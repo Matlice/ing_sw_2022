@@ -1,0 +1,21 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Accesso utente}
+    \usecase
+        {Accesso utente}
+        {Utente}
+        {
+            %Accesso normale
+            \begin{tabular}{l}
+                1. L'utente inserisce username e password\\
+                2. Mostra il menu principale
+            \end{tabular} \\
+            \auxcase{
+                \begin{tabular}{l}
+                    2.a \textit{Precondizione: utente non esistente o password non corretta}\\
+                        Torna al punto 1
+                \end{tabular}
+            }
+        }
+        \vspace{0.5cm}
+
+\end{minipage}

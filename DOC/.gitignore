@@ -1,0 +1,8 @@
+*-plantuml.latex
+*-plantuml.txt
+bin/
+*.aux
+*.toc
+*.pdf
+*.lof
+*.lot

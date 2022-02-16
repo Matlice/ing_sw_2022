@@ -1,0 +1,21 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Creazione nuovo account configuratore}
+    \usecase
+        {Creazione nuovo account configuratore}
+        {Amministratore}
+        {
+            \begin{tabular}{l}
+                1. \textit{Precondizione: l'utente deve avere accesso fisico alla macchina}\\
+                L'amministratore inserisce il nuovo nome utente\\
+                2. \textit{Postcondizione: Un nuovo account configuratore viene aggiunto} \\
+                \textit{con passwod randomica}
+            \end{tabular} \\
+            \auxcase{
+                \begin{tabular}{l}
+                    1.a \textit{Precondizione: il nome utente inserito è duplicato}\\
+                    Errore.
+                \end{tabular}
+            }
+        }
+        \vspace{0.5cm}
+\end{minipage}

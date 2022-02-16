@@ -1,0 +1,25 @@
+
+\newcommand{\auxcase}[1]{
+    \hline
+    Scenario alternativo & #1 \\
+}
+
+\newcommand{\auxactor}[1]{
+    \hline
+    Attore secondario & #1 \\
+}
+
+
+\newcommand{\usecase}[3]{ %\usecase nome attore scenario principale
+    \begin{center}
+        \begin{tabular}{ | m{4cm} | m{12cm} | }
+            \hline
+            Nome & #1 \\
+            \hline
+            Attore & #2 \\
+            \hline
+            Scenario principale & #3 \\
+            \hline
+        \end{tabular}
+    \end{center}
+}

@@ -1,0 +1,49 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{2}
+
+\usepackage{graphicx}
+\usepackage[utf8x]{inputenc}
+\usepackage[italian]{babel}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+\usepackage{array}
+
+\usepackage{plantuml}
+
+\title{Progetto di Ingegneria del software}
+\author{Brambilla Enrico\\Filippini Roberto\\Fontana Stefano}
+\date{A.A. 2021/2022}
+
+\geometry{
+ a4paper, %210 x 297
+ total={160mm,242mm},
+ left=25mm,
+ top=30mm,
+ }
+
+\begin{document}
+
+\pagenumbering{gobble}
+\maketitle
+\cleardoublepage
+\pagenumbering{arabic}
+\tableofcontents
+\cleardoublepage
+
+\input{utils/use_case.tex}
+\input{utils/includepuml.tex}
+
+\chapter{Documentazione}
+\section{Versione 1}
+\input{VER1/ver1.tex}
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Elenco delle figure}
+\listoffigures
+
+\end{document}
