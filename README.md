@@ -324,7 +324,7 @@ I requisiti (funzionali e non) delle cinque versioni dell’applicazione da real
 
 >ad esempio, non si è parlato esplicitamente di possibili conseguenze – che comunque non è necessario siano gestite – della modifica dei valori dei parametri di configurazione, né si è fissato – e non è indispensabile farlo – un numero massimo di tentativi entro cui le due parti di un baratto devono convergere nello stabilire luogo, data e ora dell’incontro in cui avviene lo scambio effettivo degli articoli; inoltre, non si è stabilita la lunghezza massima, in termini di numero di caratteri, delle stringhe attraverso cui il fruitore esprime il valore dei campi atti a descrivere un articolo
 
-## Richieste relative alla PRIMA PARTE DEL PROGETTO
+## Richieste
 
 Agli studenti è richiesto di realizzare evolutivamente cinque versioni software che soddisfino irequisiti sopra esposti.
 

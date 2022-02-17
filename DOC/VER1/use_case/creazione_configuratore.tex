@@ -1,19 +1,24 @@
 \begin{minipage}{\textwidth}
     \subsubsection{Creazione nuovo account configuratore}
+    Per questo caso d'uso è stato considerato un terzo tipo di attore, ovvero
+    l'amministratore. Esso può accedere direttamente all'applicativo, modificandone
+    i file, ma non è utente dell'applicativo.
     \usecase
         {Creazione nuovo account configuratore}
         {Amministratore}
         {
             \begin{tabular}{l}
-                1. \textit{Precondizione: l'utente deve avere accesso fisico alla macchina}\\
-                L'amministratore inserisce il nuovo nome utente\\
-                2. \textit{Postcondizione: Un nuovo account configuratore viene aggiunto} \\
-                \textit{con password randomica}
+                1. \textit{Precondizione: l'amministratore ha accesso alla macchina su}\\
+                \textit{cui è eseguito l'applicativo}\\
+                2. L'amministratore inserisce il nuovo nome utente\\
+                \textit{Postcondizione: Un nuovo account configuratore viene creato} \\
+                \textit{con password randomica (da modificare al primo accesso)}\\
+                Fine
             \end{tabular} \\
             \auxcase{
                 \begin{tabular}{l}
-                    1.a \textit{Precondizione: il nome utente inserito è duplicato}\\
-                    Errore.
+                    2.a \textit{Precondizione: il nome utente inserito è già esistente}\\
+                    Torna al punto 1
                 \end{tabular}
             }
         }

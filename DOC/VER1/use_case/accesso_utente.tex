@@ -6,13 +6,17 @@
         {
             %Accesso normale
             \begin{tabular}{l}
-                1. L'utente inserisce username e password\\
-                \textit{Postcondizione: l'utente ha accesso all'applicazione}
+                1. All'utente viene presentato un form per il login\\
+                2. L'utente inserisce username e password\\
+                \textit{Postcondizione: l'utente ha accesso all'applicazione}\\
+                Fine
             \end{tabular} \\
             \auxcase{
                 \begin{tabular}{l}
-                    1.a \textit{Precondizione: utente non esistente o password non corretta}\\
-                        Torna al punto 1.
+                    2.a \textit{Precondizione: utente non esistente o password non corretta}\\
+                    3. Il sistema segnala che l'utente inserito non esiste oppure la\\
+                       password è errata\\
+                    Torna al punto 1
                 \end{tabular}
             }
         }

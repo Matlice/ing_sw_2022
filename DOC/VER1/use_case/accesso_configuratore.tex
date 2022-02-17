@@ -11,17 +11,18 @@
         %Accesso normale
         \begin{tabular}{l}
             1. <<include>> "Accesso utente" (verifica credenziali e permessi)\\
-            \textit{Postcondizione: l'utente può procedere alla configurazione}
+            \textit{Postcondizione: l'utente può procedere alla configurazione}\\
+            Fine
         \end{tabular} \\
 
         %primo accesso
         \auxcase{
             \begin{tabular}{l}
-                2.a \textit{Precondizione: l'utente è al primo accesso} \\
-                2.b All'utente viene chiesta una nuova password\\
+                1.a \textit{Precondizione: l'utente è al primo accesso} \\
+                1.b All'utente viene chiesto di inserire una nuova password\\
                 \textit{Postcondizione: all'utente è stata assegnata la nuova password e}\\
                 \textit{può procedere alla configurazione}\\
-                Fine.
+                Fine
             \end{tabular}
         }
     }
