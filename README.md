@@ -1,4 +1,4 @@
-# ing_sw_2022
+# Specifiche dell'applicativo
 
 ## Specifiche
 
@@ -117,7 +117,7 @@ nativi, indicando l’eventuale obbligatorietà di ciascuno
 - salvare in modo persistente tutte le informazioni di cui ai punti precedenti
 - visualizzare ciascuna gerarchia presente e tutte le informazioni a corredo della stessa.
 
-#### Progress {#v1}
+#### Progresso
 
 - [ ] Creazione infrastruttura di base e database
 - [ ] Creazione account configuratore (tool esterno)
@@ -153,7 +153,7 @@ proposta di scambio avanzata da un altro fruitore.
 
 Infine, la seconda versione dell’applicazione visualizza, a beneficio del fruitore, il nome e la descrizione delle categorie radice di tutte le gerarchie, nonché la piazza, i luoghi, i giorni e gli intervalli orari in cui sono possibili gli scambi.
 
-#### Progress {#v2}
+#### Progresso
 
 - [ ] Registrazione fruitore
 - [ ] Visualizzazione frontend
@@ -179,7 +179,7 @@ In ogni momento, il **configuratore** e così pure il **fruitore** può indicare
 
 Inoltre, il **fruitore** può visualizzare tutte le `Offerte aperte` e le `Offerte ritirate` di cui è autore, indipendentemente dalla categoria di appartenenza
 
-#### Progress {#v3}
+#### Progresso
 
 - [ ] Creazione di offerte
 - [ ] Modifica degli stati dell'offerta
@@ -233,7 +233,7 @@ Quindi, la comunicazione non avviene mai attraverso messaggi (ad esempio, di pos
 
 Il **configuratore** può indicare una categoria foglia di una gerarchia e visualizzare le attuali Offerte in scambio nonché le Offerte chiuse relative ad articoli di tale categoria.
 
-#### Progress {#v4}
+#### Progresso
 
 - [ ] Sistema di proposte da visualizzazione Offerte aperte
 - [ ] Stati `Offerta accoppiata`, `Offerta selezionata`, `Offerta in scambio`
@@ -244,7 +244,7 @@ Il **configuratore** può indicare una categoria foglia di una gerarchia e visua
 
 La quinta versione consente al configuratore di importare gli ingressi del back-end dell’applicazione, ovvero gerarchie delle categorie e valori dei parametri di configurazione, in modalità batch (cioè attraverso uno o più file di input) anziché in modalità interattiva.
 
-#### Progress {#v5}
+#### Progresso
 
 - [ ] File di configurazione
 
