@@ -7,3 +7,5 @@ bin/
 *.lof
 *.lot
 _markdown_main/
+_markdown_main/
+*.md.tex

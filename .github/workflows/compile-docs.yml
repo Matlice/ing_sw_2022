@@ -1,0 +1,42 @@
+name: Compila la documentazione
+on: [push]
+jobs:
+  compile-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Compile latex document (pregenerate)
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: main.tex
+          working_directory: ./DOC
+          compiler: lualatex
+          args: "-etex -parse-first-line -shell-escape -interaction=nonstopmode -file-line-error -halt-on-error"
+          pre_compile: >
+            set -x;
+            apk add openjdk11-jre fontconfig ttf-dejavu;
+            [ -d ./bin ] || mkdir ./bin;
+            [ -f ./bin/plantuml.jar ] || wget https://github.com/plantuml/plantuml/releases/download/snapshot/plantuml-SNAPSHOT.jar -O ./bin/plantuml.jar;
+            export PLANTUML_JAR=./bin/plantuml.jar;
+      - name: Compile latex document (generate)
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: main.tex
+          working_directory: ./DOC
+          compiler: lualatex
+          args: "-etex -parse-first-line -shell-escape -interaction=nonstopmode -file-line-error -halt-on-error"
+          pre_compile: >
+            set -x;
+            apk add openjdk11-jre fontconfig ttf-dejavu;
+            [ -d ./bin ] || mkdir ./bin;
+            [ -f ./bin/plantuml.jar ] || wget https://github.com/plantuml/plantuml/releases/download/snapshot/plantuml-SNAPSHOT.jar -O ./bin/plantuml.jar;
+            export PLANTUML_JAR=./bin/plantuml.jar;
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: documentazione
+          path: DOC/main.pdf
+
+
