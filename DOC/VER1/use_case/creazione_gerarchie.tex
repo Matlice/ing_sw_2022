@@ -8,26 +8,24 @@
                 1.  Il configuratore inserisce il nome della categoria root\\
                 2.  Il configuratore inserisce la descrizione \\
                 3.  Viene chiesto se si vogliono aggiungere campi nativi\\
-                3.1 Viene richiesto il nome del campo\\
-                3.2 Viene richiesto il tipo del campo\\
-                3.3 Viene richiesta l'obbligatorietà del campo\\
-                     \textit{Postcondizione: il campo viene aggiunto alla categoria root}\\
-                3.4 ritorna al punto 3
+                \textit{Postcondizione: la gerarchia viene creata a cui è assegnata}\\
+                \textit{la categoria root}
             \end{tabular}\\
             \auxcase{
                 \begin{tabular}{l}
-                    3.a \textit{Precondizione: Il configuratore} \\
-                        \textit{non vuole aggiungere ulteriori campi}\\
-                        \textit{Postcondizione: la categoria root viene creata}\\
-                        \textit{Postcondizione: la gerarchia viene creata e la categoria }\\
-                        \textit{vi è assegnata}\\
-                    Fine.
+                    3.a \textit{Precondizione: il configuratore vuole aggiungere un nuovo}\\
+                    \textit{campo} \\
+                    3.1 Viene richiesto il nome del campo\\
+                    3.2 Viene richiesto il tipo del campo\\
+                    3.3 Viene richiesta l'obbligatorietà del campo\\
+                    \textit{Postcondizione: il campo viene aggiunto alla categoria root}\\
+                    3.4 Torna al punto 3.
                 \end{tabular}
             } \\
             \auxcase{
                 \begin{tabular}{l}
                     3.1.a \textit{Precondizione: il nome del campo è duplicato} \\
-                    Ritorna al punto 3
+                    Torna al punto 3.
                 \end{tabular}
             }
         }
