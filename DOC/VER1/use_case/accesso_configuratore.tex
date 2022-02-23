@@ -1,32 +1,29 @@
 \begin{minipage}{\textwidth}
-
-\subsubsection{Accesso configuratore}
-\usecase
-    {Accesso configuratore}
-    {
-        Configuratore %\\
-        %\auxactor{teto}
-    }
-    {
-        %Accesso normale
-        \begin{tabular}{l}
-            1. <<include>> "Accesso utente" (verifica credenziali e permessi)\\
-            \textit{Postcondizione: l'utente può procedere alla configurazione}\\
-            Fine
-        \end{tabular} \\
-
-        %primo accesso
-        \auxcase{
-            \begin{tabular}{l}
-                1.a \textit{Precondizione: l'utente è al primo accesso} \\
-                1.b All'utente viene chiesto di inserire una nuova password\\
-                \textit{Postcondizione: all'utente è stata assegnata la nuova password e}\\
-                \textit{può procedere alla configurazione}\\
-                Fine
-            \end{tabular}
+    \subsubsection{Accesso configuratore}
+    \usecase
+        {Accesso configuratore}
+        {
+            Configuratore %\\
+            %\auxactor{teto}
         }
-    }
-    \vspace{0.5cm}
+        {
+            %Accesso normale
+            \begin{tabular}{l}
+                1. <<include>> "Accesso utente" (verifica credenziali e permessi)\\
+                \textit{Postcondizione: l'utente può procedere alla configurazione}\\
+                Fine
+            \end{tabular} \\
 
-
+            %primo accesso
+            \auxcase{
+                \begin{tabular}{l}
+                    1.a \textit{Precondizione: l'utente è al primo accesso} \\
+                    1.b All'utente viene chiesto di inserire una nuova password\\
+                    \textit{Postcondizione: all'utente è stata assegnata la nuova password e}\\
+                    \textit{può procedere alla configurazione}\\
+                    Fine
+                \end{tabular}
+            }
+        }
+        \vspace{0.5cm}
 \end{minipage}

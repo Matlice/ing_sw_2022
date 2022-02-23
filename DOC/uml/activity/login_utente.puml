@@ -1,0 +1,31 @@
+@startuml
+skinparam conditionStyle diamond
+
+start
+
+: Input credenziali \n (username:password);
+
+if ("user exists") then (true)
+    
+    : Verifica password |
+
+    if ("result") then (true)
+        :Accesso consentito >
+        
+        if ("primo accesso") then
+            :Cambio password;
+            stop
+        else ([else])
+            stop
+        endif
+
+    else ([else])
+        end
+    endif
+
+
+else ([else])
+    end
+endif
+
+@enduml

@@ -1,16 +1,61 @@
 \subsection{Casi d'uso}
+Di seguito sono elencati i casi d'uso ritenuti necessari a sopperire alle funzionalità
+dell'applicativo.
+\\\\
 \input{VER1/use_case/accesso_utente.tex}
 \input{VER1/use_case/accesso_configuratore.tex}
 \input{VER1/use_case/creazione_configuratore.tex}
 \input{VER1/use_case/creazione_gerarchie.tex}
 
 \pagebreak
-
 \subsection{Casi d'uso (UML)}
 \vspace{0.5cm}
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includeplantuml{uml/use_case/version_1.puml}
     \caption{Diagramma UML dei casi d'uso, versione 1}
     \label{fig:use_case_uml_v1}
 \end{figure}
+
+\pagebreak
+\subsection{Diagrammi supplementari}
+\subsection{Ciclo di vita dell'utente configuratore}
+Il seguente diagramma rappresenta il ciclo di vita dell'utente configuratore differenziando i casi "Primo login", dove 
+viene forzato al cambio password e "Login ordinario", dove invece procede al menu principale.
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{uml/states/ciclo_vita_utente_configuratore.puml}
+    \caption{Diagramma UML degli stati, ciclo  vita utente configuratore}
+    \label{fig:states_config_user_lifecycle}
+\end{figure}
+
+\pagebreak
+\subsection{Algoritmo verifica delle credenziali}
+Il seguente diagramma rappresenta il procedimento per autenticare un utente nel sistema
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{uml/activity/login_utente.puml}
+    \caption{Diagramma UML delle attività, login utente}
+    \label{fig:activity_user_login}
+\end{figure}
+
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{uml/activity/verifica_password.puml}
+    \caption{Diagramma UML delle attività, ref: verifica password}
+    \label{fig:activity_user_login}
+\end{figure}
+
+\pagebreak
+\subsection{Diagramma delle classi}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{uml/class/class_diagram.puml}
+    \caption{Diagramma UML delle classi, versione 1}
+    \label{fig:class_v_1}
+\end{figure}
+

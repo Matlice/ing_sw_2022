@@ -1,0 +1,22 @@
+@startuml
+hide empty description
+
+State "Creazione nuovo utente" as new_user
+State "Primo login" as first_login
+State "Menu principale" as actions
+State "Nuova categoria" as new_category
+
+
+[*] --> first_login: Primo login
+[*] --> actions: Login ordinario
+actions --> [*]: fine esecuzione
+
+first_login --> actions: Cambio password
+
+actions --> new_user: Creazione nuovo utente
+new_user --> actions: Success
+
+actions --> new_category: Creazione nuovo utente
+new_category --> actions: Success
+
+@enduml

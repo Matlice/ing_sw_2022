@@ -1,5 +1,8 @@
 name: Compila la documentazione
-on: [push]
+on:
+  push:
+    branches:
+      - 'documentation'
 jobs:
   compile-docs:
     runs-on: ubuntu-latest
