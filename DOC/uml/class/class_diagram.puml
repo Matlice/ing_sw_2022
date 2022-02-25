@@ -5,6 +5,81 @@ skinparam ClassAttributeIconSize 0
 skinparam linetype ortho
 hide empty members
 
+package controller #FFFFFF{
+    class Controller <<singleton>> {
+        + createConfigurator(auth: Authentication, username: String)
+        + createHierarchy(auth: Authentication, root: Category)
+    }
+
+    interface Authentication {
+        + getUser(): User
+        + getLoginTime(): int
+        + getExpirationTime(): int
+        + isExpired(): bool
+    }
+
+    class Settings {
+        + TODO: String
+    }
+}
+
+
+package data #FFFFFF{
+    abstract class User {
+        + USERNAME: String <<final>>
+        + User(username: String) <<constructor>>
+    }
+
+    class Configurator {
+    
+    }
+
+    'add nota per classe innestata
+    class AuthImpl <<static>> {
+        - AuthImpl() <<constructor>>
+    }
+
+    class Hierarchy{
+
+    }
+
+    class Category <<extends HashMap<String, TypeDefinition>>> {
+        + Category(categoryName: String) <<constructor>>
+        + addField(fieldName: String, typeDef: TypeDefinition): Category
+    }
+
+    class TypeDefinition<T   > {
+        + FRIENDLY_NAME: String
+        + TYPE: T
+        + REQUIRED: bool
+        + {static} fromString<Q>(): TypeDefinition<Q>
+    }
+
+    class LeafCategory{
+    }
+
+    class NodeCategory{
+    }
+
+    note right of AuthImpl : The class has private constructor\nin order to be instantiated by the\nController class only
+
+    package db #FFFFFF{
+        class UserDB {
+            - username
+            - password_hash
+            - password_salt
+            - user_type
+            - full_name
+        }
+
+        class UserDBDao
+
+        class UserFactory
+    }
+
+}
+
+
 class Configurator extends User
 class LeafCategory extends Category
 class NodeCategory extends Category
@@ -22,63 +97,5 @@ Controller ..> UserFactory: uses >
 UserFactory ..> User: creates >
 UserFactory ..> UserDBDao: uses >
 UserDBDao ..> UserDB: selects\nfrom database >
-
-abstract class User {
-    + USERNAME: String <<final>>
-    + User(username: String) <<constructor>>
-}
-
-class UserDB {
-    - username
-    - password_hash
-    - password_salt
-    - user_type
-    - full_name
-}
-
-class Configurator {
-    
-}
-
-class Controller <<singleton>> {
-    + createConfigurator(auth: Authentication, username: String)
-    + createHierarchy(auth: Authentication, root: Category)
-}
-
-interface Authentication{
-    + getUser(): User
-    + getLoginTime(): int
-    + getExpirationTime(): int
-    + isExpired(): bool
-}
-
-'add nota per classe innestata
-class AuthImpl <<static>> {
-    - AuthImpl() <<constructor>>
-}
-
-class Hierarchy{
-
-}
-
-class Category <<extends HashMap<String, TypeDefinition>>> {
-    + Category(categoryName: String) <<constructor>>
-    + addField(fieldName: String, typeDef: TypeDefinition): Category
-}
-
-class TypeDefinition<T   > {
-    + FRIENDLY_NAME: String
-    + TYPE: T
-    + REQUIRED: bool
-    + {static} fromString<Q>(): TypeDefinition<Q>
-}
-
-class LeafCategory{
-}
-
-class NodeCategory{
-}
-
-note right of AuthImpl : The class has private constructor\nin order to be instantiated by the\nController class only
 
 @enduml
