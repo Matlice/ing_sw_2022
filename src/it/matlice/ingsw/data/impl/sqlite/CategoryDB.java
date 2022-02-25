@@ -3,6 +3,8 @@ package it.matlice.ingsw.data.impl.sqlite;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Objects;
+
 @DatabaseTable(tableName = "categories")
 public class CategoryDB {
 
@@ -33,5 +35,18 @@ public class CategoryDB {
 
     public CategoryDB getFather() {
         return father;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CategoryDB that = (CategoryDB) o;
+        return category_id == that.category_id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(category_id);
     }
 }

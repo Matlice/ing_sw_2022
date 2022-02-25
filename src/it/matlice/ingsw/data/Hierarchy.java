@@ -1,8 +1,13 @@
 package it.matlice.ingsw.data;
 
-import it.matlice.ingsw.auth.AuthData;
-import it.matlice.ingsw.auth.AuthMethod;
-import it.matlice.ingsw.auth.Authenticable;
+public abstract class Hierarchy {
+    private final Category rootCategory;
 
-public abstract class Hierarchy{
+    public Hierarchy(Category rootCategory) {
+        this.rootCategory = rootCategory;
+    }
+
+    public Category getRootCategory() {
+        return rootCategory;
+    }
 }
