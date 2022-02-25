@@ -15,4 +15,3 @@ fi
 for i in $(seq $TIMES); do
     lualatex -etex -parse-first-line -shell-escape -halt-on-error --interaction=nonstopmode main.tex 
 done
-
