@@ -1,0 +1,34 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package data #FFFFFF {
+    abstract class User
+
+    package db #FFFFFF {
+        class UserDB {
+            - username
+            - password_hash
+            - password_salt
+            - user_type
+            - full_name
+        }
+
+        class UserDBDao
+
+        class UserFactory
+    }
+
+}
+
+
+
+Controller ..> UserFactory: uses >
+UserFactory ..> User: creates >
+UserFactory ..> UserDBDao: uses >
+UserDBDao ..> UserDB: selects\nfrom database >
+
+@enduml

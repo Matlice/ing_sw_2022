@@ -6,31 +6,9 @@ skinparam linetype ortho
 hide empty members
 
 package controller #FFFFFF {
-    class Controller <<singleton>> {
-        + createConfigurator(auth: Authentication, username: String)
-        + createHierarchy(auth: Authentication, root: Category)
-    }
-
-    interface Authentication {
-        + getUser(): User
-        + getLoginTime(): int
-        + getExpirationTime(): int
-        + isExpired(): bool
-    }
-
-    'add nota per classe innestata
-    class AuthImpl <<static>> {
-        - AuthImpl() <<constructor>>
-    }
-
-    note right of AuthImpl : The class has private constructor\nin order to be instantiated by the\nController class only
-
-
-    class Settings {
-        + TODO: String
-    }
+    class Controller
+    class AuthImpl <<static>>
 }
-
 
 package data #FFFFFF {
     abstract class User {
@@ -65,16 +43,6 @@ package data #FFFFFF {
     }
 
     package db #FFFFFF {
-        class UserDB {
-            - username
-            - password_hash
-            - password_salt
-            - user_type
-            - full_name
-        }
-
-        class UserDBDao
-
         class UserFactory
     }
 
@@ -84,7 +52,6 @@ package data #FFFFFF {
 class Configurator extends User
 class LeafCategory extends Category
 class NodeCategory extends Category
-class AuthImpl implements Authentication
 
 LeafCategory -[hidden]-> NodeCategory
 Controller "1" o--> "1..n" Hierarchy
@@ -93,10 +60,10 @@ NodeCategory "1" o-right-> "2..n" Category
 Controller +--> AuthImpl
 AuthImpl "1" --> "1" User
 Category -up-> TypeDefinition: uses >
+UserFactory -[hidden]-> Hierarchy
+
 
 Controller ..> UserFactory: uses >
 UserFactory ..> User: creates >
-UserFactory ..> UserDBDao: uses >
-UserDBDao ..> UserDB: selects\nfrom database >
 
 @enduml

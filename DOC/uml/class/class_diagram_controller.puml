@@ -1,0 +1,33 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package controller #FFFFFF {
+    class Controller <<singleton>> {
+        + createConfigurator(auth: Authentication, username: String)
+        + createHierarchy(auth: Authentication, root: Category)
+    }
+
+    interface Authentication {
+        + getUser(): User
+        + getLoginTime(): int
+        + getExpirationTime(): int
+        + isExpired(): bool
+    }
+
+    class Settings {
+        + TODO: String
+    }
+}
+
+
+class AuthImpl implements Authentication
+
+Controller "1" o--> "1..n" Hierarchy
+Controller +--> AuthImpl
+Controller ..> UserFactory: uses >
+
+@enduml
