@@ -8,85 +8,19 @@ dell'applicativo.
 \input{VER1/use_case/creazione_gerarchie.tex}
 
 \pagebreak
-\subsection{Casi d'uso (UML)}
-\vspace{0.5cm}
-\begin{figure}[H]
-    \centering
-    \includeplantuml{uml/use_case/version_1.puml}
-    \caption{Diagramma UML dei casi d'uso, versione 1}
-    \label{fig:use_case_uml_v1}
-\end{figure}
+\input{VER1/use_case/casi_uso_uml.tex}
+
+\pagebreak
+\subsection{Diagrammi delle classi}
+\input{VER1/class/diagramma_classi.tex}
+\input{VER1/class/diagramma_classi_controller.tex}
+\input{VER1/class/diagramma_classi_data.tex}
+\input{VER1/class/diagramma_classi_db.tex}
 
 \pagebreak
 \subsection{Diagrammi supplementari}
-\subsection{Ciclo di vita dell'utente configuratore}
-Il seguente diagramma rappresenta il ciclo di vita dell'utente configuratore differenziando i casi "Primo login", dove 
-viene forzato al cambio password e "Login ordinario", dove invece procede al menu principale.
-\vspace{0.5cm}
-\begin{figure}[H]
-    \centering
-    \includeplantuml{uml/states/ciclo_vita_utente_configuratore.puml}
-    \caption{Diagramma UML degli stati, ciclo  vita utente configuratore}
-    \label{fig:states_config_user_lifecycle}
-\end{figure}
-
+\input{VER1/states/ciclo_vita_utente_configuratore.tex}
 \pagebreak
-\subsection{Algoritmo verifica delle credenziali}
-Il seguente diagramma rappresenta il procedimento per autenticare un utente nel sistema
-\vspace{0.5cm}
-\begin{figure}[H]
-    \centering
-    \includeplantuml{uml/activity/login_utente.puml}
-    \caption{Diagramma UML delle attività, login utente}
-    \label{fig:activity_user_login}
-\end{figure}
-
+\input{VER1/activity/login_utente.tex}
 \pagebreak
-\subsection{Algoritmo verifica della password}
-Il seguente diagramma rappresenta il procedimento per verificare la password
-\vspace{0.5cm}
-\begin{figure}[H]
-    \centering
-    \includeplantuml{uml/activity/verifica_password.puml}
-    \caption{Diagramma UML delle attività, ref: verifica password}
-    \label{fig:activity_user_password}
-\end{figure}
-
-\pagebreak
-\subsection{Diagramma delle classi}
-\vspace{0.5cm}
-\begin{figure}[H]
-    \centering
-    \includeplantuml{uml/class/class_diagram.puml}
-    \caption{Diagramma UML delle classi, versione 1}
-    \label{fig:class_v_1}
-\end{figure}
-
-\subsection{Diagramma delle classi \texttt{controller}}
-\vspace{0.5cm}
-\begin{figure}[H]
-    \centering
-    \includeplantuml{uml/class/class_diagram_controller.puml}
-    \caption{Diagramma UML delle classi \texttt{controller}, versione 1}
-    \label{fig:class_controller_v_1}
-\end{figure}
-
-\subsection{Diagramma delle classi \texttt{data}}
-\vspace{0.5cm}
-\begin{figure}[H]
-    \centering
-    \includeplantuml{uml/class/class_diagram_data.puml}
-    \caption{Diagramma UML delle classi \texttt{data}, versione 1}
-    \label{fig:class_data_v_1}
-\end{figure}
-
-\subsection{Diagramma delle classi \texttt{db}}
-\vspace{0.5cm}
-\begin{figure}[H]
-    \centering
-    \includeplantuml{uml/class/class_diagram_db.puml}
-    \caption{Diagramma UML delle classi \texttt{db}, versione 1}
-    \label{fig:class_db_v_1}
-\end{figure}
-
-
+\input{VER1/activity/verifica_password.tex}
