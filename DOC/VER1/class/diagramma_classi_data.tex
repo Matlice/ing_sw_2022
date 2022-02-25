@@ -6,3 +6,24 @@
     \caption{Versione 1: Diagramma UML delle classi, package \texttt{data}}
     \label{fig:class_data_v_1}
 \end{figure}
+
+il package \texttt{data} offre un'interfaccia strutturata per la gestione dei tipi di dato dell'applicativo.
+La struttura del package si presenta con le classi rappresentanti gli oggetti (\textit{User}, \textit{Category} e \textit{Hierarchy})
+definite astratte, e con le classi derivate comunque definiter astratte perchè mancanti di gestione dei dati effettivi.
+
+Per la rappresentazione degli utenti abbiamo una classe User che accomuna le funzioni uguali per i (futuri) tipi di utente, tra le quali
+l'autenticazione. Per questo motivo \textit{User} fornisce l'interfaccia \textit{Authenticable} (figura~\ref{fig:class_auth_v_1}).
+
+L'unica tipologia di utenti per questa versione è \textit{ConfiguratorUser}.
+
+La rappresentazione delle categorie viene invece spartita su due classi:
+\begin{itemize}
+    \item \textit{LeafCategory}: Questa classe rapresenta le foglie dell'albero delle categorie.
+    \item \textit{NodeCategory}: Questa classe rappresenta i nodi delle categorie, permettendo l'aggiunta di categorie figlie.
+\end{itemize}
+
+La struttura dati utilizzata per rappresentare l'albero è stata adottata una doppia referenza padre-figli e figlio-padre.
+La struttura è stata adottata perchè, seppur comportando problematiche relative alla gestione di due tipologie di referenze
+essa permette di navigare attraverso l'albero in modo efficiente in qualsvoglia verso.
+Inoltre, per semplificare la programmazione, il riferimento al padre verrà aggiornato ogni volta che una categoria viene
+aggiunta a un padre o rimossa.

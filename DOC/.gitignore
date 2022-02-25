@@ -9,3 +9,7 @@ bin/
 _markdown_main/
 _markdown_main/
 *.md.tex
+*.markdown.lua
+*.fdb_latexmk
+*.fls
+*.pytxcode

@@ -40,13 +40,14 @@ package data #FFFFFF {
         + REQUIRED: bool
         + {static} fromString<Q>(): TypeDefinition<Q>
     }
+    
     abstract class Hierarchy {}
 
     abstract class User {
         + {abstract} getUsername(): String
     }
 
-    class ConfiguratorUser extends User {}
+    abstract class ConfiguratorUser extends User {}
 
     abstract class NodeCategory extends Category {
         + addChild(child: Category): Category

@@ -12,7 +12,9 @@ package controller #FFFFFF {
         + createHierarchy(auth: Authentication, root: Category)
     }
 
-    class AuthImpl implements Authentication
+    class AuthImpl implements Authentication{
+        - AuthImpl(user: User)
+    }
 
     interface Authentication {
         + getUser(): User

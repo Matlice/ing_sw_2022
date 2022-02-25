@@ -1,45 +1,65 @@
 \NewDocumentCommand{\includeplantuml}{m}{%
   \directlua{
+    function exists(file)
+      local ok, err, code = os.rename(file, file)
+      if not ok then
+          if code == 13 then
+            return true
+          end
+      end
+      return ok, err
+    end
+
+    function isdir(path)
+      return exists(path.."/")
+    end
+
     function compile (jobname, plantUmlSourceFilename, plantUmlMode)
+      print("compiling... " .. jobname .. " " .. plantUmlSourceFilename)
+
       infile = io.open(jobname, "r")
       instr = infile:read("*a")
       infile:close()
-      
+
       outfile = io.open(plantUmlSourceFilename, "w")
       outfile:write(instr)
       outfile:close()
 
       require("plantuml.lua")
-      convertPlantUmlToTikz(jobname, plantUmlMode)
+      convertPlantUmlToTikz("compiled-puml/" .. jobname, plantUmlMode)
     end
 
     local jobname = \luastring{#1}
     local plantUmlMode = \luastring{\PlantUmlMode}
-    local plantUmlSourceFilename = jobname .. "-plantuml.txt"
+    local plantUmlSourceFilename = "compiled-puml/" .. jobname .. "-plantuml.txt"
+
+    if not isdir(plantUmlSourceFilename) then
+      os.execute("mkdir -p $(dirname " .. plantUmlSourceFilename .. ")")
+    end
 
     local old_file = io.open(plantUmlSourceFilename, "r")
 
     if old_file == nil then 
+      print("No old file found at " .. plantUmlSourceFilename)
       compile(jobname, plantUmlSourceFilename, plantUmlMode)
     else
       local old_data = old_file:read("*a")
 
       local new_file = io.open(jobname, "r")
       local new_data = new_file:read("*a")
-      
+      io.close(old_file) 
+
       if old_data == new_data then
       else
         compile(jobname, plantUmlSourceFilename, plantUmlMode)
       end
-
-      io.close(old_file) 
     end
   }
   \ifthenelse{\equal{\PlantUmlMode}{latex}}{
     \begin{adjustbox}{max width=\linewidth}
-      \input{#1-plantuml.latex}
+      \input{compiled-puml/#1-plantuml.latex}
     \end{adjustbox}
   }{
-    \includegraphics[width=\maxwidth{\textwidth}]{#1-plantuml.\PlantUmlMode}
+    \includegraphics[width=\maxwidth{\textwidth}]{compiled-puml/#1-plantuml.\PlantUmlMode}
   }
 }
