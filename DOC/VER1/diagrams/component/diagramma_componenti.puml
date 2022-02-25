@@ -1,0 +1,16 @@
+@startuml
+interface "Esempio Interfaccia" as ExInterface
+interface "Altra interfaccia" as InterTwo
+
+[Componente Uno] - ExInterface
+[Componente Due] --( ExInterface
+[Componente Due] - InterTwo
+
+database SQLite {
+    [Componente di SQLite] as sss
+    sss - prova
+}
+
+[Componente Uno] --( prova
+
+@enduml
