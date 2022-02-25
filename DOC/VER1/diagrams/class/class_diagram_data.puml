@@ -5,28 +5,31 @@ skinparam ClassAttributeIconSize 0
 skinparam linetype ortho
 hide empty members
 
-package controller #FFFFFF {
-    class Controller
-    class AuthImpl <<static>>
-}
-
 package data #FFFFFF {
-    abstract class User {
-        + USERNAME: String <<final>>
-        + User(username: String) <<constructor>>
+
+    interface CategoryFactory {
+        + getCategory(id: int): Category
+        + createCategory(name: String, father: Category, isLeaf: bool): Category
     }
 
-    class Configurator {
-    
+    interface HierarchyFactory {
+        + getHierarchies(): Hierarchy[]
+        + createHierarchy(root: Category): Hierarchy
     }
 
-    class Hierarchy{
-
+    interface UserFactory {
+        + getUser(username: String): User
+        + createUser(username: String, userType: UserTypes): User
     }
 
-    class Category <<extends HashMap<String, TypeDefinition>>> {
-        + Category(categoryName: String) <<constructor>>
-        + addField(fieldName: String, typeDef: TypeDefinition): Category
+    enum UserTypes {
+        CONFIGURATOR
+    }
+
+    abstract class Category <<extends HashMap<String, TypeDefinition>>> {
+        + getFather(): Category
+        + setFather(father: Category): void
+        + isRoot(): bool
     }
 
     class TypeDefinition<T   > {
@@ -35,35 +38,38 @@ package data #FFFFFF {
         + REQUIRED: bool
         + {static} fromString<Q>(): TypeDefinition<Q>
     }
+    abstract class Hierarchy {}
 
-    class LeafCategory{
+    abstract class User {
+        + {abstract} getUsername(): String
     }
 
-    class NodeCategory{
-    }
+    class ConfiguratorUser extends User {}
 
-    package db #FFFFFF {
-        class UserFactory
+    abstract class NodeCategory extends Category {
+        + addChild(child: Category): Category
+        + removeChild(child: Category): Category
+        + getChildren(): Category[]
     }
+    
+    abstract class LeafCategory extends Category {}
 
 }
 
+User ..|> Authenticable
 
-class Configurator extends User
-class LeafCategory extends Category
-class NodeCategory extends Category
+Category --> "0..1" Category: father
+Hierarchy --> "1" Category: root
+NodeCategory "2..n" o--> Category
 
-LeafCategory -[hidden]-> NodeCategory
-Controller "1" o--> "1..n" Hierarchy
-Hierarchy "1" -- "1" Category: has root >
-NodeCategory "1" o-right-> "2..n" Category
-Controller +--> AuthImpl
-AuthImpl "1" --> "1" User
-Category -up-> TypeDefinition: uses >
-UserFactory -[hidden]-> Hierarchy
+Category ..> TypeDefinition
 
+HierarchyFactory -[hidden]-> CategoryFactory
+CategoryFactory -[hidden]-> UserFactory
 
-Controller ..> UserFactory: uses >
-UserFactory ..> User: creates >
+CategoryFactory .down.> Category: creates >
+HierarchyFactory .down.> Hierarchy: creates >
+UserFactory .down.> User: creates >
+UserFactory ..> UserTypes
 
 @enduml

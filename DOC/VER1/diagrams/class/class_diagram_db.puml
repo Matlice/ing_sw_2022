@@ -5,30 +5,64 @@ skinparam ClassAttributeIconSize 0
 skinparam linetype ortho
 hide empty members
 
-package data #FFFFFF {
-    abstract class User
+interface PasswordAuthenticable
 
-    package db #FFFFFF {
-        class UserDB {
-            - username
-            - password_hash
-            - password_salt
-            - user_type
-            - full_name
+package data #FFFFFF {
+    abstract class ConfiguratorUser
+    interface UserFactory
+    interface HierarchyFactory
+
+    abstract class NodeCategory
+    abstract class LeafCategory
+
+    package impl.sqlite #FFFFFF {
+        
+        class CategoryDB {
+            - categoryId: int
+            - categoryName: String
         }
 
-        class UserDBDao
+        class HierarchyDB {
+            - hierarchyId: int
+        }
 
-        class UserFactory
+        class UserDB {
+            - username: String
+            - password_hash: String
+            - password_salt: String
+            - type: String
+        }
+
+        class UserFactoryImpl implements UserFactory {
+
+        }
+
+        package types {
+            interface CategoryImpl {
+                + getDBData(): CategoryDB
+            }
+
+            class NodeCategoryImpl extends NodeCategory implements CategoryImpl
+            class LeafCategoryImpl extends LeafCategory implements CategoryImpl
+
+            class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAuthenticable
+
+            class HierarchyFactoryImpl extends HierarchyFactory
+            class UserFactoryImpl extends UserFactory
+            class CaegoryFactoryImpl extends CategoryFactory
+
+        }
+
     }
 
 }
 
+CategoryDB --> "0..1" CategoryDB: father
+HierarchyDB --> "1" CategoryDB: root
 
+CategoryImpl ..> CategoryDB
 
-Controller ..> UserFactory: uses >
-UserFactory ..> User: creates >
-UserFactory ..> UserDBDao: uses >
-UserDBDao ..> UserDB: selects\nfrom database >
+NodeCategory -[hidden]-> LeafCategory
+
 
 @enduml

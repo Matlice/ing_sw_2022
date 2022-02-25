@@ -1,0 +1,48 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package auth #FFFFFF {
+    interface AuthData {
+
+    }
+
+    interface Authenticable {
+        + authenticate(method: AuthMethod, data: AuthData): bool
+        + getAuthMethods(): AuthMethod[]
+    }
+
+    interface AuthMethod {
+        + performAuthentication(data: AuthData): bool
+    }
+
+    package password #FFFFFF {
+        class PasswordAuthData implements AuthData {
+            - password: String
+            __
+            + PasswordAuthData(password: String)
+            <<getters/setters>>
+        }
+
+        interface PasswordAuthenticable extends Authenticable {
+            + getPasswordHash(): String
+            + getPasswordSalt(): String
+        }
+
+        class PasswordAuthMethod implements AuthMethod {
+            + PasswordAuthMethod(user: PasswordAuthenticable)
+        }
+    }    
+
+}
+
+Authenticable -[hidden]-> AuthMethod
+Authenticable -[hidden]-> AuthData
+
+PasswordAuthMethod ..> PasswordAuthenticable
+PasswordAuthMethod ..> PasswordAuthData
+
+@enduml

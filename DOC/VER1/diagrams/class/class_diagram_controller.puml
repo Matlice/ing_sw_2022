@@ -11,6 +11,8 @@ package controller #FFFFFF {
         + createHierarchy(auth: Authentication, root: Category)
     }
 
+    class AuthImpl implements Authentication
+
     interface Authentication {
         + getUser(): User
         + getLoginTime(): int
@@ -18,16 +20,13 @@ package controller #FFFFFF {
         + isExpired(): bool
     }
 
-    class Settings {
-        + TODO: String
-    }
+    class Settings {}
 }
 
+AuthImpl --> "1" User
 
-class AuthImpl implements Authentication
-
-Controller "1" o--> "1..n" Hierarchy
+Controller "1 " o--> "1..n" Hierarchy
 Controller +--> AuthImpl
-Controller ..> UserFactory: uses >
+Controller ..> UserFactory
 
 @enduml
