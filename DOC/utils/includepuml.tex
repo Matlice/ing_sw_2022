@@ -1,17 +1,40 @@
 \NewDocumentCommand{\includeplantuml}{m}{%
   \directlua{
-    local jobname=\luastring{#1}
-      local plantUmlMode=\luastring{\PlantUmlMode}
-      local plantUmlSourceFilename = jobname .. "-plantuml.txt"
-          infile = io.open(jobname, "r")
-          instr = infile:read("*a")
-          infile:close()
-          outfile = io.open(plantUmlSourceFilename, "w")
-          outfile:write(instr)
-          outfile:close()
+    function compile (jobname, plantUmlSourceFilename, plantUmlMode)
+      infile = io.open(jobname, "r")
+      instr = infile:read("*a")
+      infile:close()
+      
+      outfile = io.open(plantUmlSourceFilename, "w")
+      outfile:write(instr)
+      outfile:close()
+
       require("plantuml.lua")
       convertPlantUmlToTikz(jobname, plantUmlMode)
-    }
+    end
+
+    local jobname = \luastring{#1}
+    local plantUmlMode = \luastring{\PlantUmlMode}
+    local plantUmlSourceFilename = jobname .. "-plantuml.txt"
+
+    local old_file = io.open(plantUmlSourceFilename, "r")
+
+    if old_file == nil then 
+      compile(jobname, plantUmlSourceFilename, plantUmlMode)
+    else
+      local old_data = old_file:read("*a")
+
+      local new_file = io.open(jobname, "r")
+      local new_data = new_file:read("*a")
+      
+      if old_data == new_data then
+      else
+        compile(jobname, plantUmlSourceFilename, plantUmlMode)
+      end
+
+      io.close(old_file) 
+    end
+  }
   \ifthenelse{\equal{\PlantUmlMode}{latex}}{
     \begin{adjustbox}{max width=\linewidth}
       \input{#1-plantuml.latex}

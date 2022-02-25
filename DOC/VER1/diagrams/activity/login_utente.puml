@@ -2,6 +2,7 @@
 skinparam conditionStyle diamond
 
 start
+
 : Input credenziali \n (username:password);
 
 if ("user exists") then (true)
