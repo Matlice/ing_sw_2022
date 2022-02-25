@@ -4,6 +4,7 @@ import it.matlice.ingsw.auth.password.PasswordAuthData;
 import it.matlice.ingsw.data.ConfiguratorUser;
 import it.matlice.ingsw.data.UserFactory;
 import it.matlice.ingsw.data.impl.sqlite.CategoryFactoryImpl;
+import it.matlice.ingsw.data.impl.sqlite.HierarchyFactoryImpl;
 import it.matlice.ingsw.data.impl.sqlite.SQLiteConnection;
 import it.matlice.ingsw.data.impl.sqlite.UserFactoryImpl;
 
@@ -30,7 +31,7 @@ public class EntryPoint {
 
         var g = cf.getCategory(1);
 
-//        var hf = new HierarchyFactoryImpl();
+        var hf = new HierarchyFactoryImpl();
 //        hf.createHierarchy(g);
 
         var h = hf.getHierarchies();

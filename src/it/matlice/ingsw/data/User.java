@@ -6,7 +6,6 @@ import it.matlice.ingsw.auth.Authenticable;
 
 public abstract class User implements Authenticable {
     public abstract String getUsername();
-
     public abstract boolean authenticate(AuthMethod method, AuthData authdata);
     public abstract AuthMethod[] getAuthMethods();
 }

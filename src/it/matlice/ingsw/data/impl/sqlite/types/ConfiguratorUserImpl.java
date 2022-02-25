@@ -5,12 +5,12 @@ import it.matlice.ingsw.auth.AuthMethod;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.auth.password.PasswordAuthenticable;
 import it.matlice.ingsw.data.ConfiguratorUser;
+import it.matlice.ingsw.data.UserTypes;
 import it.matlice.ingsw.data.impl.sqlite.UserDB;
-import it.matlice.ingsw.data.impl.sqlite.UserTypes;
 
 public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAuthenticable {
 
-    private UserDB dbData;
+    private final UserDB dbData;
 
     public UserDB getDbData() {
         return dbData;
@@ -26,8 +26,6 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
         dbData.setType(UserTypes.CONFIGURATOR.getTypeRepresentation());
 
         //todo real password management
-        dbData.setPassword_salt(password);
-        dbData.setPassword_hash(password);
     }
 
     @Override
@@ -57,4 +55,8 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
         return this.dbData.getPassword_salt();
     }
 
+    @Override
+    public String setPassword(String password) {
+        //todo
+    }
 }

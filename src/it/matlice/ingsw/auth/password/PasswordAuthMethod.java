@@ -5,7 +5,7 @@ import it.matlice.ingsw.auth.AuthMethod;
 
 public class PasswordAuthMethod implements AuthMethod {
 
-    private PasswordAuthenticable user;
+    private final PasswordAuthenticable user;
 
     public PasswordAuthMethod(PasswordAuthenticable user) {
         this.user = user;
@@ -15,5 +15,9 @@ public class PasswordAuthMethod implements AuthMethod {
     public boolean performAuthentication(AuthData data) {
         assert data instanceof PasswordAuthData;
         return ((PasswordAuthData) data).getPassword().equals(user.getPasswordHash()); //todo
+    }
+
+    public void setPassword(String password) {
+        this.user.setPassword(password)
     }
 }

@@ -1,12 +1,13 @@
-package it.matlice.ingsw.data.impl.sqlite;
+package it.matlice.ingsw.data;
 
 public enum UserTypes {
-    CONFIGURATOR("sqlite.configurator");
+    CONFIGURATOR("configurator");
 
-    UserTypes(String typeRepresentation){
+    UserTypes(String typeRepresentation) {
         this.typeRepresentation = typeRepresentation;
     }
-    private String typeRepresentation;
+
+    private final String typeRepresentation;
 
     public String getTypeRepresentation() {
         return typeRepresentation;
