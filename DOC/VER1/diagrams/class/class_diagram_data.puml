@@ -27,6 +27,8 @@ package data #FFFFFF {
     }
 
     abstract class Category <<extends HashMap<String, TypeDefinition>>> {
+        - father: Category | null
+        
         + getFather(): Category
         + setFather(father: Category): void
         + isRoot(): bool
@@ -58,18 +60,19 @@ package data #FFFFFF {
 
 User ..|> Authenticable
 
-Category --> "0..1" Category: father
+'Category --> "0..1" Category: father
 Hierarchy --> "1" Category: root
 NodeCategory "2..n" o--> Category
 
-Category ..> TypeDefinition
-
-HierarchyFactory -[hidden]-> CategoryFactory
-CategoryFactory -[hidden]-> UserFactory
+Category .left.> TypeDefinition
 
 CategoryFactory .down.> Category: creates >
 HierarchyFactory .down.> Hierarchy: creates >
 UserFactory .down.> User: creates >
 UserFactory ..> UserTypes
 
+HierarchyFactory -left- CategoryFactory
+UserFactory -left- HierarchyFactory
+LeafCategory -right- NodeCategory
+Authenticable -left- UserFactory
 @enduml

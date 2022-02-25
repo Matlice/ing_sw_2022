@@ -1,16 +1,66 @@
 @startuml
-interface "Esempio Interfaccia" as ExInterface
-interface "Altra interfaccia" as InterTwo
+skinparam linetype ortho
 
-[Componente Uno] - ExInterface
-[Componente Due] --( ExInterface
-[Componente Due] - InterTwo
+component it.matlice.ingsw.auth #FFFFFF{
+    interface AuthMethod
+    interface Authenticable
+    interface AuthData
+    component password #FFFFFF{
+        [PasswordAuthData] -- AuthData
+        [PasswordAuthMethod] -- AuthMethod
+        [PasswordAuthMethod] --( Authenticable
+        interface "Password\nAuthenticable" as PasswordAuthenticable
+    } 
+} 
 
-database SQLite {
-    [Componente di SQLite] as sss
-    sss - prova
+component it.matlice.ingsw.data #FFFFFF{
+
+    [User] -- Authenticable
+    [Category]
+    [Hierarchy]
+
+    interface UserFactory
+    interface CategoryFactory
+    interface HierarchyFactory
+
+    component impl.sqlite #FFFFFF{
+        [UserFactoryImpl] -- UserFactory
+        [CategoryFactoryImpl] -- CategoryFactory
+        [HierarchyFactoryImpl] -- HierarchyFactory
+
+        component types #FFFFFF{
+            [ConfiguratorUserImpl] -up- PasswordAuthenticable
+            [ConfiguratorUserImpl] -up-( AuthMethod
+            [ConfiguratorUserImpl] -up-( AuthData
+
+            [CategoryImpl]
+            [HierarchyImpl]
+        }
+
+    }
 }
 
-[Componente Uno] --( prova
+component it.matlice.ingsw.controller #FFFFFF{
+
+    interface Authentication
+
+    [Controller.AuthImpl] -- Authentication
+    [Controller] -( Authentication
+
+    [Controller] -up-( CategoryFactory
+    [Controller] -up-( HierarchyFactory
+    [Controller] -up-( UserFactory
+}
+
+[Controller] +--> [Controller.AuthImpl]
+
+[UserFactoryImpl] .up.> [ConfiguratorUserImpl]: creates
+[CategoryFactoryImpl] .up.> [CategoryImpl]: creates
+[HierarchyFactoryImpl] .up.> [HierarchyImpl]: creates
+
+[ConfiguratorUserImpl] --|> User
+[CategoryImpl] -up-|> Category
+[HierarchyImpl] -up-|> Hierarchy
+
 
 @enduml

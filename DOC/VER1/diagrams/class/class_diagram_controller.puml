@@ -6,6 +6,7 @@ skinparam linetype ortho
 hide empty members
 
 package controller #FFFFFF {
+
     class Controller <<singleton>> {
         + createConfigurator(auth: Authentication, username: String)
         + createHierarchy(auth: Authentication, root: Category)
@@ -23,10 +24,27 @@ package controller #FFFFFF {
     class Settings {}
 }
 
-AuthImpl --> "1" User
+abstract class User
+abstract class Hierarchy
 
-Controller "1 " o--> "1..n" Hierarchy
-Controller +--> AuthImpl
-Controller ..> UserFactory
+interface UserFactory
+interface CategoryFactory
+interface HierarchyFactory
+
+AuthImpl --> "1" User
+Controller "1 " o--right--> "1..n" Hierarchy
+Controller +-down-> AuthImpl
+
+Controller ..> Settings
+
+Controller .down.> UserFactory
+Controller .down.> CategoryFactory
+Controller .down.> HierarchyFactory
+
+AuthImpl -left[hidden]- Authentication
+Hierarchy -[hidden]- UserFactory
+UserFactory -[hidden]- CategoryFactory
+CategoryFactory -[hidden]- HierarchyFactory
+
 
 @enduml

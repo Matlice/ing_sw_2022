@@ -39,8 +39,8 @@ package auth #FFFFFF {
 
 }
 
-Authenticable -[hidden]-> AuthMethod
-Authenticable -[hidden]-> AuthData
+Authenticable -right[hidden]- AuthMethod
+AuthMethod -right[hidden]- AuthData
 
 PasswordAuthMethod ..> PasswordAuthenticable
 PasswordAuthMethod ..> PasswordAuthData

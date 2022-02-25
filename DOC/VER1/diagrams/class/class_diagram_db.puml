@@ -9,15 +9,18 @@ interface PasswordAuthenticable
 
 package data #FFFFFF {
     abstract class ConfiguratorUser
-    interface UserFactory
-    interface HierarchyFactory
-
     abstract class NodeCategory
     abstract class LeafCategory
+    abstract class Hierarchy
+
+    interface UserFactory
+    interface CategoryFactory
+    interface HierarchyFactory
 
     package impl.sqlite #FFFFFF {
         
         class CategoryDB {
+            - father: CategoryDB | null
             - categoryId: int
             - categoryName: String
         }
@@ -33,36 +36,52 @@ package data #FFFFFF {
             - type: String
         }
 
-        class UserFactoryImpl implements UserFactory {
+        class UserFactoryImpl implements UserFactory {}
+        class HierarchyFactoryImpl extends HierarchyFactory
+        class CategoryFactoryImpl extends CategoryFactory
 
-        }
-
-        package types {
+        package types #FFFFFF {
             interface CategoryImpl {
                 + getDBData(): CategoryDB
             }
 
             class NodeCategoryImpl extends NodeCategory implements CategoryImpl
             class LeafCategoryImpl extends LeafCategory implements CategoryImpl
-
             class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAuthenticable
-
-            class HierarchyFactoryImpl extends HierarchyFactory
-            class UserFactoryImpl extends UserFactory
-            class CaegoryFactoryImpl extends CategoryFactory
-
+            class HierarchyImpl extends Hierarchy
         }
 
     }
 
 }
 
-CategoryDB --> "0..1" CategoryDB: father
+UserFactoryImpl ..> ConfiguratorUserImpl: creates >
+HierarchyFactoryImpl ..> HierarchyImpl: creates >
+CategoryFactoryImpl ..> CategoryImpl: creates >
+
+CategoryImpl -up-> "1" CategoryDB
+ConfiguratorUserImpl -up-> "1" UserDB
+HierarchyImpl -up-> "1" HierarchyDB
+
 HierarchyDB --> "1" CategoryDB: root
 
-CategoryImpl ..> CategoryDB
+CategoryImpl -right[hidden]- HierarchyImpl
+HierarchyImpl -right[hidden]- ConfiguratorUserImpl
+HierarchyImpl -down[hidden]--- Hierarchy
 
-NodeCategory -[hidden]-> LeafCategory
+CategoryDB -right- CategoryImpl
+HierarchyDB -down- CategoryDB
+HierarchyFactoryImpl -right- UserFactoryImpl
+CategoryFactoryImpl -right- HierarchyFactoryImpl
+
+'CategoryDB -right[hidden]- HierarchyDB
+'HierarchyDB -right[hidden]- UserDB
+
+LeafCategoryImpl -down[hidden]-- LeafCategory
+NodeCategoryImpl -down[hidden]-- NodeCategory
+ConfiguratorUserImpl -down[hidden]--- ConfiguratorUser
+
+ConfiguratorUserImpl -down[hidden]--- PasswordAuthenticable
 
 
 @enduml
