@@ -1,7 +1,7 @@
-package it.matlice.ingsw.data.impl.sqlite.types;
+package it.matlice.ingsw.data.impl.jdbc.types;
 
 import it.matlice.ingsw.data.NodeCategory;
-import it.matlice.ingsw.data.impl.sqlite.CategoryDB;
+import it.matlice.ingsw.data.impl.jdbc.CategoryDB;
 
 public class NodeCategoryImpl extends NodeCategory implements CategoryImpl {
     private final CategoryDB dbData;

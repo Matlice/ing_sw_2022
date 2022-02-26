@@ -1,10 +1,10 @@
-package it.matlice.ingsw.data.impl.sqlite;
+package it.matlice.ingsw.data.impl.jdbc;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "users")
-public class UserDB{
+public class UserDB {
     @DatabaseField(id = true)
     private String username;
 
@@ -17,7 +17,19 @@ public class UserDB{
     @DatabaseField(canBeNull = false)
     private String type;
 
-    public UserDB(){}
+    @DatabaseField(canBeNull = true)
+    private Long lastAccess;
+
+    public UserDB() {
+    }
+
+    public Long getLastAccess() {
+        return lastAccess;
+    }
+
+    public void setLastAccess(Long lastAccess) {
+        this.lastAccess = lastAccess;
+    }
 
     public String getUsername() {
         return username;

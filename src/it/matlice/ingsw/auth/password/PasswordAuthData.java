@@ -2,14 +2,10 @@ package it.matlice.ingsw.auth.password;
 
 import it.matlice.ingsw.auth.AuthData;
 
-public class PasswordAuthData implements AuthData {
-
-    private String password;
-
-    public PasswordAuthData(String password) {
-        this.password = password;
-    }
-
+/**
+ * Questa classe rappresenta i dati necessari per l'autenticazione con password.
+ */
+public record PasswordAuthData(String password) implements AuthData {
     public String getPassword() {
         return password;
     }

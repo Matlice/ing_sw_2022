@@ -1,11 +1,30 @@
 package it.matlice.ingsw.data;
 
-import it.matlice.ingsw.auth.AuthData;
 import it.matlice.ingsw.auth.AuthMethod;
 import it.matlice.ingsw.auth.Authenticable;
 
+import java.util.List;
+
+/**
+ * rappresenta un utente del sistema
+ */
 public abstract class User implements Authenticable {
     public abstract String getUsername();
-    public abstract boolean authenticate(AuthMethod method, AuthData authdata);
-    public abstract AuthMethod[] getAuthMethods();
+
+    @Override
+    public abstract List<AuthMethod> getAuthMethods();
+
+    public enum UserTypes {
+        CONFIGURATOR("configurator");
+
+        private final String typeRepresentation;
+
+        UserTypes(String typeRepresentation) {
+            this.typeRepresentation = typeRepresentation;
+        }
+
+        public String getTypeRepresentation() {
+            return typeRepresentation;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package it.matlice.ingsw.data.impl.sqlite;
+package it.matlice.ingsw.data.impl.jdbc;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -11,10 +11,10 @@ public class CategoryDB {
     @DatabaseField(generatedId = true)
     private int category_id;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, uniqueCombo = true)
     private String category_name;
 
-    @DatabaseField(canBeNull = true, foreign = true)
+    @DatabaseField(canBeNull = true, foreign = true, uniqueCombo = true)
     private CategoryDB father;
 
     CategoryDB(String category_name, CategoryDB father) {

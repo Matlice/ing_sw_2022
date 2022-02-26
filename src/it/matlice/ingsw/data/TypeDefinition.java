@@ -1,16 +1,23 @@
 package it.matlice.ingsw.data;
 
-public class TypeDefinition<T> {
+/**
+ * rappresenta un tipo di dato, salvandone il tipo e se esso è obbligatorio
+ *
+ * @param <T>
+ */
+public record TypeDefinition<T>(it.matlice.ingsw.data.TypeDefinition.TypeAssociation type, boolean required) {
+    public enum TypeAssociation {
+        INTEGER(Integer.class),
+        STRING(String.class);
 
-    public final String FRIENDLY_NAME;
-    public final Class<T> TYPE;
+        private final Class<?> type;
 
-    public TypeDefinition(String FRIENDLY_NAME, Class<T> TYPE, boolean REQUIRED) {
-        this.FRIENDLY_NAME = FRIENDLY_NAME;
-        this.TYPE = TYPE;
-        this.REQUIRED = REQUIRED;
+        TypeAssociation(Class<?> type) {
+            this.type = type;
+        }
+
+        public Class<?> getType() {
+            return type;
+        }
     }
-
-    public final boolean REQUIRED;
-
 }

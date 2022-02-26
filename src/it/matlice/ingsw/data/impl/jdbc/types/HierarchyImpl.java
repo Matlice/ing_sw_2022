@@ -1,8 +1,8 @@
-package it.matlice.ingsw.data.impl.sqlite.types;
+package it.matlice.ingsw.data.impl.jdbc.types;
 
 import it.matlice.ingsw.data.Category;
 import it.matlice.ingsw.data.Hierarchy;
-import it.matlice.ingsw.data.impl.sqlite.HierarchyDB;
+import it.matlice.ingsw.data.impl.jdbc.HierarchyDB;
 
 public class HierarchyImpl extends Hierarchy {
     private final HierarchyDB dbData;

@@ -1,4 +1,4 @@
-package it.matlice.ingsw.data.impl.sqlite;
+package it.matlice.ingsw.data.impl.jdbc;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -7,17 +7,19 @@ import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.data.Category;
 import it.matlice.ingsw.data.Hierarchy;
 import it.matlice.ingsw.data.HierarchyFactory;
-import it.matlice.ingsw.data.impl.sqlite.types.CategoryImpl;
-import it.matlice.ingsw.data.impl.sqlite.types.HierarchyImpl;
+import it.matlice.ingsw.data.impl.jdbc.types.CategoryImpl;
+import it.matlice.ingsw.data.impl.jdbc.types.HierarchyImpl;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HierarchyFactoryImpl implements HierarchyFactory {
     private final ConnectionSource connectionSource;
     private final Dao<HierarchyDB, Integer> hierarchyDAO;
 
     public HierarchyFactoryImpl() throws SQLException {
-        this.connectionSource = SQLiteConnection.getInstance().getConnectionSource();
+        this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
         this.hierarchyDAO = DaoManager.createDao(connectionSource, HierarchyDB.class);
         if (!this.hierarchyDAO.isTableExists()) {
             TableUtils.createTable(connectionSource, HierarchyDB.class);
@@ -25,7 +27,7 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
     }
 
     @Override
-    public Hierarchy[] getHierarchies() throws SQLException {
+    public List<Hierarchy> getHierarchies() throws SQLException {
         var category_factory = new CategoryFactoryImpl();
         return hierarchyDAO.queryForAll().stream().map(e -> {
             try {
@@ -34,7 +36,7 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
             } catch (SQLException ex) {
                 return null;
             }
-        }).toArray(Hierarchy[]::new);
+        }).collect(Collectors.toList());
     }
 
     @Override

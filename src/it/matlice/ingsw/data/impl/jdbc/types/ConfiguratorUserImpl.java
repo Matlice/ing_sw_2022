@@ -1,12 +1,14 @@
-package it.matlice.ingsw.data.impl.sqlite.types;
+package it.matlice.ingsw.data.impl.jdbc.types;
 
-import it.matlice.ingsw.auth.AuthData;
 import it.matlice.ingsw.auth.AuthMethod;
+import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.auth.password.PasswordAuthenticable;
 import it.matlice.ingsw.data.ConfiguratorUser;
-import it.matlice.ingsw.data.UserTypes;
-import it.matlice.ingsw.data.impl.sqlite.UserDB;
+import it.matlice.ingsw.data.impl.jdbc.UserDB;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAuthenticable {
 
@@ -20,12 +22,14 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
         this.dbData = from;
     }
 
-    public ConfiguratorUserImpl(String username, String password){
+    public ConfiguratorUserImpl(String username) {
         dbData = new UserDB();
         dbData.setUsername(username);
         dbData.setType(UserTypes.CONFIGURATOR.getTypeRepresentation());
 
         //todo real password management
+        dbData.setPassword_hash("");
+        dbData.setPassword_salt("");
     }
 
     @Override
@@ -34,15 +38,10 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
     }
 
     @Override
-    public boolean authenticate(AuthMethod method, AuthData authdata) {
-        return method.performAuthentication(authdata);
-    }
-
-    @Override
-    public AuthMethod[] getAuthMethods() {
-        return new AuthMethod[]{
+    public List<AuthMethod> getAuthMethods() {
+        return Arrays.asList(new AuthMethod[]{
                 new PasswordAuthMethod(this)
-        };
+        });
     }
 
     @Override
@@ -56,7 +55,7 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
     }
 
     @Override
-    public String setPassword(String password) {
+    public void setPassword(String password) throws InvalidPasswordException {
         //todo
     }
 }

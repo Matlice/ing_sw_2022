@@ -1,4 +1,4 @@
-package it.matlice.ingsw.data.impl.sqlite;
+package it.matlice.ingsw.data.impl.jdbc;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
