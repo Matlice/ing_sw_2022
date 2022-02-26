@@ -8,7 +8,7 @@
 \end{figure}
 
 Il package \texttt{controller} è il responsabile della gestione dei dati e dell'attuazione dei comandi.
-I dati delle impostazioni sono ottenuti dalla classe \textit{Settings}, la quale -nelle versioni successive-
+I dati delle impostazioni sono ottenuti dalla classe \textit{Settings}, la quale - nelle versioni successive -
 acquisirà i metodi di serializzazione su file in formato modificabile. 
 
 La gestione dell'autenticazione avviene mediante la classe \textit{AuthImpl}, classe innestata con costruttore privato
@@ -17,4 +17,4 @@ Così facendo la classe \textit{Controller} sarà l'unica a poter ``rilasciare''
 solamente dopo aver verificato le credenziali ed aver autenticato l'utente.
 
 La classe \textit{AuthImpl} svolge la funzione di ``Token di autenticazione'' all'interno dell'applicativo, 
-di conseguenza verrà utilizzata come parametro per tutte le funzioni di \textit{Controller} che richiederanno autentiucazione.
+di conseguenza verrà utilizzata come parametro per tutte le funzioni di \textit{Controller} che richiedano autenticazione.

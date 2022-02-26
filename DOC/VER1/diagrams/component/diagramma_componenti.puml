@@ -6,10 +6,11 @@ component it.matlice.ingsw.auth #FFFFFF{
     interface Authenticable
     interface AuthData
     component password #FFFFFF{
+        interface "Password\nAuthenticable" as PasswordAuthenticable
         [PasswordAuthData] -- AuthData
+        [PasswordAuthData] -[hidden]-( PasswordAuthenticable
         [PasswordAuthMethod] -- AuthMethod
         [PasswordAuthMethod] --( Authenticable
-        interface "Password\nAuthenticable" as PasswordAuthenticable
     } 
 } 
 

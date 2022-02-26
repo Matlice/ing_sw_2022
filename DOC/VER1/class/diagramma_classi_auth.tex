@@ -8,24 +8,23 @@
 \end{figure}
 
 Il package \texttt{auth} è il responsabile della gestione delle autenticazioni all'interno dell'applicazione.
-Al fine di garantire la massima flessibilità nello sviluppo, le classi utente non hanno alcuna concezione di autenticazione
-e, come è possibile vedere dalla figura~\ref{fig:class_data_v_1}, l'interfaccia \textit{UserFactory} non richiede alcuna password
-per la creazione dell'utente e nemmeno la classe \textit{User} User non presenta alcun getter per l'attributo \texttt{password}.
+Al fine di garantire la massima flessibilità nello sviluppo, le classi utente non hanno alcuna concezione di autenticazione;
+come è possibile vedere dalla figura~\ref{fig:class_data_v_1}, l'interfaccia \textit{UserFactory} non richiede alcuna password
+per la creazione dell'utente e nemmeno la classe \textit{User} presenta alcun getter per l'attributo \texttt{password}.
 
-Il package Auth è stato ideato, dunque, per scindere i comportamenti relativi all'autenticazione dalla classe \textit{User}.
-
+Il package \texttt{auth} è stato ideato, dunque, per scindere i comportamenti relativi all'autenticazione dalla classe \textit{User}.
 Questa soluzione permette in futuro di implementare nuovi metodi di login indipendenti dalla struttura dell'applicazione.
 
-La referenza all'attributo \texttt{password} si ha solamente nella classe \textit{ConfiguratorUserImpl} (figura~\ref{fig:class_db_v_1})
+La referenza all'attributo \texttt{password} si ha solamente nella classe \textit{ConfiguratorUserImpl} (figura~\ref{fig:class_db_v_1}),
 dove è necessario al fine di salvare i dati di autenticazione a database.
 
 L'interfaccia \textit{PasswordAuthenticable} è un'estensione dell'interfaccia \textit{Authenticable} implementata dalla classe astratta
-\textit{User}, cosicchè data un'istanza rappresentante l'utente, sarà possibile ottenere la lista dei metodi di autenticazione supportati
-mediante il metodo \[ \texttt{getAuthMethods(): AuthMetod[]} \]
+\textit{User} cosicchè, data un'istanza rappresentante l'utente, sarà possibile ottenere la lista dei metodi di autenticazione supportati
+mediante il metodo \texttt{getAuthMethods()}.
 
 Per permettere a questo metodo di ritornare un'istanza di \textit{PasswordAuthMethod}, la classe che si vuole autenticare deve essere un'implementazione
 di \textit{PasswordAuthenticable}, di conseguenza non ci possono essere errori di mancata implementazione.
 
-Per autenticare l'utente sarà quindi necessario ottenere un'istanza di \textit{Authenticable} tramite il metodo \[ \texttt{getAuthMethods(): AuthMetod[]} \]
-sulla quale chiamare il metodo \[\texttt{performAuthentication(data: AuthData): boolean}\] con l'istanza di \textit{AuthData}
+Per autenticare l'utente sarà quindi necessario ottenere un'istanza di \textit{Authenticable} tramite il metodo \texttt{getAuthMethods()}
+sulla quale chiamare il metodo \texttt{performAuthentication(data: AuthData)} con l'istanza di \textit{AuthData}
 necessaria da quest'ultimo e costruita dall'applicativo quando necessaria.

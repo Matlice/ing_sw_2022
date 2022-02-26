@@ -5,14 +5,14 @@ start
 
 : Input credenziali \n (username:password);
 
-if ("user exists") then (true)
+if (``user exists'') then (true)
     
     : Verifica password |
 
-    if ("result") then (true)
+    if (``result'') then (true)
         :Accesso consentito >
         
-        if ("primo accesso") then
+        if (``primo accesso'') then
             :Cambio password;
             stop
         else ([else])

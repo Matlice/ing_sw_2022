@@ -3,24 +3,24 @@
 \begin{figure}[H]
     \centering
     \includeplantuml{VER1/diagrams/class/class_diagram_db.puml}
-    \caption{Versione 1: Diagramma UML delle classi, package \texttt{db}}
+    \caption{Versione 1: Diagramma UML delle classi, package \texttt{impl.sqlite}}
     \label{fig:class_db_v_1}
 \end{figure}
 
-Questo package implementa le interfacce fornite dal package padre sfruttando come motore di dati un database supportato da JDBC.
-Tramite l'utilizzo di una libraria esterna (\textit{ORMLite}) la quale permette la semplificazione della gestione dei dati nel database
-e permettendo l'utilizzo di helper per la scrittura delle query; l'associazione dato-oggetto è stata così progettata:
+Questo package implementa le interfacce fornite dal package padre, sfruttando come motore di dati un database supportato da JDBC
+tramite l'utilizzo di una libraria esterna (\textit{ORMLite}), la quale permette la semplificazione della gestione dei dati nel database
+e permette l'utilizzo di helper per la scrittura delle query. L'associazione dato-oggetto è stata così progettata:
 
-Ogni rapresentazione di un oggetto a database viene identificata in una classe wrapper: \textit{UserDB}, \textit{CategoryDB}, \textit{HierarchyDB}
+Ogni rapresentazione di un oggetto a database viene identificata in una classe wrapper: \textit{UserDB}, \textit{CategoryDB}, \textit{HierarchyDB}.
 Mediante queste classi sarà possibile accedere direttamente ai dati così come sono salvati nel database.
 
 Il package offre anche un'implementazione delle Factory definite nel package padre. Lo scopo di queste classi
-è istanziare le classi di implementazioni delle classi \textit{User}, \textit{Category}, \textit{Hierarchy} (figura~\ref{fig:class_data_v_1}) 
+è istanziare le classi di implementazioni delle classi \textit{User}, \textit{Category}, \textit{Hierarchy} (figura~\ref{fig:class_data_v_1}
 nella loro declinazione corretta in base allo stato del programma e del dato a database.
 
 In particolare, la classe \textit{UserFactoryImpl} instanzierà una classe \textit{ConfiguratorUser} se a database l'utente avrà
-il permesso di configuratore.
+i permessi di configuratore.
 
 Caso più particolare è quello delle categorie:
-La classe \textit{CategoryFactoryImpl} otterrà dall'origine dati la struttura delle categorie definita mediante backreference al padre, 
-e ricostruirà l'albero delle categiorie composto da elementi di tipo \textit{NodeCAtegoryImpl} o \textit{LeafCategoryImpl}.
+la classe \textit{CategoryFactoryImpl} otterrà dall'origine dati la struttura delle categorie definita mediante backreference al padre, 
+e ricostruirà l'albero delle categorie composto da elementi di tipo \textit{NodeCategoryImpl} o \textit{LeafCategoryImpl}.
