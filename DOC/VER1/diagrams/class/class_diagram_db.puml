@@ -69,10 +69,10 @@ CategoryImpl -right[hidden]- HierarchyImpl
 HierarchyImpl -right[hidden]- ConfiguratorUserImpl
 HierarchyImpl -down[hidden]--- Hierarchy
 
-CategoryDB -right- CategoryImpl
-HierarchyDB -down- CategoryDB
-HierarchyFactoryImpl -right- UserFactoryImpl
-CategoryFactoryImpl -right- HierarchyFactoryImpl
+CategoryDB -right[hidden]- CategoryImpl
+HierarchyDB -down[hidden]- CategoryDB
+HierarchyFactoryImpl -right[hidden]- UserFactoryImpl
+CategoryFactoryImpl -right[hidden]- HierarchyFactoryImpl
 
 'CategoryDB -right[hidden]- HierarchyDB
 'HierarchyDB -right[hidden]- UserDB

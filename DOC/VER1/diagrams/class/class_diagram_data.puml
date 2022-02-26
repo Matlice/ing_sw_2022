@@ -72,8 +72,8 @@ HierarchyFactory .down.> Hierarchy: creates >
 UserFactory .down.> User: creates >
 UserFactory ..> UserTypes
 
-HierarchyFactory -left- CategoryFactory
-UserFactory -left- HierarchyFactory
-LeafCategory -right- NodeCategory
+HierarchyFactory -left[hidden]- CategoryFactory
+UserFactory -left[hidden]- HierarchyFactory
+LeafCategory -left[hidden]- NodeCategory
 Authenticable -left- UserFactory
 @enduml

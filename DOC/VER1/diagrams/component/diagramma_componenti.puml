@@ -46,7 +46,7 @@ component it.matlice.ingsw.controller #FFFFFF{
     interface Authentication
 
     [Controller.AuthImpl] -- Authentication
-    [Controller] -( Authentication
+    [Controller] -left( Authentication
 
     [Controller] -up-( CategoryFactory
     [Controller] -up-( HierarchyFactory
