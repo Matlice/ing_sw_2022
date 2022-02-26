@@ -24,7 +24,7 @@ public abstract class User implements Authenticable {
         }
 
         public String getTypeRepresentation() {
-            return typeRepresentation;
+            return this.typeRepresentation;
         }
     }
 }

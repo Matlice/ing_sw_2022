@@ -13,6 +13,6 @@ public class HierarchyImpl extends Hierarchy {
     }
 
     public HierarchyDB getDbData() {
-        return dbData;
+        return this.dbData;
     }
 }

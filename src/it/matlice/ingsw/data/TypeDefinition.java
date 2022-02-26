@@ -17,7 +17,7 @@ public record TypeDefinition<T>(it.matlice.ingsw.data.TypeDefinition.TypeAssocia
         }
 
         public Class<?> getType() {
-            return type;
+            return this.type;
         }
     }
 }

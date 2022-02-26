@@ -14,22 +14,22 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
 
     private final UserDB dbData;
 
-    public UserDB getDbData() {
-        return dbData;
-    }
-
-    public ConfiguratorUserImpl(UserDB from){
+    public ConfiguratorUserImpl(UserDB from) {
         this.dbData = from;
     }
 
     public ConfiguratorUserImpl(String username) {
-        dbData = new UserDB();
-        dbData.setUsername(username);
-        dbData.setType(UserTypes.CONFIGURATOR.getTypeRepresentation());
+        this.dbData = new UserDB();
+        this.dbData.setUsername(username);
+        this.dbData.setType(UserTypes.CONFIGURATOR.getTypeRepresentation());
 
         //todo real password management
-        dbData.setPassword_hash("");
-        dbData.setPassword_salt("");
+        this.dbData.setPassword_hash("");
+        this.dbData.setPassword_salt("");
+    }
+
+    public UserDB getDbData() {
+        return this.dbData;
     }
 
     @Override

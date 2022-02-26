@@ -26,27 +26,27 @@ public class CategoryDB {
     }
 
     public int getCategory_id() {
-        return category_id;
+        return this.category_id;
     }
 
     public String getCategory_name() {
-        return category_name;
+        return this.category_name;
     }
 
     public CategoryDB getFather() {
-        return father;
+        return this.father;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
         CategoryDB that = (CategoryDB) o;
-        return category_id == that.category_id;
+        return this.category_id == that.category_id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(category_id);
+        return Objects.hash(this.category_id);
     }
 }

@@ -20,10 +20,10 @@ public class HierarchyDB {
     }
 
     public CategoryDB getRoot() {
-        return root;
+        return this.root;
     }
 
     public int getHierarchy_id() {
-        return hierarchy_id;
+        return this.hierarchy_id;
     }
 }

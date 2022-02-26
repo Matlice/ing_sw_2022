@@ -16,14 +16,14 @@ public class UserFactoryImpl implements UserFactory {
 
     public UserFactoryImpl() throws SQLException {
         this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
-        this.userDAO = DaoManager.createDao(connectionSource, UserDB.class);
+        this.userDAO = DaoManager.createDao(this.connectionSource, UserDB.class);
         if (!this.userDAO.isTableExists()) {
-            TableUtils.createTable(connectionSource, UserDB.class);
+            TableUtils.createTable(this.connectionSource, UserDB.class);
         }
     }
 
     public User getUser(String username) throws SQLException {
-        var udb = userDAO.queryForId(username);
+        var udb = this.userDAO.queryForId(username);
         if (udb.getType().equals(User.UserTypes.CONFIGURATOR.getTypeRepresentation()))
             return new ConfiguratorUserImpl(udb);
         throw new RuntimeException("no user type found");
@@ -32,7 +32,7 @@ public class UserFactoryImpl implements UserFactory {
     public User createUser(String username, User.UserTypes userType) throws SQLException {
         if (userType == User.UserTypes.CONFIGURATOR) {
             var ref = new ConfiguratorUserImpl(username);
-            userDAO.create(ref.getDbData());
+            this.userDAO.create(ref.getDbData());
             return ref;
         }
         throw new RuntimeException("no user type found");

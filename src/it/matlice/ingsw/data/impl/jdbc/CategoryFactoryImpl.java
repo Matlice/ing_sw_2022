@@ -23,20 +23,20 @@ public class CategoryFactoryImpl implements CategoryFactory {
 
     public CategoryFactoryImpl() throws SQLException {
         this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
-        this.categoryDAO = DaoManager.createDao(connectionSource, CategoryDB.class);
-        this.fieldDAO = DaoManager.createDao(connectionSource, CategoryFieldDB.class);
+        this.categoryDAO = DaoManager.createDao(this.connectionSource, CategoryDB.class);
+        this.fieldDAO = DaoManager.createDao(this.connectionSource, CategoryFieldDB.class);
 
         if (!this.categoryDAO.isTableExists())
-            TableUtils.createTable(connectionSource, CategoryDB.class);
+            TableUtils.createTable(this.connectionSource, CategoryDB.class);
         if (!this.fieldDAO.isTableExists())
-            TableUtils.createTable(connectionSource, CategoryFieldDB.class);
+            TableUtils.createTable(this.connectionSource, CategoryFieldDB.class);
     }
 
     private Category populateCategory(Category cat) throws SQLException {
         assert cat instanceof CategoryImpl;
 
-        var fields = fieldDAO.query(
-                fieldDAO.queryBuilder().where()
+        var fields = this.fieldDAO.query(
+                this.fieldDAO.queryBuilder().where()
                         .eq("category_id", ((CategoryImpl) cat).getDbData().getCategory_id())
                         .prepare()
         );
@@ -57,14 +57,14 @@ public class CategoryFactoryImpl implements CategoryFactory {
     @Override
     public Category getCategory(int id) throws SQLException {
         var map = new HashMap<CategoryDB, List<CategoryDB>>();
-        var ref = categoryDAO.queryForId(id);
+        var ref = this.categoryDAO.queryForId(id);
 
         var stack = new Stack<CategoryDB>();
         stack.push(ref);
         while (!stack.empty()) {
             var r = stack.pop();
-            var qb = categoryDAO.queryBuilder();
-            var children = categoryDAO.query(qb.where().eq("father_id", r.getCategory_id()).prepare());
+            var qb = this.categoryDAO.queryBuilder();
+            var children = this.categoryDAO.query(qb.where().eq("father_id", r.getCategory_id()).prepare());
             map.put(r, children);
             children.forEach(stack::push);
         }
@@ -74,7 +74,7 @@ public class CategoryFactoryImpl implements CategoryFactory {
         obj_stack.push(obj_ref);
         while (!obj_stack.empty()) {
             var father = obj_stack.pop();
-            populateCategory((Category) father);
+            this.populateCategory((Category) father);
 
             map.get(father.getDbData()).forEach(e -> {
                 assert father instanceof NodeCategoryImpl;
@@ -90,17 +90,17 @@ public class CategoryFactoryImpl implements CategoryFactory {
     }
 
     @Override
-    public Category createCategory(String nome, Category father, boolean isLeaf) throws SQLException{
+    public Category createCategory(String nome, Category father, boolean isLeaf) throws SQLException {
         CategoryDB ref;
 
-        if(father != null){
+        if (father != null) {
             assert father instanceof NodeCategoryImpl;
             ref = new CategoryDB(nome, ((NodeCategoryImpl) father).getDbData());
         } else {
             ref = new CategoryDB(nome, null);
         }
 
-        categoryDAO.createIfNotExists(ref);
+        this.categoryDAO.createIfNotExists(ref);
 
         Category ret = isLeaf ? new LeafCategoryImpl(ref) : new NodeCategoryImpl(ref);
 
@@ -114,12 +114,12 @@ public class CategoryFactoryImpl implements CategoryFactory {
     public Category saveCategory(Category category) throws SQLException {
         assert category instanceof CategoryImpl;
 
-        categoryDAO.update(((CategoryImpl) category).getDbData());
+        this.categoryDAO.update(((CategoryImpl) category).getDbData());
 
         for (var entry : category.entrySet()) {
             var field_name = entry.getKey();
             var field_type = entry.getValue();
-            fieldDAO.createOrUpdate(
+            this.fieldDAO.createOrUpdate(
                     new CategoryFieldDB(
                             field_name,
                             ((CategoryImpl) category).getDbData(),

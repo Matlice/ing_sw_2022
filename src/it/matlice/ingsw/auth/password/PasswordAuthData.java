@@ -7,6 +7,6 @@ import it.matlice.ingsw.auth.AuthData;
  */
 public record PasswordAuthData(String password) implements AuthData {
     public String getPassword() {
-        return password;
+        return this.password;
     }
 }

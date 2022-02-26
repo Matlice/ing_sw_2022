@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class JdbcConnection {
     private static JdbcConnection instance = null;
 
-    private ConnectionSource cs = null;
+    private final ConnectionSource cs;
 
     private JdbcConnection() {
         throw new RuntimeException("Database has not been instantiated");
@@ -28,7 +28,7 @@ public class JdbcConnection {
     }
 
     public void close() throws Exception {
-        cs.close();
+        this.cs.close();
     }
 
     public ConnectionSource getConnectionSource() {

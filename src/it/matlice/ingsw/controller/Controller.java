@@ -78,7 +78,7 @@ public class Controller {
          */
         @Override
         public long getExpirationTime() {
-            return login_time + LOGIN_EXPIRATION_TIME;
+            return this.login_time + LOGIN_EXPIRATION_TIME;
         }
 
         /**
@@ -86,7 +86,7 @@ public class Controller {
          */
         @Override
         public boolean isValid() {
-            return loginProblem() == null;
+            return this.loginProblem() == null;
         }
 
         /**
@@ -94,7 +94,7 @@ public class Controller {
          */
         @Override
         public String loginProblem() {
-            if (System.currentTimeMillis() / 1000L >= getExpirationTime())
+            if (System.currentTimeMillis() / 1000L >= this.getExpirationTime())
                 return "Expired token";
             return null;
         }

@@ -17,18 +17,18 @@ import java.util.Set;
  */
 public abstract class Category extends HashMap<String, TypeDefinition<?>> {
 
-    public boolean isRequired(String name) {
-        return this.containsKey(name) && this.get(name).REQUIRED();
-    }
-
     private Category father = null;
+
+    public boolean isRequired(String name) {
+        return this.containsKey(name) && this.get(name).required();
+    }
 
     /**
      * @return ritorna la dimensione della mappa distribuita (size nodo + sum(size(e): e predecessore))
      */
     @Override
     public int size() {
-        return father == null ? super.size() : super.size() + father.size();
+        return this.father == null ? super.size() : super.size() + this.father.size();
     }
 
     /**
@@ -36,36 +36,36 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
      */
     @Override
     public boolean isEmpty() {
-        return father == null ? super.isEmpty() : super.isEmpty() && father.isEmpty();
+        return this.father == null ? super.isEmpty() : super.isEmpty() && this.father.isEmpty();
     }
 
     @Override
     public TypeDefinition<?> get(Object key) {
-        if (super.containsKey(key) || father == null)
+        if (super.containsKey(key) || this.father == null)
             return super.get(key);
-        return father.get(key);
+        return this.father.get(key);
     }
 
     @Override
     public boolean containsKey(Object key) {
-        if (super.containsKey(key) || father == null)
+        if (super.containsKey(key) || this.father == null)
             return super.containsKey(key);
-        return father.containsKey(key);
+        return this.father.containsKey(key);
     }
 
     @Override
     public TypeDefinition<?> put(String key, TypeDefinition<?> value) {
-        if (father != null) {
-            if (father.containsKey(key))
-                father.put(key, value);
+        if (this.father != null) {
+            if (this.father.containsKey(key))
+                this.father.put(key, value);
         }
         return super.put(key, value);
     }
 
     @Override
     public TypeDefinition<?> remove(Object key) {
-        if (father != null) {
-            father.remove(key);
+        if (this.father != null) {
+            this.father.remove(key);
         }
         return super.remove(key);
     }
@@ -77,25 +77,25 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
      */
     public Set<Entry<String, TypeDefinition<?>>> fullEntrySet() {
         var set = this.entrySet();
-        if (father != null)
-            set.addAll(father.fullEntrySet());
+        if (this.father != null)
+            set.addAll(this.father.fullEntrySet());
         return set;
     }
 
     @Override
     public void clear() {
-        if (father != null) father.clear();
+        if (this.father != null) this.father.clear();
         super.clear();
     }
 
 
     @Override
     public boolean containsValue(Object value) {
-        return super.containsValue(value) || (father != null && father.containsValue(value));
+        return super.containsValue(value) || (this.father != null && this.father.containsValue(value));
     }
 
     public Category getFather() {
-        return father;
+        return this.father;
     }
 
     public void setFather(Category father) {
@@ -108,7 +108,7 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
      * @return true se è una categoria root
      */
     public boolean isRoot() {
-        return father == null;
+        return this.father == null;
     }
 
     /**

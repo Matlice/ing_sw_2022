@@ -24,7 +24,7 @@ public class UserDB {
     }
 
     public Long getLastAccess() {
-        return lastAccess;
+        return this.lastAccess;
     }
 
     public void setLastAccess(Long lastAccess) {
@@ -32,7 +32,7 @@ public class UserDB {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -40,7 +40,7 @@ public class UserDB {
     }
 
     public String getPassword_hash() {
-        return password_hash;
+        return this.password_hash;
     }
 
     public void setPassword_hash(String password_hash) {
@@ -48,7 +48,7 @@ public class UserDB {
     }
 
     public String getPassword_salt() {
-        return password_salt;
+        return this.password_salt;
     }
 
     public void setPassword_salt(String password_salt) {
@@ -56,7 +56,7 @@ public class UserDB {
     }
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public void setType(String type) {

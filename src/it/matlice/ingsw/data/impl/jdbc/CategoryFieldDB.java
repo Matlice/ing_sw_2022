@@ -31,7 +31,7 @@ public class CategoryFieldDB {
     }
 
     public int getFieldId() {
-        return fieldId;
+        return this.fieldId;
     }
 
     public void setFieldId(int fieldId) {
@@ -39,7 +39,7 @@ public class CategoryFieldDB {
     }
 
     public boolean isRequired() {
-        return required;
+        return this.required;
     }
 
     public void setRequired(boolean required) {
@@ -47,7 +47,7 @@ public class CategoryFieldDB {
     }
 
     public String getFieldName() {
-        return fieldName;
+        return this.fieldName;
     }
 
     public void setFieldName(String fieldName) {
@@ -55,7 +55,7 @@ public class CategoryFieldDB {
     }
 
     public CategoryDB getCategory() {
-        return category;
+        return this.category;
     }
 
     public void setCategory(CategoryDB category) {
@@ -63,7 +63,7 @@ public class CategoryFieldDB {
     }
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public void setType(String type) {

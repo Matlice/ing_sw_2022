@@ -12,6 +12,6 @@ public abstract class Hierarchy {
     }
 
     public Category getRootCategory() {
-        return rootCategory;
+        return this.rootCategory;
     }
 }

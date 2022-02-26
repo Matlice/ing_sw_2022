@@ -15,7 +15,7 @@ public interface CategoryFactory {
      *
      * @param id numero incrementale identificativo univoco della categoria
      * @return una categoria se esiste
-     * @throws FactoryException
+     * @throws Exception
      */
     Category getCategory(int id) throws Exception;
 
@@ -26,7 +26,7 @@ public interface CategoryFactory {
      * @param father categoria padre (null se si vuole creare una root category
      * @param isLeaf indica se la categoria creata potrà avere figli o se è eldiana nel finale alternativo di aot
      * @return la categoria creata
-     * @throws FactoryException
+     * @throws Exception
      */
     Category createCategory(String nome, Category father, boolean isLeaf) throws Exception;
 
@@ -37,7 +37,7 @@ public interface CategoryFactory {
      *
      * @param category categoria da salvare
      * @return la categoria aggiornata
-     * @throws FactoryException
+     * @throws Exception
      */
     Category saveCategory(Category category) throws Exception;
 }

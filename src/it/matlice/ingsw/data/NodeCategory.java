@@ -17,7 +17,7 @@ public abstract class NodeCategory extends Category {
      */
     public Category addChild(Category child) {
         child.setFather(this);
-        children.add(child);
+        this.children.add(child);
         //todo lanciare un errore se il campo è duplicato?
         return child;
     }
@@ -30,11 +30,11 @@ public abstract class NodeCategory extends Category {
      */
     public Category removeChild(Category child) {
         child.setFather(null);
-        children.remove(child);
+        this.children.remove(child);
         return child;
     }
 
     public Category[] getChildren() {
-        return children.toArray(Category[]::new);
+        return this.children.toArray(Category[]::new);
     }
 }

@@ -20,16 +20,16 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
 
     public HierarchyFactoryImpl() throws SQLException {
         this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
-        this.hierarchyDAO = DaoManager.createDao(connectionSource, HierarchyDB.class);
+        this.hierarchyDAO = DaoManager.createDao(this.connectionSource, HierarchyDB.class);
         if (!this.hierarchyDAO.isTableExists()) {
-            TableUtils.createTable(connectionSource, HierarchyDB.class);
+            TableUtils.createTable(this.connectionSource, HierarchyDB.class);
         }
     }
 
     @Override
     public List<Hierarchy> getHierarchies() throws SQLException {
         var category_factory = new CategoryFactoryImpl();
-        return hierarchyDAO.queryForAll().stream().map(e -> {
+        return this.hierarchyDAO.queryForAll().stream().map(e -> {
             try {
                 var root = category_factory.getCategory(e.getRoot().getCategory_id());
                 return new HierarchyImpl(e, root);
@@ -43,13 +43,13 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
     public Hierarchy createHierarchy(Category rootCategory) throws SQLException {
         assert rootCategory instanceof CategoryImpl;
         var ref = new HierarchyDB(((CategoryImpl) rootCategory).getDbData());
-        hierarchyDAO.create(ref);
+        this.hierarchyDAO.create(ref);
         return new HierarchyImpl(ref, rootCategory);
     }
 
     @Override
     public void deleteHierarchy(Hierarchy h) throws SQLException {
         assert h instanceof HierarchyImpl;
-        hierarchyDAO.delete(((HierarchyImpl) h).getDbData());
+        this.hierarchyDAO.delete(((HierarchyImpl) h).getDbData());
     }
 }

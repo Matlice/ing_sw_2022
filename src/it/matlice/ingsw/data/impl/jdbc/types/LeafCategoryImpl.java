@@ -6,16 +6,16 @@ import it.matlice.ingsw.data.impl.jdbc.CategoryDB;
 public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
     private final CategoryDB dbData;
 
-    public CategoryDB getDbData() {
-        return dbData;
-    }
-
     public LeafCategoryImpl(CategoryDB from) {
         this.dbData = from;
     }
 
+    public CategoryDB getDbData() {
+        return this.dbData;
+    }
+
     @Override
     public String getName() {
-        return dbData.getCategory_name();
+        return this.dbData.getCategory_name();
     }
 }
