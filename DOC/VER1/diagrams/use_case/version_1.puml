@@ -11,5 +11,6 @@ conf --> (Creazione gerarchia)
 adm --> (Creazione nuovo \naccount configuratore)
 
 (Accesso Configuratore) ..> (Accesso utente): <<include>>
+(Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
 
 @enduml
