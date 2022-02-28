@@ -1,5 +1,51 @@
 @startuml
 
-TODO
+:Utente di sistema: as user
+:Configuratore: as conf
+:Amministratore: as adm
+
+conf -up-|> user
+conf --> (Accesso Configuratore)
+conf --> (Creazione gerarchia)
+
+adm --> (Creazione nuovo \naccount configuratore)
+
+(Accesso Configuratore) ..> (Accesso utente): <<include>>
+(Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
+
+:Fruitore: as fruit
+
+fruit -up-|> user
+
+(Configurazione parametri)
+(Registrazione fruitore)
+
+conf --> (Configurazione parametri)
+fruit --> (Registrazione fruitore)
+(Configurazione parametri) ..> (Accesso Configuratore) : <<include>>
+
+
+'VERSIONE 3 ==========================================
+
+(Pubblicazione articolo) #pink;line:red;text:red
+(Ritiro offerta) #pink;line:red;text:red
+(Visualizzazione offerte \nper categoria) #pink;line:red;text:red
+(Visualizzazione offerte \ndell'utente) #pink;line:red;text:red
+
+fruit --> (Pubblicazione articolo) #red;text:red
+fruit --> (Ritiro offerta) #red;text:red
+fruit --> (Visualizzazione offerte \nper categoria) #red;text:red
+conf --> (Visualizzazione offerte \nper categoria) #red;text:red
+fruit --> (Visualizzazione offerte \ndell'utente) #red;text:red
+
+(Creazione gerarchia) -[hidden]- (Visualizzazione offerte \nper categoria)
+(Registrazione fruitore) -[hidden]- (Pubblicazione articolo)
+(Pubblicazione articolo) -[hidden]- (Ritiro offerta)
+
+(Visualizzazione offerte \ndell'utente) ..> (Accesso utente) #red;text:red : <<include>>
+(Visualizzazione offerte \nper categoria) ..> (Accesso utente) #red;text:red : <<include>>
+(Ritiro offerta) ..> (Accesso utente) #red;text:red : <<include>>
+(Pubblicazione articolo)  ..> (Accesso utente) #red;text:red : <<include>>
 
 @enduml
+

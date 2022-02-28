@@ -20,10 +20,10 @@ adm --> (Creazione nuovo \naccount configuratore)
 fruit -up-|> user #red;text:red
 
 (Configurazione parametri)  #pink;line:red;text:red
-(Registrazone fruitore) #pink;line:red;text:red
+(Registrazione fruitore) #pink;line:red;text:red
 
 conf --> (Configurazione parametri) #red;text:red
-fruit --> (Registrazone fruitore) #red;text:red
+fruit --> (Registrazione fruitore) #red;text:red
 (Configurazione parametri) ..> (Accesso Configuratore) #red;text:red : <<include>>
 
 @enduml
