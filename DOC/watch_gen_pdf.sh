@@ -9,5 +9,5 @@ do
         fi
         chsum1=$chsum2
     fi
-    sleep 2
+    sleep 10
 done
