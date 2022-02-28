@@ -5,10 +5,11 @@
         {Configuratore}
         {
             \begin{tabular}{l}
-                \textit{<<include>> accesso configuratore}
+                \textit{<<include>> Accesso configuratore}\\
                 1.  Il configuratore inserisce il nome della categoria radice\\
                 2.  Il configuratore inserisce la descrizione della categoria radice \\
                 3.  Il sistema chiede se si vogliono aggiungere campi nativi\\
+                4.  L'utente conferma la creazione della gerarchia\\
                 \textit{Postcondizione: la gerarchia viene creata, e le viene assegnata}\\
                 \textit{la categoria radice}\\
                 Fine
@@ -30,7 +31,17 @@
                     3.2 Viene segnalato che il campo è già stato inserito\\
                     Torna al punto 3
                 \end{tabular}
+            } \\
+            \auxcase{
+                \begin{tabular}{l}
+                    4.a L'utente richiede di aggiungere una nuova categoria alla\\gerarchia che sta creando\\
+                    5. L'utente inserisce a quale categoria vuole aggiungere la sot-\\tocategoria\\
+                    6. L'utente inserisce il nome della categoria che vuole aggiungere\\
+                    7. L'utente inserisce eventuali campi nativi alla categoria (si veda\\il primo scenario alternativo)\\
+                    Torna al punto 4
+                \end{tabular}
             }
         }
         \vspace{0.5cm}
+    \textbf{Nota bene:} le categorie introdotte deevono avere nome univoco all'interno della gerarchia
 \end{minipage}
