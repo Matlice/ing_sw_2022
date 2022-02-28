@@ -24,6 +24,7 @@ fruit -up-|> user #red;text:red
 
 conf --> (Configurazione parametri) #red;text:red
 fruit --> (Registrazione fruitore) #red;text:red
+fruit --> (Accesso utente) #red;text:red
 (Configurazione parametri) ..> (Accesso Configuratore) #red;text:red : <<include>>
 
 @enduml

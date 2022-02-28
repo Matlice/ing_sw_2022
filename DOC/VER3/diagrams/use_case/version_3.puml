@@ -22,6 +22,7 @@ fruit -up-|> user
 
 conf --> (Configurazione parametri)
 fruit --> (Registrazione fruitore)
+fruit --> (Accesso utente)
 (Configurazione parametri) ..> (Accesso Configuratore) : <<include>>
 
 

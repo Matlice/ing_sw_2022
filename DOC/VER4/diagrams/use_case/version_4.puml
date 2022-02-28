@@ -1,0 +1,39 @@
+@startuml
+
+:Utente di sistema: as user
+:Configuratore: as conf
+:Amministratore: as adm
+
+conf -up-|> user
+conf --> (Accesso Configuratore)
+conf --> (Creazione gerarchia)
+
+adm --> (Creazione nuovo \naccount configuratore)
+
+(Accesso Configuratore) ..> (Accesso utente): <<include>>
+(Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
+
+:Fruitore: as fruit
+
+fruit -up-|> user
+
+(Configurazione parametri)
+(Registrazione fruitore)
+
+conf --> (Configurazione parametri)
+fruit --> (Registrazione fruitore)
+fruit --> (Accesso utente)
+(Configurazione parametri) ..> (Accesso Configuratore) : <<include>>
+
+fruit --> (Pubblicazione articolo)
+fruit --> (Ritiro offerta)
+fruit --> (Visualizzazione offerte \nper categoria)
+conf --> (Visualizzazione offerte \nper categoria)
+fruit --> (Visualizzazione offerte \ndell'utente)
+
+
+'VERSIONE 4 ==========================================
+
+
+@enduml
+
