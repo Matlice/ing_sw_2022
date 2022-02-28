@@ -1,5 +1,29 @@
 @startuml
 
-!include file:///VER1/diagrams/use_case/version_1.puml!1
+:Utente di sistema: as user
+:Configuratore: as conf
+:Amministratore: as adm
+
+conf -up-|> user
+conf --> (Accesso Configuratore)
+conf --> (Creazione gerarchia)
+
+adm --> (Creazione nuovo \naccount configuratore)
+
+(Accesso Configuratore) ..> (Accesso utente): <<include>>
+(Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
+
+'VERSIONE 2 ===========================================
+
+:Fruitore: as fruit #pink;line:red;text:red
+
+fruit -up-|> user #red;text:red
+
+(Configurazione parametri)  #pink;line:red;text:red
+(Registrazone fruitore) #pink;line:red;text:red
+
+conf --> (Configurazione parametri) #red;text:red
+fruit --> (Registrazone fruitore) #red;text:red
+(Configurazione parametri) ..> (Accesso Configuratore) #red;text:red : <<include>>
 
 @enduml
