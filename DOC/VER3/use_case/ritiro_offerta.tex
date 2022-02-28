@@ -1,0 +1,31 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Ritiro offerta}
+    \usecase
+        {Ritiro offerta}
+        {
+            Fruitore %\\
+        }
+        {
+            %Pubblicazione
+            \begin{tabular}{l}
+                1. \textit{<<include>> Accesso fruitore}\\
+                2. \textit{<<include>> Pubblicazione articolo}\\
+                3. L'utente seleziona un suo articolo pubblicato\\
+                4. L'utente richiede di ritirare la sua offerta\\
+                \textit{Postcondizione: l'articolo precedentemente inserito viene ritirato}\\
+                \textit{(stato }\texttt{Offerta ritirata}\textit{)}\\
+                Fine
+            \end{tabular}\\
+
+            %articolo non in Offerta aperta
+            \auxcase{
+                \begin{tabular}{l}
+                    4.a \textit{Precondizione: l'articolo selezionato non è in stato \texttt{Offerta}}\\\texttt{aperta}\\
+                    5. Viene mostrato un messaggio di errore\\
+                    Fine
+                \end{tabular}
+            }
+
+        }
+        \vspace{0.5cm}
+\end{minipage}

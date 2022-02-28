@@ -1,0 +1,29 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Visualizzazione offerte per categoria}
+    \usecase
+        {Visualizzazione offerte per categoria}
+        {
+            Fruitore o Configuratore %\\
+        }
+        {
+            %Pubblicazione
+            \begin{tabular}{l}
+                1. \textit{<<include>> Accesso utente}\\
+                2. L'utente seleziona una categoria\\
+                \textit{Postcondizione: viene fornita una lista di articoli disponibili allo}\\
+                \textit{scambio appartenenti alla categoria selezionata dall'utente}\\
+                Fine
+            \end{tabular}\\
+
+            %categoria non esistente
+            \auxcase{
+                \begin{tabular}{l}
+                    3.a \textit{Precondizione: l'utente sceglie una categoria non esistente}\\
+                    4. Viene mostrato un messaggio di errore\\
+                    Fine
+                \end{tabular}
+            }
+
+        }
+        \vspace{0.5cm}
+\end{minipage}

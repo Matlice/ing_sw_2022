@@ -7,19 +7,27 @@
         }
         {
             \begin{tabular}{l}
-                1. L'utente sceglie la voce di menu \\ ``modifica parametri applicativo''\\
+                1. L'utente sceglie la voce di menu ``modifica parametri \\applicativo''\\
                 2. Viene mostrata la lista dei parametri configurabili\\
                 3. L'utente sceglie il parametro da modificare.\\
                 4. L'utente inserisce il nuovo valore.\\
-                \textit{Postcondizione: Il valore viene modificato runtime}\\
+                \textit{Postcondizione: il valore viene modificato runtime}\\
                 Fine
             \end{tabular}\\
 
             \auxcase{
                 \begin{tabular}{l}
-                    \textit{Precondizione: l'utente sceglie un campo non esistente } \\
-                    4.a Mostrando un messaggio di errore, ritorna al punto 2\\
-                    Fine.
+                    \textit{Precondizione: l'utente sceglie un parametro non esistente } \\
+                    3.a Viene mostrato un messaggio di errore\\
+                    Torna al punto 2
+                \end{tabular}
+            }\\
+
+            \auxcase{
+                \begin{tabular}{l}
+                    \textit{Precondizione: l'utente inserisce un valore non valido } \\
+                    4.a Viene mostrato un messaggio di errore\\
+                    Torna al punto 2
                 \end{tabular}
             }
         }
