@@ -1,0 +1,44 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Accettazione appuntamento}
+    Si considera fruitore \textit{B} colui che ha proposto un luogo, un giorno ed un orario per l'appuntamento; mentre è considerato fruitore \textit{A} colui che deve accettare oppure replicare con una controproposta per l'appuntamento.
+    \usecase
+        {Accettazione appuntamento}
+        {
+            Fruitore A\\
+            \auxactor{Fruitore B}
+        }
+        {
+            %proposta di scambio
+            \begin{tabular}{l}
+                \textit{Precondizione: i due fruitori sono distinti, entrambi hanno un}\\
+                \textit{articolo nella medesima \textbf{proposta di scambio}; entrambi gli ar-}\\
+                \textit{ticoli sono nello stato di \texttt{Offerta in scambio}}\\
+                1. Il fruitore \textit{A} accetta l'appuntamento\\
+                \textit{Postcondizione: entrambi gli articoli passano allo stato di \texttt{Of-}}\\
+                \textit{\texttt{ferta chiusa}}\\
+                Fine
+            \end{tabular}\\
+
+            %appuntamento rifiutato
+            \auxcase{
+                \begin{tabular}{l}
+                    1.a Il fruitore \textit{A} rifiuta la proposta di scambio, quindi indica un\\
+                    luogo, un giorno ed un orario in cui poter effettuare lo scambio al\\
+                    fruitore \textit{B}\\
+                    2. \textit{<<include>> Accettazione appuntamento}\\
+                    Fine
+                \end{tabular}
+            }\\
+
+            %appuntamento scaduto
+            \auxcase{
+                \begin{tabular}{l}
+                    1.b Il fruitore \textit{A} non accetta entro il numero massimo di giorni\\
+                    \textit{Postcondizione: entrambi gli articoli ritornano allo stato di \texttt{Of-}}\\
+                    \textit{\texttt{ferta aperta}, concludendo la \textbf{proposta di scambio}}\\
+                    Fine
+                \end{tabular}
+            }\\
+        }
+        \vspace{0.5cm}
+\end{minipage}

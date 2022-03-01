@@ -1,0 +1,36 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Proposta di scambio}
+    \usecase
+        {Proposta di scambio}
+        {
+            Fruitore A\\
+            \auxactor{Fruitore B}
+        }
+        {
+            %proposta di scambio
+            \begin{tabular}{l}
+                1. \textit{Precondizione: i due fruitori sono distinti ed entrambi hanno}\\
+                \textit{almeno un articolo nello stato \texttt{Offerta aperta}}\\
+                2. Il fruitore \textit{A} seleziona quale tra i suoi articoli vuole proporre\\
+                in scambio\\
+                3. Il fruitore \textit{A} seleziona quale tra gli articoli del fruitore \textit{B}\\
+                intende accettare in scambio\\
+                \textit{Postcondizione: l'articolo del fruitore \textit{A} passa allo stato di \texttt{Of-}}\\
+                \textit{\texttt{ferta accoppiata}, mentre l'articolo del fruitore \textit{B} passa allo}\\
+                \textit{stato di \texttt{Offerta selezionata}. La coppia degli articoli da scam-}\\
+                \textit{biare va a formare una \textbf{proposta di scambio}}\\
+                Fine
+            \end{tabular}\\
+
+            %articolo appartenenti a due categorie diverse
+            \auxcase{
+                \begin{tabular}{l}
+                    3.a \textit{Precondizione: i due articoli selezionati appartengono a cate-}\\
+                    \textit{gorie diverse}\\
+                    4. Viene mostrato un messaggio di errore\\
+                    Fine
+                \end{tabular}
+            }
+        }
+        \vspace{0.5cm}
+\end{minipage}
