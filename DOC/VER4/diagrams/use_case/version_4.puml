@@ -1,5 +1,7 @@
 @startuml
 
+!assert %false()
+
 :Utente di sistema: as user
 :Configuratore: as conf
 :Amministratore: as adm
