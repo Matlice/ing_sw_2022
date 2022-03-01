@@ -13,8 +13,9 @@
                 \textit{articolo nella medesima \textbf{proposta di scambio}, il fruitore A pos-}\\
                 \textit{siede l'articolo nello stato di \texttt{Offerta accoppiata}, mentre il}\\
                 \textit{fruitore B possiede l'articolo nello stato di \texttt{Offerta selezionata}}\\
-                1. Il fruitore \textit{B} accetta la proposta di scambio, perciò indica un\\
-                luogo, un giorno ed un orario in cui poter effettuare lo scambio\\
+                1. Il fruitore \textit{B} accetta la proposta di scambio\\
+                2. Il fruitore \textit{B} indica un luogo, un giorno ed un orario (tra quelli\\
+                disponibili) in cui poter effettuare lo scambio\\
                 \textit{Postcondizione: entrambi gli articoli passano allo stato di \texttt{Of-}}\\
                 \textit{\texttt{ferta in scambio} in attesa della conferma del fruitore A}\\
                 Fine
@@ -29,8 +30,21 @@
                     \textit{\texttt{ferta aperta}}\\
                     Fine
                 \end{tabular}
+            }\\
+
+            %luogo, giorno o ora non consentiti
+            \auxcase{
+                \begin{tabular}{l}
+                    2.a \textit{Precondizione: il fruitore B seleziona un luogo, un giorno od}\\
+                    \textit{un ora non consentiti}\\
+                    3. Visualizza un messaggio di errore\\
+                    Torna al punto 2
+                \end{tabular}
             }
+
         }
         \vspace{0.5cm}
-    \textbf{Nota bene:} non è contemplata la possibilità per il fruitore \textit{B} di rifiutare la proposta, è necessario quindi che lasci scadere il tempo a disposizione per poter accettare
+    \textbf{Nota bene:} non è contemplata la possibilità per il fruitore \textit{B}
+    di rifiutare la proposta, è necessario quindi che lasci scadere il tempo
+    a disposizione per poter accettare
 \end{minipage}

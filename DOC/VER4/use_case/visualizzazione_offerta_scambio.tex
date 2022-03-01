@@ -1,0 +1,27 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Visualizzazione offerta in scambio}
+    \usecase
+        {Visualizzazione offerta in scambio}
+        {
+            Fruitore
+        }
+        {
+            %visualizzazione scambio
+            \begin{tabular}{l}
+                \textit{<<include>> Visualizzazione offerte dell'utente}\\
+                1. Il fruitore seleziona un'offerta in scambio\\
+                2. Viene visualizzata l'ultima risposta fornita dall'autore dell'of-\\
+                ferta ad essa collegata\\
+                Fine
+            \end{tabular}\\
+
+            %offerta non in scambio
+            \auxcase{
+                \begin{tabular}{l}
+                    1.a \textit{Precondizione: il fruitore selezionata un'offerta non in scambio}\\
+                    Fine
+                \end{tabular}
+            }
+        }
+        \vspace{0.5cm}
+\end{minipage}

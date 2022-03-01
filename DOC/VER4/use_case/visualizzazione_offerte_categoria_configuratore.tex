@@ -1,0 +1,40 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Visualizzazione offerte chiuse e in scambio per categoria}
+    \usecase
+        {Visualizzazione offerte chiuse e in scambio per categoria}
+        {
+            Configuratore %\\
+        }
+        {
+            %Pubblicazione
+            \begin{tabular}{l}
+                1. \textit{<<include>> Accesso configuratore}\\
+                2. Il configuratore seleziona una categoria\\
+                \textit{Postcondizione: viene fornita una lista di articoli disponibili ap-}\\
+                \textit{partenenti alla categoria selezionata nello stato di \texttt{Offerta}}\\
+                \textit{\texttt{in scambio} o di \texttt{Offerta chiusa}}\\
+                Fine
+            \end{tabular}\\
+
+            %categoria non esistente
+            \auxcase{
+                \begin{tabular}{l}
+                    2.a \textit{Precondizione: il configuratore sceglie una categoria non}\\
+                    \textit{esistente}\\
+                    3. Viene mostrato un messaggio di errore\\
+                    Fine
+                \end{tabular}
+            }\\
+
+            %categoria non foglia
+            \auxcase{
+                \begin{tabular}{l}
+                    2.a \textit{Precondizione: il configuratore sceglie una categoria non foglia}\\
+                    3. Viene mostrato un messaggio di errore\\
+                    Fine
+                \end{tabular}
+            }
+
+        }
+        \vspace{0.5cm}
+\end{minipage}

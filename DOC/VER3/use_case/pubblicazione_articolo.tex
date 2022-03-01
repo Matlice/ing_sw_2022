@@ -9,21 +9,41 @@
             %Pubblicazione
             \begin{tabular}{l}
                 1. \textit{<<include>> Accesso fruitore}\\
-                2. L'utente inserisce il nome dell'articolo che intende scambiare\\
+                2. L'utente inserisce il nome dell'articolo che intende pubblicare\\
                 3. L'utente sceglie la categoria di appartenenza\\
-                4. L'utente compila tutti i campi obbligatori (e opzionalmente\\anche quelli facoltativi) relativi alla categoria scelta\\
-                \textit{Postcondizione: l'articolo (legato all'utente che l'ha inserito) è}\\
-                \textit{pubblicato e disponibile allo scambio (stato }\texttt{Offerta aperta}\textit{)}\\
+                4. L'utente compila i campi relativi alla categoria scelta\\
+                5. L'utente conferma
+                \textit{Postcondizione: l'articolo (legato all'utente}\\
+                \textit{che l'ha inserito) è pubblicato e disponibile}\\
+                \textit{allo scambio (stato }\texttt{Offerta aperta}\textit{)}\\
                 Fine
             \end{tabular}\\
 
             %categoria non esistente
             \auxcase{
                 \begin{tabular}{l}
-                    \textit{Precondizione: l'utente sceglie una categoria non esistente (op-}\\
+                    3.a \textit{Precondizione: l'utente sceglie una categoria non esistente (op-}\\
                     \textit{pure non categoria foglia)}\\
-                    3.a Viene mostrato un messaggio di errore\\
+                    4. Viene mostrato un messaggio di errore\\
                     Torna al punto 3
+                \end{tabular}
+            }\\
+
+            %campi non compilati
+            \auxcase{
+                \begin{tabular}{l}
+                    5.a \textit{Precondizione: l'utente non ha inserito i valori per tutti}\\
+                    \textit{i campi obbligatori}\\
+                    6. Viene mostrato un messaggio di errore\\
+                    Torna al punto 4
+                \end{tabular}
+            }\\
+
+            %utente annulla
+            \auxcase{
+                \begin{tabular}{l}
+                    5.b L'utente annulla l'operazione di pubblicazione dell'articolo\\
+                    Fine
                 \end{tabular}
             }
 

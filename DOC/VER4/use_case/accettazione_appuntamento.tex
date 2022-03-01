@@ -22,11 +22,22 @@
             %appuntamento rifiutato
             \auxcase{
                 \begin{tabular}{l}
-                    1.a Il fruitore \textit{A} rifiuta la proposta di scambio, quindi indica un\\
-                    luogo, un giorno ed un orario in cui poter effettuare lo scambio al\\
-                    fruitore \textit{B}\\
-                    2. \textit{<<include>> Accettazione appuntamento}\\
+                    1.a Il fruitore \textit{A} rifiuta la proposta di scambio\\
+                    2.a Il fruitore \textit{A} indica un luogo, un giorno ed un orario in cui\\
+                    poter effettuare lo scambio al fruitore \textit{B}\\
+                    \textit{Postcondizione: la proposta di scambio resta in attesa della}\\
+                    \textit{conferma del fruitore B}\\
                     Fine
+                \end{tabular}
+            }\\
+
+            %luogo, giorno o ora non consentiti
+            \auxcase{
+                \begin{tabular}{l}
+                    2.a.a \textit{Precondizione: il fruitore A seleziona un luogo, un giorno od}\\
+                    \textit{un ora non consentiti}\\
+                    3.a.a Visualizza un messaggio di errore\\
+                    Torna al punto 2.a
                 \end{tabular}
             }\\
 
