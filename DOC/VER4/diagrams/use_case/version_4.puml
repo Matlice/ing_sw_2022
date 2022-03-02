@@ -1,7 +1,5 @@
 @startuml
 
-!assert %false()
-
 :Utente di sistema: as user
 :Configuratore: as conf
 :Amministratore: as adm
@@ -36,6 +34,27 @@ fruit --> (Visualizzazione offerte \ndell'utente)
 
 'VERSIONE 4 ==========================================
 
+(Proposta di scambio) #pink;line:red;text:red
+(Accettazione scambio) #pink;line:red;text:red
+(Accettazione appuntamento) #pink;line:red;text:red
+(Visualizzazione offerta \nin scambio) #pink;line:red;text:red
+(Visualizzazione offerte \nchiuse e in scambio) #pink;line:red;text:red
+
+fruit --> (Proposta di scambio) #red;text:red
+fruit --> (Accettazione scambio) #red;text:red
+fruit --> (Accettazione appuntamento) #red;text:red
+fruit -up-> (Visualizzazione offerta \nin scambio) #red;text:red
+conf --> (Visualizzazione offerte \nchiuse e in scambio) #red;text:red
+
+(Accettazione appuntamento) ..> (Accettazione scambio) #red;text:red : <<include>>
+(Accettazione scambio) ..> (Proposta di scambio) #red;text:red : <<include>>
+
+(Visualizzazione offerte \nchiuse e in scambio) -[hidden]- (Visualizzazione offerte \nper categoria)
+(Registrazione fruitore) -[hidden]- (Pubblicazione articolo)
+(Pubblicazione articolo) -[hidden]- (Ritiro offerta)
+'(Accettazione appuntamento) -[hidden]- (Ritiro offerta)
+(Registrazione fruitore) -[hidden]- (Visualizzazione offerte \ndell'utente)
+(Accettazione appuntamento) -[hidden]- (Visualizzazione offerte \ndell'utente)
+'(Visualizzazione offerte \nchiuse e in scambio) -[hidden]- (Visualizzazione offerte \nper categoria)
 
 @enduml
-
