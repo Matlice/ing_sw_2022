@@ -1,6 +1,61 @@
 @startuml
 
-!assert %false()
+:Utente di sistema: as user
+:Configuratore: as conf
+:Amministratore: as adm
+
+conf -up-|> user
+conf --> (Accesso Configuratore)
+conf --> (Creazione gerarchia)
+
+adm --> (Creazione nuovo \naccount configuratore)
+
+(Accesso Configuratore) ..> (Accesso utente): <<include>>
+(Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
+
+:Fruitore: as fruit
+
+fruit -up-|> user
+
+(Configurazione parametri)
+(Registrazione fruitore)
+
+conf --> (Configurazione parametri)
+fruit --> (Registrazione fruitore)
+fruit --> (Accesso utente)
+(Configurazione parametri) ..> (Accesso Configuratore) : <<include>>
+
+fruit --> (Pubblicazione articolo)
+fruit --> (Ritiro offerta)
+fruit --> (Visualizzazione offerte \nper categoria)
+conf --> (Visualizzazione offerte \nper categoria)
+fruit --> (Visualizzazione offerte \ndell'utente)
+
+(Proposta di scambio)
+(Accettazione scambio)
+(Accettazione appuntamento)
+(Visualizzazione offerta \nin scambio)
+(Visualizzazione offerte \nchiuse e in scambio)
+
+fruit --> (Proposta di scambio)
+fruit --> (Accettazione scambio)
+fruit --> (Accettazione appuntamento)
+fruit -up-> (Visualizzazione offerta \nin scambio)
+conf --> (Visualizzazione offerte \nchiuse e in scambio)
+
+(Accettazione appuntamento) ..> (Accettazione scambio) : <<include>>
+(Accettazione scambio) ..> (Proposta di scambio) : <<include>>
+
+(Visualizzazione offerte \nchiuse e in scambio) -[hidden]- (Visualizzazione offerte \nper categoria)
+(Registrazione fruitore) -[hidden]- (Pubblicazione articolo)
+(Pubblicazione articolo) -[hidden]- (Ritiro offerta)
+(Registrazione fruitore) -[hidden]- (Visualizzazione offerte \ndell'utente)
+(Accettazione appuntamento) -[hidden]- (Visualizzazione offerte \ndell'utente)
+
+'VERSIONE 5 ==========================================
+
+(Importazione configurazione \nin mddalità batch) #pink;line:red;text:red
+
+conf --> (Importazione configurazione \nin mddalità batch) #red;text:red
 
 @enduml
-

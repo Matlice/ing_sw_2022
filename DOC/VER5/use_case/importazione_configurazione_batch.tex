@@ -1,0 +1,32 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Importazione configurazione in modalità batch}
+    \usecase
+        {Importazione configurazione in modalità batch}
+        {
+            Configuratore
+        }
+        {
+            %Importazione batch
+            \begin{tabular}{l}
+                \textit{<<include>> Accesso configuratore}\\
+                1. Il configuratore seleziona un file da cui importare la configu-\\
+                razione\\
+                2. L'applicazione fornisce un messaggio di successo\\
+                \textit{Postcondizione: l'applicazione ha caricato i parametri di configu-}\\
+                \textit{razione descritti dal file importato}\\
+                Fine
+            \end{tabular}\\
+
+            %file non esistente
+            \auxcase{
+                \begin{tabular}{l}
+                    1.a \textit{Precondizione: il configuratore seleziona un file non esistente,}\\
+                    \textit{non leggibile o nel formato non corretto}\\
+                    2. Viene mostrato un messaggio di errore\\
+                    Fine
+                \end{tabular}
+            }
+
+        }
+        \vspace{0.5cm}
+\end{minipage}
