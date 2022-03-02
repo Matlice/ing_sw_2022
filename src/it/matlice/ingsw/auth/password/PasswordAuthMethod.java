@@ -3,6 +3,18 @@ package it.matlice.ingsw.auth.password;
 import it.matlice.ingsw.auth.AuthData;
 import it.matlice.ingsw.auth.AuthMethod;
 import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
+import org.jetbrains.annotations.NotNull;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Random;
+import java.util.regex.Pattern;
 
 /**
  * Rappresenta il metodo di autenticazione mediante password.
@@ -11,9 +23,15 @@ import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 public class PasswordAuthMethod implements AuthMethod {
 
     private final PasswordAuthenticable user;
+    private final Random random_source;
+
+    public static final String MAC_ALGO = "HmacSHA256";
+    public static final Pattern PASSWORD_SEC_REGEX = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_()-=+])(?=.{8,})$");
+    public static final int SALT_LENGTH = 64;
 
     public PasswordAuthMethod(PasswordAuthenticable user) {
         this.user = user;
+        this.random_source = new SecureRandom();
     }
 
     /**
@@ -33,8 +51,11 @@ public class PasswordAuthMethod implements AuthMethod {
      * @throws InvalidPasswordException
      */
     public void setPassword(String password) throws InvalidPasswordException {
-        //todo verifica password con regex? qualcosa come /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_()-=+])(?=.{8,})$/
-        this.user.setPassword(password);
+        if(PasswordAuthMethod.PASSWORD_SEC_REGEX.matcher(password).matches())
+            throw new InvalidPasswordException();
+        var salt = this.getNewSalt();
+        this.user.setSalt(salt);
+        this.user.setPassword(this.getPasswordHash(salt, password));
     }
 
     /**
@@ -47,9 +68,30 @@ public class PasswordAuthMethod implements AuthMethod {
     @Override
     public boolean performAuthentication(AuthData data) {
         assert data instanceof PasswordAuthData;
-        //TODO verificare che base64encode(hmac_sha256(data.password, data=user.salt)) == user.password_hash
-        // se user.last_login è null, forzare il cambio password.
+        return Arrays.equals(
+                this.getPasswordHash(this.user.getPasswordSalt(), ((PasswordAuthData) data).password()),
+                this.user.getPasswordHash()
+        );
+    }
 
-        return true;
+    private byte @NotNull [] getNewSalt(){
+        var salt = new byte[SALT_LENGTH];
+        this.random_source.nextBytes(salt);
+        return salt;
+    }
+
+    private byte[] getPasswordHash(byte[] salt, @NotNull String password){
+        try {
+            var mac = Mac.getInstance("HmacSHA256");
+            var secret_key = new SecretKeySpec(password.getBytes(StandardCharsets.UTF_8), MAC_ALGO);
+            mac.init(secret_key);
+            return mac.doFinal(salt);
+        } catch (NoSuchAlgorithmException nsae){
+            System.err.println("Cannot find mac algorithm provider");
+            throw new RuntimeException(nsae);
+        } catch (InvalidKeyException ike){
+            throw new RuntimeException(ike);
+        }
+
     }
 }

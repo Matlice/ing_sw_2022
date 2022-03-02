@@ -7,6 +7,7 @@ import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.data.User;
 import it.matlice.ingsw.data.UserFactory;
 import it.matlice.ingsw.data.impl.jdbc.types.ConfiguratorUserImpl;
+import it.matlice.ingsw.data.impl.jdbc.types.UserImpl;
 
 import java.sql.SQLException;
 
@@ -36,5 +37,11 @@ public class UserFactoryImpl implements UserFactory {
             return ref;
         }
         throw new RuntimeException("no user type found");
+    }
+
+    public User saveUser(User u) throws SQLException {
+        assert u instanceof UserImpl;
+        userDAO.update(((UserImpl) u).getDbData());
+        return u;
     }
 }

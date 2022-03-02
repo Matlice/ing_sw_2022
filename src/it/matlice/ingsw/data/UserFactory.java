@@ -1,5 +1,7 @@
 package it.matlice.ingsw.data;
 
+import java.sql.SQLException;
+
 /**
  * Interfaccia che rappresenta una classe in grado di istanziare User nella giusta declinazione
  * a partire da una base di dati
@@ -23,4 +25,5 @@ public interface UserFactory {
      */
     User createUser(String username, User.UserTypes userType) throws Exception;
 
+    User saveUser(User u) throws Exception;
 }

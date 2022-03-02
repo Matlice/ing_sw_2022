@@ -1,6 +1,11 @@
 package it.matlice.ingsw.controller;
 
+import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
+import it.matlice.ingsw.auth.password.PasswordAuthMethod;
+import it.matlice.ingsw.controller.exceptions.InvalidUserException;
+import it.matlice.ingsw.controller.exceptions.LoginInvalidException;
 import it.matlice.ingsw.data.*;
+import it.matlice.ingsw.model.Model;
 
 import java.util.List;
 
@@ -14,7 +19,9 @@ public class Controller {
 
     private List<Hierarchy> hierarchies;
 
-    public Controller(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
+    private static Controller instance;
+
+    private Controller(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
@@ -26,21 +33,56 @@ public class Controller {
         }
     }
 
+    public static Controller getInstance(){
+        return Controller.instance;
+    }
+
+    public static Controller makeInstance(HierarchyFactory hf, CategoryFactory cf, UserFactory uf){
+        assert instance == null;
+        instance = new Controller(hf, cf, uf);
+        return Controller.instance;
+    }
+
+    public void changePassword(Authentication auth, String newPassword) throws LoginInvalidException, InvalidPasswordException {
+        if(!auth.isValid())
+            throw new LoginInvalidException();
+
+        for(var method : auth.getUser().getAuthMethods()){
+            if(method instanceof PasswordAuthMethod)
+                ((PasswordAuthMethod) method).setPassword(newPassword);
+        }
+    }
+
     /**
      * Effettua l'autenticazione
      *
      * @param username username dell'utente
      * @return un token di sessione oppure null se l'auitenticazione non ha avuto successo
      */
-    public Authentication authenticate(String username) {
-        //todo get user from factory
+    public Authentication authenticate(String username) throws InvalidUserException{
+        User user;
+        try {
+            user = uf.getUser(username);
+        } catch (Exception e){
+            throw new InvalidUserException();
+        }
 
-        //todo see(Algoritmo verifica delle credenziali)
-        // ottieni i metodi di login e iterando su di essi, in funzione del tipo di login esegui una funzione per prendere i dati da stdin
-        // quindi chiama performAuthentication e se positivo ritorna l'istanza di AuthImpl.
-        // la chiamata a performAuthentication deve prevedere il cambio password immediato se è il primo login dell'utente.
+        boolean ret = false;
+        for(var method: user.getAuthMethods()){
+            var authdata = Model.getInstance().getLoginData(method.getClass().getName());
+            if(authdata == null)
+                continue;
+            ret = method.performAuthentication(authdata);
+            if(ret) break;
+        }
 
-        return new AuthImpl(null);
+        if(ret)
+            return new AuthImpl(user);
+        return null;
+    }
+
+    public void mainloop(){
+        Model.getInstance().login();
     }
 
     private static class AuthImpl implements Authentication {

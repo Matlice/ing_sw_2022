@@ -8,9 +8,10 @@ import it.matlice.ingsw.data.ConfiguratorUser;
 import it.matlice.ingsw.data.impl.jdbc.UserDB;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
-public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAuthenticable {
+public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAuthenticable, UserImpl {
 
     private final UserDB dbData;
 
@@ -45,17 +46,25 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
     }
 
     @Override
-    public String getPasswordHash() {
-        return this.dbData.getPassword_hash();
+    public byte[] getPasswordHash() {
+        return Base64.getDecoder().decode(this.dbData.getPassword_hash());
     }
 
     @Override
-    public String getPasswordSalt() {
-        return this.dbData.getPassword_salt();
+    public byte[] getPasswordSalt() {
+        return Base64.getDecoder().decode(this.dbData.getPassword_salt());
+    }
+
+
+    @Override
+    public void setPassword(byte[] password) throws InvalidPasswordException {
+        this.dbData.setPassword_hash(Base64.getEncoder().encodeToString(password));
     }
 
     @Override
-    public void setPassword(String password) throws InvalidPasswordException {
-        //todo
+    public void setSalt(byte[] salt) throws InvalidPasswordException {
+        this.dbData.setPassword_salt(Base64.getEncoder().encodeToString(salt));
     }
+
+
 }

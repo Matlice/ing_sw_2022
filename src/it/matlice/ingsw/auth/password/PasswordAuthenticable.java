@@ -19,18 +19,18 @@ public interface PasswordAuthenticable extends Authenticable {
      *
      * @return l'hash della password salvato in precedenza
      */
-    String getPasswordHash();
+    byte[] getPasswordHash();
 
     /**
      * @return ritorna il salt, generato casualmente, utilizzato per "salare la password"
      */
-    String getPasswordSalt();
+    byte[] getPasswordSalt();
 
     /**
-     * Verifica l;a sicurezza della password secondo le policy impostate, quindi
-     * aggiorna la password associata all'utente __rigenerando__ il salt
+     * Aggiorna la password associata all'utente __rigenerando__ il salt
      *
      * @param password nuova password
      */
-    void setPassword(String password) throws InvalidPasswordException;
+    void setPassword(byte[] password) throws InvalidPasswordException;
+    void setSalt(byte[] salt) throws InvalidPasswordException;
 }

@@ -1,26 +1,32 @@
 package it.matlice.ingsw;
 
 import it.matlice.ingsw.auth.password.PasswordAuthData;
+import it.matlice.ingsw.auth.password.PasswordAuthMethod;
+import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.data.ConfiguratorUser;
 import it.matlice.ingsw.data.UserFactory;
 import it.matlice.ingsw.data.impl.jdbc.CategoryFactoryImpl;
 import it.matlice.ingsw.data.impl.jdbc.HierarchyFactoryImpl;
 import it.matlice.ingsw.data.impl.jdbc.JdbcConnection;
 import it.matlice.ingsw.data.impl.jdbc.UserFactoryImpl;
+import it.matlice.ingsw.model.Model;
+import it.matlice.ingsw.view.StreamView;
+
+import java.util.Scanner;
 
 public class EntryPoint {
     public static void main(String[] args) throws Exception {
-        System.out.println("lol");
-
-        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
-        UserFactory uf = new UserFactoryImpl();
-
-//        uf.createUser("stefano", UserTypes.CONFIGURATOR);
-        var u = uf.getUser("stefano");
-        System.out.println(u instanceof ConfiguratorUser);
-        System.out.println(u.getAuthMethods().get(0).performAuthentication(new PasswordAuthData("stefano")));
-
-        var cf = new CategoryFactoryImpl();
+//        System.out.println("lol");
+//
+//        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+//        UserFactory uf = new UserFactoryImpl();
+//
+////        uf.createUser("stefano", UserTypes.CONFIGURATOR);
+//        var u = uf.getUser("stefano");
+//        System.out.println(u instanceof ConfiguratorUser);
+//        System.out.println(u.getAuthMethods().get(0).performAuthentication(new PasswordAuthData("stefano")));
+//
+//        var cf = new CategoryFactoryImpl();
 
 //        var a = cf.createCategory("root", null, false);
 //        a.put("campo1", new TypeDefinition<>("campo1", TypeDefinition.TypeAssociation.INTEGER, true));
@@ -41,12 +47,28 @@ public class EntryPoint {
 //        cf.saveCategory(e);
 //        cf.saveCategory(f);
 
-        var g = cf.getCategory(1);
-        var hf = new HierarchyFactoryImpl();
-//        hf.createHierarchy(g);
-        var h = hf.getHierarchies();
+//        var g = cf.getCategory(1);
+//        var hf = new HierarchyFactoryImpl();
+////        hf.createHierarchy(g);
+//        var h = hf.getHierarchies();
+//
+//        JdbcConnection.getInstance().getConnectionSource().close();
 
-        JdbcConnection.getInstance().getConnectionSource().close();
+        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+        var uf = new UserFactoryImpl();
+        var cf = new CategoryFactoryImpl();
+        var hf = new HierarchyFactoryImpl();
+
+        var u = uf.getUser("stefano");
+        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword("stefano");
+        uf.saveUser(u);
+
+
+        var view = new StreamView(System.out, new Scanner(System.in));
+        Controller.makeInstance(hf, cf, uf);
+        Model.startInstance(view);
+
+        Controller.getInstance().mainloop();
 
     }
 }
