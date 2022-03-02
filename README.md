@@ -12,7 +12,7 @@ al baratto di categorie diverse di articoli e/o operano supiazze diverse.
 
 L’applicazione prevede due tipologie di utente, il **configuratore** e il **fruitore**.
 Il primo è un esponente dell’organizzazione che, attraverso l’applicazione
-software, sovrintende agliscambi di beni senza uso di denaro;
+software, sovrintende agli scambi di beni senza uso di denaro;
 egli è deputato alla descrizione delle categorie di articoli scambiabili e può
 ottenere informazioni relative agli attuali baratti potenziali o a quelli già
 avvenuti.
@@ -46,7 +46,7 @@ Ogni singola categoria è dotata di un `nome` e di una `descrizione`, entrambe s
 
 Una categoria può articolarsi in **due o più** (sotto)categorie, a loro volta suddividibili **ricorsivamente**, e così via, secondo una gerarchia ad albero.
 
-> Ad esempio, la radice di una gerarchia può essere la categoria `Libro` ed essa può articolarsi nelle (sotto)categorie `Romanzo`, `Saggio`, `Opera a fumetti`, `Numero di un fumetto periodico` e `Testo scolastico`. A sua volta la categoria Romanzo può articolarsi nelle (sotto)categorie `Romanzo di letteratura italiana` e`Romanzo di letteratura straniera`, ecc.
+> Ad esempio, la radice di una gerarchia può essere la categoria `Libro` ed essa può articolarsi nelle (sotto)categorie `Romanzo`, `Saggio`, `Opera a fumetti`, `Numero di un fumetto periodico` e `Testo scolastico`. A sua volta la categoria `Romanzo` può articolarsi nelle (sotto)categorie `Romanzo di letteratura italiana` e `Romanzo di letteratura straniera`, ecc.
 
 Il nome di ciascuna categoria è **unico all’interno della gerarchia di appartenenza**.
 
@@ -88,13 +88,13 @@ Ogni articolo da barattare può essere descritto dal fruitore assegnando un valo
 >Supponendo che un fruitore intenda proporre il baratto di un articolo appartenente alla
 categoria (foglia) Romanzo di letteratura straniera, egli potrebbe, ad esempio, compilare i campi come segue:
 >
->- Stato di conservazione: `nuovo`
->- Descrizione libera: `volume a copertina flessibile mai sfogliato (doppione ricevuto in regalo)`
->- Titolo: `A farewell to arms`
->- Autore/i: `Ernest Hemingway`
->- Casa editrice: ``
->- Anno di stampa: ``
->- Lingua di stampa: `Inglese`
+>- Stato di conservazione: “`nuovo`”
+>- Descrizione libera: “`volume a copertina flessibile mai sfogliato (doppione ricevuto in regalo)`”
+>- Titolo: “`A farewell to arms`”
+>- Autore/i: “`Ernest Hemingway`”
+>- Casa editrice: “”
+>- Anno di stampa: “”
+>- Lingua di stampa: “`Inglese`”
 
 ## Versioni
 
@@ -173,7 +173,6 @@ Una pubblicazione accettata rappresenta un’offerta di baratto che si trova nel
 Il fruitore autore di una `Offerta aperta` non può modificare le informazioni fornite in merito all’articolo da barattare, egli può però ritirare tale offerta, trasformandone così lo stato in quello di `Offerta ritirata`.
 
 L’applicazione deve mantenere traccia dei passaggi di stato subiti da un’offerta, salvando le informazioni relative a tali passaggi in modo **persistente**.
-*Nota di teto: Questa è una blockchain LOL*
 
 In ogni momento, il **configuratore** e così pure il **fruitore** può indicare una categoria (foglia) di una qualsiasi gerarchia e visualizzare tutte le attuali Offerte aperte relative a tale categoria.
 
@@ -192,9 +191,7 @@ Questa versione consente a una coppia di fruitori di accordarsi per un baratto.
 
 Il fruitore autore di una `Proposta aperta` (*relativa a un articolo A*) può infatti scegliere un’altra `Proposta aperta` (*relativa a un articolo B*) *solo se di questa non è autore ed essa appartiene alla stessa categoria foglia*.
 
->*Nota di teto: Non dovrebbero essere Offerte?*
->
->Il fruitore autore di una `Offerta aperta` (*relativa a un articolo A*) può infatti scegliere un’altra `Offerta aperta` (*relativa a un articolo B*) *solo se di questa non è autore ed essa appartiene alla stessa categoria foglia*.
+Il fruitore autore di una `Offerta aperta` (*relativa a un articolo A*) può infatti scegliere un’altra `Offerta aperta` (*relativa a un articolo B*) *solo se di questa non è autore ed essa appartiene alla stessa categoria foglia*.
 
 In tal modo il fruitore autore della prima proposta indica la sua disponibilità ad accettare B in cambio di A.
 
@@ -223,7 +220,7 @@ Se invece si verifica la seconda condizione, l’una e l’altra `Offerta in sca
 
 Ciascun fruitore può visualizzare tutte le offerte di cui è autore, **indipendentemente dallo stato e dalla categoria di appartenenza di ognuna**. Inoltre, per ciascuna Offerta in scambio di cui è autore, egli può visualizzare l’ultima risposta fornita dall’autore dell’offerta a essa collegata.
 
-Si noti che, al passaggio di un’offerta dallo stato di `Offerta aperta` a quello di `Offerta selezionata` (e, analogamente, al passaggio di un’offerta dallo stato di `Offerta accoppiata` allo stato di `Offerta in scambio`), l’autore della prima si rende conto del fatto che è invitato a rispondere al fruitore autore della seconda e se ne rende conto proprio in virtù di tale passaggio (di cui può acquisire consapevolezza solo se accede all’applicazione e visualizza le offerte di sua pertinenza), **non già perché gli viene inviato un messaggio (ad esempio, di posta elettronica)** (Sad teto).
+Si noti che, al passaggio di un’offerta dallo stato di `Offerta aperta` a quello di `Offerta selezionata` (e, analogamente, al passaggio di un’offerta dallo stato di `Offerta accoppiata` allo stato di `Offerta in scambio`), l’autore della prima si rende conto del fatto che è invitato a rispondere al fruitore autore della seconda e se ne rende conto proprio in virtù di tale passaggio (di cui può acquisire consapevolezza solo se accede all’applicazione e visualizza le offerte di sua pertinenza), **non già perché gli viene inviato un messaggio (ad esempio, di posta elettronica)**.
 
 Parimenti, quando sopra si parla di “invio” di una risposta da parte di un fruitore, si intende che tale fruitore può “allegare” la risposta, cioè la proposta di un appuntamento, a un’`Offerta selezionata` oppure a un’`Offerta in scambio` di cui è autore e che suddetta risposta è visualizzabile dal fruitore autore dell’offerta collegata.
 
@@ -231,14 +228,14 @@ Quest’ultimo, però, si rende conto di quale appuntamento è stato proposto so
 
 Quindi, la comunicazione non avviene mai attraverso messaggi (ad esempio, di posta elettronica) inviati esplicitamente da un fruitore a un altro (i fruitori ignorano lo username degli altri fruitori e non hanno modo di contattarli direttamente).
 
-Il **configuratore** può indicare una categoria foglia di una gerarchia e visualizzare le attuali Offerte in scambio nonché le Offerte chiuse relative ad articoli di tale categoria.
+Il **configuratore** può indicare una categoria foglia di una gerarchia e visualizzare le attuali `Offerte in scambio` nonché le `Offerte chiuse` relative ad articoli di tale categoria.
 
 #### Progresso
 
 - [ ] Sistema di proposte da visualizzazione Offerte aperte
 - [ ] Stati `Offerta accoppiata`, `Offerta selezionata`, `Offerta in scambio`
 - [ ] Interfacce di messaggistica tra utenti
-- [ ] Gestione eventi temporizzati (script cron?)
+- [ ] Gestione eventi temporizzati
 
 ### Versione 5
 
@@ -281,7 +278,7 @@ Per la stessa ragione non si è mai parlato del ritorno atteso da parte dell’o
 Tale ritorno esula completamente dagli scopi didattici del progetto.
 
 **Nelle pagine precedenti si è assunto che i valori dei campi atti a descrivere un articolo che un fruitore desidera scambiare siano solo stringhe di caratteri.
-Nel caso più generale, alcuni valori potrebbero essere di tipo diverso, talvolta anche enumerativo (con richiesta al fruitore di fornire risposte chiuse).** *JSON SCHEMA?*
+Nel caso più generale, alcuni valori potrebbero essere di tipo diverso, talvolta anche enumerativo (con richiesta al fruitore di fornire risposte chiuse).**
 
 Inoltre, potrebbe essere contemplato che il fruitore carichi opzionalmente dei file (ad esempio, una fotografia dell’articolo che intende scambiare).
 

@@ -9,6 +9,7 @@ conf --> (Accesso Configuratore)
 conf --> (Creazione gerarchia)
 
 adm --> (Creazione nuovo \naccount configuratore)
+conf --> (Creazione nuovo \naccount configuratore)
 
 (Accesso Configuratore) ..> (Accesso utente): <<include>>
 (Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
@@ -23,7 +24,7 @@ fruit -up-|> user #red;text:red
 (Registrazione fruitore) #pink;line:red;text:red
 
 conf --> (Configurazione parametri) #red;text:red
-fruit --> (Registrazione fruitore) #red;text:red
+fruit -right-> (Registrazione fruitore) #red;text:red
 fruit --> (Accesso utente) #red;text:red
 (Configurazione parametri) ..> (Accesso Configuratore) #red;text:red : <<include>>
 

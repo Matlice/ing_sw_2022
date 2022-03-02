@@ -9,6 +9,7 @@ conf --> (Accesso Configuratore)
 conf --> (Creazione gerarchia)
 
 adm --> (Creazione nuovo \naccount configuratore)
+conf --> (Creazione nuovo \naccount configuratore)
 
 (Accesso Configuratore) ..> (Accesso utente): <<include>>
 (Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
@@ -57,5 +58,8 @@ conf --> (Visualizzazione offerte \nchiuse e in scambio)
 (Importazione configurazione \nin mddalità batch) #pink;line:red;text:red
 
 conf --> (Importazione configurazione \nin mddalità batch) #red;text:red
+
+(Registrazione fruitore) -[hidden]- (Pubblicazione articolo)
+(Registrazione fruitore) -[hidden]- (Visualizzazione offerte \ndell'utente)
 
 @enduml
