@@ -11,6 +11,8 @@ conf --> (Creazione gerarchia)
 adm --> (Creazione nuovo \naccount configuratore)
 conf --> (Creazione nuovo \naccount configuratore)
 
+conf --> (Visualizzazione gerarchia)
+
 (Accesso Configuratore) ..> (Accesso utente): <<include>>
 (Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
 
@@ -30,6 +32,7 @@ fruit --> (Pubblicazione articolo)
 fruit --> (Ritiro offerta)
 fruit --> (Visualizzazione offerte \nper categoria)
 conf --> (Visualizzazione offerte \nper categoria)
+fruit --> (Visualizzazione informazioni)
 fruit --> (Visualizzazione offerte \ndell'utente)
 
 (Proposta di scambio)
@@ -59,7 +62,9 @@ conf --> (Visualizzazione offerte \nchiuse e in scambio)
 
 conf --> (Importazione configurazione \nin mddalità batch) #red;text:red
 
-(Registrazione fruitore) -[hidden]- (Pubblicazione articolo)
-(Registrazione fruitore) -[hidden]- (Visualizzazione offerte \ndell'utente)
+(Visualizzazione offerte \ndell'utente) -[hidden]- (Accettazione appuntamento)
+(Creazione nuovo \naccount configuratore) -[hidden]- (Configurazione parametri)
+'(Creazione nuovo \naccount configuratore) -[hidden]- (Importazione configurazione \nin mddalità batch)
+
 
 @enduml

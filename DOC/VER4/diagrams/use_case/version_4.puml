@@ -10,6 +10,7 @@ conf --> (Creazione gerarchia)
 
 adm --> (Creazione nuovo \naccount configuratore)
 conf --> (Creazione nuovo \naccount configuratore)
+conf --> (Visualizzazione gerarchia)
 
 (Accesso Configuratore) ..> (Accesso utente): <<include>>
 (Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
@@ -22,6 +23,7 @@ fruit -up-|> user
 (Registrazione fruitore)
 
 conf --> (Configurazione parametri)
+fruit --> (Visualizzazione informazioni)
 fruit --> (Registrazione fruitore)
 fruit --> (Accesso utente)
 (Configurazione parametri) ..> (Accesso Configuratore) : <<include>>
@@ -57,5 +59,6 @@ conf -left-> (Visualizzazione offerte \nchiuse e in scambio) #red;text:red
 (Registrazione fruitore) -[hidden]- (Visualizzazione offerte \ndell'utente)
 '(Accettazione appuntamento) -[hidden]- (Visualizzazione offerte \ndell'utente)
 '(Visualizzazione offerte \nchiuse e in scambio) -[hidden]- (Visualizzazione offerte \nper categoria)
+'(Visualizzazione gerarchia) -[hidden]- (Creazione nuovo \naccount configuratore)
 
 @enduml

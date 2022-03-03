@@ -1,0 +1,29 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Visualizzazione gerarchia}
+    \usecase
+        {Visualizzazione gerarchia}
+        {
+            Configuratore
+        }
+        {
+            %Visualizzazione gerarchia
+            \begin{tabular}{l}
+                1. Il configuratore richiede la visualizzazione delle gerarchie\\
+                2. Vengono visualizzate tutte le gerarchie presenti a sistema\\
+                3. Il configuratore sceglie di quale gerarchia visualizzare le infor-\\mazioni\\
+                4. Il sistema mostra tutte le informazioni relative alla gerarchia,\\
+                ovvero l'albero delle categorie con i relativi campi nativi\\
+                Fine
+            \end{tabular}\\
+
+            \auxcase{
+                \begin{tabular}{l}
+                    3.a \textit{Precondizione: la gerarchia selezionata non esiste}\\
+                    4. Viene mostrato un messaggio di errore\\
+                    Torna al punto 3
+                \end{tabular}
+            }
+
+        }
+        \vspace{0.5cm}
+\end{minipage}
