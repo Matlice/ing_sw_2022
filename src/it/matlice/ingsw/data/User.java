@@ -11,8 +11,13 @@ import java.util.List;
 public abstract class User implements Authenticable {
     public abstract String getUsername();
 
+    public abstract Long getLastLoginTime();
+
+    public abstract void setLastLoginTime(long time);
+
     @Override
     public abstract List<AuthMethod> getAuthMethods();
+
 
     public enum UserTypes {
         CONFIGURATOR("configurator");

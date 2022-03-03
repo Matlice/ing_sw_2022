@@ -7,69 +7,96 @@ import it.matlice.ingsw.controller.Authentication;
 import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.controller.exceptions.InvalidUserException;
 import it.matlice.ingsw.controller.exceptions.LoginInvalidException;
+import it.matlice.ingsw.data.ConfiguratorUser;
+import it.matlice.ingsw.data.User;
 import it.matlice.ingsw.view.View;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Model {
 
-    private View view;
+    private final View view;
+    private final Controller controller;
     private Authentication currentUser;
 
-    private static Model instance;
-    private Model(View view) {
+    private final List<MenuAction> user_actions = Arrays.asList(
+            new MenuAction("Change password", User.class, () -> this.changePassword()),
+            new MenuAction("New Configurator", ConfiguratorUser.class, () -> true),
+            new MenuAction("New Hierarchy", ConfiguratorUser.class, () -> true),
+            new MenuAction("Show Hierarchy", ConfiguratorUser.class, () -> true),
+            new MenuAction("Exit", User.class, () -> false)
+
+    );
+
+    public Model(View view, Controller c) {
         this.view = view;
+        this.controller = c;
+        c.setModel(this);
     }
 
-    public static Model getInstance() {
-        return instance;
+    public boolean mainloop() {
+        if (this.currentUser == null) {
+            this.login();
+            if (this.currentUser.getUser().getLastLoginTime() == null) {
+                this.view.message("WARN", "You need to change your password");
+                return this.changePassword();
+            }
+            this.controller.finalizeLogin(this.currentUser);
+            return true;
+        } else {
+            var action = this.view.choose(this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList());
+            if (action != null)
+                return action.getAction().run();
+            else
+                return true;
+        }
     }
 
-    public static Model startInstance(View view){
-        assert instance == null;
-        instance = new Model(view);
-        return instance;
-    }
-
-    //Controller to Model ==================================================================
-    public void forceChangePassword(){
-        while(true) {
+    public void forceChangePassword() {
+        while (true) {
             try {
                 this.view.changePassword();
                 break;
-            } catch (Exception e){
-                view.message("Errore", "La password deve essere cambiata al primo accesso.");
+            } catch (Exception e) {
+                this.view.message("Errore", "La password deve essere cambiata al primo accesso.");
             }
         }
     }
 
     public AuthData getLoginData(String method){
         if(method.equals(PasswordAuthMethod.class.getName()))
-            return PasswordAuthMethod.getAuthData(view.getPassword());
+            return PasswordAuthMethod.getAuthData(this.view.getPassword());
         else {
-            view.message("Errore", "Nessun metodo di login disponibile per " + method);
+            this.view.message("Errore", "Nessun metodo di login disponibile per " + method);
             return null;
         }
     }
 
     public void login(){
-        var username = view.getLoginUsername();
+        var username = this.view.getLoginUsername();
         try {
-            this.currentUser = Controller.getInstance().authenticate(username);
+            this.currentUser = this.controller.authenticate(username);
             if(this.currentUser == null){
-                view.message("Errore", "password errata");
+                this.view.message("Errore", "password errata");
             }
         } catch (InvalidUserException e) {
-            view.message("Errore", "Invalid user");
+            this.view.message("Errore", "Invalid user");
         }
     }
 
-    //Model to Controller ==================================================================
-    public void changePassword(String password){
+    public boolean changePassword() {
         try {
-            Controller.getInstance().changePassword(currentUser, password);
-        } catch (InvalidPasswordException e){
-            view.message("Errore", "La password non rispetta i requisiti di sicurezza");
-        } catch (LoginInvalidException e){
-            view.message("Errore", "Il login non è più valido.");
+            var psw = this.view.changePassword();
+            this.controller.changePassword(this.currentUser, psw);
+            return true;
+        } catch (InvalidPasswordException e) {
+            this.view.message("Errore", "La password non rispetta i requisiti di sicurezza");
+        } catch (LoginInvalidException e) {
+            this.view.message("Errore", "Il login non è più valido.");
+        } catch (Exception e) {
+            this.view.message("Errore", e.getMessage());
         }
+        return true;
     }
 }

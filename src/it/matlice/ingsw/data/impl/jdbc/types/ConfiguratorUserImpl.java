@@ -39,6 +39,16 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
     }
 
     @Override
+    public Long getLastLoginTime() {
+        return this.dbData.getLastAccess();
+    }
+
+    @Override
+    public void setLastLoginTime(long time) {
+        this.dbData.setLastAccess(time);
+    }
+
+    @Override
     public List<AuthMethod> getAuthMethods() {
         return Arrays.asList(new AuthMethod[]{
                 new PasswordAuthMethod(this)

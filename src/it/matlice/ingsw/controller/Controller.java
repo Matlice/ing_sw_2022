@@ -1,6 +1,5 @@
 package it.matlice.ingsw.controller;
 
-import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.controller.exceptions.InvalidUserException;
 import it.matlice.ingsw.controller.exceptions.LoginInvalidException;
@@ -16,12 +15,11 @@ public class Controller {
     private final HierarchyFactory hf;
     private final CategoryFactory cf;
     private final UserFactory uf;
+    private Model model;
 
     private List<Hierarchy> hierarchies;
 
-    private static Controller instance;
-
-    private Controller(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
+    public Controller(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
@@ -33,24 +31,16 @@ public class Controller {
         }
     }
 
-    public static Controller getInstance(){
-        return Controller.instance;
-    }
-
-    public static Controller makeInstance(HierarchyFactory hf, CategoryFactory cf, UserFactory uf){
-        assert instance == null;
-        instance = new Controller(hf, cf, uf);
-        return Controller.instance;
-    }
-
-    public void changePassword(Authentication auth, String newPassword) throws LoginInvalidException, InvalidPasswordException {
-        if(!auth.isValid())
+    public void changePassword(Authentication auth, String newPassword) throws Exception {
+        if (!auth.isValid())
             throw new LoginInvalidException();
 
-        for(var method : auth.getUser().getAuthMethods()){
-            if(method instanceof PasswordAuthMethod)
+        for (var method : auth.getUser().getAuthMethods()) {
+            if (method instanceof PasswordAuthMethod)
                 ((PasswordAuthMethod) method).setPassword(newPassword);
         }
+
+        this.uf.saveUser(auth.getUser());
     }
 
     /**
@@ -59,30 +49,51 @@ public class Controller {
      * @param username username dell'utente
      * @return un token di sessione oppure null se l'auitenticazione non ha avuto successo
      */
-    public Authentication authenticate(String username) throws InvalidUserException{
+    public Authentication authenticate(String username) throws InvalidUserException {
         User user;
         try {
-            user = uf.getUser(username);
-        } catch (Exception e){
+            user = this.uf.getUser(username);
+        } catch (Exception e) {
             throw new InvalidUserException();
         }
 
         boolean ret = false;
-        for(var method: user.getAuthMethods()){
-            var authdata = Model.getInstance().getLoginData(method.getClass().getName());
-            if(authdata == null)
+        for (var method : user.getAuthMethods()) {
+            var authdata = this.model.getLoginData(method.getClass().getName());
+            if (authdata == null)
                 continue;
             ret = method.performAuthentication(authdata);
-            if(ret) break;
+            if (ret) break;
         }
 
-        if(ret)
+        if (ret)
             return new AuthImpl(user);
         return null;
     }
 
-    public void mainloop(){
-        Model.getInstance().login();
+    public void finalizeLogin(Authentication auth) {
+        auth.getUser().setLastLoginTime(auth.getLoginTime());
+        try {
+            this.uf.saveUser(auth.getUser());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String genRandomPassword(int size) {
+        return "Config!1";
+    }
+
+    public void addConfiguratorUser(String username) throws Exception {
+        var u = this.uf.createUser("admin", User.UserTypes.CONFIGURATOR);
+        var password = this.genRandomPassword(8);
+        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password);
+        this.uf.saveUser(u);
+        System.out.println("Use " + username + ":" + password + " to login.");
+    }
+
+    public void setModel(Model m) {
+        this.model = m;
     }
 
     private static class AuthImpl implements Authentication {
@@ -92,6 +103,8 @@ public class Controller {
         private AuthImpl(User user_ref) {
             this.user_ref = user_ref;
             this.login_time = System.currentTimeMillis() / 1000L;
+
+            this.user_ref.setLastLoginTime(this.login_time);
         }
 
 
