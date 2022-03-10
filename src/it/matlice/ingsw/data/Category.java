@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public abstract class Category extends HashMap<String, TypeDefinition<?>> {
 
-    private Category father = null;
+    private NodeCategory father = null;
 
     public boolean isRequired(String name) {
         return this.containsKey(name) && this.get(name).required();
@@ -94,11 +94,11 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
         return super.containsValue(value) || (this.father != null && this.father.containsValue(value));
     }
 
-    public Category getFather() {
+    public NodeCategory getFather() {
         return this.father;
     }
 
-    public void setFather(Category father) {
+    public void setFather(NodeCategory father) {
         this.father = father;
     }
 

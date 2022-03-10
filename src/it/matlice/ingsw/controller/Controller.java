@@ -5,7 +5,10 @@ import it.matlice.ingsw.controller.exceptions.InvalidUserException;
 import it.matlice.ingsw.controller.exceptions.LoginInvalidException;
 import it.matlice.ingsw.data.*;
 import it.matlice.ingsw.model.Model;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static it.matlice.ingsw.controller.Settings.LOGIN_EXPIRATION_TIME;
@@ -31,7 +34,7 @@ public class Controller {
         }
     }
 
-    public void changePassword(Authentication auth, String newPassword) throws Exception {
+    public void changePassword(@NotNull Authentication auth, String newPassword) throws Exception {
         if (!auth.isValid())
             throw new LoginInvalidException();
 
@@ -71,7 +74,7 @@ public class Controller {
         return null;
     }
 
-    public void finalizeLogin(Authentication auth) {
+    public void finalizeLogin(@NotNull Authentication auth) {
         auth.getUser().setLastLoginTime(auth.getLoginTime());
         try {
             this.uf.saveUser(auth.getUser());
@@ -80,16 +83,41 @@ public class Controller {
         }
     }
 
-    private String genRandomPassword(int size) {
+    @Contract(pure = true)
+    private @NotNull String genRandomPassword() {
         return "Config!1";
     }
 
     public void addConfiguratorUser(String username) throws Exception {
         var u = this.uf.createUser("admin", User.UserTypes.CONFIGURATOR);
-        var password = this.genRandomPassword(8);
+        var password = this.genRandomPassword();
         ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password);
         this.uf.saveUser(u);
         System.out.println("Use " + username + ":" + password + " to login.");
+    }
+
+    public Category createCategory(String name, Category father) {
+        try {
+            return this.cf.createCategory(name, father, true);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void createHierarchy(Category root) {
+        try {
+            this.cf.saveCategory(root);
+            //todo check if no same name
+            this.hierarchies.add(this.hf.createHierarchy(root));
+        } catch (Exception e) {
+        }
+    }
+
+    public boolean isCategoryValid(Category c) {
+        if (c instanceof LeafCategory)
+            return true;
+        assert c instanceof NodeCategory;
+        return ((NodeCategory) c).getChildren().length >= 2 && Arrays.stream(((NodeCategory) c).getChildren()).allMatch(this::isCategoryValid);
     }
 
     public void setModel(Model m) {
@@ -103,8 +131,6 @@ public class Controller {
         private AuthImpl(User user_ref) {
             this.user_ref = user_ref;
             this.login_time = System.currentTimeMillis() / 1000L;
-
-            this.user_ref.setLastLoginTime(this.login_time);
         }
 
 

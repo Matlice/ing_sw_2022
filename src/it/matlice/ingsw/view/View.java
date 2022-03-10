@@ -14,5 +14,15 @@ public interface View {
 
     String getPassword();
 
-    MenuAction choose(List<MenuAction> choices);
+    String get(String prompt);
+
+    <T> MenuAction<T> choose(List<MenuAction<T>> choices, String prompt, T default_return);
+
+    default <T> MenuAction<T> choose(List<MenuAction<T>> choices) {
+        return this.choose(choices, "", null);
+    }
+
+    default <T> MenuAction<T> choose(List<MenuAction<T>> choices, T default_return) {
+        return this.choose(choices, "", default_return);
+    }
 }

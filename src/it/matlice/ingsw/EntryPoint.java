@@ -1,5 +1,7 @@
 package it.matlice.ingsw;
 
+import com.j256.ormlite.logger.Level;
+import com.j256.ormlite.logger.Logger;
 import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.data.impl.jdbc.CategoryFactoryImpl;
 import it.matlice.ingsw.data.impl.jdbc.HierarchyFactoryImpl;
@@ -12,6 +14,7 @@ import java.util.Scanner;
 
 public class EntryPoint {
     public static void main(String[] args) throws Exception {
+        Logger.setGlobalLogLevel(Level.WARNING);
         JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
         var uf = new UserFactoryImpl();
         var cf = new CategoryFactoryImpl();

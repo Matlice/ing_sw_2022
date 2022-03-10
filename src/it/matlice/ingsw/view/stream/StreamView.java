@@ -2,6 +2,7 @@ package it.matlice.ingsw.view.stream;
 
 import it.matlice.ingsw.model.MenuAction;
 import it.matlice.ingsw.view.View;
+import it.matlice.ingsw.view.menu.Menu;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -47,12 +48,19 @@ public class StreamView implements View {
     }
 
     @Override
-    public MenuAction choose(List<MenuAction> choices) {
+    public String get(String prompt) {
+        this.out.print(prompt + "> ");
+        return this.in.next();
+    }
+
+    @Override
+    public <T> MenuAction<T> choose(List<MenuAction<T>> choices, String prompt, T default_return) {
         Menu menu = new Menu();
         for (var act : choices) {
-            menu.addEntry(act.getName(), (in, out, ref) -> act);
+            menu.addEntry(act.getName(), (in, out, ref) -> act).disable(act.isDisabled());
         }
-
-        return (MenuAction) menu.display(this.in, this.out);
+        menu.setPrompt(prompt);
+        var answ = menu.displayOnce(this.in, this.out);
+        return answ == null ? new MenuAction<>("", null, () -> default_return) : (MenuAction<T>) answ;
     }
 }

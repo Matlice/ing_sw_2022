@@ -1,4 +1,4 @@
-package it.matlice.ingsw.view.stream;
+package it.matlice.ingsw.view.menu;
 
 import java.io.PrintStream;
 import java.util.Scanner;

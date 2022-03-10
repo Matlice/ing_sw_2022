@@ -1,4 +1,4 @@
-package it.matlice.ingsw.view.stream;
+package it.matlice.ingsw.view.menu;
 
 import java.io.PrintStream;
 import java.util.*;
@@ -181,7 +181,12 @@ public class Menu {
      */
     public Object selectAfterDisplay(Scanner in, PrintStream out) {
 //        var action = new InputRequest<>(Integer.class).queryMessage(lang.INPUT_PROMPT()).blacklist(false).allow(call_ref.keySet()).ask(in, out);
-        var action = in.nextInt();
+        int action;
+        try {
+            action = in.nextInt();
+        } catch (InputMismatchException e) {
+            return null;
+        }
         if (!this.call_ref.containsKey(action))
             return null;
         var ref = this.call_ref.get(action);

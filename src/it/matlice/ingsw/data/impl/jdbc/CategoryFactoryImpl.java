@@ -100,8 +100,6 @@ public class CategoryFactoryImpl implements CategoryFactory {
             ref = new CategoryDB(nome, null);
         }
 
-        this.categoryDAO.createIfNotExists(ref);
-
         Category ret = isLeaf ? new LeafCategoryImpl(ref) : new NodeCategoryImpl(ref);
 
         if (father != null)
@@ -114,7 +112,7 @@ public class CategoryFactoryImpl implements CategoryFactory {
     public Category saveCategory(Category category) throws SQLException {
         assert category instanceof CategoryImpl;
 
-        this.categoryDAO.update(((CategoryImpl) category).getDbData());
+        this.categoryDAO.createOrUpdate(((CategoryImpl) category).getDbData());
 
         for (var entry : category.entrySet()) {
             var field_name = entry.getKey();

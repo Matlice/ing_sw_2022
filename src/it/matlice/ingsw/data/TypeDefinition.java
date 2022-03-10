@@ -7,7 +7,6 @@ package it.matlice.ingsw.data;
  */
 public record TypeDefinition<T>(it.matlice.ingsw.data.TypeDefinition.TypeAssociation type, boolean required) {
     public enum TypeAssociation {
-        INTEGER(Integer.class),
         STRING(String.class);
 
         private final Class<?> type;

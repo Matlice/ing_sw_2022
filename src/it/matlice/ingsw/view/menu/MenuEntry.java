@@ -1,4 +1,4 @@
-package it.matlice.ingsw.view.stream;
+package it.matlice.ingsw.view.menu;
 
 
 public class MenuEntry implements Comparable<MenuEntry> {
