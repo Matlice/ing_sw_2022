@@ -185,6 +185,7 @@ public class Menu {
         try {
             action = in.nextInt();
         } catch (InputMismatchException e) {
+            in.nextLine();
             return null;
         }
         if (!this.call_ref.containsKey(action))

@@ -88,12 +88,12 @@ public class Controller {
         return "Config!1";
     }
 
-    public void addConfiguratorUser(String username) throws Exception {
-        var u = this.uf.createUser("admin", User.UserTypes.CONFIGURATOR);
+    public String addConfiguratorUser(String username) throws Exception {
+        var u = this.uf.createUser(username, User.UserTypes.CONFIGURATOR);
         var password = this.genRandomPassword();
         ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password);
         this.uf.saveUser(u);
-        System.out.println("Use " + username + ":" + password + " to login.");
+        return password;
     }
 
     public Category createCategory(String name, Category father) {

@@ -8,6 +8,10 @@ public interface View {
 
     String changePassword() throws Exception;
 
+    String getNewConfiguratorUsername();
+
+    void newConfiguratorUserAndPassword(String username, String password);
+
     void message(String title, String text);
 
     String getLoginUsername();
@@ -25,4 +29,5 @@ public interface View {
     default <T> MenuAction<T> choose(List<MenuAction<T>> choices, T default_return) {
         return this.choose(choices, "", default_return);
     }
+
 }

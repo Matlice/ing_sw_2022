@@ -6,6 +6,7 @@ bin/
 *.pdf
 *.lof
 *.lot
+*.out
 _markdown_main/
 _markdown_main/
 *.md.tex

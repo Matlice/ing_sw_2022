@@ -22,7 +22,7 @@ public class Model {
 
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
             new MenuAction<>("Change password", User.class, this::changePassword),
-            //new MenuAction("New Configurator", ConfiguratorUser.class, () -> true),
+            new MenuAction<>("New Configurator", ConfiguratorUser.class, this::createConfigurator),
             new MenuAction<>("New Hierarchy", ConfiguratorUser.class, this::createHierarchy),
             //new MenuAction("Show Hierarchy", ConfiguratorUser.class, () -> true),
             new MenuAction<>("Exit", User.class, () -> false)
@@ -44,16 +44,16 @@ public class Model {
         if (action != null)
             return action.getAction().run();
         else {
-            this.view.message("ERRORE", "Cannot retrive action informations");
+            this.view.message("ERRORE", "Azione non permessa");
             return true;
         }
     }
 
     public boolean mainloop() {
         if (this.currentUser == null)
-            return this.chooseAndRun(this.public_actions, "Sciegliere un'opzione");
+            return this.chooseAndRun(this.public_actions, "Scegliere un'opzione");
 
-        return this.chooseAndRun(this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList(), String.format("Benvenuto %s. Sciegli un'opzione", this.currentUser.getUser().getUsername()));
+        return this.chooseAndRun(this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList(), String.format("Benvenuto %s. Scegli un'opzione", this.currentUser.getUser().getUsername()));
     }
 
     //ACTIONS===============================================================
@@ -71,16 +71,30 @@ public class Model {
     }
 
     public boolean changePassword() {
+        boolean passwordChanged = false;
+        while (!passwordChanged) {
+            try {
+                var psw = this.view.changePassword();
+                this.controller.changePassword(this.currentUser, psw);
+                passwordChanged = true;
+            } catch (InvalidPasswordException e) {
+                this.view.message("Errore", "La password non rispetta i requisiti di sicurezza");
+            } catch (LoginInvalidException e) {
+                this.view.message("Errore", "Il login non è più valido.");
+            } catch (Exception e) {
+                this.view.message("Errore", e.getMessage());
+            }
+        }
+        return true;
+    }
+
+    public boolean createConfigurator() {
+        var username = this.view.getNewConfiguratorUsername();
         try {
-            var psw = this.view.changePassword();
-            this.controller.changePassword(this.currentUser, psw);
-            return true;
-        } catch (InvalidPasswordException e) {
-            this.view.message("Errore", "La password non rispetta i requisiti di sicurezza");
-        } catch (LoginInvalidException e) {
-            this.view.message("Errore", "Il login non è più valido.");
+            String password = this.controller.addConfiguratorUser(username);
+            this.view.newConfiguratorUserAndPassword(username, password);
         } catch (Exception e) {
-            this.view.message("Errore", e.getMessage());
+            this.view.message("Errore", "Could not create a new configurator");
         }
         return true;
     }
@@ -89,7 +103,7 @@ public class Model {
         var root = this.createCategory(); //todo add descrizione to categoria
 
         while (this.view.choose(Arrays.asList(
-                new MenuAction<>("Aggiunti nuova categoria", ConfiguratorUser.class, () -> true),
+                new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true),
                 new MenuAction<>("Conferma ed esci", ConfiguratorUser.class, () -> false, !this.controller.isCategoryValid(root))
         ), "Si vuole aggiungere una nuova categoria?", true).getAction().run()) {
             var father = this.view.choose(this.getCategories(root), "Selezionare una categoria", null).getAction().run();

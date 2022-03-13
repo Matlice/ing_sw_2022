@@ -20,7 +20,6 @@ public class StreamView implements View {
 
     @Override
     public String changePassword() throws Exception {
-        //todo
         this.out.print("new password> ");
         var psw1 = this.in.next();
         this.out.print("repeat password> ");
@@ -28,6 +27,17 @@ public class StreamView implements View {
         if (!psw1.equals(psw2))
             throw new Exception("Password does not match!");
         return psw1;
+    }
+
+    @Override
+    public String getNewConfiguratorUsername() {
+        this.out.print("New Configurator username> ");
+        return this.in.next().trim();
+    }
+
+    @Override
+    public void newConfiguratorUserAndPassword(String username, String password) {
+        this.out.println("Use " + username + ":" + password + " to login");
     }
 
     @Override
@@ -61,6 +71,6 @@ public class StreamView implements View {
         }
         menu.setPrompt(prompt);
         var answ = menu.displayOnce(this.in, this.out);
-        return answ == null ? new MenuAction<>("", null, () -> default_return) : (MenuAction<T>) answ;
+        return answ == null ? null : (MenuAction<T>) answ;
     }
 }
