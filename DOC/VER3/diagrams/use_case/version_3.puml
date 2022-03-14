@@ -28,6 +28,7 @@ fruit --> (Registrazione fruitore)
 fruit --> (Accesso utente)
 (Configurazione parametri) ..> (Accesso Configuratore) : <<include>>
 
+(Visualizzazione informazioni) ..> (Accesso utente) : <<include>>
 
 'VERSIONE 3 ==========================================
 

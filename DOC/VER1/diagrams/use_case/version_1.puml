@@ -14,5 +14,6 @@ conf --> (Visualizzazione gerarchia)
 
 (Accesso Configuratore) ..> (Accesso utente): <<include>>
 (Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
+(Visualizzazione gerarchia) ..> (Accesso Configuratore): <<include>>
 
 @enduml

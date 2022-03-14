@@ -14,6 +14,7 @@ conf --> (Visualizzazione gerarchia)
 
 (Accesso Configuratore) ..> (Accesso utente): <<include>>
 (Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
+(Visualizzazione gerarchia) ..> (Accesso Configuratore): <<include>>
 
 'VERSIONE 2 ===========================================
 
@@ -30,5 +31,7 @@ fruit --> (Visualizzazione informazioni) #red;text:red
 fruit -right-> (Registrazione fruitore) #red;text:red
 fruit --> (Accesso utente) #red;text:red
 (Configurazione parametri) ..> (Accesso Configuratore) #red;text:red : <<include>>
+
+(Visualizzazione informazioni) ..> (Accesso utente) #red;text:red : <<include>>
 
 @enduml
