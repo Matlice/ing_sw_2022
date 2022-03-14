@@ -1,183 +1,192 @@
-package it.matlice.ingsw.controller;
+package it.matlice.ingsw.model;
 
+import it.matlice.ingsw.auth.AuthData;
+import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
+import it.matlice.ingsw.controller.Authentication;
+import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.controller.exceptions.InvalidUserException;
 import it.matlice.ingsw.controller.exceptions.LoginInvalidException;
 import it.matlice.ingsw.data.*;
-import it.matlice.ingsw.model.Model;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import it.matlice.ingsw.view.View;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
-import static it.matlice.ingsw.controller.Settings.LOGIN_EXPIRATION_TIME;
+public class Model {
 
-public class Controller {
+    private final View view;
+    private final Controller controller;
+    private Authentication currentUser;
 
-    private final HierarchyFactory hf;
-    private final CategoryFactory cf;
-    private final UserFactory uf;
-    private Model model;
+    private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
+            new MenuAction<>("Change password", User.class, this::changePassword),
+            new MenuAction<>("New Configurator", ConfiguratorUser.class, this::createConfigurator),
+            new MenuAction<>("New Hierarchy", ConfiguratorUser.class, this::createHierarchy),
+            //new MenuAction("Show Hierarchy", ConfiguratorUser.class, () -> true),
+            new MenuAction<>("Exit", User.class, () -> false)
+    );
 
-    private List<Hierarchy> hierarchies;
+    private final List<MenuAction<Boolean>> public_actions = Arrays.asList(
+            new MenuAction<>("Login", User.class, this::performLogin),
+            new MenuAction<>("Exit", User.class, () -> false)
+    );
 
-    public Controller(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
-        this.hf = hf;
-        this.cf = cf;
-        this.uf = uf;
+    public Model(View view, Controller c) {
+        this.view = view;
+        this.controller = c;
+        c.setModel(this);
+    }
 
-        try {
-            this.hierarchies = hf.getHierarchies();
-        } catch (Exception e) {
-            e.printStackTrace(); //todo handle
+    private boolean chooseAndRun(List<MenuAction<Boolean>> actions, String prompt) {
+        var action = this.view.chooseOption(actions, prompt, null);
+        if (action != null)
+            return action.getAction().run();
+        else {
+            this.view.message("ERRORE", "Azione non permessa");
+            return true;
         }
     }
 
-    public void changePassword(@NotNull Authentication auth, String newPassword) throws Exception {
-        if (!auth.isValid())
-            throw new LoginInvalidException();
+    public boolean mainloop() {
+        if (this.currentUser == null)
+            return this.chooseAndRun(this.public_actions, "Scegliere un'opzione");
 
-        for (var method : auth.getUser().getAuthMethods()) {
-            if (method instanceof PasswordAuthMethod)
-                ((PasswordAuthMethod) method).setPassword(newPassword);
+        return this.chooseAndRun(this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList(), String.format("Benvenuto %s. Scegli un'opzione", this.currentUser.getUser().getUsername()));
+    }
+
+    //ACTIONS===============================================================
+
+    public boolean performLogin() {
+        if (this.login()) {
+            if (this.currentUser.getUser().getLastLoginTime() == null) {
+                this.view.message("WARN", "You need to change your password");
+                this.changePassword();
+            }
+            this.controller.finalizeLogin(this.currentUser);
+            return true;
+        }
+        return true;
+    }
+
+    public boolean changePassword() {
+        boolean passwordChanged = false;
+        while (!passwordChanged) {
+            try {
+                var psw = this.view.changePassword();
+                this.controller.changePassword(this.currentUser, psw);
+                passwordChanged = true;
+            } catch (InvalidPasswordException e) {
+                this.view.message("Errore", "La password non rispetta i requisiti di sicurezza");
+            } catch (LoginInvalidException e) {
+                this.view.message("Errore", "Il login non è più valido.");
+            } catch (Exception e) {
+                this.view.message("Errore", e.getMessage());
+            }
+        }
+        return true;
+    }
+
+    public boolean createConfigurator() {
+        var username = this.view.getNewConfiguratorUsername();
+        try {
+            String password = this.controller.addConfiguratorUser(username);
+            this.view.showNewConfiguratorUserAndPassword(username, password);
+        } catch (Exception e) {
+            this.view.message("Errore", "Could not create a new configurator");
+        }
+        return true;
+    }
+
+    public boolean createHierarchy() {
+        var root = this.createCategory(); //todo add descrizione to categoria
+
+        while (this.view.chooseOption(Arrays.asList(
+                new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true),
+                new MenuAction<>("Conferma ed esci", ConfiguratorUser.class, () -> false, !this.controller.isCategoryValid(root))
+        ), "Si vuole aggiungere una nuova categoria?", true).getAction().run()) {
+            var father = this.view.chooseOption(this.getCategories(root), "Selezionare una categoria", null).getAction().run();
+            if (father == null) continue;
+
+            var r = this.appendCategory(father, this.createCategory());
+            if (father == root)
+                root = r;
         }
 
-        this.uf.saveUser(auth.getUser());
+        this.controller.createHierarchy(root);
+        return true;
+    }
+
+    //FROM CONTROLLER===============================================================
+
+    public AuthData getLoginData(String method) {
+        if (method.equals(PasswordAuthMethod.class.getName()))
+            return PasswordAuthMethod.getAuthData(this.view.getPassword());
+        else {
+            this.view.message("Errore", "Nessun metodo di login disponibile per " + method);
+            return null;
+        }
+    }
+
+    //INTERNAL ACTIONS==============================================================
+
+    public boolean login() {
+        var username = this.view.getLoginUsername();
+        try {
+            this.currentUser = this.controller.authenticate(username);
+            if (this.currentUser == null) {
+                this.view.message("Errore", "password errata");
+            }
+            return this.currentUser != null;
+        } catch (InvalidUserException e) {
+            this.view.message("Errore", "Invalid user");
+        }
+        return false;
+    }
+
+    public void addField(Category c) {
+        var name = this.view.get("Nome campo");
+        var type = this.view.chooseOption(
+                Arrays.stream(TypeDefinition.TypeAssociation.values())
+                        .map(e -> new MenuAction<>(e.toString(), ConfiguratorUser.class, () -> e))
+                        .toList(), "Seleziona un tipo", TypeDefinition.TypeAssociation.STRING).getAction().run();
+        var required = this.view.get("Obbligatorio [y/N]").equalsIgnoreCase("y");
+        c.put(name, new TypeDefinition<>(type, required));
     }
 
     /**
-     * Effettua l'autenticazione
+     * Le categorie di default sono create come LeafCategory
      *
-     * @param username username dell'utente
-     * @return un token di sessione oppure null se l'auitenticazione non ha avuto successo
+     * @return
      */
-    public Authentication authenticate(String username) throws InvalidUserException {
-        User user;
-        try {
-            user = this.uf.getUser(username);
-        } catch (Exception e) {
-            throw new InvalidUserException();
+    public Category createCategory() {
+        var category = this.controller.createCategory(this.view.get("Category name"), null);
+        while (this.view.chooseOption(Arrays.asList(
+                new MenuAction<>("Aggiunti campo nativo", ConfiguratorUser.class, () -> true),
+                new MenuAction<>("Conferma", ConfiguratorUser.class, () -> false)
+        ), "Si vuole aggiungere un campo nativo?", true).getAction().run()) {
+            this.addField(category);
         }
-
-        boolean ret = false;
-        for (var method : user.getAuthMethods()) {
-            var authdata = this.model.getLoginData(method.getClass().getName());
-            if (authdata == null)
-                continue;
-            ret = method.performAuthentication(authdata);
-            if (ret) break;
-        }
-
-        if (ret)
-            return new AuthImpl(user);
-        return null;
+        return category;
     }
 
-    public void finalizeLogin(@NotNull Authentication auth) {
-        auth.getUser().setLastLoginTime(auth.getLoginTime());
-        try {
-            this.uf.saveUser(auth.getUser());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public NodeCategory appendCategory(Category father, Category child) {
+        var f = father instanceof LeafCategory ? ((LeafCategory) father).convertToNode() : (NodeCategory) father;
+        f.addChild(child);
+        return f;
+        //todo this can throw errors?
     }
 
-    @Contract(pure = true)
-    private @NotNull String genRandomPassword() {
-        return "Config!1";
+    private List<MenuAction<Category>> getCategories(Category root) {
+        return this.getCategories(root, new LinkedList<>(), "");
     }
 
-    public String addConfiguratorUser(String username) throws Exception {
-        var u = this.uf.createUser(username, User.UserTypes.CONFIGURATOR);
-        var password = this.genRandomPassword();
-        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password);
-        this.uf.saveUser(u);
-        return password;
-    }
-
-    public Category createCategory(String name, Category father) {
-        try {
-            return this.cf.createCategory(name, father, true);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public void createHierarchy(Category root) {
-        try {
-            this.cf.saveCategory(root);
-            //todo check if no same name
-            this.hierarchies.add(this.hf.createHierarchy(root));
-        } catch (Exception e) {
-        }
-    }
-
-    public boolean isCategoryValid(Category c) {
-        if (c instanceof LeafCategory)
-            return true;
-        assert c instanceof NodeCategory;
-        return ((NodeCategory) c).getChildren().length >= 2 && Arrays.stream(((NodeCategory) c).getChildren()).allMatch(this::isCategoryValid);
-    }
-
-    public void setModel(Model m) {
-        this.model = m;
-    }
-
-    private static class AuthImpl implements Authentication {
-        private final User user_ref;
-        private final long login_time;
-
-        private AuthImpl(User user_ref) {
-            this.user_ref = user_ref;
-            this.login_time = System.currentTimeMillis() / 1000L;
-        }
-
-
-        /**
-         * @return Ritorna l'utente al quale il login è associato
-         */
-        @Override
-        public User getUser() {
-            return this.user_ref;
-        }
-
-        /**
-         * Ottiene la data di login
-         *
-         * @return unix time stamp del login
-         */
-        @Override
-        public long getLoginTime() {
-            return this.login_time;
-        }
-
-        /**
-         * Ottiene la data entro cui il login è valido
-         *
-         * @return unix time stamp della data di scadenza della sessione
-         */
-        @Override
-        public long getExpirationTime() {
-            return this.login_time + LOGIN_EXPIRATION_TIME;
-        }
-
-        /**
-         * @return true se la sessione è valida
-         */
-        @Override
-        public boolean isValid() {
-            return this.loginProblem() == null;
-        }
-
-        /**
-         * @return una stringa che identifica l'errore di sessione o null se la sessione è valida
-         */
-        @Override
-        public String loginProblem() {
-            if (System.currentTimeMillis() / 1000L >= this.getExpirationTime())
-                return "Expired token";
-            return null;
-        }
+    private List<MenuAction<Category>> getCategories(Category root, List<MenuAction<Category>> acc, String prefix) {
+        acc.add(new MenuAction<>(prefix + root.getName(), null, () -> root));
+        if (root instanceof NodeCategory)
+            for (var child : ((NodeCategory) root).getChildren())
+                this.getCategories(child, acc, prefix + root.getName() + ".");
+        return acc;
     }
 }
