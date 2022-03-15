@@ -1,4 +1,4 @@
-package it.matlice.ingsw.controller;
+package it.matlice.ingsw.model;
 
 public class Settings {
 

@@ -1,28 +1,28 @@
-package it.matlice.ingsw.controller;
+package it.matlice.ingsw.model;
 
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
-import it.matlice.ingsw.controller.exceptions.InvalidUserException;
-import it.matlice.ingsw.controller.exceptions.LoginInvalidException;
+import it.matlice.ingsw.model.exceptions.InvalidUserException;
+import it.matlice.ingsw.model.exceptions.LoginInvalidException;
 import it.matlice.ingsw.data.*;
-import it.matlice.ingsw.model.Model;
+import it.matlice.ingsw.controller.Controller;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static it.matlice.ingsw.controller.Settings.LOGIN_EXPIRATION_TIME;
+import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
 
-public class Controller {
+public class Model {
 
     private final HierarchyFactory hf;
     private final CategoryFactory cf;
     private final UserFactory uf;
-    private Model model;
+    private Controller controller;
 
     private List<Hierarchy> hierarchies;
 
-    public Controller(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
+    public Model(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
@@ -42,7 +42,6 @@ public class Controller {
             if (method instanceof PasswordAuthMethod)
                 ((PasswordAuthMethod) method).setPassword(newPassword);
         }
-
         this.uf.saveUser(auth.getUser());
     }
 
@@ -62,7 +61,7 @@ public class Controller {
 
         boolean ret = false;
         for (var method : user.getAuthMethods()) {
-            var authdata = this.model.getLoginData(method.getClass().getName());
+            var authdata = this.controller.getLoginData(method.getClass().getName());
             if (authdata == null)
                 continue;
             ret = method.performAuthentication(authdata);
@@ -92,21 +91,14 @@ public class Controller {
         return password;
     }
 
-    public Category createCategory(String name, Category father) {
-        try {
-            return this.cf.createCategory(name, father, true);
-        } catch (Exception e) {
-            return null;
-        }
+    public Category createCategory(String name, Category father) throws Exception{
+        return this.cf.createCategory(name, father, true);
     }
 
-    public void createHierarchy(Category root) {
-        try {
-            this.cf.saveCategory(root);
-            //todo check if no same name
-            this.hierarchies.add(this.hf.createHierarchy(root));
-        } catch (Exception e) {
-        }
+    public void createHierarchy(Category root)  throws Exception{
+        this.cf.saveCategory(root);
+        //todo check if no same name
+        this.hierarchies.add(this.hf.createHierarchy(root));
     }
 
     public boolean isCategoryValid(Category c) {
@@ -116,9 +108,12 @@ public class Controller {
         return ((NodeCategory) c).getChildren().length >= 2 && Arrays.stream(((NodeCategory) c).getChildren()).allMatch(this::isCategoryValid);
     }
 
-    public void setModel(Model m) {
-        this.model = m;
+    public void setController(Controller m) {
+        this.controller = m;
     }
+
+
+
 
     private static class AuthImpl implements Authentication {
         private final User user_ref;

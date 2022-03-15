@@ -1,16 +1,16 @@
 package it.matlice.ingsw.view;
 
-import it.matlice.ingsw.model.MenuAction;
+import it.matlice.ingsw.controller.MenuAction;
 
 import java.util.List;
 
 public interface View {
 
-    String changePassword() throws Exception;
+    String[] changePassword() throws Exception;
 
     String getNewConfiguratorUsername();
 
-    void newConfiguratorUserAndPassword(String username, String password);
+    void showNewConfiguratorUserAndPassword(String username, String password);
 
     void message(String title, String text);
 
@@ -20,14 +20,14 @@ public interface View {
 
     String get(String prompt);
 
-    <T> MenuAction<T> choose(List<MenuAction<T>> choices, String prompt, T default_return);
+    <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt, T default_return);
 
-    default <T> MenuAction<T> choose(List<MenuAction<T>> choices) {
-        return this.choose(choices, "", null);
+    default <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices) {
+        return this.chooseOption(choices, "", null);
     }
 
-    default <T> MenuAction<T> choose(List<MenuAction<T>> choices, T default_return) {
-        return this.choose(choices, "", default_return);
+    default <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, T default_return) {
+        return this.chooseOption(choices, "", default_return);
     }
 
 }

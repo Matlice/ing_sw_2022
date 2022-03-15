@@ -1,12 +1,12 @@
-package it.matlice.ingsw.model;
+package it.matlice.ingsw.controller;
 
 import it.matlice.ingsw.auth.AuthData;
 import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
-import it.matlice.ingsw.controller.Authentication;
-import it.matlice.ingsw.controller.Controller;
-import it.matlice.ingsw.controller.exceptions.InvalidUserException;
-import it.matlice.ingsw.controller.exceptions.LoginInvalidException;
+import it.matlice.ingsw.model.Authentication;
+import it.matlice.ingsw.model.Model;
+import it.matlice.ingsw.model.exceptions.InvalidUserException;
+import it.matlice.ingsw.model.exceptions.LoginInvalidException;
 import it.matlice.ingsw.data.*;
 import it.matlice.ingsw.view.View;
 
@@ -14,29 +14,29 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Model {
+public class Controller {
 
     private final View view;
-    private final Controller controller;
+    private final Model model;
     private Authentication currentUser;
 
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
-            new MenuAction<>("Change password", User.class, this::changePassword),
-            new MenuAction<>("New Configurator", ConfiguratorUser.class, this::createConfigurator),
-            new MenuAction<>("New Hierarchy", ConfiguratorUser.class, this::createHierarchy),
+            new MenuAction<>("Cambia Password", User.class, this::changePassword),
+            new MenuAction<>("Aggiungi nuovo Configuratore", ConfiguratorUser.class, this::createConfigurator),
+            new MenuAction<>("Aggiungi nuova Gerarchia", ConfiguratorUser.class, this::createHierarchy),
             //new MenuAction("Show Hierarchy", ConfiguratorUser.class, () -> true),
-            new MenuAction<>("Exit", User.class, () -> false)
+            new MenuAction<>("Esci", User.class, () -> false)
     );
 
     private final List<MenuAction<Boolean>> public_actions = Arrays.asList(
             new MenuAction<>("Login", User.class, this::performLogin),
-            new MenuAction<>("Exit", User.class, () -> false)
+            new MenuAction<>("Esci", User.class, () -> false)
     );
 
-    public Model(View view, Controller c) {
+    public Controller(View view, Model model) {
         this.view = view;
-        this.controller = c;
-        c.setModel(this);
+        this.model = model;
+        model.setController(this);
     }
 
     private boolean chooseAndRun(List<MenuAction<Boolean>> actions, String prompt) {
@@ -61,10 +61,14 @@ public class Model {
     public boolean performLogin() {
         if (this.login()) {
             if (this.currentUser.getUser().getLastLoginTime() == null) {
-                this.view.message("WARN", "You need to change your password");
+                this.view.message("WARN", "Cambia le credenziali di accesso");
                 this.changePassword();
             }
-            this.controller.finalizeLogin(this.currentUser);
+            try {
+                this.model.finalizeLogin(this.currentUser);
+            } catch (Exception e) {
+                e.printStackTrace(); //todo
+            }
             return true;
         }
         return true;
@@ -75,8 +79,11 @@ public class Model {
         while (!passwordChanged) {
             try {
                 var psw = this.view.changePassword();
-                this.controller.changePassword(this.currentUser, psw);
-                passwordChanged = true;
+                if(!psw[0].equals(psw[1])) this.view.message("Errore", "Le due password inserite non coincidono");
+                else{
+                    this.model.changePassword(this.currentUser, psw[0]);
+                    passwordChanged = true;
+                }
             } catch (InvalidPasswordException e) {
                 this.view.message("Errore", "La password non rispetta i requisiti di sicurezza");
             } catch (LoginInvalidException e) {
@@ -91,34 +98,37 @@ public class Model {
     public boolean createConfigurator() {
         var username = this.view.getNewConfiguratorUsername();
         try {
-            String password = this.controller.addConfiguratorUser(username);
+            String password = this.model.addConfiguratorUser(username);
             this.view.showNewConfiguratorUserAndPassword(username, password);
         } catch (Exception e) {
-            this.view.message("Errore", "Could not create a new configurator");
+            this.view.message("Errore", "Impossibile creare un nuovo configuratore");
         }
         return true;
     }
 
     public boolean createHierarchy() {
-        var root = this.createCategory(); //todo add descrizione to categoria
+        Category root = this.createCategory(); //todo add descrizione to categoria
 
         while (this.view.chooseOption(Arrays.asList(
                 new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true),
-                new MenuAction<>("Conferma ed esci", ConfiguratorUser.class, () -> false, !this.controller.isCategoryValid(root))
+                new MenuAction<>("Conferma ed esci", ConfiguratorUser.class, () -> false, !this.model.isCategoryValid(root))
         ), "Si vuole aggiungere una nuova categoria?", true).getAction().run()) {
-            var father = this.view.chooseOption(this.getCategories(root), "Selezionare una categoria", null).getAction().run();
+            Category father = this.view.chooseOption(this.getCategories(root), "Selezionare una categoria", null).getAction().run();
             if (father == null) continue;
 
-            var r = this.appendCategory(father, this.createCategory());
-            if (father == root)
-                root = r;
+            NodeCategory r = this.appendCategory(father, this.createCategory());
+            if (father == root) root = r;
         }
 
-        this.controller.createHierarchy(root);
+        try {
+            this.model.createHierarchy(root);
+        } catch (Exception e) {
+            e.printStackTrace(); //todo
+        }
         return true;
     }
 
-    //FROM CONTROLLER===============================================================
+    //FROM MODEL ===============================================================
 
     public AuthData getLoginData(String method) {
         if (method.equals(PasswordAuthMethod.class.getName()))
@@ -127,20 +137,20 @@ public class Model {
             this.view.message("Errore", "Nessun metodo di login disponibile per " + method);
             return null;
         }
-    }
+    } //todo, appunto di rob: teto, dobbiamo fare un discorsetto...
 
     //INTERNAL ACTIONS==============================================================
 
     public boolean login() {
         var username = this.view.getLoginUsername();
         try {
-            this.currentUser = this.controller.authenticate(username);
+            this.currentUser = this.model.authenticate(username);
             if (this.currentUser == null) {
                 this.view.message("Errore", "password errata");
             }
             return this.currentUser != null;
         } catch (InvalidUserException e) {
-            this.view.message("Errore", "Invalid user");
+            this.view.message("Errore", "Utente non valido");
         }
         return false;
     }
@@ -161,7 +171,12 @@ public class Model {
      * @return
      */
     public Category createCategory() {
-        var category = this.controller.createCategory(this.view.get("Category name"), null);
+        Category category = null;
+        try {
+            category = this.model.createCategory(this.view.get("Category name"), null);
+        } catch (Exception e) {
+            e.printStackTrace(); //todo
+        }
         while (this.view.chooseOption(Arrays.asList(
                 new MenuAction<>("Aggiunti campo nativo", ConfiguratorUser.class, () -> true),
                 new MenuAction<>("Conferma", ConfiguratorUser.class, () -> false)
@@ -171,12 +186,14 @@ public class Model {
         return category;
     }
 
-    public NodeCategory appendCategory(Category father, Category child) {
+    private NodeCategory appendCategory(Category father, Category child) {
         var f = father instanceof LeafCategory ? ((LeafCategory) father).convertToNode() : (NodeCategory) father;
         f.addChild(child);
         return f;
         //todo this can throw errors?
     }
+
+    //todo ask teto, ha senso che il controller abbia dei getter?
 
     private List<MenuAction<Category>> getCategories(Category root) {
         return this.getCategories(root, new LinkedList<>(), "");
@@ -188,5 +205,15 @@ public class Model {
             for (var child : ((NodeCategory) root).getChildren())
                 this.getCategories(child, acc, prefix + root.getName() + ".");
         return acc;
+    }
+
+    public void addDefaultConfigurator() {
+        try {
+            String psw = this.model.addConfiguratorUser("admin");
+            this.view.message("INFO", String.format("Login con admin:%s", psw));
+        } catch (Exception e) {
+            e.printStackTrace(); //todo
+        }
+
     }
 }

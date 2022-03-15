@@ -1,4 +1,4 @@
-package it.matlice.ingsw.controller.exceptions;
+package it.matlice.ingsw.model.exceptions;
 
 public class LoginInvalidException extends Exception{
 }

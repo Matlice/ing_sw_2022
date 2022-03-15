@@ -1,4 +1,4 @@
-package it.matlice.ingsw.controller;
+package it.matlice.ingsw.model;
 
 import it.matlice.ingsw.data.User;
 

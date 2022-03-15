@@ -2,12 +2,12 @@ package it.matlice.ingsw;
 
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
-import it.matlice.ingsw.controller.Controller;
+import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.data.impl.jdbc.CategoryFactoryImpl;
 import it.matlice.ingsw.data.impl.jdbc.HierarchyFactoryImpl;
 import it.matlice.ingsw.data.impl.jdbc.JdbcConnection;
 import it.matlice.ingsw.data.impl.jdbc.UserFactoryImpl;
-import it.matlice.ingsw.model.Model;
+import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.view.stream.StreamView;
 
 import java.util.Scanner;
@@ -20,14 +20,14 @@ public class EntryPoint {
         var cf = new CategoryFactoryImpl();
         var hf = new HierarchyFactoryImpl();
 
+        var model = new Model(hf, cf, uf);
         var view = new StreamView(System.out, new Scanner(System.in));
-        var controller = new Controller(hf, cf, uf);
-        var model = new Model(view, controller);
+        var controller = new Controller(view, model);
 
         if (uf.getUsers().size() == 0) {
-            controller.addConfiguratorUser("admin");
+            controller.addDefaultConfigurator();
         }
 
-        while (model.mainloop()) ;
+        while(controller.mainloop());
     }
 }
