@@ -20,10 +20,8 @@ public class StreamView implements View {
 
     @Override
     public String[] changePassword() throws Exception {
-        this.out.print("new password> ");
-        var psw1 = this.in.next();
-        this.out.print("repeat password> ");
-        var psw2 = this.in.next();
+        String psw1 = this.get("Nuova password");
+        String psw2 = this.get("Repeat password");
         //if (!psw1.equals(psw2))
         //    throw new Exception("Password does not match!"); todo
         return new String[]{psw1, psw2};
@@ -31,8 +29,7 @@ public class StreamView implements View {
 
     @Override
     public String getNewConfiguratorUsername() {
-        this.out.print("New Configurator username> ");
-        return this.in.next().trim();
+        return this.get("New Configurator username");
     }
 
     @Override
@@ -40,27 +37,48 @@ public class StreamView implements View {
         this.out.println("Use " + username + ":" + password + " to login");
     }
 
+//    @Override
+//    public void message(String title, String text) {
+//        this.out.println(title + ": " + text);
+//    }
+
     @Override
-    public void message(String title, String text) {
-        this.out.println(title + ": " + text);
+    public void info(String text) {
+        this.out.println(text);
+    }
+
+    @Override
+    public void warn(String text) {
+        this.out.println("WARNING: " + text);
+    }
+
+    @Override
+    public void error(String text) {
+        this.out.println("ERROR: " + text);
     }
 
     @Override
     public String getLoginUsername() {
-        this.out.print("Username> ");
-        return this.in.next();
+        return this.get("Utente");
     }
 
     @Override
     public String getPassword() {
-        this.out.print("Password> ");
-        return this.in.next();
+        return this.getLine("Password");
     }
 
     @Override
     public String get(String prompt) {
         this.out.print(prompt + "> ");
-        return this.in.next();
+        String r = this.in.next();
+        this.in.nextLine();
+        return r;
+    }
+
+    @Override
+    public String getLine(String prompt) {
+        this.out.print(prompt + "> ");
+        return this.in.nextLine();
     }
 
     @Override
@@ -70,7 +88,12 @@ public class StreamView implements View {
             menu.addEntry(act.getName(), (in, out, ref) -> act).disable(act.isDisabled());
         }
         menu.setPrompt(prompt);
-        var answ = menu.displayOnce(this.in, this.out);
-        return answ == null ? null : (MenuAction<T>) answ;
+        Object answ = null;
+        while (answ == null) {
+            answ = menu.displayOnce(this.in, this.out);
+        }
+        //var answ = menu.displayOnce(this.in, this.out);
+        //return answ == null ? null : (MenuAction<T>) answ;
+        return (MenuAction<T>) answ;
     }
 }

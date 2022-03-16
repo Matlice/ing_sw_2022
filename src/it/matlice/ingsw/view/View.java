@@ -12,13 +12,21 @@ public interface View {
 
     void showNewConfiguratorUserAndPassword(String username, String password);
 
-    void message(String title, String text);
+    // void message(String title, String text);
+
+    void info(String text);
+
+    void warn(String text);
+
+    void error(String text);
 
     String getLoginUsername();
 
     String getPassword();
 
     String get(String prompt);
+
+    String getLine(String prompt);
 
     <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt, T default_return);
 

@@ -16,6 +16,7 @@ public class EntryPoint {
     public static void main(String[] args) throws Exception {
         Logger.setGlobalLogLevel(Level.WARNING);
         JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+
         var uf = new UserFactoryImpl();
         var cf = new CategoryFactoryImpl();
         var hf = new HierarchyFactoryImpl();

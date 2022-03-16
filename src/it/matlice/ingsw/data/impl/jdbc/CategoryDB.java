@@ -11,6 +11,10 @@ public class CategoryDB {
     @DatabaseField(generatedId = true)
     private int category_id;
 
+    public void setFather(CategoryDB father) {
+        this.father = father;
+    }
+
     @DatabaseField(canBeNull = false, uniqueCombo = true)
     private String category_name;
 

@@ -13,6 +13,7 @@ import it.matlice.ingsw.view.View;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -21,10 +22,10 @@ public class Controller {
     private Authentication currentUser;
 
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
-            new MenuAction<>("Cambia Password", User.class, this::changePassword),
+            new MenuAction<>("Cambia password", User.class, this::changePassword),
             new MenuAction<>("Aggiungi nuovo Configuratore", ConfiguratorUser.class, this::createConfigurator),
             new MenuAction<>("Aggiungi nuova Gerarchia", ConfiguratorUser.class, this::createHierarchy),
-            //new MenuAction("Show Hierarchy", ConfiguratorUser.class, () -> true),
+            new MenuAction<>("Mostra gerarchie", ConfiguratorUser.class, this::showHierarchies),
             new MenuAction<>("Esci", User.class, () -> false)
     );
 
@@ -44,7 +45,7 @@ public class Controller {
         if (action != null)
             return action.getAction().run();
         else {
-            this.view.message("ERRORE", "Azione non permessa");
+            this.view.error("Azione non permessa");
             return true;
         }
     }
@@ -61,7 +62,7 @@ public class Controller {
     public boolean performLogin() {
         if (this.login()) {
             if (this.currentUser.getUser().getLastLoginTime() == null) {
-                this.view.message("WARN", "Cambia le credenziali di accesso");
+                this.view.warn("Cambia le credenziali di accesso");
                 this.changePassword();
             }
             try {
@@ -79,17 +80,17 @@ public class Controller {
         while (!passwordChanged) {
             try {
                 var psw = this.view.changePassword();
-                if(!psw[0].equals(psw[1])) this.view.message("Errore", "Le due password inserite non coincidono");
+                if(!psw[0].equals(psw[1])) this.view.error("Le due password inserite non coincidono");
                 else{
                     this.model.changePassword(this.currentUser, psw[0]);
                     passwordChanged = true;
                 }
             } catch (InvalidPasswordException e) {
-                this.view.message("Errore", "La password non rispetta i requisiti di sicurezza");
+                this.view.error("La password non rispetta i requisiti di sicurezza");
             } catch (LoginInvalidException e) {
-                this.view.message("Errore", "Il login non è più valido.");
+                this.view.error("Il login non è più valido.");
             } catch (Exception e) {
-                this.view.message("Errore", e.getMessage());
+                this.view.error(e.getMessage());
             }
         }
         return true;
@@ -98,10 +99,10 @@ public class Controller {
     public boolean createConfigurator() {
         var username = this.view.getNewConfiguratorUsername();
         try {
-            String password = this.model.addConfiguratorUser(username);
+            String password = this.model.addConfiguratorUser(username, false);
             this.view.showNewConfiguratorUserAndPassword(username, password);
         } catch (Exception e) {
-            this.view.message("Errore", "Impossibile creare un nuovo configuratore");
+            this.view.error("Impossibile creare un nuovo configuratore");
         }
         return true;
     }
@@ -109,10 +110,10 @@ public class Controller {
     public boolean createHierarchy() {
         Category root = this.createCategory(); //todo add descrizione to categoria
 
-        while (this.view.chooseOption(Arrays.asList(
+        while (this.chooseAndRun(Arrays.asList(
                 new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true),
                 new MenuAction<>("Conferma ed esci", ConfiguratorUser.class, () -> false, !this.model.isCategoryValid(root))
-        ), "Si vuole aggiungere una nuova categoria?", true).getAction().run()) {
+        ), "Si vuole aggiungere una nuova categoria?")) {
             Category father = this.view.chooseOption(this.getCategories(root), "Selezionare una categoria", null).getAction().run();
             if (father == null) continue;
 
@@ -128,13 +129,31 @@ public class Controller {
         return true;
     }
 
+    public boolean showHierarchies() {
+        // show root categories name
+
+        List<Hierarchy> hierarchies = this.model.getHierarchies();
+
+        this.view.chooseOption(
+                hierarchies.stream()
+                        .map((e) -> new MenuAction<>(e.getRootCategory().getName(), User.class, () -> {
+                            this.view.info(e.getRootCategory().toString());
+                            return true;
+                        }))
+                        .collect(Collectors.toList()),
+                "Quale gerarchia si vuole visualizzare?", null
+        ).getAction().run();
+
+        return true;
+    }
+
     //FROM MODEL ===============================================================
 
     public AuthData getLoginData(String method) {
         if (method.equals(PasswordAuthMethod.class.getName()))
             return PasswordAuthMethod.getAuthData(this.view.getPassword());
         else {
-            this.view.message("Errore", "Nessun metodo di login disponibile per " + method);
+            this.view.error("Nessun metodo di login disponibile per " + method);
             return null;
         }
     } //todo, appunto di rob: teto, dobbiamo fare un discorsetto...
@@ -146,17 +165,17 @@ public class Controller {
         try {
             this.currentUser = this.model.authenticate(username);
             if (this.currentUser == null) {
-                this.view.message("Errore", "password errata");
+                this.view.error("password errata");
             }
             return this.currentUser != null;
         } catch (InvalidUserException e) {
-            this.view.message("Errore", "Utente non valido");
+            this.view.error("Utente non valido");
         }
         return false;
     }
 
     public void addField(Category c) {
-        var name = this.view.get("Nome campo");
+        var name = this.view.getLine("Nome campo");
         var type = this.view.chooseOption(
                 Arrays.stream(TypeDefinition.TypeAssociation.values())
                         .map(e -> new MenuAction<>(e.toString(), ConfiguratorUser.class, () -> e))
@@ -173,12 +192,12 @@ public class Controller {
     public Category createCategory() {
         Category category = null;
         try {
-            category = this.model.createCategory(this.view.get("Category name"), null);
+            category = this.model.createCategory(this.view.getLine("Category name"), null);
         } catch (Exception e) {
             e.printStackTrace(); //todo
         }
         while (this.view.chooseOption(Arrays.asList(
-                new MenuAction<>("Aggiunti campo nativo", ConfiguratorUser.class, () -> true),
+                new MenuAction<>("Aggiungi campo nativo", ConfiguratorUser.class, () -> true),
                 new MenuAction<>("Conferma", ConfiguratorUser.class, () -> false)
         ), "Si vuole aggiungere un campo nativo?", true).getAction().run()) {
             this.addField(category);
@@ -209,8 +228,8 @@ public class Controller {
 
     public void addDefaultConfigurator() {
         try {
-            String psw = this.model.addConfiguratorUser("admin");
-            this.view.message("INFO", String.format("Login con admin:%s", psw));
+            String psw = this.model.addConfiguratorUser("admin", true);
+            this.view.info(String.format("Per il primo accesso le credenziali sono admin:%s", psw));
         } catch (Exception e) {
             e.printStackTrace(); //todo
         }

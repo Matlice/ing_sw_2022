@@ -184,6 +184,7 @@ public class Menu {
         int action;
         try {
             action = in.nextInt();
+            in.nextLine();
         } catch (InputMismatchException e) {
             in.nextLine();
             return null;

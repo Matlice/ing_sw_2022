@@ -1,7 +1,9 @@
 package it.matlice.ingsw.data;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 /**
  * La classe rappresenta una categoria.
@@ -115,4 +117,29 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
      * @return ritorna il nome della categoria
      */
     public abstract String getName();
+
+    public String toString(){
+        var sb = new StringBuilder();
+        this.categoryToString(sb, 0, "");
+        return sb.toString();
+    }
+
+    private void categoryToString(StringBuilder sb, int level, String prefix){
+        sb.append(" ".repeat(level*4));
+        sb.append(prefix);
+        sb.append(this.getName());
+        if (!this.entrySet().isEmpty()) {
+            sb.append(" <");
+            StringJoiner sj = new StringJoiner(", ");
+            this.entrySet().forEach((e) -> sj.add(e.getKey() + (e.getValue().required() ? " [R]" : "") ));
+            sb.append(sj.toString());
+            sb.append(">");
+        }
+        sb.append("\n");
+
+        if(this instanceof NodeCategory)
+            for (Category child : ((NodeCategory) this).getChildren()) {
+                child.categoryToString(sb, level + 1, prefix + this.getName() + ".");
+            }
+    }
 }

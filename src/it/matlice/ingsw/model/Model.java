@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
 
@@ -83,9 +84,14 @@ public class Model {
         return "Config!1";
     }
 
-    public String addConfiguratorUser(String username) throws Exception {
+    public String addConfiguratorUser(String username, boolean defaultPassword) throws Exception {
         var u = this.uf.createUser(username, User.UserTypes.CONFIGURATOR);
-        var password = this.genRandomPassword();
+        String password = null;
+        if (defaultPassword) {
+            password = "Config!1";
+        } else {
+            password = this.genRandomPassword();
+        }
         ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password);
         this.uf.saveUser(u);
         return password;
@@ -101,7 +107,11 @@ public class Model {
         this.hierarchies.add(this.hf.createHierarchy(root));
     }
 
-    public boolean isCategoryValid(Category c) {
+    public List<Hierarchy> getHierarchies() {
+        return this.hierarchies;
+    }
+
+    public boolean isCategoryValid(Category c) { //todo move to Category
         if (c instanceof LeafCategory)
             return true;
         assert c instanceof NodeCategory;

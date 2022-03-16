@@ -21,6 +21,10 @@ public class CategoryFactoryImpl implements CategoryFactory {
     private final Dao<CategoryDB, Integer> categoryDAO;
     private final Dao<CategoryFieldDB, Integer> fieldDAO;
 
+    public Dao<CategoryDB, Integer> getCategoryDAO() {
+        return this.categoryDAO;
+    }
+
     public CategoryFactoryImpl() throws SQLException {
         this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
         this.categoryDAO = DaoManager.createDao(this.connectionSource, CategoryDB.class);
@@ -126,6 +130,12 @@ public class CategoryFactoryImpl implements CategoryFactory {
                     )
             );
         }
+
+        if(category instanceof NodeCategoryImpl)
+            for (Category child : ((NodeCategoryImpl) category).getChildren()) {
+                this.saveCategory(child);
+            }
+
         return category;
     }
 }
