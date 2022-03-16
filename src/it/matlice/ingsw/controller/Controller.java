@@ -22,16 +22,16 @@ public class Controller {
     private Authentication currentUser;
 
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
-            new MenuAction<>("Cambia password", User.class, this::changePassword),
-            new MenuAction<>("Aggiungi nuovo Configuratore", ConfiguratorUser.class, this::createConfigurator),
-            new MenuAction<>("Aggiungi nuova Gerarchia", ConfiguratorUser.class, this::createHierarchy),
+            new MenuAction<>("Esci", User.class, () -> false, false, 0, -1),
+            new MenuAction<>("Aggiungi nuova gerarchia", ConfiguratorUser.class, this::createHierarchy),
             new MenuAction<>("Mostra gerarchie", ConfiguratorUser.class, this::showHierarchies),
-            new MenuAction<>("Esci", User.class, () -> false)
-    );
+            new MenuAction<>("Aggiungi nuovo configuratore", ConfiguratorUser.class, this::createConfigurator),
+            new MenuAction<>("Cambia password", User.class, this::changePassword)
+            );
 
     private final List<MenuAction<Boolean>> public_actions = Arrays.asList(
-            new MenuAction<>("Login", User.class, this::performLogin),
-            new MenuAction<>("Esci", User.class, () -> false)
+            new MenuAction<>("Esci", User.class, () -> false, false, 0, -1),
+            new MenuAction<>("Login", User.class, this::performLogin)
     );
 
     public Controller(View view, Model model) {

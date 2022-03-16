@@ -85,7 +85,11 @@ public class StreamView implements View {
     public <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt, T default_return) {
         Menu menu = new Menu();
         for (var act : choices) {
-            menu.addEntry(act.getName(), (in, out, ref) -> act).disable(act.isDisabled());
+            if (act.getIndex() == null) {
+                menu.addEntry(act.getName(), (in, out, ref) -> act).disable(act.isDisabled());
+            } else {
+                menu.addEntry(act.getIndex(), act.getName(), (in, out, ref) -> act, act.getPosition()).disable(act.isDisabled());
+            }
         }
         menu.setPrompt(prompt);
         Object answ = null;
