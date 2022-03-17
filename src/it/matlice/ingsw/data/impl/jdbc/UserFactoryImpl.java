@@ -8,6 +8,8 @@ import it.matlice.ingsw.data.User;
 import it.matlice.ingsw.data.UserFactory;
 import it.matlice.ingsw.data.impl.jdbc.types.ConfiguratorUserImpl;
 import it.matlice.ingsw.data.impl.jdbc.types.UserImpl;
+import it.matlice.ingsw.model.exceptions.InvalidUserException;
+import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -30,21 +32,26 @@ public class UserFactoryImpl implements UserFactory {
         return null;
     }
 
-    public User getUser(String username) throws SQLException {
+    public User getUser(String username) throws SQLException, InvalidUserException {
         var udb = this.userDAO.queryForId(username);
         var u = this.makeUser(udb);
         if (u == null)
-            throw new RuntimeException("no user type found");
+            throw new InvalidUserException();
         return u;
     }
 
-    public User createUser(String username, User.UserTypes userType) throws SQLException {
+    public boolean doesUserExist(String username) throws SQLException {
+        var udb = this.userDAO.queryForId(username);
+        return !(udb == null);
+    }
+
+    public User createUser(String username, User.UserTypes userType) throws SQLException, InvalidUserTypeException {
         if (userType == User.UserTypes.CONFIGURATOR) {
             var ref = new ConfiguratorUserImpl(username);
             this.userDAO.create(ref.getDbData());
             return ref;
         }
-        throw new RuntimeException("no user type found");
+        throw new InvalidUserTypeException();
     }
 
     public User saveUser(User u) throws SQLException {
@@ -53,7 +60,7 @@ public class UserFactoryImpl implements UserFactory {
         return u;
     }
 
-    public List<User> getUsers() throws Exception {
+    public List<User> getUsers() throws SQLException {
         return this.userDAO.queryForAll().stream()
                 .map(e -> this.makeUser(e))
                 .filter(e -> e != null)

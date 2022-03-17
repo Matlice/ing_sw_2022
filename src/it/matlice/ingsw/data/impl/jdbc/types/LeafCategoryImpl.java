@@ -17,12 +17,12 @@ public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
 
     @Override
     public String getName() {
-        return this.dbData.getCategory_name();
+        return this.dbData.getCategoryName();
     }
 
     @Override
     public String getDescription() {
-        return this.dbData.getCategory_description();
+        return this.dbData.getCategoryDescription();
     }
 
     @Override

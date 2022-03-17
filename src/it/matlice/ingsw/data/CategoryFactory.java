@@ -1,6 +1,8 @@
 package it.matlice.ingsw.data;
 
 
+import java.sql.SQLException;
+
 /**
  * rappresenta una classe che si occuperà di istanziare implementazioni di categorie,
  * correttamente identificate da NodeCategory o LeafCategory, complete di struttura di (eventuali) figli
@@ -15,9 +17,9 @@ public interface CategoryFactory {
      *
      * @param id numero incrementale identificativo univoco della categoria
      * @return una categoria se esiste
-     * @throws Exception
+     * @throws SQLException
      */
-    Category getCategory(int id) throws Exception;
+    Category getCategory(int id) throws SQLException;
 
     /**
      * crea e salva una nuova categoria
@@ -36,7 +38,7 @@ public interface CategoryFactory {
      *
      * @param category categoria da salvare
      * @return la categoria aggiornata
-     * @throws Exception
+     * @throws SQLException
      */
-    Category saveCategory(Category category) throws Exception;
+    Category saveCategory(Category category) throws SQLException;
 }

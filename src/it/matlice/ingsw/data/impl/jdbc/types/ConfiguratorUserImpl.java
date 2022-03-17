@@ -25,8 +25,8 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
         this.dbData.setType(UserTypes.CONFIGURATOR.getTypeRepresentation());
 
         //todo real password management
-        this.dbData.setPassword_hash("");
-        this.dbData.setPassword_salt("");
+        this.dbData.setPasswordHash("");
+        this.dbData.setPasswordSalt("");
     }
 
     public UserDB getDbData() {
@@ -57,23 +57,23 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
 
     @Override
     public byte[] getPasswordHash() {
-        return Base64.getDecoder().decode(this.dbData.getPassword_hash());
+        return Base64.getDecoder().decode(this.dbData.getPasswordHash());
     }
 
     @Override
     public byte[] getPasswordSalt() {
-        return Base64.getDecoder().decode(this.dbData.getPassword_salt());
+        return Base64.getDecoder().decode(this.dbData.getPasswordSalt());
     }
 
 
     @Override
-    public void setPassword(byte[] password) throws InvalidPasswordException {
-        this.dbData.setPassword_hash(Base64.getEncoder().encodeToString(password));
+    public void setPassword(byte[] password) {
+        this.dbData.setPasswordHash(Base64.getEncoder().encodeToString(password));
     }
 
     @Override
-    public void setSalt(byte[] salt) throws InvalidPasswordException {
-        this.dbData.setPassword_salt(Base64.getEncoder().encodeToString(salt));
+    public void setSalt(byte[] salt) {
+        this.dbData.setPasswordSalt(Base64.getEncoder().encodeToString(salt));
     }
 
 

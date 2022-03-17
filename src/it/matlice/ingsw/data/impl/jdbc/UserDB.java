@@ -39,19 +39,19 @@ public class UserDB {
         this.username = username;
     }
 
-    public String getPassword_hash() {
+    public String getPasswordHash() {
         return this.password_hash;
     }
 
-    public void setPassword_hash(String password_hash) {
+    public void setPasswordHash(String password_hash) {
         this.password_hash = password_hash;
     }
 
-    public String getPassword_salt() {
+    public String getPasswordSalt() {
         return this.password_salt;
     }
 
-    public void setPassword_salt(String password_salt) {
+    public void setPasswordSalt(String password_salt) {
         this.password_salt = password_salt;
     }
 

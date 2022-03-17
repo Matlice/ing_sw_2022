@@ -25,7 +25,7 @@ public class PasswordAuthMethod implements AuthMethod {
     private final Random random_source;
 
     public static final String MAC_ALGO = "HmacSHA256";
-    public static final Pattern PASSWORD_SEC_REGEX = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_()-=+])(?=.{8,}).*$");
+    public static final Pattern PASSWORD_SEC_REGEX = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_()\\-=+])(?=.{8,}).*$");
     public static final int SALT_LENGTH = 64;
 
     public PasswordAuthMethod(PasswordAuthenticable user) {
@@ -47,14 +47,18 @@ public class PasswordAuthMethod implements AuthMethod {
      * questo metodo permette di impostare la password dell'utente
      *
      * @param password nuova password che rispetti i parametri impostati nella configurazione
-     * @throws InvalidPasswordException
+     * @throws InvalidPasswordException nel caso in cui la password non rispetti la complessità richiesta
      */
-    public void setPassword(String password) throws InvalidPasswordException {
-        if (!PasswordAuthMethod.PASSWORD_SEC_REGEX.matcher(password).matches())
+    public void setPassword(String password, boolean skipComplexityCheck) throws InvalidPasswordException {
+        if (!skipComplexityCheck && !PasswordAuthMethod.PASSWORD_SEC_REGEX.matcher(password).matches())
             throw new InvalidPasswordException();
         var salt = this.getNewSalt();
         this.user.setSalt(salt);
         this.user.setPassword(this.getPasswordHash(salt, password));
+    }
+
+    public void setPassword(String password) throws InvalidPasswordException {
+        this.setPassword(password, false);
     }
 
     /**

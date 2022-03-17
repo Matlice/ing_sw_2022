@@ -1,5 +1,9 @@
 package it.matlice.ingsw.data;
 
+import it.matlice.ingsw.model.exceptions.InvalidUserException;
+import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
+
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -11,9 +15,12 @@ public interface UserFactory {
     /**
      * @param username username dell'utente voluto (univoco)
      * @return l'utente tratto dalla base di dati
-     * @throws Exception
+     * @throws SQLException
+     * @throws InvalidUserException
      */
-    User getUser(String username) throws Exception;
+    User getUser(String username) throws SQLException, InvalidUserException;
+
+    boolean doesUserExist(String username) throws SQLException;
 
     /**
      * crea un utente e lo salva nella bs
@@ -21,11 +28,12 @@ public interface UserFactory {
      * @param username username del nuovo utente
      * @param userType tipo di utente
      * @return l'utente creato
-     * @throws Exception
+     * @throws SQLException
+     * @throws InvalidUserTypeException
      */
-    User createUser(String username, User.UserTypes userType) throws Exception;
+    User createUser(String username, User.UserTypes userType) throws SQLException, InvalidUserTypeException;
 
-    User saveUser(User u) throws Exception;
+    User saveUser(User u) throws SQLException;
 
-    List<User> getUsers() throws Exception;
+    List<User> getUsers() throws SQLException;
 }

@@ -5,12 +5,11 @@ import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.Authentication;
 import it.matlice.ingsw.model.Model;
-import it.matlice.ingsw.model.exceptions.DuplicateCategoryException;
-import it.matlice.ingsw.model.exceptions.InvalidUserException;
-import it.matlice.ingsw.model.exceptions.LoginInvalidException;
+import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.data.*;
 import it.matlice.ingsw.view.View;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,7 +70,7 @@ public class Controller {
             }
             try {
                 this.model.finalizeLogin(this.currentUser);
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace(); //todo
             }
             return true;
@@ -95,7 +94,7 @@ public class Controller {
                 this.view.error("La password non rispetta i requisiti di sicurezza");
             } catch (LoginInvalidException e) {
                 this.view.error("Il login non è più valido.");
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 this.view.error(e.getMessage());
             }
         }
@@ -106,8 +105,10 @@ public class Controller {
         var username = this.view.get("New configurator username");
         try {
             String password = this.model.addConfiguratorUser(username, false);
-            this.view.info("Use " + username + ":" + password + " to login");
-        } catch (Exception e) {
+            this.view.info("Usa " + username + ":" + password + " per il primo login");
+        } catch (DuplicateUserException e) {
+            this.view.error("Utente già esistente");
+        } catch (InvalidUserTypeException | InvalidPasswordException | SQLException e) {
             this.view.error("Impossibile creare un nuovo configuratore");
         }
         return true;
@@ -247,9 +248,8 @@ public class Controller {
             throw new DuplicateCategoryException();
 
         String description = this.view.getLine("Category description");
-        Category category = this.model.createCategory(name, description, null);
 
-        return category;
+        return this.model.createCategory(name, description, null);
     }
 
     private NodeCategory appendCategory(Category father, Category child) {

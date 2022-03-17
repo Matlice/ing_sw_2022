@@ -1,5 +1,6 @@
 package it.matlice.ingsw.data;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -9,24 +10,24 @@ import java.util.List;
 public interface HierarchyFactory {
     /**
      * @return Ottiene la lista di getrarchie presenti nel programma
-     * @throws Exception
+     * @throws SQLException
      */
-    List<Hierarchy> getHierarchies() throws Exception;
+    List<Hierarchy> getHierarchies() throws SQLException;
 
     /**
      * crea una nuova gerarchia e la salva sulla base di dati
      *
      * @param rootCategory la categoria root
      * @return la nuova gerarchia
-     * @throws Exception
+     * @throws SQLException
      */
-    Hierarchy createHierarchy(Category rootCategory) throws Exception;
+    Hierarchy createHierarchy(Category rootCategory) throws SQLException;
 
     /**
      * rimuove una gerarchia dalla bd
      *
      * @param h gerarchia da rimuovere
-     * @throws Exception
+     * @throws SQLException
      */
-    void deleteHierarchy(Hierarchy h) throws Exception;
+    void deleteHierarchy(Hierarchy h) throws SQLException;
 }

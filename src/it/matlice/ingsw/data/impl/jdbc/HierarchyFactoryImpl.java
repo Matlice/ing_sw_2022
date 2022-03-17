@@ -31,9 +31,8 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
         var category_factory = new CategoryFactoryImpl();
         return this.hierarchyDAO.queryForAll().stream().map(e -> {
             try {
-                var root = category_factory.getCategory(e.getRoot().getCategory_id());
-                var b = new HierarchyImpl(e, root);
-                return b;
+                var root = category_factory.getCategory(e.getRoot().getCategoryId());
+                return new HierarchyImpl(e, root);
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 return null;

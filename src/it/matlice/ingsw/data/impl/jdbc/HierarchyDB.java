@@ -23,7 +23,7 @@ public class HierarchyDB {
         return this.root;
     }
 
-    public int getHierarchy_id() {
+    public int getHierarchyId() {
         return this.hierarchy_id;
     }
 }

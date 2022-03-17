@@ -1,7 +1,11 @@
 package it.matlice.ingsw.model;
 
+import com.j256.ormlite.stmt.query.In;
+import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
+import it.matlice.ingsw.model.exceptions.DuplicateUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
+import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
 import it.matlice.ingsw.model.exceptions.LoginInvalidException;
 import it.matlice.ingsw.data.*;
 import it.matlice.ingsw.controller.Controller;
@@ -9,6 +13,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,12 +36,12 @@ public class Model {
 
         try {
             this.hierarchies = hf.getHierarchies();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace(); //todo handle
         }
     }
 
-    public void changePassword(@NotNull Authentication auth, String newPassword) throws Exception {
+    public void changePassword(@NotNull Authentication auth, String newPassword) throws SQLException, InvalidPasswordException, LoginInvalidException {
         if (!auth.isValid())
             throw new LoginInvalidException();
 
@@ -75,7 +80,7 @@ public class Model {
         return null;
     }
 
-    public void finalizeLogin(@NotNull Authentication auth) throws Exception{
+    public void finalizeLogin(@NotNull Authentication auth) throws SQLException {
         auth.getUser().setLastLoginTime(auth.getLoginTime());
         this.uf.saveUser(auth.getUser());
     }
@@ -93,15 +98,21 @@ public class Model {
         return password.toString();
     }
 
-    public String addConfiguratorUser(String username, boolean defaultPassword) throws Exception {
+    public String addConfiguratorUser(String username, boolean defaultPassword) throws SQLException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
+
+        if (this.uf.doesUserExist(username)) {
+            throw new DuplicateUserException();
+        }
+
         var u = this.uf.createUser(username, User.UserTypes.CONFIGURATOR);
+
         String password;
         if (defaultPassword) {
             password = "Config!1";
         } else {
             password = this.genRandomPassword();
         }
-        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password);
+        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, true);
         this.uf.saveUser(u);
         return password;
     }
@@ -110,9 +121,8 @@ public class Model {
         return this.cf.createCategory(name, description, father, true);
     }
 
-    public void createHierarchy(Category root)  throws Exception{
+    public void createHierarchy(Category root) throws Exception{
         this.cf.saveCategory(root);
-        //todo check if no same name
         this.hierarchies.add(this.hf.createHierarchy(root));
     }
 

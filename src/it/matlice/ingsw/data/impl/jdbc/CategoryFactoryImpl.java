@@ -41,7 +41,7 @@ public class CategoryFactoryImpl implements CategoryFactory {
 
         var fields = this.fieldDAO.query(
                 this.fieldDAO.queryBuilder().where()
-                        .eq("category_id", ((CategoryImpl) cat).getDbData().getCategory_id())
+                        .eq("category_id", ((CategoryImpl) cat).getDbData().getCategoryId())
                         .prepare()
         );
 
@@ -68,7 +68,7 @@ public class CategoryFactoryImpl implements CategoryFactory {
         while (!stack.empty()) {
             var r = stack.pop();
             var qb = this.categoryDAO.queryBuilder();
-            var children = this.categoryDAO.query(qb.where().eq("father_id", r.getCategory_id()).prepare());
+            var children = this.categoryDAO.query(qb.where().eq("father_id", r.getCategoryId()).prepare());
             map.put(r, children);
             children.forEach(stack::push);
         }
