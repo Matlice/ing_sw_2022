@@ -113,10 +113,20 @@ public class Controller {
         return true;
     }
 
+    private void makeFields(Category category){
+        while (this.view.chooseOption(Arrays.asList(
+                new MenuAction<>("No, torna all'inserimento categorie", ConfiguratorUser.class, () -> false, false, 0, -1),
+                new MenuAction<>("Sì, aggiungi campo nativo", ConfiguratorUser.class, () -> true)
+        ), "Si vuole aggiungere un campo nativo?").getAction().run()) {
+            this.addField(category);
+        }
+    }
+
     public boolean createHierarchy() {
         Category root;
         try {
             root = this.createCategory(null);
+            this.makeFields(root);
         } catch (DuplicateCategoryException e) {
             this.view.error("Categoria radice con lo stesso nome già presente");
             return true;
@@ -138,6 +148,7 @@ public class Controller {
             while (r == null) {
                 try {
                     r = this.appendCategory(father, this.createCategory(root));
+                    this.makeFields(r);
                 } catch (DuplicateCategoryException e) {
                     this.view.error("Categoria già esistente nell'albero della gerarchia");
                 }
@@ -199,7 +210,14 @@ public class Controller {
     }
 
     public void addField(Category c) {
-        var name = this.view.getLine("Nome campo");
+        String name = null;
+        while (name == null) {
+             name = this.view.getLine("Nome campo");
+             if (c.containsKey(name)) {
+                 this.view.error("Campo già esistente nella categoria");
+                 name = null;
+             }
+        }
 
         var type = TypeDefinition.TypeAssociation.values()[0];
 
@@ -231,12 +249,6 @@ public class Controller {
         String description = this.view.getLine("Category description");
         Category category = this.model.createCategory(name, description, null);
 
-        while (this.view.chooseOption(Arrays.asList(
-                new MenuAction<>("No, torna all'inserimento categorie", ConfiguratorUser.class, () -> false, false, 0, -1),
-                new MenuAction<>("Sì, aggiungi campo nativo", ConfiguratorUser.class, () -> true)
-        ), "Si vuole aggiungere un campo nativo?").getAction().run()) {
-            this.addField(category);
-        }
         return category;
     }
 

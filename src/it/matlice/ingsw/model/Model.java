@@ -8,6 +8,7 @@ import it.matlice.ingsw.controller.Controller;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -81,7 +82,15 @@ public class Model {
 
     @Contract(pure = true)
     private @NotNull String genRandomPassword() {
-        return "Config!1";
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder();
+        while (password.length() < 8) {
+            char character = (char) random.nextInt(Character.MAX_VALUE);
+            if ((character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') || (character >= '0' && character <= '9')) {
+                password.append(character);
+            }
+        }
+        return password.toString();
     }
 
     public String addConfiguratorUser(String username, boolean defaultPassword) throws Exception {
