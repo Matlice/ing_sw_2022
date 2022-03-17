@@ -111,13 +111,6 @@ public class Model {
         return this.hierarchies;
     }
 
-    public boolean isCategoryValid(Category c) { //todo move to Category
-        if (c instanceof LeafCategory)
-            return true;
-        assert c instanceof NodeCategory;
-        return ((NodeCategory) c).getChildren().length >= 2 && Arrays.stream(((NodeCategory) c).getChildren()).allMatch(this::isCategoryValid);
-    }
-
     public void setController(Controller m) {
         this.controller = m;
     }

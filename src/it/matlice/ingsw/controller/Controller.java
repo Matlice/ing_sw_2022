@@ -112,9 +112,12 @@ public class Controller {
     public boolean createHierarchy() {
         Category root = this.createCategory(); //todo add descrizione to categoria
 
+        root.put("Stato di conservazione", new TypeDefinition<>(true));
+        root.put("Descrizione libera", new TypeDefinition<>(false));
+
         while (this.chooseAndRun(Arrays.asList(
                 new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true),
-                new MenuAction<>("Conferma ed esci", ConfiguratorUser.class, () -> false, !this.model.isCategoryValid(root))
+                new MenuAction<>("Conferma ed esci", ConfiguratorUser.class, () -> false, !root.isCategoryValid())
         ), "Si vuole aggiungere una nuova categoria?")) {
             Category father = this.view.chooseOption(this.getCategories(root), "Selezionare una categoria", null).getAction().run();
             if (father == null) continue;
@@ -209,6 +212,7 @@ public class Controller {
 
     private NodeCategory appendCategory(Category father, Category child) {
         var f = father instanceof LeafCategory ? ((LeafCategory) father).convertToNode() : (NodeCategory) father;
+        f.clone();
         f.addChild(child);
         return f;
         //todo this can throw errors?

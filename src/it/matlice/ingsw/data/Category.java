@@ -1,9 +1,6 @@
 package it.matlice.ingsw.data;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * La classe rappresenta una categoria.
@@ -96,6 +93,13 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
         return super.containsValue(value) || (this.father != null && this.father.containsValue(value));
     }
 
+    public boolean isCategoryValid() {
+        if (this instanceof LeafCategory)
+            return true;
+        assert this instanceof NodeCategory;
+        return ((NodeCategory) this).getChildren().length >= 2 && Arrays.stream(((NodeCategory) this).getChildren()).allMatch(Category::isCategoryValid);
+    }
+
     public NodeCategory getFather() {
         return this.father;
     }
@@ -131,7 +135,7 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
         if (!this.entrySet().isEmpty()) {
             sb.append(" <");
             StringJoiner sj = new StringJoiner(", ");
-            this.entrySet().forEach((e) -> sj.add(e.getKey() + (e.getValue().required() ? " [R]" : "") ));
+            this.forEach((key, value) -> sj.add(key + (value.required() ? " [R]" : "")));
             sb.append(sj.toString());
             sb.append(">");
         }
@@ -139,7 +143,7 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
 
         if(this instanceof NodeCategory)
             for (Category child : ((NodeCategory) this).getChildren()) {
-                child.categoryToString(sb, level + 1, prefix + this.getName() + ".");
+                child.categoryToString(sb, level + 1, "");
             }
     }
 }
