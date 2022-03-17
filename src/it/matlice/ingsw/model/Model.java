@@ -86,7 +86,7 @@ public class Model {
 
     public String addConfiguratorUser(String username, boolean defaultPassword) throws Exception {
         var u = this.uf.createUser(username, User.UserTypes.CONFIGURATOR);
-        String password = null;
+        String password;
         if (defaultPassword) {
             password = "Config!1";
         } else {
@@ -97,7 +97,7 @@ public class Model {
         return password;
     }
 
-    public Category createCategory(String name, String description, Category father) throws Exception{
+    public Category createCategory(String name, String description, Category father) {
         return this.cf.createCategory(name, description, father, true);
     }
 
@@ -115,7 +115,12 @@ public class Model {
         this.controller = m;
     }
 
-
+    public boolean isValidRootCategoryName(String name) {
+        return !this.hierarchies.stream()
+                .map((e) -> e.getRootCategory().getName())
+                .collect(Collectors.toList())
+                .contains(name);
+    }
 
 
     private static class AuthImpl implements Authentication {

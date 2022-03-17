@@ -5,6 +5,7 @@ import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.Authentication;
 import it.matlice.ingsw.model.Model;
+import it.matlice.ingsw.model.exceptions.DuplicateCategoryException;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.LoginInvalidException;
 import it.matlice.ingsw.data.*;
@@ -41,7 +42,7 @@ public class Controller {
     }
 
     private boolean chooseAndRun(List<MenuAction<Boolean>> actions, String prompt) {
-        var action = this.view.chooseOption(actions, prompt, null);
+        var action = this.view.chooseOption(actions, prompt);
         if (action != null)
             return action.getAction().run();
         else {
@@ -113,7 +114,15 @@ public class Controller {
     }
 
     public boolean createHierarchy() {
-        Category root = this.createCategory();
+        Category root;
+        try {
+            root = this.createCategory(null);
+        } catch (DuplicateCategoryException e) {
+            this.view.error("Categoria radice con lo stesso nome già presente");
+            return true;
+        }
+
+        assert root != null;
 
         root.put("Stato di conservazione", new TypeDefinition<>(true));
         root.put("Descrizione libera", new TypeDefinition<>(false));
@@ -122,10 +131,17 @@ public class Controller {
                 new MenuAction<>("Salva ed esci", ConfiguratorUser.class, () -> false, !root.isCategoryValid(), 0, -1),
                 new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true)
         ), "Si vuole aggiungere una nuova categoria?")) {
-            Category father = this.view.chooseOption(this.getCategories(root), "Selezionare una categoria", null).getAction().run();
+            Category father = this.view.chooseOption(this.getCategories(root), "Selezionare una categoria").getAction().run();
             if (father == null) continue;
 
-            NodeCategory r = this.appendCategory(father, this.createCategory());
+            NodeCategory r = null;
+            while (r == null) {
+                try {
+                    r = this.appendCategory(father, this.createCategory(root));
+                } catch (DuplicateCategoryException e) {
+                    this.view.error("Categoria già esistente nell'albero della gerarchia");
+                }
+            }
             if (father == root) root = r;
         }
 
@@ -149,7 +165,7 @@ public class Controller {
                             return true;
                         }))
                         .collect(Collectors.toList()),
-                "Quale gerarchia si vuole visualizzare?", null
+                "Quale gerarchia si vuole visualizzare?"
         ).getAction().run();
 
         return true;
@@ -192,7 +208,7 @@ public class Controller {
             type = this.view.chooseOption(
                 Arrays.stream(TypeDefinition.TypeAssociation.values())
                         .map(e -> new MenuAction<>(e.toString(), ConfiguratorUser.class, () -> e))
-                        .toList(), "Seleziona un tipo", TypeDefinition.TypeAssociation.STRING).getAction().run();
+                        .toList(), "Seleziona un tipo").getAction().run();
         }
 
         var required = this.view.get("Obbligatorio [y/N]").equalsIgnoreCase("y");
@@ -204,20 +220,21 @@ public class Controller {
      *
      * @return
      */
-    public Category createCategory() {
-        Category category = null;
-        try {
-            category = this.model.createCategory(
-                    this.view.getLine("Category name"),
-                    this.view.getLine("Category description"),
-                    null);
-        } catch (Exception e) {
-            e.printStackTrace(); //todo
-        }
+    public Category createCategory(Category root) throws DuplicateCategoryException {
+
+        String name = this.view.getLine("Category name");
+        if (root==null && !this.model.isValidRootCategoryName(name))
+            throw new DuplicateCategoryException();
+        else if (root!=null && !root.isValidChildCategoryName(name))
+            throw new DuplicateCategoryException();
+
+        String description = this.view.getLine("Category description");
+        Category category = this.model.createCategory(name, description, null);
+
         while (this.view.chooseOption(Arrays.asList(
                 new MenuAction<>("No, torna all'inserimento categorie", ConfiguratorUser.class, () -> false, false, 0, -1),
                 new MenuAction<>("Sì, aggiungi campo nativo", ConfiguratorUser.class, () -> true)
-        ), "Si vuole aggiungere un campo nativo?", true).getAction().run()) {
+        ), "Si vuole aggiungere un campo nativo?").getAction().run()) {
             this.addField(category);
         }
         return category;
@@ -241,7 +258,7 @@ public class Controller {
         acc.add(new MenuAction<>(prefix + root.getName(), null, () -> root));
         if (root instanceof NodeCategory)
             for (var child : ((NodeCategory) root).getChildren())
-                this.getCategories(child, acc, prefix + root.getName() + ".");
+                this.getCategories(child, acc, prefix + root.getName() + " > ");
         return acc;
     }
 

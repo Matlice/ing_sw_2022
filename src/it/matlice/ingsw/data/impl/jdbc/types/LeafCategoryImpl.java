@@ -26,6 +26,11 @@ public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
     }
 
     @Override
+    public boolean isValidChildCategoryName(String name) {
+        return !name.equals(this.getName());
+    }
+
+    @Override
     public NodeCategory convertToNode() {
         var r = new NodeCategoryImpl(this.dbData);
         var father = this.getFather();

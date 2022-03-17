@@ -20,14 +20,10 @@ public interface View {
 
     String getLine(String prompt);
 
-    <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt, T default_return);
+    <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt);
 
     default <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices) {
-        return this.chooseOption(choices, "", null);
-    }
-
-    default <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, T default_return) {
-        return this.chooseOption(choices, "", default_return);
+        return this.chooseOption(choices, "");
     }
 
 }

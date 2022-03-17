@@ -94,7 +94,7 @@ public class CategoryFactoryImpl implements CategoryFactory {
     }
 
     @Override
-    public Category createCategory(String nome, String description, Category father, boolean isLeaf) throws SQLException {
+    public Category createCategory(String nome, String description, Category father, boolean isLeaf) {
         CategoryDB ref;
 
         if (father != null) {

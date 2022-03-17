@@ -58,7 +58,7 @@ public class StreamView implements View {
     }
 
     @Override
-    public <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt, T default_return) {
+    public <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt) {
         Menu menu = new Menu();
         for (var act : choices) {
             if (act.getIndex() == null) {

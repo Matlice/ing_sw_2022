@@ -148,7 +148,7 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
             sb.append(" <");
             StringJoiner sj = new StringJoiner(", ");
             this.forEach((key, value) -> sj.add(key + (value.required() ? " [R]" : "")));
-            sb.append(sj.toString());
+            sb.append(sj);
             sb.append(">");
         }
         sb.append("\n");
@@ -158,4 +158,6 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
                 child.categoryToString(sb, level + 1, "");
             }
     }
+
+    public abstract boolean isValidChildCategoryName(String name);
 }

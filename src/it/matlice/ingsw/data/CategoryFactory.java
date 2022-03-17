@@ -26,13 +26,12 @@ public interface CategoryFactory {
      * @param father categoria padre (null se si vuole creare una root category
      * @param isLeaf indica se la categoria creata potrà avere figli o se è eldiana nel finale alternativo di aot
      * @return la categoria creata
-     * @throws Exception
      */
-    Category createCategory(String nome, String description, Category father, boolean isLeaf) throws Exception;
+    Category createCategory(String nome, String description, Category father, boolean isLeaf);
 
     /**
      * salva la categoria nel database aggiornandola, inoltre salva i campi se non esistono.
-     * Si noti che non è necessario cancelare i campi rimossi dato che da specifica, le categorie sono immutabili.
+     * Si noti che non è necessario cancellare i campi rimossi dato che da specifica, le categorie sono immutabili.
      * È necessario quindi solo aggiungere i nuovi campi al momento della creazione.
      *
      * @param category categoria da salvare
