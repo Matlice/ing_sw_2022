@@ -94,14 +94,14 @@ public class CategoryFactoryImpl implements CategoryFactory {
     }
 
     @Override
-    public Category createCategory(String nome, Category father, boolean isLeaf) throws SQLException {
+    public Category createCategory(String nome, String description, Category father, boolean isLeaf) throws SQLException {
         CategoryDB ref;
 
         if (father != null) {
             assert father instanceof NodeCategoryImpl;
-            ref = new CategoryDB(nome, ((NodeCategoryImpl) father).getDbData());
+            ref = new CategoryDB(nome, description, ((NodeCategoryImpl) father).getDbData());
         } else {
-            ref = new CategoryDB(nome, null);
+            ref = new CategoryDB(nome, description, null);
         }
 
         Category ret = isLeaf ? new LeafCategoryImpl(ref) : new NodeCategoryImpl(ref);

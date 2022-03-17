@@ -54,7 +54,10 @@ public class Controller {
         if (this.currentUser == null)
             return this.chooseAndRun(this.public_actions, "Scegliere un'opzione");
 
-        return this.chooseAndRun(this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList(), String.format("Benvenuto %s. Scegli un'opzione", this.currentUser.getUser().getUsername()));
+        return this.chooseAndRun(
+                this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList(),
+                String.format("Benvenuto %s. Scegli un'opzione", this.currentUser.getUser().getUsername())
+        );
     }
 
     //ACTIONS===============================================================
@@ -110,14 +113,14 @@ public class Controller {
     }
 
     public boolean createHierarchy() {
-        Category root = this.createCategory(); //todo add descrizione to categoria
+        Category root = this.createCategory();
 
         root.put("Stato di conservazione", new TypeDefinition<>(true));
         root.put("Descrizione libera", new TypeDefinition<>(false));
 
         while (this.chooseAndRun(Arrays.asList(
-                new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true),
-                new MenuAction<>("Conferma ed esci", ConfiguratorUser.class, () -> false, !root.isCategoryValid())
+                new MenuAction<>("Salva ed esci", ConfiguratorUser.class, () -> false, !root.isCategoryValid(), 0, -1),
+                new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true)
         ), "Si vuole aggiungere una nuova categoria?")) {
             Category father = this.view.chooseOption(this.getCategories(root), "Selezionare una categoria", null).getAction().run();
             if (father == null) continue;
@@ -181,10 +184,17 @@ public class Controller {
 
     public void addField(Category c) {
         var name = this.view.getLine("Nome campo");
-        var type = this.view.chooseOption(
+
+        var type = TypeDefinition.TypeAssociation.values()[0];
+
+        // only one type possible for now, let the user choose only if needed
+        if (TypeDefinition.TypeAssociation.values().length >= 2) {
+            type = this.view.chooseOption(
                 Arrays.stream(TypeDefinition.TypeAssociation.values())
                         .map(e -> new MenuAction<>(e.toString(), ConfiguratorUser.class, () -> e))
                         .toList(), "Seleziona un tipo", TypeDefinition.TypeAssociation.STRING).getAction().run();
+        }
+
         var required = this.view.get("Obbligatorio [y/N]").equalsIgnoreCase("y");
         c.put(name, new TypeDefinition<>(type, required));
     }
@@ -197,13 +207,16 @@ public class Controller {
     public Category createCategory() {
         Category category = null;
         try {
-            category = this.model.createCategory(this.view.getLine("Category name"), null);
+            category = this.model.createCategory(
+                    this.view.getLine("Category name"),
+                    this.view.getLine("Category description"),
+                    null);
         } catch (Exception e) {
             e.printStackTrace(); //todo
         }
         while (this.view.chooseOption(Arrays.asList(
-                new MenuAction<>("Aggiungi campo nativo", ConfiguratorUser.class, () -> true),
-                new MenuAction<>("Conferma", ConfiguratorUser.class, () -> false)
+                new MenuAction<>("No, torna all'inserimento categorie", ConfiguratorUser.class, () -> false, false, 0, -1),
+                new MenuAction<>("Sì, aggiungi campo nativo", ConfiguratorUser.class, () -> true)
         ), "Si vuole aggiungere un campo nativo?", true).getAction().run()) {
             this.addField(category);
         }

@@ -21,6 +21,11 @@ public class NodeCategoryImpl extends NodeCategory implements CategoryImpl {
     }
 
     @Override
+    public String getDescription() {
+        return this.dbData.getCategory_description();
+    }
+
+    @Override
     public Category addChild(Category child) {
         assert child instanceof CategoryImpl;
         ((CategoryImpl) child).getDbData().setFather(this.getDbData());

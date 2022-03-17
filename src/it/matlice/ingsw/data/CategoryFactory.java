@@ -28,7 +28,7 @@ public interface CategoryFactory {
      * @return la categoria creata
      * @throws Exception
      */
-    Category createCategory(String nome, Category father, boolean isLeaf) throws Exception;
+    Category createCategory(String nome, String description, Category father, boolean isLeaf) throws Exception;
 
     /**
      * salva la categoria nel database aggiornandola, inoltre salva i campi se non esistono.

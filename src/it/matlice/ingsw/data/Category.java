@@ -122,6 +122,11 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
      */
     public abstract String getName();
 
+    /**
+     * @return ritorna la descrizione della categoria
+     */
+    public abstract String getDescription();
+
     public String toString(){
         var sb = new StringBuilder();
         this.categoryToString(sb, 0, "");
@@ -132,6 +137,13 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
         sb.append(" ".repeat(level*4));
         sb.append(prefix);
         sb.append(this.getName());
+
+        if (!this.getDescription().isEmpty()) {
+            sb.append(" (");
+            sb.append(this.getDescription());
+            sb.append(")");
+        }
+
         if (!this.entrySet().isEmpty()) {
             sb.append(" <");
             StringJoiner sj = new StringJoiner(", ");

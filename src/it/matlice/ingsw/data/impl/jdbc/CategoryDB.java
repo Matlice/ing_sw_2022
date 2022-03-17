@@ -18,11 +18,15 @@ public class CategoryDB {
     @DatabaseField(canBeNull = false, uniqueCombo = true)
     private String category_name;
 
+    @DatabaseField(canBeNull = false, uniqueCombo = false)
+    private String category_description;
+
     @DatabaseField(canBeNull = true, foreign = true, uniqueCombo = true)
     private CategoryDB father;
 
-    CategoryDB(String category_name, CategoryDB father) {
+    CategoryDB(String category_name, String category_description, CategoryDB father) {
         this.category_name = category_name;
+        this.category_description = category_description;
         this.father = father;
     }
 
@@ -31,6 +35,10 @@ public class CategoryDB {
 
     public int getCategory_id() {
         return this.category_id;
+    }
+
+    public String getCategory_description() {
+        return this.category_description;
     }
 
     public String getCategory_name() {

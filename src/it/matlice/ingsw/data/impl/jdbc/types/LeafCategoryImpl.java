@@ -21,6 +21,11 @@ public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
     }
 
     @Override
+    public String getDescription() {
+        return this.dbData.getCategory_description();
+    }
+
+    @Override
     public NodeCategory convertToNode() {
         var r = new NodeCategoryImpl(this.dbData);
         var father = this.getFather();

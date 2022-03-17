@@ -35,6 +35,7 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
                 var b = new HierarchyImpl(e, root);
                 return b;
             } catch (SQLException ex) {
+                ex.printStackTrace();
                 return null;
             }
         }).collect(Collectors.toList());

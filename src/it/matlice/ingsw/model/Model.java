@@ -97,8 +97,8 @@ public class Model {
         return password;
     }
 
-    public Category createCategory(String name, Category father) throws Exception{
-        return this.cf.createCategory(name, father, true);
+    public Category createCategory(String name, String description, Category father) throws Exception{
+        return this.cf.createCategory(name, description, father, true);
     }
 
     public void createHierarchy(Category root)  throws Exception{
