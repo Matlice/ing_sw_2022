@@ -19,30 +19,6 @@ public class StreamView implements View {
     }
 
     @Override
-    public String[] changePassword() throws Exception {
-        String psw1 = this.get("Nuova password");
-        String psw2 = this.get("Repeat password");
-        //if (!psw1.equals(psw2))
-        //    throw new Exception("Password does not match!"); todo
-        return new String[]{psw1, psw2};
-    }
-
-    @Override
-    public String getNewConfiguratorUsername() {
-        return this.get("New Configurator username");
-    }
-
-    @Override
-    public void showNewConfiguratorUserAndPassword(String username, String password) {
-        this.out.println("Use " + username + ":" + password + " to login");
-    }
-
-//    @Override
-//    public void message(String title, String text) {
-//        this.out.println(title + ": " + text);
-//    }
-
-    @Override
     public void info(String text) {
         this.out.println(text);
     }
@@ -58,13 +34,13 @@ public class StreamView implements View {
     }
 
     @Override
-    public String getLoginUsername() {
-        return this.get("Utente");
+    public String getPassword() {
+        return this.getLine("Password");
     }
 
     @Override
-    public String getPassword() {
-        return this.getLine("Password");
+    public String getPassword(String prompt) {
+        return this.getLine(prompt);
     }
 
     @Override

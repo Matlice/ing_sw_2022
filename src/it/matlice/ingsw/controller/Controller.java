@@ -79,10 +79,12 @@ public class Controller {
         boolean passwordChanged = false;
         while (!passwordChanged) {
             try {
-                var psw = this.view.changePassword();
-                if(!psw[0].equals(psw[1])) this.view.error("Le due password inserite non coincidono");
+                var psw1 = this.view.getPassword();
+                var psw2 = this.view.getPassword("Ripeti password");
+                if(!psw1.equals(psw2))
+                    this.view.error("Le due password inserite non coincidono");
                 else{
-                    this.model.changePassword(this.currentUser, psw[0]);
+                    this.model.changePassword(this.currentUser, psw1);
                     passwordChanged = true;
                 }
             } catch (InvalidPasswordException e) {
@@ -97,10 +99,10 @@ public class Controller {
     }
 
     public boolean createConfigurator() {
-        var username = this.view.getNewConfiguratorUsername();
+        var username = this.view.get("New configurator username");
         try {
             String password = this.model.addConfiguratorUser(username, false);
-            this.view.showNewConfiguratorUserAndPassword(username, password);
+            this.view.info("Use " + username + ":" + password + " to login");
         } catch (Exception e) {
             this.view.error("Impossibile creare un nuovo configuratore");
         }
@@ -161,7 +163,7 @@ public class Controller {
     //INTERNAL ACTIONS==============================================================
 
     public boolean login() {
-        var username = this.view.getLoginUsername();
+        var username = this.view.get("Utente");
         try {
             this.currentUser = this.model.authenticate(username);
             if (this.currentUser == null) {

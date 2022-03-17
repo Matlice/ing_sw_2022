@@ -6,23 +6,15 @@ import java.util.List;
 
 public interface View {
 
-    String[] changePassword() throws Exception;
-
-    String getNewConfiguratorUsername();
-
-    void showNewConfiguratorUserAndPassword(String username, String password);
-
-    // void message(String title, String text);
-
     void info(String text);
 
     void warn(String text);
 
     void error(String text);
 
-    String getLoginUsername();
-
     String getPassword();
+
+    String getPassword(String prompt);
 
     String get(String prompt);
 
