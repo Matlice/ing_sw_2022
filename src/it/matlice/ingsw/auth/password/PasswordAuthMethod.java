@@ -43,6 +43,10 @@ public class PasswordAuthMethod implements AuthMethod {
         return new PasswordAuthData(password);
     }
 
+    public static boolean isPasswordValid(String password){
+        return PasswordAuthMethod.PASSWORD_SEC_REGEX.matcher(password).matches();
+    }
+
     /**
      * questo metodo permette di impostare la password dell'utente
      *
@@ -50,7 +54,7 @@ public class PasswordAuthMethod implements AuthMethod {
      * @throws InvalidPasswordException nel caso in cui la password non rispetti la complessità richiesta
      */
     public void setPassword(String password, boolean skipComplexityCheck) throws InvalidPasswordException {
-        if (!skipComplexityCheck && !PasswordAuthMethod.PASSWORD_SEC_REGEX.matcher(password).matches())
+        if (!skipComplexityCheck && !isPasswordValid(password))
             throw new InvalidPasswordException();
         var salt = this.getNewSalt();
         this.user.setSalt(salt);

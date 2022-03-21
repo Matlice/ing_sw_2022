@@ -9,15 +9,15 @@ public class UserDB {
     private String username;
 
     @DatabaseField(canBeNull = false)
-    private String password_hash;
+    private String password_hash = "";
 
     @DatabaseField(canBeNull = false)
-    private String password_salt;
+    private String password_salt = "";
 
     @DatabaseField(canBeNull = false)
     private String type;
 
-    @DatabaseField(canBeNull = true)
+    @DatabaseField()
     private Long lastAccess;
 
     public UserDB() {

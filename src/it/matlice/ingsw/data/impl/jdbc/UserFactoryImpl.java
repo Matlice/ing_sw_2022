@@ -7,28 +7,31 @@ import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.data.User;
 import it.matlice.ingsw.data.UserFactory;
 import it.matlice.ingsw.data.impl.jdbc.types.ConfiguratorUserImpl;
+import it.matlice.ingsw.data.impl.jdbc.types.StandardUserImpl;
 import it.matlice.ingsw.data.impl.jdbc.types.UserImpl;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 public class UserFactoryImpl implements UserFactory {
-    private final ConnectionSource connectionSource;
     private final Dao<UserDB, String> userDAO;
 
     public UserFactoryImpl() throws SQLException {
-        this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
-        this.userDAO = DaoManager.createDao(this.connectionSource, UserDB.class);
+        ConnectionSource connectionSource = JdbcConnection.getInstance().getConnectionSource();
+        this.userDAO = DaoManager.createDao(connectionSource, UserDB.class);
         if (!this.userDAO.isTableExists()) {
-            TableUtils.createTable(this.connectionSource, UserDB.class);
+            TableUtils.createTable(connectionSource, UserDB.class);
         }
     }
 
     private User makeUser(UserDB udb) {
         if (udb.getType().equals(User.UserTypes.CONFIGURATOR.getTypeRepresentation()))
             return new ConfiguratorUserImpl(udb);
+        if (udb.getType().equals(User.UserTypes.STANDARD.getTypeRepresentation()))
+            return new StandardUserImpl(udb);
         return null;
     }
 
@@ -45,13 +48,14 @@ public class UserFactoryImpl implements UserFactory {
         return !(udb == null);
     }
 
-    public User createUser(String username, User.UserTypes userType) throws SQLException, InvalidUserTypeException {
-        if (userType == User.UserTypes.CONFIGURATOR) {
-            var ref = new ConfiguratorUserImpl(username);
-            this.userDAO.create(ref.getDbData());
-            return ref;
-        }
-        throw new InvalidUserTypeException();
+    public User createUser(String username, User.UserTypes userType) throws SQLException {
+        var ref = switch (userType){
+            case CONFIGURATOR -> new ConfiguratorUserImpl(username);
+            case STANDARD -> new StandardUserImpl(username);
+        };
+
+        this.userDAO.create(ref.getDbData());
+        return ref;
     }
 
     public User saveUser(User u) throws SQLException {
@@ -62,8 +66,8 @@ public class UserFactoryImpl implements UserFactory {
 
     public List<User> getUsers() throws SQLException {
         return this.userDAO.queryForAll().stream()
-                .map(e -> this.makeUser(e))
-                .filter(e -> e != null)
+                .map(this::makeUser)
+                .filter(Objects::nonNull)
                 .toList();
     }
 

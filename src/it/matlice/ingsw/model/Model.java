@@ -98,23 +98,27 @@ public class Model {
         return password.toString();
     }
 
-    public String addConfiguratorUser(String username, boolean defaultPassword) throws SQLException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
-
+    private User createUser(String username, User.UserTypes type) throws SQLException, DuplicateUserException, InvalidUserTypeException {
         if (this.uf.doesUserExist(username)) {
             throw new DuplicateUserException();
         }
 
-        var u = this.uf.createUser(username, User.UserTypes.CONFIGURATOR);
+        return this.uf.createUser(username, type);
+    }
 
-        String password;
-        if (defaultPassword) {
-            password = "Config!1";
-        } else {
-            password = this.genRandomPassword();
-        }
-        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, true);
+    public String addConfiguratorUser(String username) throws SQLException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
+        var u = createUser(username, User.UserTypes.CONFIGURATOR);
+        String password = this.genRandomPassword();
+        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, true); //todo assert type
         this.uf.saveUser(u);
         return password;
+    }
+
+    public void registerUser(String username, String password) throws SQLException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
+        var u = createUser(username, User.UserTypes.STANDARD);
+        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, false); //todo assert type
+        u.setLastLoginTime(0);
+        this.uf.saveUser(u);
     }
 
     public Category createCategory(String name, String description, Category father) {
@@ -136,8 +140,7 @@ public class Model {
 
     public boolean isValidRootCategoryName(String name) {
         return !this.hierarchies.stream()
-                .map((e) -> e.getRootCategory().getName())
-                .collect(Collectors.toList())
+                .map((e) -> e.getRootCategory().getName()).toList()
                 .contains(name);
     }
 

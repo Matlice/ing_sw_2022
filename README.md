@@ -119,10 +119,10 @@ nativi, indicando l’eventuale obbligatorietà di ciascuno
 
 #### Progresso
 
-- [ ] Creazione infrastruttura di base e database
-- [ ] Creazione account configuratore (tool esterno)
-- [ ] Modifica password utente
-- [ ] Creazione nuova gerarchia
+- [x] Creazione infrastruttura di base e database
+- [x] Creazione account configuratore (tool esterno)
+- [x] Modifica password utente
+- [x] Creazione nuova gerarchia
 
 ### Versione 2
 
@@ -155,8 +155,9 @@ Infine, la seconda versione dell’applicazione visualizza, a beneficio del frui
 
 #### Progresso
 
-- [ ] Registrazione fruitore
-- [ ] Visualizzazione frontend
+- [x] Registrazione fruitore
+- [x] Visualizzazione frontend
+- [ ] Impostazioni
 
 ### Versione 3
 

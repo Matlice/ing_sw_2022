@@ -1,28 +1,28 @@
 package it.matlice.ingsw.data.impl.jdbc.types;
 
 import it.matlice.ingsw.auth.AuthMethod;
-import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.auth.password.PasswordAuthenticable;
 import it.matlice.ingsw.data.ConfiguratorUser;
+import it.matlice.ingsw.data.StandardUser;
 import it.matlice.ingsw.data.impl.jdbc.UserDB;
 
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAuthenticable, UserImpl {
+public class StandardUserImpl extends StandardUser implements PasswordAuthenticable, UserImpl {
 
     private final UserDB dbData;
 
-    public ConfiguratorUserImpl(UserDB from) {
+    public StandardUserImpl(UserDB from) {
         this.dbData = from;
     }
 
-    public ConfiguratorUserImpl(String username) {
+    public StandardUserImpl(String username) {
         this.dbData = new UserDB();
         this.dbData.setUsername(username);
-        this.dbData.setType(UserTypes.CONFIGURATOR.getTypeRepresentation());
+        this.dbData.setType(UserTypes.STANDARD.getTypeRepresentation());
     }
 
     public UserDB getDbData() {

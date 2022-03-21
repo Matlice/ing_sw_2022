@@ -8,12 +8,15 @@ import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.data.*;
 import it.matlice.ingsw.view.View;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static it.matlice.ingsw.auth.password.PasswordAuthMethod.isPasswordValid;
 
 public class Controller {
 
@@ -22,16 +25,17 @@ public class Controller {
     private Authentication currentUser;
 
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
-            new MenuAction<>("Esci", User.class, () -> false, false, 0, -1),
+            new MenuAction<>("Logout", User.class, () -> {this.currentUser = null; return true;}, false, 0, -1),
             new MenuAction<>("Aggiungi nuova gerarchia", ConfiguratorUser.class, this::createHierarchy),
-            new MenuAction<>("Mostra gerarchie", ConfiguratorUser.class, this::showHierarchies),
+            new MenuAction<>("Mostra gerarchie", User.class, this::showHierarchies),
             new MenuAction<>("Aggiungi nuovo configuratore", ConfiguratorUser.class, this::createConfigurator),
             new MenuAction<>("Cambia password", User.class, this::changePassword)
-            );
+    );
 
     private final List<MenuAction<Boolean>> public_actions = Arrays.asList(
-            new MenuAction<>("Esci", User.class, () -> false, false, 0, -1),
-            new MenuAction<>("Login", User.class, this::performLogin)
+            new MenuAction<>("Esci", null, () -> false, false, 0, -1),
+            new MenuAction<>("Login", null, this::performLogin),
+            new MenuAction<>("Registrati", null, this::registerUser)
     );
 
     public Controller(View view, Model model) {
@@ -82,14 +86,8 @@ public class Controller {
         boolean passwordChanged = false;
         while (!passwordChanged) {
             try {
-                var psw1 = this.view.getPassword();
-                var psw2 = this.view.getPassword("Ripeti password");
-                if(!psw1.equals(psw2))
-                    this.view.error("Le due password inserite non coincidono");
-                else{
-                    this.model.changePassword(this.currentUser, psw1);
-                    passwordChanged = true;
-                }
+                this.model.changePassword(this.currentUser, getNewPassword());
+                passwordChanged = true;
             } catch (InvalidPasswordException e) {
                 this.view.error("La password non rispetta i requisiti di sicurezza");
             } catch (LoginInvalidException e) {
@@ -104,7 +102,7 @@ public class Controller {
     public boolean createConfigurator() {
         var username = this.view.get("New configurator username");
         try {
-            String password = this.model.addConfiguratorUser(username, false);
+            String password = this.model.addConfiguratorUser(username);
             this.view.info("Usa " + username + ":" + password + " per il primo login");
         } catch (DuplicateUserException e) {
             this.view.error("Utente già esistente");
@@ -186,9 +184,24 @@ public class Controller {
         return true;
     }
 
+    public boolean registerUser(){
+        var username = this.view.get("Utente");
+        var psw = getNewPassword();
+
+        try {
+            this.model.registerUser(username, psw);
+        } catch (SQLException | InvalidUserTypeException | InvalidPasswordException e) {
+            this.view.error(e.getMessage());
+        } catch (DuplicateUserException e) {
+            this.view.error("L'utente inserito è già esistente.");
+        }
+
+        return true;
+    }
+
     //FROM MODEL ===============================================================
 
-    public AuthData getLoginData(String method) {
+    public AuthData getLoginData(@NotNull String method) {
         if (method.equals(PasswordAuthMethod.class.getName()))
             return PasswordAuthMethod.getAuthData(this.view.getPassword());
         else {
@@ -199,7 +212,23 @@ public class Controller {
 
     //INTERNAL ACTIONS==============================================================
 
-    public boolean login() {
+    private @NotNull String getNewPassword(){
+        String psw;
+        while(true){
+            psw = this.view.getPassword("Password");
+            if(!psw.equals(this.view.getPassword("Ripeti la password"))) {
+                this.view.error("Le password non corrispondono");
+                continue;
+            }
+            if(!isPasswordValid(psw)){
+                this.view.error("La password non rispetta i requisiti di sicurezza");
+                continue;
+            }
+            return psw;
+        }
+    }
+
+    private boolean login() {
         var username = this.view.get("Utente");
         try {
             this.currentUser = this.model.authenticate(username);
@@ -213,7 +242,7 @@ public class Controller {
         return false;
     }
 
-    public void addField(Category c) {
+    private void addField(Category c) {
         String name = null;
         while (name == null) {
              name = this.view.getLine("Nome campo");
@@ -279,7 +308,7 @@ public class Controller {
 
     public void addDefaultConfigurator() {
         try {
-            String psw = this.model.addConfiguratorUser("admin", true);
+            String psw = this.model.addConfiguratorUser("admin");
             this.view.info(String.format("Per il primo accesso le credenziali sono admin:%s", psw));
         } catch (Exception e) {
             e.printStackTrace(); //todo
