@@ -169,7 +169,10 @@ public class Controller {
         // show root categories name
 
         List<Hierarchy> hierarchies = this.model.getHierarchies();
-
+        if(hierarchies.size() == 0){
+            this.view.info("Nessuna gerarchia torvata");
+            return true;
+        }
         this.view.chooseOption(
                 hierarchies.stream()
                         .map((e) -> new MenuAction<>(e.getRootCategory().getName(), User.class, () -> {
@@ -192,7 +195,7 @@ public class Controller {
             this.view.error("Nessun metodo di login disponibile per " + method);
             return null;
         }
-    } //todo, appunto di rob: teto, dobbiamo fare un discorsetto...
+    }
 
     //INTERNAL ACTIONS==============================================================
 
@@ -237,7 +240,7 @@ public class Controller {
     /**
      * Le categorie di default sono create come LeafCategory
      *
-     * @return
+     * @return categoria creata
      */
     public Category createCategory(Category root) throws DuplicateCategoryException {
 
