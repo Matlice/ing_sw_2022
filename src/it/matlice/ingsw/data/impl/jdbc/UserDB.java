@@ -3,6 +3,9 @@ package it.matlice.ingsw.data.impl.jdbc;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+/**
+ * Classe che rappresenta a database la tabella `users`
+ */
 @DatabaseTable(tableName = "users")
 public class UserDB {
     @DatabaseField(id = true)

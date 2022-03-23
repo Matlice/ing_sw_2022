@@ -77,12 +77,22 @@ public class PasswordAuthMethod implements AuthMethod {
         );
     }
 
+    /**
+     * Ritorna un nuovo salt casuale
+     * @return salt casuale della lunghezza SALT_LENGTH
+     */
     private byte @NotNull [] getNewSalt(){
         var salt = new byte[SALT_LENGTH];
         this.random_source.nextBytes(salt);
         return salt;
     }
 
+    /**
+     * Calcola e ritorna l'hash della password col salt specificato
+     * @param salt salt da utilizzare
+     * @param password password di cui generare l'hash
+     * @return hash della password
+     */
     private byte[] getPasswordHash(byte[] salt, @NotNull String password){
         try {
             var mac = Mac.getInstance("HmacSHA256");

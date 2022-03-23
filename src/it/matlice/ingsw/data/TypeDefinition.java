@@ -15,9 +15,6 @@ public final class TypeDefinition<T> {
         this.required = required;
     }
 
-    /**
-     * @param <T>
-     */
     public TypeDefinition(TypeAssociation type, boolean required) {
         this.type = type;
         this.required = required;
@@ -52,6 +49,9 @@ public final class TypeDefinition<T> {
                 "required=" + required + ']';
     }
 
+    /**
+     * Tipi di campo disponibili, nel caso specifico si possono aggiungere solo stringhe
+     */
     public enum TypeAssociation {
         STRING(String.class);
 

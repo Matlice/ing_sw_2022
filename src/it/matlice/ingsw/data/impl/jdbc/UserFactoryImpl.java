@@ -14,6 +14,10 @@ import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * classe in grado di istanziare User nella giusta declinazione
+ * a partire da una base di dati Jdbc
+ */
 public class UserFactoryImpl implements UserFactory {
     private final ConnectionSource connectionSource;
     private final Dao<UserDB, String> userDAO;

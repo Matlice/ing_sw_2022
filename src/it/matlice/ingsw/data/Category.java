@@ -127,12 +127,23 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
      */
     public abstract String getDescription();
 
+    /**
+     * Formatta la categoria in una stringa secondo una struttura ad albero
+     * @return stringa rappresentante la categoria
+     */
     public String toString(){
         var sb = new StringBuilder();
         this.categoryToString(sb, 0, "");
         return sb.toString();
     }
 
+    /**
+     * Passo ricorsivo della formattazione della categoria a stringa,
+     * genera la riga per il livello corrente e richiama se stesso sul livello inferiore
+     * @param sb StringBuilder su cui scrivere la stringa
+     * @param level livelli di indentazione
+     * @param prefix prefisso da aggiungere al nome della categoria
+     */
     private void categoryToString(StringBuilder sb, int level, String prefix){
         sb.append(" ".repeat(level*4));
         sb.append(prefix);

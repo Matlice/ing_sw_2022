@@ -180,7 +180,6 @@ public class Menu {
      * @return the return of the action lambda
      */
     public Object selectAfterDisplay(Scanner in, PrintStream out) {
-//        var action = new InputRequest<>(Integer.class).queryMessage(lang.INPUT_PROMPT()).blacklist(false).allow(call_ref.keySet()).ask(in, out);
         int action;
         try {
             action = in.nextInt();

@@ -1,6 +1,5 @@
 package it.matlice.ingsw.model;
 
-import com.j256.ormlite.stmt.query.In;
 import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.exceptions.DuplicateUserException;
@@ -20,6 +19,9 @@ import java.util.stream.Collectors;
 
 import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
 
+/**
+ * Model dell'applicazione, fornisce i metodi per accedere ai dati
+ */
 public class Model {
 
     private final HierarchyFactory hf;
@@ -29,6 +31,12 @@ public class Model {
 
     private List<Hierarchy> hierarchies;
 
+    /**
+     * Costruttore del Model
+     * @param hf la hierarchy factory che permette di interfacciarsi col DB per le gerarchie
+     * @param cf la category factory che permette di interfacciarsi col DB per le categorie
+     * @param uf la user factory che permette di interfacciarsi col DB per gli utenti
+     */
     public Model(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
         this.hf = hf;
         this.cf = cf;
@@ -41,6 +49,24 @@ public class Model {
         }
     }
 
+    /**
+     * Permette al controller di impostare una referenza verso se stesso
+     *
+     * @param c controller
+     */
+    public void setController(Controller c) {
+        this.controller = c;
+    }
+
+    /**
+     * Permette il cambio password all'utente
+     *
+     * @param auth autenticazione, permette di indetificare l'utente e verificare sia loggato
+     * @param newPassword nuova password che si vuole impostare
+     * @throws SQLException errore di connessione col database
+     * @throws InvalidPasswordException password non rispettante i requisiti di sicurezza
+     * @throws LoginInvalidException utente non loggato
+     */
     public void changePassword(@NotNull Authentication auth, String newPassword) throws SQLException, InvalidPasswordException, LoginInvalidException {
         if (!auth.isValid())
             throw new LoginInvalidException();
@@ -56,7 +82,7 @@ public class Model {
      * Effettua l'autenticazione
      *
      * @param username username dell'utente
-     * @return un token di sessione oppure null se l'auitenticazione non ha avuto successo
+     * @return un token di sessione oppure null se l'autenticazione non ha avuto successo
      */
     public Authentication authenticate(String username) throws InvalidUserException {
         User user;
@@ -80,11 +106,23 @@ public class Model {
         return null;
     }
 
+    /**
+     * Ultimo passaggio per completare il login
+     * Imposta l'ultimo accesso dell'utente
+     *
+     * @param auth autenticazione, permette di indetificare l'utente e verificare sia loggato
+     * @throws SQLException errore di connessione col database
+     */
     public void finalizeLogin(@NotNull Authentication auth) throws SQLException {
         auth.getUser().setLastLoginTime(auth.getLoginTime());
         this.uf.saveUser(auth.getUser());
     }
 
+    /**
+     * Genera una password casuale di 8 caratteri alfanumerici
+     *
+     * @return la password generata
+     */
     @Contract(pure = true)
     private @NotNull String genRandomPassword() {
         SecureRandom random = new SecureRandom();
@@ -98,6 +136,17 @@ public class Model {
         return password.toString();
     }
 
+    /**
+     * Aggiunge un utente configuratore
+     *
+     * @param username username dell'utente da creare
+     * @param defaultPassword true per utilizzare una password default, altrimenti la genera casualmente
+     * @return password dell'utente appena creato
+     * @throws SQLException errore di connessione col database
+     * @throws DuplicateUserException utente con username già esistente
+     * @throws InvalidPasswordException
+     * @throws InvalidUserTypeException
+     */
     public String addConfiguratorUser(String username, boolean defaultPassword) throws SQLException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
 
         if (this.uf.doesUserExist(username)) {
@@ -117,23 +166,25 @@ public class Model {
         return password;
     }
 
-    public Category createCategory(String name, String description, Category father) {
+    /**
+     * Crea una nuova categoria foglia con i parametri passati
+     *
+     * @param name nome della categoria
+     * @param description descrizione della categoria
+     * @param father padre della categoria (null se è categoria root)
+     * @return
+     */
+    public @NotNull Category createCategory(String name, String description, Category father) {
         return this.cf.createCategory(name, description, father, true);
     }
 
-    public void createHierarchy(Category root) throws Exception{
-        this.cf.saveCategory(root);
-        this.hierarchies.add(this.hf.createHierarchy(root));
-    }
-
-    public List<Hierarchy> getHierarchies() {
-        return this.hierarchies;
-    }
-
-    public void setController(Controller m) {
-        this.controller = m;
-    }
-
+    /**
+     * Controlla l'esistenza di una categoria radice il nome passato,
+     * non possono esserci due categorie root con lo stesso nome
+     *
+     * @param name nome della categoria radice
+     * @return true se il nome della categoria radice non è già esistente
+     */
     public boolean isValidRootCategoryName(String name) {
         return !this.hierarchies.stream()
                 .map((e) -> e.getRootCategory().getName())
@@ -141,11 +192,37 @@ public class Model {
                 .contains(name);
     }
 
+    /**
+     * Crea una nuova gerarchia con la categoria root specificata
+     *
+     * @param root categoria root della gerarchia
+     * @throws SQLException errore di connessione col database
+     */
+    public void createHierarchy(Category root) throws SQLException {
+        this.cf.saveCategory(root);
+        this.hierarchies.add(this.hf.createHierarchy(root));
+    }
 
+    /**
+     * Ritorna le gerarchie
+     * @return lista di gerarchie a sistema
+     */
+    public List<Hierarchy> getHierarchies() {
+        return this.hierarchies;
+    }
+
+
+    /**
+     * Classe che gestisce l'autenticazione dell'utente
+     */
     private static class AuthImpl implements Authentication {
         private final User user_ref;
         private final long login_time;
 
+        /**
+         * Costruttore di AuthImpl
+         * @param user_ref l'utente di cui si vuol creare l'autenticazione
+         */
         private AuthImpl(User user_ref) {
             this.user_ref = user_ref;
             this.login_time = System.currentTimeMillis() / 1000L;

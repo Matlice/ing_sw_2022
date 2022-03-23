@@ -3,6 +3,10 @@ package it.matlice.ingsw.data.impl.jdbc;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+/**
+ * Classe che rappresenta a database la tabella `fields`
+ * in cui sono salvati i campi relativi alle categorie
+ */
 @DatabaseTable(tableName = "fields")
 public class CategoryFieldDB {
 

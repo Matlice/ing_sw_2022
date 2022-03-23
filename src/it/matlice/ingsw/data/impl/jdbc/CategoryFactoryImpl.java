@@ -10,12 +10,18 @@ import it.matlice.ingsw.data.TypeDefinition;
 import it.matlice.ingsw.data.impl.jdbc.types.CategoryImpl;
 import it.matlice.ingsw.data.impl.jdbc.types.LeafCategoryImpl;
 import it.matlice.ingsw.data.impl.jdbc.types.NodeCategoryImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * Classe che si occuperà di istanziare implementazioni di categorie,
+ * correttamente identificate da NodeCategory o LeafCategory, complete di struttura di (eventuali) figli
+ * a partire da una base di dati mediante Jdbc
+ */
 public class CategoryFactoryImpl implements CategoryFactory {
     private final ConnectionSource connectionSource;
     private final Dao<CategoryDB, Integer> categoryDAO;
@@ -94,7 +100,7 @@ public class CategoryFactoryImpl implements CategoryFactory {
     }
 
     @Override
-    public Category createCategory(String nome, String description, Category father, boolean isLeaf) {
+    public @NotNull Category createCategory(String nome, String description, Category father, boolean isLeaf) {
         CategoryDB ref;
 
         if (father != null) {
