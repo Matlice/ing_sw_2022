@@ -3,6 +3,7 @@ package it.matlice.ingsw.view.stream;
 import it.matlice.ingsw.controller.MenuAction;
 import it.matlice.ingsw.view.View;
 import it.matlice.ingsw.view.menu.Menu;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintStream;
 import java.util.List;
@@ -114,7 +115,7 @@ public class StreamView implements View {
      * @return l'azione scelta dall'utente
      */
     @Override
-    public <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt) {
+    public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, String prompt) {
         Menu menu = new Menu();
         for (var act : choices) {
             if (act.getIndex() == null) {

@@ -10,6 +10,8 @@ import it.matlice.ingsw.data.impl.jdbc.types.ConfiguratorUserImpl;
 import it.matlice.ingsw.data.impl.jdbc.types.UserImpl;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -30,7 +32,7 @@ public class UserFactoryImpl implements UserFactory {
         }
     }
 
-    private User makeUser(UserDB udb) {
+    private @Nullable User makeUser(@NotNull UserDB udb) {
         if (udb.getType().equals(User.UserTypes.CONFIGURATOR.getTypeRepresentation()))
             return new ConfiguratorUserImpl(udb);
         return null;

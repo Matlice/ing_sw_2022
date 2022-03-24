@@ -1,5 +1,7 @@
 package it.matlice.ingsw.data;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 /**
@@ -144,7 +146,7 @@ public abstract class Category extends HashMap<String, TypeDefinition<?>> {
      * @param level livelli di indentazione
      * @param prefix prefisso da aggiungere al nome della categoria
      */
-    private void categoryToString(StringBuilder sb, int level, String prefix){
+    private void categoryToString(@NotNull StringBuilder sb, int level, String prefix){
         sb.append(" ".repeat(level*4));
         sb.append(prefix);
         sb.append(this.getName());

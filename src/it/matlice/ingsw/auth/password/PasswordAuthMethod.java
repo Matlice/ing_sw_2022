@@ -2,7 +2,10 @@ package it.matlice.ingsw.auth.password;
 
 import it.matlice.ingsw.auth.AuthData;
 import it.matlice.ingsw.auth.AuthMethod;
+import it.matlice.ingsw.auth.Authenticable;
 import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
+import it.matlice.ingsw.data.User;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
@@ -39,8 +42,14 @@ public class PasswordAuthMethod implements AuthMethod {
      * @param password password di login
      * @return un'istanza di AuthData valida.
      */
-    public static AuthData getAuthData(String password) {
+    @Contract("_ -> new")
+    public static @NotNull AuthData getAuthData(String password) {
         return new PasswordAuthData(password);
+    }
+
+    @Override
+    public Authenticable getUser() {
+        return this.user;
     }
 
     /**

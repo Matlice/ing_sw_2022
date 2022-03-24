@@ -21,11 +21,11 @@ public final class TypeDefinition<T> {
     }
 
     public TypeAssociation type() {
-        return type;
+        return this.type;
     }
 
     public boolean required() {
-        return required;
+        return this.required;
     }
 
     @Override
@@ -39,14 +39,14 @@ public final class TypeDefinition<T> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, required);
+        return Objects.hash(this.type, this.required);
     }
 
     @Override
     public String toString() {
         return "TypeDefinition[" +
-                "type=" + type + ", " +
-                "required=" + required + ']';
+                "type=" + this.type + ", " +
+                "required=" + this.required + ']';
     }
 
     /**

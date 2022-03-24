@@ -119,7 +119,7 @@ public class CategoryFactoryImpl implements CategoryFactory {
     }
 
     @Override
-    public Category saveCategory(Category category) throws SQLException {
+    public Category saveCategory(@NotNull Category category) throws SQLException {
         assert category instanceof CategoryImpl;
 
         this.categoryDAO.createOrUpdate(((CategoryImpl) category).getDbData());

@@ -1,6 +1,7 @@
 package it.matlice.ingsw.controller;
 
 import it.matlice.ingsw.auth.AuthData;
+import it.matlice.ingsw.auth.AuthMethod;
 import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.Authentication;
@@ -8,7 +9,9 @@ import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.data.*;
 import it.matlice.ingsw.view.View;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -47,7 +50,6 @@ public class Controller {
     public Controller(View view, Model model) {
         this.view = view;
         this.model = model;
-        model.setController(this);
     }
 
     /**
@@ -79,7 +81,8 @@ public class Controller {
             try {
                 this.model.finalizeLogin(this.currentUser);
             } catch (SQLException e) {
-                e.printStackTrace(); //todo
+                e.printStackTrace();
+                System.exit(1);
             }
             return true;
         }
@@ -120,8 +123,11 @@ public class Controller {
         try {
             String psw = this.model.addConfiguratorUser("admin", true);
             this.view.info(String.format("Per il primo accesso le credenziali sono admin:%s", psw));
-        } catch (DuplicateUserException | InvalidUserTypeException | InvalidPasswordException | SQLException e) {
-            e.printStackTrace(); //todo
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch (InvalidUserTypeException | DuplicateUserException | InvalidPasswordException e) {
+            this.view.error("Errore nella creazione dell'utente di default");
         }
     }
 
@@ -168,15 +174,16 @@ public class Controller {
         while (this.chooseAndRun(Arrays.asList(
                 new MenuAction<>("Salva ed esci", ConfiguratorUser.class, () -> false, !root.isCategoryValid(), 0, -1),
                 new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true)
-        ), "Si vuole aggiungere una nuova categoria?")) {
-            Category father = this.chooseAndRun(this.getCategorySelectionMenu(root), "Selezionare una categoria");
+        ), "Si vuole aggiungere una nuova categoria?\n(nota: una categoria non può avere una sola sottocategoria)")) {
+            Category father = this.chooseAndRun(this.getCategorySelectionMenu(root), "Selezionare la categoria padre");
             if (father == null) continue;
 
             NodeCategory r = null;
             while (r == null) {
                 try {
-                    r = this.appendCategory(father, this.createCategory(root));
-                    this.makeFields(r);
+                    var newChild = this.createCategory(root);
+                    r = this.appendCategory(father, newChild);
+                    this.makeFields(newChild);
                 } catch (DuplicateCategoryException e) {
                     this.view.error("Categoria già esistente nell'albero della gerarchia");
                 }
@@ -186,8 +193,9 @@ public class Controller {
 
         try {
             this.model.createHierarchy(root);
-        } catch (Exception e) {
-            e.printStackTrace(); //todo
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
         return true;
     }
@@ -200,7 +208,7 @@ public class Controller {
         // mostra la lista di gerarchie disponibili
         List<Hierarchy> hierarchies = this.model.getHierarchies();
         if(hierarchies.size() == 0){
-            this.view.info("Nessuna gerarchia torvata");
+            this.view.info("Nessuna gerarchia trovata");
             return true;
         }
 
@@ -239,20 +247,44 @@ public class Controller {
 
     /**
      * Permette all'utente di effettuare il login
+     *
      * @return true se l'utente si è autenticato
      */
     private boolean login() {
         var username = this.view.get("Utente");
+
+        List<AuthMethod> authType;
         try {
-            this.currentUser = this.model.authenticate(username);
-            if (this.currentUser == null) {
-                this.view.error("Password errata");
+            authType = this.model.authenticationType(username);
+            for (var t: authType) {
+                var authData = this.getLoginData(t.getClass().getName());
+                this.currentUser = this.model.authenticate(t, authData);
+                if (this.currentUser != null) {
+                    return true;
+                } else {
+                    this.view.warn("Credenziali errate");
+                    return false;
+                }
             }
-            return this.currentUser != null;
         } catch (InvalidUserException e) {
-            this.view.error("Utente non valido");
+            this.view.error("Utente non esistente");
         }
+
         return false;
+    }
+
+    /**
+     * In base al tipo di autenticazione, permetta al model di richiedere i dati necessari all'utente tramite la view
+     * @param method il metodo di autenticazione
+     * @return dati relativi all'autenticazione
+     */
+    private @Nullable AuthData getLoginData(@NotNull String method) {
+        if (method.equals(PasswordAuthMethod.class.getName()))
+            return PasswordAuthMethod.getAuthData(this.view.getPassword());
+        else {
+            this.view.error("Nessun metodo di login disponibile per " + method);
+            return null;
+        }
     }
 
     /**
@@ -334,12 +366,11 @@ public class Controller {
      * @param child categoria figlia da aggiungere
      * @return la nuova categoria padre
      */
-    private NodeCategory appendCategory(Category father, Category child) {
+    private @NotNull NodeCategory appendCategory(Category father, Category child) {
         var f = father instanceof LeafCategory ? ((LeafCategory) father).convertToNode() : (NodeCategory) father;
         f.clone();
         f.addChild(child);
         return f;
-        //todo this can throw errors?
     }
 
     /**
@@ -351,7 +382,8 @@ public class Controller {
      * @param root categoria radice
      * @return la lista di MenuAction delle categorie figlie
      */
-    private List<MenuAction<Category>> getCategorySelectionMenu(Category root) {
+    @Contract("_ -> new")
+    private @NotNull List<MenuAction<Category>> getCategorySelectionMenu(Category root) {
         return this.getCategorySelectionMenu(root, new LinkedList<>(), "");
     }
 
@@ -366,28 +398,12 @@ public class Controller {
      * @param prefix prefisso da anteporre ai nomi delle categorie
      * @return la lista completa delle categorie figlie
      */
-    private List<MenuAction<Category>> getCategorySelectionMenu(Category root, List<MenuAction<Category>> acc, String prefix) {
+    private List<MenuAction<Category>> getCategorySelectionMenu(@NotNull Category root, @NotNull List<MenuAction<Category>> acc, String prefix) {
         acc.add(new MenuAction<>(prefix + root.getName(), null, () -> root));
         if (root instanceof NodeCategory)
             for (var child : ((NodeCategory) root).getChildren())
                 this.getCategorySelectionMenu(child, acc, prefix + root.getName() + " > ");
         return acc;
-    }
-
-    //FROM MODEL ===============================================================
-
-    /**
-     * In base al tipo di autenticazione, permetta al model di richiedere i dati necessari all'utente tramite la view
-     * @param method il metodo di autenticazione
-     * @return dati relativi all'autenticazione
-     */
-    public AuthData getLoginData(String method) {
-        if (method.equals(PasswordAuthMethod.class.getName()))
-            return PasswordAuthMethod.getAuthData(this.view.getPassword());
-        else {
-            this.view.error("Nessun metodo di login disponibile per " + method);
-            return null;
-        }
     }
 
 }

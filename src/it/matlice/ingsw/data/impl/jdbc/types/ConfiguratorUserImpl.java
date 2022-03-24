@@ -24,7 +24,6 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
         this.dbData.setUsername(username);
         this.dbData.setType(UserTypes.CONFIGURATOR.getTypeRepresentation());
 
-        //todo real password management
         this.dbData.setPasswordHash("");
         this.dbData.setPasswordSalt("");
     }

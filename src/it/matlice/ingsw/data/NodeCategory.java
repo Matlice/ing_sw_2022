@@ -1,5 +1,7 @@
 package it.matlice.ingsw.data;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +17,9 @@ public abstract class NodeCategory extends Category {
      * @param child categoria figlio
      * @return la categoria aggiunta
      */
-    public Category addChild(Category child) {
+    public Category addChild(@NotNull Category child) {
         child.setFather(this);
         this.children.add(child);
-        //todo lanciare un errore se il campo è duplicato?
         return child;
     }
 
@@ -28,7 +29,7 @@ public abstract class NodeCategory extends Category {
      * @param child figlio da rimuovere
      * @return il figlio rimosso
      */
-    public Category removeChild(Category child) {
+    public Category removeChild(@NotNull Category child) {
         child.setFather(null);
         this.children.remove(child);
         return child;

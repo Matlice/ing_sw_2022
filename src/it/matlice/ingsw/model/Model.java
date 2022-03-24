@@ -1,5 +1,8 @@
 package it.matlice.ingsw.model;
 
+import it.matlice.ingsw.auth.AuthData;
+import it.matlice.ingsw.auth.AuthMethod;
+import it.matlice.ingsw.auth.Authenticable;
 import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.exceptions.DuplicateUserException;
@@ -27,7 +30,6 @@ public class Model {
     private final HierarchyFactory hf;
     private final CategoryFactory cf;
     private final UserFactory uf;
-    private Controller controller;
 
     private List<Hierarchy> hierarchies;
 
@@ -37,7 +39,7 @@ public class Model {
      * @param cf la category factory che permette di interfacciarsi col DB per le categorie
      * @param uf la user factory che permette di interfacciarsi col DB per gli utenti
      */
-    public Model(HierarchyFactory hf, CategoryFactory cf, UserFactory uf) {
+    public Model(@NotNull HierarchyFactory hf, @NotNull  CategoryFactory cf, @NotNull UserFactory uf) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
@@ -45,17 +47,9 @@ public class Model {
         try {
             this.hierarchies = hf.getHierarchies();
         } catch (SQLException e) {
-            e.printStackTrace(); //todo handle
+            e.printStackTrace();
+            System.exit(1);
         }
-    }
-
-    /**
-     * Permette al controller di impostare una referenza verso se stesso
-     *
-     * @param c controller
-     */
-    public void setController(Controller c) {
-        this.controller = c;
     }
 
     /**
@@ -79,12 +73,12 @@ public class Model {
     }
 
     /**
-     * Effettua l'autenticazione
+     * Ritorna una lista di metodi disponibili per l'utente
      *
      * @param username username dell'utente
-     * @return un token di sessione oppure null se l'autenticazione non ha avuto successo
+     * @return lista di metodi disponibili
      */
-    public Authentication authenticate(String username) throws InvalidUserException {
+    public List<AuthMethod> authenticationType(String username) throws InvalidUserException {
         User user;
         try {
             user = this.uf.getUser(username);
@@ -92,17 +86,24 @@ public class Model {
             throw new InvalidUserException();
         }
 
-        boolean ret = false;
-        for (var method : user.getAuthMethods()) {
-            var authdata = this.controller.getLoginData(method.getClass().getName());
-            if (authdata == null)
-                continue;
-            ret = method.performAuthentication(authdata);
-            if (ret) break;
+        return user.getAuthMethods();
+    }
+
+    /**
+     * Dati i parametri di autenticazione, ritorna il token di autenticazione
+     *
+     * @param method metodo di autenticazione
+     * @param data parametri di autenticazione
+     * @return token di autenticazione
+     */
+    public Authentication authenticate(@NotNull AuthMethod method, AuthData data) {
+
+        assert method.getUser() instanceof User;
+
+        if (method.performAuthentication(data)) {
+            return new AuthImpl((User) method.getUser());
         }
 
-        if (ret)
-            return new AuthImpl(user);
         return null;
     }
 
@@ -188,7 +189,7 @@ public class Model {
     public boolean isValidRootCategoryName(String name) {
         return !this.hierarchies.stream()
                 .map((e) -> e.getRootCategory().getName())
-                .collect(Collectors.toList())
+                .toList()
                 .contains(name);
     }
 
