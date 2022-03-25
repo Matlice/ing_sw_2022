@@ -25,7 +25,7 @@ public class EntryPoint {
     public static void main(String[] args){
 
 //        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
-//        var sf = new SettingsFactoryImpl();
+//
 //        sf.makeSettings("si", 665, Arrays.asList("ciao1", "ciao2"), Arrays.asList(Settings.Day.MON, Settings.Day.TUE), Arrays.asList(new Interval(30, 60), new Interval(120, 150)));
 //        var a = sf.readSettings();
 
@@ -37,8 +37,9 @@ public class EntryPoint {
             var uf = new UserFactoryImpl();
             var cf = new CategoryFactoryImpl();
             var hf = new HierarchyFactoryImpl();
+            var sf = new SettingsFactoryImpl();
 
-            var model = new Model(hf, cf, uf);
+            var model = new Model(hf, cf, uf, sf);
 
             // istanzia una view sugli stream stdin e stdout
             var view = new StreamView(System.out, new Scanner(System.in));

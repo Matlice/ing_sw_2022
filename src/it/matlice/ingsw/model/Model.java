@@ -6,7 +6,9 @@ import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.data.factories.CategoryFactory;
 import it.matlice.ingsw.data.factories.HierarchyFactory;
+import it.matlice.ingsw.data.factories.SettingsFactory;
 import it.matlice.ingsw.data.factories.UserFactory;
+import it.matlice.ingsw.data.impl.jdbc.SettingsFactoryImpl;
 import it.matlice.ingsw.model.exceptions.DuplicateUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
@@ -30,26 +32,20 @@ public class Model {
     private final HierarchyFactory hf;
     private final CategoryFactory cf;
     private final UserFactory uf;
-
-    private List<Hierarchy> hierarchies;
+    private final SettingsFactory sf;
 
     /**
      * Costruttore del Model
      * @param hf la hierarchy factory che permette di interfacciarsi col DB per le gerarchie
      * @param cf la category factory che permette di interfacciarsi col DB per le categorie
      * @param uf la user factory che permette di interfacciarsi col DB per gli utenti
+     * @param sf la settings factory che permette di interfacciarsi col DB per i parametri di configurazione
      */
-    public Model(@NotNull HierarchyFactory hf, @NotNull  CategoryFactory cf, @NotNull UserFactory uf) {
+    public Model(@NotNull HierarchyFactory hf, @NotNull CategoryFactory cf, @NotNull UserFactory uf, SettingsFactoryImpl sf) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
-
-        try {
-            this.hierarchies = hf.getHierarchies();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+        this.sf = sf;
     }
 
     /**
@@ -220,10 +216,16 @@ public class Model {
      * @return true se il nome della categoria radice non è già esistente
      */
     public boolean isValidRootCategoryName(String name) {
-        return !this.hierarchies.stream()
-                .map((e) -> e.getRootCategory().getName())
-                .toList()
-                .contains(name);
+        try {
+            return !this.hf.getHierarchies().stream()
+                    .map((e) -> e.getRootCategory().getName())
+                    .toList()
+                    .contains(name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return false;
     }
 
     /**
@@ -234,7 +236,7 @@ public class Model {
      */
     public void createHierarchy(Category root) throws SQLException {
         this.cf.saveCategory(root);
-        this.hierarchies.add(this.hf.createHierarchy(root));
+        this.hf.getHierarchies().add(this.hf.createHierarchy(root));
     }
 
     /**
@@ -242,7 +244,32 @@ public class Model {
      * @return lista di gerarchie a sistema
      */
     public List<Hierarchy> getHierarchies() {
-        return this.hierarchies;
+        try {
+            return this.hf.getHierarchies();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
+    }
+
+    /**
+     * Ritorna true se sono stati configurati i parametri dell'applicazione
+     * (piazza, scadenza, giorni, orari, luoghi)
+     * @return boolean
+     */
+    public boolean hasConfiguredSettings() {
+        try {
+            return this.sf.readSettings() != null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return false;
+    }
+
+    public void configureSettings(String city, int daysDue, List<String> places, List<it.matlice.ingsw.data.Settings.Day> days, List<Interval> intervals) {
+        // todo
     }
 
 

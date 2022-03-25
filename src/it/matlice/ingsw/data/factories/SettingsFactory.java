@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SettingsFactory {
 
-    Settings readSettings() throws Exception;
-    Settings makeSettings(String city, int due, @NotNull List<String> locations, @NotNull List<Settings.Day> days, @NotNull List<Interval> intervals) throws Exception;
+    Settings readSettings() throws SQLException;
+    Settings makeSettings(String city, int due, @NotNull List<String> locations, @NotNull List<Settings.Day> days, @NotNull List<Interval> intervals) throws SQLException;
 
 }

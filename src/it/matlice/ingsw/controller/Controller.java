@@ -14,12 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-
-import static it.matlice.ingsw.auth.password.PasswordAuthMethod.isPasswordValid;
 
 public class Controller {
 
@@ -92,6 +88,11 @@ public class Controller {
             }
             try {
                 this.model.finalizeLogin(this.currentUser);
+
+                if (this.currentUser.getUser() instanceof ConfiguratorUser && !this.model.hasConfiguredSettings()) {
+                    configureSettings(true);
+                }
+
             } catch (SQLException e) {
                 e.printStackTrace();
                 System.exit(1);
@@ -148,7 +149,7 @@ public class Controller {
      */
     public void addDefaultConfigurator() {
         try {
-            String psw = this.model.addConfiguratorUser("admin", false);
+            String psw = this.model.addConfiguratorUser("admin", true);
             this.view.info(String.format("Per il primo accesso le credenziali sono admin:%s", psw));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -165,7 +166,7 @@ public class Controller {
     private boolean createConfigurator() {
         var username = this.view.get("Nome utente");
         try {
-            String password = this.model.addConfiguratorUser(username, true);
+            String password = this.model.addConfiguratorUser(username, false);
             this.view.info("Usa " + username + ":" + password + " per il primo login");
         } catch (DuplicateUserException e) {
             this.view.error("Utente già esistente");
@@ -450,6 +451,93 @@ public class Controller {
             for (var child : ((NodeCategory) root).getChildren())
                 this.getCategorySelectionMenu(child, acc, prefix + root.getName() + " > ");
         return acc;
+    }
+
+    private void configureSettings(boolean firstConfiguration) {
+
+        String city = null;
+        if (firstConfiguration) {
+            this.view.info(""); //todo brutto brutto, trova una soluzione migliore
+            this.view.warn("È necessario procedere alla prima configurazione dei parametri");
+            city = this.view.get("Inserire la piazza di scambio");
+        }
+
+        List<String> places = this.getConfPlaces();
+        List<Settings.Day> days = this.getConfDays();
+        List<Interval> intervals = this.getConfIntervals();
+
+        this.view.info("");
+        String daysDueString = this.view.get("Inserire la scadenza (in numero di giorni)");
+        int daysDue = -1;
+        while (daysDue < 0) {
+            try {
+                daysDue = Integer.parseInt(daysDueString);
+                if (daysDue < 0) {
+                    this.view.error("Numero inserito non valido");
+                }
+            } catch (NumberFormatException e) {
+                this.view.error("Valore inserito non valido");
+            }
+        }
+
+        this.model.configureSettings(city, daysDue, places, days, intervals);
+    }
+
+    private List<String> getConfPlaces() {
+        this.view.info(""); //todo same as b4
+        String lastPlace = "";
+        Set<String> places = new HashSet<>();
+        while (places.size() < 1 || lastPlace.trim().length() != 0) {
+            lastPlace = this.view.getLine("Inserire un luogo (oppure nulla per terminare l'inserimento)");
+            if (lastPlace.trim().length() >= 1) {
+                places.add(lastPlace);
+            }
+        }
+        return places.stream().toList();
+    }
+
+    private List<Settings.Day> getConfDays() {
+        this.view.info(""); //todo same as b4
+        String lastDay = "";
+        List<Settings.Day> days = new ArrayList<>();
+        while (days.size() < 1 || lastDay.trim().length() != 0) {
+            lastDay = this.view.getLine("Inserire un giorno (oppure nulla per terminare l'inserimento)");
+            if (lastDay.trim().length() >= 1) {
+
+                try {
+                    Settings.Day dayToAdd = Settings.Day.fromString(lastDay);
+                    if (!days.contains(dayToAdd)) {
+                        days.add(dayToAdd);
+                    } else {
+                        this.view.warn("Giorno già inserito");
+                    }
+                } catch (CannotParseDayException e) {
+                    this.view.error("Giorno errato");
+                }
+            }
+        }
+        return days.stream().toList();
+    }
+
+    private List<Interval> getConfIntervals() {
+        this.view.info("");
+        String lastInterval = "";
+        List<Interval> intervals = new ArrayList<>();
+        while (intervals.size() < 1 || lastInterval.trim().length() != 0) {
+            lastInterval = this.view.getLine("Inserire un intervallo [es. 15:30-17:00] (oppure nulla per terminare l'inserimento)");
+            if (lastInterval.trim().length() >= 1) {
+                try {
+                    Interval intvToAdd = Interval.fromString(lastInterval);
+                    intervals.add(intvToAdd);
+                } catch (CannotParseIntervalException e) {
+                    this.view.error("Intervallo nel formato errato");
+                } catch (InvalidIntervalException e) {
+                    this.view.error("Intervallo non valido");
+                }
+            }
+        }
+        return intervals.stream().toList();
+
     }
 
 }
