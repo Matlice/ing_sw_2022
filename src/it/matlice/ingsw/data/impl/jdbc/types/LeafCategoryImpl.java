@@ -2,7 +2,7 @@ package it.matlice.ingsw.data.impl.jdbc.types;
 
 import it.matlice.ingsw.data.LeafCategory;
 import it.matlice.ingsw.data.NodeCategory;
-import it.matlice.ingsw.data.impl.jdbc.CategoryDB;
+import it.matlice.ingsw.data.impl.jdbc.db.CategoryDB;
 
 public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
     private final CategoryDB dbData;

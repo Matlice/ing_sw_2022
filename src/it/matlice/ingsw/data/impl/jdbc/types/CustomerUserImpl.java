@@ -4,7 +4,7 @@ import it.matlice.ingsw.auth.AuthMethod;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.auth.password.PasswordAuthenticable;
 import it.matlice.ingsw.data.CustomerUser;
-import it.matlice.ingsw.data.impl.jdbc.UserDB;
+import it.matlice.ingsw.data.impl.jdbc.db.UserDB;
 
 import java.util.Arrays;
 import java.util.Base64;

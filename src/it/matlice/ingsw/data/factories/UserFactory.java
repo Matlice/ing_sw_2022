@@ -1,5 +1,6 @@
-package it.matlice.ingsw.data;
+package it.matlice.ingsw.data.factories;
 
+import it.matlice.ingsw.data.User;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
 

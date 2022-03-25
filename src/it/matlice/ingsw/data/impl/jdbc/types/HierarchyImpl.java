@@ -2,7 +2,7 @@ package it.matlice.ingsw.data.impl.jdbc.types;
 
 import it.matlice.ingsw.data.Category;
 import it.matlice.ingsw.data.Hierarchy;
-import it.matlice.ingsw.data.impl.jdbc.HierarchyDB;
+import it.matlice.ingsw.data.impl.jdbc.db.HierarchyDB;
 
 public class HierarchyImpl extends Hierarchy {
     private final HierarchyDB dbData;

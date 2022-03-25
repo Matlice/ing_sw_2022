@@ -2,15 +2,15 @@ package it.matlice.ingsw;
 
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
+import it.matlice.ingsw.data.Interval;
+import it.matlice.ingsw.data.Settings;
+import it.matlice.ingsw.data.impl.jdbc.*;
 import it.matlice.ingsw.model.Model;
-import it.matlice.ingsw.data.impl.jdbc.CategoryFactoryImpl;
-import it.matlice.ingsw.data.impl.jdbc.HierarchyFactoryImpl;
-import it.matlice.ingsw.data.impl.jdbc.JdbcConnection;
-import it.matlice.ingsw.data.impl.jdbc.UserFactoryImpl;
 import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.view.stream.StreamView;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -22,7 +22,12 @@ public class EntryPoint {
      * Metodo main() dell'applicazione
      * @param args nessuno
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
+
+//        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+//        var sf = new SettingsFactoryImpl();
+//        sf.makeSettings("si", 665, Arrays.asList("ciao1", "ciao2"), Arrays.asList(Settings.Day.MON, Settings.Day.TUE), Arrays.asList(new Interval(30, 60), new Interval(120, 150)));
+//        var a = sf.readSettings();
 
         try {
             Logger.setGlobalLogLevel(Level.WARNING);

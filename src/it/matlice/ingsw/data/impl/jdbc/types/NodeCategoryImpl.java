@@ -2,7 +2,7 @@ package it.matlice.ingsw.data.impl.jdbc.types;
 
 import it.matlice.ingsw.data.Category;
 import it.matlice.ingsw.data.NodeCategory;
-import it.matlice.ingsw.data.impl.jdbc.CategoryDB;
+import it.matlice.ingsw.data.impl.jdbc.db.CategoryDB;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

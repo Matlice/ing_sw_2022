@@ -1,4 +1,4 @@
-package it.matlice.ingsw.data.impl.jdbc;
+package it.matlice.ingsw.data.impl.jdbc.db;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -27,7 +27,7 @@ public class CategoryDB {
     @DatabaseField(foreign = true, uniqueCombo = true)
     private CategoryDB father;
 
-    CategoryDB(String category_name, String category_description, CategoryDB father) {
+    public CategoryDB(String category_name, String category_description, CategoryDB father) {
         this.category_name = category_name;
         this.category_description = category_description;
         this.father = father;

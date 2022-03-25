@@ -6,7 +6,8 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.data.Category;
 import it.matlice.ingsw.data.Hierarchy;
-import it.matlice.ingsw.data.HierarchyFactory;
+import it.matlice.ingsw.data.factories.HierarchyFactory;
+import it.matlice.ingsw.data.impl.jdbc.db.HierarchyDB;
 import it.matlice.ingsw.data.impl.jdbc.types.CategoryImpl;
 import it.matlice.ingsw.data.impl.jdbc.types.HierarchyImpl;
 

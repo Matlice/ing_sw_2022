@@ -1,4 +1,7 @@
-package it.matlice.ingsw.data;
+package it.matlice.ingsw.data.factories;
+
+import it.matlice.ingsw.data.Category;
+import it.matlice.ingsw.data.Hierarchy;
 
 import java.sql.SQLException;
 import java.util.List;
