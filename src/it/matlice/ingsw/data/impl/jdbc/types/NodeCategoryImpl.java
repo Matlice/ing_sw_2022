@@ -3,6 +3,7 @@ package it.matlice.ingsw.data.impl.jdbc.types;
 import it.matlice.ingsw.data.Category;
 import it.matlice.ingsw.data.NodeCategory;
 import it.matlice.ingsw.data.impl.jdbc.CategoryDB;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -28,7 +29,7 @@ public class NodeCategoryImpl extends NodeCategory implements CategoryImpl {
     }
 
     @Override
-    public boolean isValidChildCategoryName(String name) {
+    public boolean isValidChildCategoryName(@NotNull String name) {
         return !name.equals(this.getName()) &&
                 Arrays.stream(this.getChildren())
                         .map((e) -> e.isValidChildCategoryName(name))
@@ -36,14 +37,14 @@ public class NodeCategoryImpl extends NodeCategory implements CategoryImpl {
     }
 
     @Override
-    public Category addChild(Category child) {
+    public Category addChild(@NotNull Category child) {
         assert child instanceof CategoryImpl;
         ((CategoryImpl) child).getDbData().setFather(this.getDbData());
         return super.addChild(child);
     }
 
     @Override
-    public Category removeChild(Category child) {
+    public Category removeChild(@NotNull Category child) {
         assert child instanceof CategoryImpl;
         ((CategoryImpl) child).getDbData().setFather(null);
         return super.removeChild(child);

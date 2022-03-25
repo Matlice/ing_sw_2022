@@ -14,6 +14,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Classe che si occupa di istanziare elementi di tipo Hierarchy
+ * una volta caricati da una base di dati Jdbc
+ */
 public class HierarchyFactoryImpl implements HierarchyFactory {
     private final ConnectionSource connectionSource;
     private final Dao<HierarchyDB, Integer> hierarchyDAO;

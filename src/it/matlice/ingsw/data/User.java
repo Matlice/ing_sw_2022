@@ -21,8 +21,7 @@ public abstract class User implements Authenticable {
 
     public enum UserTypes {
         CONFIGURATOR("configurator"),
-        STANDARD("standard")
-        ;
+        CUSTOMER("customer");
 
         private final String typeRepresentation;
 

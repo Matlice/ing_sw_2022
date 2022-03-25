@@ -3,26 +3,25 @@ package it.matlice.ingsw.data.impl.jdbc.types;
 import it.matlice.ingsw.auth.AuthMethod;
 import it.matlice.ingsw.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.auth.password.PasswordAuthenticable;
-import it.matlice.ingsw.data.ConfiguratorUser;
-import it.matlice.ingsw.data.StandardUser;
+import it.matlice.ingsw.data.CustomerUser;
 import it.matlice.ingsw.data.impl.jdbc.UserDB;
 
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-public class StandardUserImpl extends StandardUser implements PasswordAuthenticable, UserImpl {
+public class CustomerUserImpl extends CustomerUser implements PasswordAuthenticable, UserImpl {
 
     private final UserDB dbData;
 
-    public StandardUserImpl(UserDB from) {
+    public CustomerUserImpl(UserDB from) {
         this.dbData = from;
     }
 
-    public StandardUserImpl(String username) {
+    public CustomerUserImpl(String username) {
         this.dbData = new UserDB();
         this.dbData.setUsername(username);
-        this.dbData.setType(UserTypes.STANDARD.getTypeRepresentation());
+        this.dbData.setType(UserTypes.CUSTOMER.getTypeRepresentation());
     }
 
     public UserDB getDbData() {

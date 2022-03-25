@@ -69,6 +69,6 @@ public class MenuEntry implements Comparable<MenuEntry> {
 
     @Override
     public String toString() {
-        return " " + (this.disabled ? "X" : this.call_index) + ") " + this.name + (this.disabled ? " " + "DISABLED" : "");
+        return " " + (this.disabled ? "X" : this.call_index) + ") " + this.name + (this.disabled ? " " + "[DISABILITATO]" : "");
     }
 }

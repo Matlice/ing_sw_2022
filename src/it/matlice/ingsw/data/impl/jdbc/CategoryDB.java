@@ -5,6 +5,9 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Objects;
 
+/**
+ * Classe che rappresenta a database la tabella `categories`
+ */
 @DatabaseTable(tableName = "categories")
 public class CategoryDB {
 

@@ -4,18 +4,25 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import it.matlice.ingsw.auth.password.PasswordAuthenticable;
 import it.matlice.ingsw.data.User;
 import it.matlice.ingsw.data.UserFactory;
 import it.matlice.ingsw.data.impl.jdbc.types.ConfiguratorUserImpl;
-import it.matlice.ingsw.data.impl.jdbc.types.StandardUserImpl;
+import it.matlice.ingsw.data.impl.jdbc.types.CustomerUserImpl;
 import it.matlice.ingsw.data.impl.jdbc.types.UserImpl;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * classe in grado di istanziare User nella giusta declinazione
+ * a partire da una base di dati Jdbc
+ */
 public class UserFactoryImpl implements UserFactory {
     private final Dao<UserDB, String> userDAO;
 
@@ -27,11 +34,11 @@ public class UserFactoryImpl implements UserFactory {
         }
     }
 
-    private User makeUser(UserDB udb) {
+    private @Nullable User makeUser(@NotNull UserDB udb) {
         if (udb.getType().equals(User.UserTypes.CONFIGURATOR.getTypeRepresentation()))
             return new ConfiguratorUserImpl(udb);
-        if (udb.getType().equals(User.UserTypes.STANDARD.getTypeRepresentation()))
-            return new StandardUserImpl(udb);
+        else if (udb.getType().equals(User.UserTypes.CUSTOMER.getTypeRepresentation()))
+            return new CustomerUserImpl(udb);
         return null;
     }
 
@@ -48,10 +55,11 @@ public class UserFactoryImpl implements UserFactory {
         return !(udb == null);
     }
 
-    public User createUser(String username, User.UserTypes userType) throws SQLException {
+    public User createUser(String username, User.UserTypes userType) throws SQLException, InvalidUserTypeException {
         var ref = switch (userType){
             case CONFIGURATOR -> new ConfiguratorUserImpl(username);
-            case STANDARD -> new StandardUserImpl(username);
+            case CUSTOMER -> new CustomerUserImpl(username);
+            default -> throw new InvalidUserTypeException();
         };
 
         this.userDAO.create(ref.getDbData());

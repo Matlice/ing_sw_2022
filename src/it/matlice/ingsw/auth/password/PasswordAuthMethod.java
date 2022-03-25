@@ -2,7 +2,10 @@ package it.matlice.ingsw.auth.password;
 
 import it.matlice.ingsw.auth.AuthData;
 import it.matlice.ingsw.auth.AuthMethod;
+import it.matlice.ingsw.auth.Authenticable;
 import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
+import it.matlice.ingsw.data.User;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
@@ -39,12 +42,18 @@ public class PasswordAuthMethod implements AuthMethod {
      * @param password password di login
      * @return un'istanza di AuthData valida.
      */
-    public static AuthData getAuthData(String password) {
+    @Contract("_ -> new")
+    public static @NotNull AuthData getAuthData(String password) {
         return new PasswordAuthData(password);
     }
 
     public static boolean isPasswordValid(String password){
         return PasswordAuthMethod.PASSWORD_SEC_REGEX.matcher(password).matches();
+    }
+
+    @Override
+    public Authenticable getUser() {
+        return this.user;
     }
 
     /**
@@ -81,12 +90,22 @@ public class PasswordAuthMethod implements AuthMethod {
         );
     }
 
+    /**
+     * Ritorna un nuovo salt casuale
+     * @return salt casuale della lunghezza SALT_LENGTH
+     */
     private byte @NotNull [] getNewSalt(){
         var salt = new byte[SALT_LENGTH];
         this.random_source.nextBytes(salt);
         return salt;
     }
 
+    /**
+     * Calcola e ritorna l'hash della password col salt specificato
+     * @param salt salt da utilizzare
+     * @param password password di cui generare l'hash
+     * @return hash della password
+     */
     private byte[] getPasswordHash(byte[] salt, @NotNull String password){
         try {
             var mac = Mac.getInstance("HmacSHA256");

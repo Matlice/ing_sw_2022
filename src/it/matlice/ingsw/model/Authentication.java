@@ -1,5 +1,6 @@
 package it.matlice.ingsw.model;
 
+import it.matlice.ingsw.auth.Authenticable;
 import it.matlice.ingsw.data.User;
 
 /**

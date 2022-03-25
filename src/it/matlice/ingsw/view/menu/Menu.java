@@ -1,5 +1,7 @@
 package it.matlice.ingsw.view.menu;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.PrintStream;
 import java.util.*;
 
@@ -179,8 +181,7 @@ public class Menu {
      * @param out
      * @return the return of the action lambda
      */
-    public Object selectAfterDisplay(Scanner in, PrintStream out) {
-//        var action = new InputRequest<>(Integer.class).queryMessage(lang.INPUT_PROMPT()).blacklist(false).allow(call_ref.keySet()).ask(in, out);
+    public Object selectAfterDisplay(@NotNull Scanner in, @NotNull PrintStream out) {
         int action;
         try {
             action = in.nextInt();
