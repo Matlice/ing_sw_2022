@@ -10,7 +10,6 @@ conf --> (Creazione gerarchia)
 conf --> (Creazione nuovo \naccount configuratore)
 conf --> (Visualizzazione gerarchia)
 
-(Accesso Configuratore) ..> (Accesso utente): <<include>>
 (Creazione gerarchia) ..> (Accesso Configuratore): <<include>>
 (Visualizzazione gerarchia) ..> (Accesso Configuratore): <<include>>
 
@@ -20,7 +19,8 @@ conf --> (Visualizzazione gerarchia)
 
 fruit -up-|> user #red;text:red
 
-(Configurazione parametri)  #pink;line:red;text:red
+(Accesso Configuratore) #pink;line:red;text:red
+(Configurazione parametri) #pink;line:red;text:red
 (Registrazione fruitore) #pink;line:red;text:red
 (Visualizzazione informazioni) #pink;line:red;text:red
 
@@ -28,6 +28,7 @@ conf --> (Configurazione parametri) #red;text:red
 fruit --> (Visualizzazione informazioni) #red;text:red
 fruit -right-> (Registrazione fruitore) #red;text:red
 fruit --> (Accesso utente) #red;text:red
+(Accesso Configuratore) ..> (Accesso utente) #red;text:red : <<include>> 
 (Configurazione parametri) ..> (Accesso Configuratore) #red;text:red : <<include>>
 
 (Visualizzazione informazioni) ..> (Accesso utente) #red;text:red : <<include>>

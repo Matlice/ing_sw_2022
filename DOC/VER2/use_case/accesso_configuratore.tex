@@ -1,0 +1,43 @@
+\begin{minipage}{\textwidth}
+    \subsubsection{Accesso configuratore (v2)}
+    \usecase
+        {Accesso configuratore}
+        {
+            Configuratore %\\
+            %\auxactor{teto}
+        }
+        {
+            %Accesso normale
+            \begin{tabular}{l}
+                1. <<include>> ``Accesso utente'' (verifica credenziali e permessi)\\
+                \textit{Postcondizione: l'utente può procedere alla configurazione}\\
+                Fine
+            \end{tabular} \\
+
+            %primo accesso
+            \auxcase{
+                \begin{tabular}{l}
+                    1.a \textit{Precondizione: l'utente è al primo accesso} \\
+                    2 All'utente viene chiesto di inserire una nuova password\\
+                    \textit{Postcondizione: all'utente è stata assegnata la nuova password e}\\
+                    \textit{può procedere alla configurazione}\\
+                    Fine
+                \end{tabular}
+            } \\
+
+            %creazione parametri di configurazione
+            \auxcase{
+                \begin{tabular}{l}
+                    1.b \textit{Precondizione: i parametri di configurazione (Piazza, luoghi,}\\
+                    \textit{ecc...) non sono stati configurati} \\
+                    2. Viene richiesto obbligatoriamente l'inserimento dei parametri\\
+                    3. <<include>> Configurazione parametri di sistema\\
+                    \textit{Postcondizione: sono stati configurati i parametri di sistema}\\
+                    Fine
+                \end{tabular}
+            }
+
+        }
+        \vspace{0.5cm}
+        \textbf{Nota:} questo caso d'uso sovrascrive il caso d'uso con lo stesso nome specificato nella versione 1.
+\end{minipage}
