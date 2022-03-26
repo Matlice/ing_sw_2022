@@ -525,14 +525,17 @@ public class Controller {
                 .sorted(it.matlice.ingsw.data.Settings.Day::compareTo)
                 .toList();
 
-        List<Interval> intervals = this.view.getGenericList("Inserire un intervallo orario [es. 15:30-17:00]", true,
-                (v) -> {
-                    try {
-                        return Interval.fromString(v);
-                    } catch (CannotParseIntervalException | InvalidIntervalException e) {
-                        return null;
-                    }
-                });
+        List<Interval> intervals = Interval.mergeIntervals(
+                this.view.getGenericList("Inserire un intervallo orario [es. 15:30-17:00]", true,
+                    (v) -> {
+                        try {
+                            return Interval.fromString(v);
+                        } catch (CannotParseIntervalException | InvalidIntervalException e) {
+                            return null;
+                        }
+                })).stream() // sort the intervals after they have been merged together
+                .sorted(Interval::compareTo)
+                .toList();
 
         int daysDue = this.view.getInt("Inserire la scadenza (in numero di giorni)", (e) -> e > 0);
 

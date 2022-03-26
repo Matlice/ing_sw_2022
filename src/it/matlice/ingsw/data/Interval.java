@@ -2,10 +2,11 @@ package it.matlice.ingsw.data;
 
 import it.matlice.ingsw.model.exceptions.CannotParseIntervalException;
 import it.matlice.ingsw.model.exceptions.InvalidIntervalException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class Interval {
+public class Interval implements Comparable<Interval> {
     private final int start;
     private final int end;
 
@@ -38,6 +39,17 @@ public class Interval {
         return false;
     }
 
+    /**
+     * Ritorna un intervallo che comprende entrambi gli intervalli
+     * È necessario garantire che i due intervalli siano sovrapposti
+     * @param oth l'altro intervallo da unire
+     * @return un nuovo intervallo
+     */
+    private Interval mergeWith(Interval oth) {
+        assert this.overlaps(oth);
+        return new Interval(Math.min(this.start, oth.start), Math.max(this.end, oth.end));
+    }
+
     @Override
     public String toString() {
         int start_hour = this.start / 60;
@@ -47,9 +59,9 @@ public class Interval {
         return start_hour + ":" + String.format("%02d", start_min) + "-" + end_hour + ":" + String.format("%02d", end_min);
     }
 
-    public static Interval fromString(String lastInterval) throws CannotParseIntervalException, InvalidIntervalException {
+    public static Interval fromString(String intervalString) throws CannotParseIntervalException, InvalidIntervalException {
         try {
-            var times = lastInterval.split("[\\-]");
+            var times = intervalString.split("[\\-]");
 
             if (times.length != 2) throw new CannotParseIntervalException();
             if (!times[0].contains(":")) throw new CannotParseIntervalException();
@@ -88,18 +100,43 @@ public class Interval {
      * @return la lista ridotta di intervalli
      */
     public static List<Interval> mergeIntervals(List<Interval> intervals) {
-//        for (int i = 0; i<intervals.size(); i++) {
-//            for (int j = 0; j<intervals.size(); j++) {
-//                if (intervals.get(i).overlaps(intervals.get(j))) {
-//                    intervals.set(j, mergeTwoIntervals(intervals.get(i), intervals.get(j)));
-//                }
-//            }
-//        }
-        return intervals; // todo
+
+        var merged = true;
+
+        while(merged) {
+            // search the two interval to merge
+            merged = false;
+            int merge_i = -1, merge_j = -1;
+            for (int i = 0; i<intervals.size()-1; i++) {
+                for (int j = i+1; j<intervals.size(); j++) {
+                    if (intervals.get(i).overlaps(intervals.get(j))) {
+                        merged = true;
+                        merge_i = i;
+                        merge_j = j;
+                        break;
+                    }
+                }
+            }
+            // merge the two intervals
+            if (merged) {
+                assert merge_j > merge_i;
+                Interval merged_interval = intervals.get(merge_i).mergeWith(intervals.get(merge_j));
+                intervals.remove(merge_j);
+                intervals.remove(merge_i);
+                intervals.add(merged_interval);
+            }
+            // if something has been merged repeat,
+            // otherwise exit the loop and return
+        }
+
+        return intervals;
     }
 
-    private static Interval mergeTwoIntervals(Interval a, Interval b) {
-        return new Interval(Math.min(a.start, b.start), Math.max(a.end, b.end));
+    @Override
+    public int compareTo(@NotNull Interval o) {
+        if (this.start < ((Interval) o).start) return -1;
+        if (this.start > ((Interval) o).start) return 1;
+        return 0;
     }
 
 }
