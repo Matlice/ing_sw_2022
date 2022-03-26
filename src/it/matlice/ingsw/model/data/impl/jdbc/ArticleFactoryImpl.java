@@ -4,10 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.table.TableUtils;
-import it.matlice.ingsw.model.data.Article;
-import it.matlice.ingsw.model.data.Category;
-import it.matlice.ingsw.model.data.LeafCategory;
-import it.matlice.ingsw.model.data.User;
+import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
@@ -16,8 +13,7 @@ import it.matlice.ingsw.model.data.impl.jdbc.types.*;
 import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ArticleFactoryImpl {
 
@@ -72,12 +68,35 @@ public class ArticleFactoryImpl {
 
         }
 
-        var article = new ArticleDB(((UserImpl) owner).getDbData());
+        var article = new ArticleDB(((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData());
         articleDAO.create(article);
         for(var field: values.entrySet()){
             articleFieldDAO.create(new ArticleFieldDB(field.getKey(), article, field.getValue()));
         }
-        return new ArticleImpl(article);
+
+        return new ArticleImpl(article, category, owner);
+    }
+
+    private LeafCategory findCategory(List<Hierarchy> hierarchyList, int id){
+        //todo
+        throw new RuntimeException();
+    }
+
+    public List<Article> getUserArticles(User owner, List<Hierarchy> hierarchyList) throws SQLException {
+        assert owner instanceof UserImpl;
+
+        var articles_db = articleDAO.query(
+                articleDAO.queryBuilder().where().eq("owner_id", ((UserImpl) owner).getDbData()).prepare()
+        );
+
+        var articles = new LinkedList<Article>();
+        for(var a: articles_db){
+            var fields = articleFieldDAO.query(articleFieldDAO.queryBuilder().where().eq("article_ref_id", a.getId()).prepare());
+            var art = new ArticleImpl(a, findCategory(hierarchyList, a.getCategory().getCategoryId()), owner);
+            fields.forEach(e -> art.put(e.getRef().getFieldName(), e.getValue()));
+            articles.add(art);
+        }
+        return articles; //todo test perché sono stanco
     }
 
 }

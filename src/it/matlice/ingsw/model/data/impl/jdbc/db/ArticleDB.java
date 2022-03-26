@@ -12,11 +12,15 @@ public class ArticleDB {
     @DatabaseField(foreign = true, canBeNull = false)
     private UserDB owner;
 
+    @DatabaseField(foreign = true, canBeNull = false)
+    private CategoryDB category;
+
     ArticleDB() {
     }
 
-    public ArticleDB(UserDB owner) {
+    public ArticleDB(UserDB owner, CategoryDB category) {
         this.owner = owner;
+        this.category = category;
     }
 
     public Integer getId() {
@@ -25,5 +29,8 @@ public class ArticleDB {
 
     public UserDB getOwner() {
         return this.owner;
+    }
+    public CategoryDB getCategory() {
+        return this.category;
     }
 }
