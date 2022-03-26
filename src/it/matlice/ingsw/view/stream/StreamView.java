@@ -157,16 +157,15 @@ public class StreamView implements View {
     @Override
     public int getInt(String prompt, Function<Integer, Boolean> available, String nonValidErrorMessage) {
         this.out.println();
-        String input = this.getLine(prompt);
         while (true) {
             try {
+                String input = this.getLine(prompt);
                 int v = Integer.parseInt(input);
 
                 if (available.apply(v))
                     return v;
 
                 this.error(nonValidErrorMessage);
-                input = this.getLine(prompt);
 
             } catch (NumberFormatException e) {
                 this.error(nonValidErrorMessage);

@@ -36,6 +36,8 @@ public class Interval implements Comparable<Interval> {
     private boolean overlaps(Interval other) {
         if (other.start <= this.end && other.start >= this.start) return true;
         if (other.end <= this.end && other.end >= this.start) return true;
+        if (this.start <= other.end && this.end >= other.start) return true;
+        if (this.end <= other.end && this.end >= other.start) return true;
         return false;
     }
 
@@ -66,6 +68,8 @@ public class Interval implements Comparable<Interval> {
             if (times.length != 2) throw new CannotParseIntervalException();
             if (!times[0].contains(":")) throw new CannotParseIntervalException();
             if (!times[1].contains(":")) throw new CannotParseIntervalException();
+            if (times[0].split(":")[1].length() != 2) throw new CannotParseIntervalException();
+            if (times[1].split(":")[1].length() != 2) throw new CannotParseIntervalException();
 
             var start = timeToMinutes(times[0]);
             var end = timeToMinutes(times[1]);
@@ -116,6 +120,7 @@ public class Interval implements Comparable<Interval> {
                         break;
                     }
                 }
+                if (merged) break;
             }
             // merge the two intervals
             if (merged) {
@@ -134,8 +139,8 @@ public class Interval implements Comparable<Interval> {
 
     @Override
     public int compareTo(@NotNull Interval o) {
-        if (this.start < ((Interval) o).start) return -1;
-        if (this.start > ((Interval) o).start) return 1;
+        if (this.start < o.start) return -1;
+        if (this.start > o.start) return 1;
         return 0;
     }
 

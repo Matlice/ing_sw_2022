@@ -349,7 +349,7 @@ public class Controller {
     private @NotNull String getNewPassword() {
         String psw;
         while (true) {
-            psw = this.view.getPassword("Password");
+            psw = this.view.getPassword("Nuova password");
 
             if (!psw.equals(this.view.getPassword("Ripeti la password"))) {
                 this.view.error("Le password non corrispondono");
