@@ -157,7 +157,7 @@ Infine, la seconda versione dell’applicazione visualizza, a beneficio del frui
 
 - [x] Registrazione fruitore
 - [x] Visualizzazione frontend
-- [ ] Impostazioni
+- [x] Impostazioni
 
 ### Versione 3
 
