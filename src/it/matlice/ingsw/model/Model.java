@@ -1,19 +1,19 @@
 package it.matlice.ingsw.model;
 
-import it.matlice.ingsw.auth.AuthData;
-import it.matlice.ingsw.auth.AuthMethod;
-import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
-import it.matlice.ingsw.auth.password.PasswordAuthMethod;
-import it.matlice.ingsw.data.factories.CategoryFactory;
-import it.matlice.ingsw.data.factories.HierarchyFactory;
-import it.matlice.ingsw.data.factories.SettingsFactory;
-import it.matlice.ingsw.data.factories.UserFactory;
-import it.matlice.ingsw.data.impl.jdbc.SettingsFactoryImpl;
+import it.matlice.ingsw.model.auth.AuthData;
+import it.matlice.ingsw.model.auth.AuthMethod;
+import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
+import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
+import it.matlice.ingsw.model.data.factories.CategoryFactory;
+import it.matlice.ingsw.model.data.factories.HierarchyFactory;
+import it.matlice.ingsw.model.data.factories.SettingsFactory;
+import it.matlice.ingsw.model.data.factories.UserFactory;
+import it.matlice.ingsw.model.data.impl.jdbc.SettingsFactoryImpl;
 import it.matlice.ingsw.model.exceptions.DuplicateUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
 import it.matlice.ingsw.model.exceptions.LoginInvalidException;
-import it.matlice.ingsw.data.*;
+import it.matlice.ingsw.model.data.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.List;
 
-import static it.matlice.ingsw.auth.password.PasswordAuthMethod.isPasswordValid;
+import static it.matlice.ingsw.model.auth.password.PasswordAuthMethod.isPasswordValid;
 import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
 
 /**
@@ -273,7 +273,7 @@ public class Model {
     /**
      * Ritorna i parametri di configurazione attuali
      */
-    public it.matlice.ingsw.data.Settings readSettings() {
+    public it.matlice.ingsw.model.data.Settings readSettings() {
         try {
             return this.sf.readSettings();
         } catch (SQLException e) {
@@ -291,9 +291,9 @@ public class Model {
      * @param days giorni
      * @param intervals intervalli
      */
-    public void configureSettings(String city, int daysDue, List<String> locations, List<it.matlice.ingsw.data.Settings.Day> days, List<Interval> intervals) {
+    public void configureSettings(String city, int daysDue, List<String> locations, List<it.matlice.ingsw.model.data.Settings.Day> days, List<Interval> intervals) {
         try {
-            it.matlice.ingsw.data.Settings set = this.sf.readSettings();
+            it.matlice.ingsw.model.data.Settings set = this.sf.readSettings();
             if (set == null) {
                 this.sf.makeSettings(city, daysDue, locations, days, intervals);
             } else {

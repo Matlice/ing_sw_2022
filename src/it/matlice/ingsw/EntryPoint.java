@@ -2,19 +2,17 @@ package it.matlice.ingsw;
 
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
-import it.matlice.ingsw.data.Interval;
-import it.matlice.ingsw.data.Settings;
-import it.matlice.ingsw.data.impl.jdbc.*;
+import it.matlice.ingsw.model.data.LeafCategory;
+import it.matlice.ingsw.model.data.NodeCategory;
+import it.matlice.ingsw.model.data.impl.jdbc.*;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.controller.Controller;
-import it.matlice.ingsw.model.exceptions.CannotParseIntervalException;
-import it.matlice.ingsw.model.exceptions.InvalidIntervalException;
+import it.matlice.ingsw.model.exceptions.InvalidUserException;
+import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
 import it.matlice.ingsw.view.stream.StreamView;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -26,7 +24,23 @@ public class EntryPoint {
      * Metodo main() dell'applicazione
      * @param args nessuno
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException, InvalidUserException, RequiredFieldConstrainException {
+        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+
+        var u = new UserFactoryImpl();
+        var c = new CategoryFactoryImpl();
+        var f = new ArticleFactoryImpl();
+
+        var cat = ((NodeCategory) c.getCategory(1)).getChildren()[0];
+        var usr = u.getUser("admin");
+
+        var map = new HashMap<String, Object>();
+        map.put("Stato di conservazione", "caldo");
+        map.put("coso", "si");
+        map.put("nativonativo", "forse");
+
+        f.makeArticle((LeafCategory) cat, usr, map);
+
 
         try {
             Logger.setGlobalLogLevel(Level.WARNING);

@@ -1,13 +1,13 @@
 package it.matlice.ingsw.controller;
 
-import it.matlice.ingsw.auth.AuthData;
-import it.matlice.ingsw.auth.AuthMethod;
-import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
-import it.matlice.ingsw.auth.password.PasswordAuthMethod;
+import it.matlice.ingsw.model.auth.AuthData;
+import it.matlice.ingsw.model.auth.AuthMethod;
+import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
+import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.Authentication;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.exceptions.*;
-import it.matlice.ingsw.data.*;
+import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.view.View;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -204,8 +204,8 @@ public class Controller {
         }
 
         // aggiunge i campi default alla categoria radice
-        root.put("Stato di conservazione", new TypeDefinition<>(true));
-        root.put("Descrizione libera", new TypeDefinition<>(false));
+        root.put("Stato di conservazione", new TypeDefinition(true));
+        root.put("Descrizione libera", new TypeDefinition(false));
 
         // creazione delle categorie figlie
         while (this.chooseAndRun(Arrays.asList(
@@ -422,7 +422,7 @@ public class Controller {
         // chiede se la compilazione del campo è obbligatoria
         var required = this.view.get("Obbligatorio [y/N]").equalsIgnoreCase("y");
 
-        c.put(name, new TypeDefinition<>(type, required));
+        c.put(name, new TypeDefinition(type, required));
 
         return true;
     }
@@ -522,7 +522,7 @@ public class Controller {
                         return null;
                     }
                 }).stream() // sort the days, so it does not depend on input order
-                .sorted(it.matlice.ingsw.data.Settings.Day::compareTo)
+                .sorted(it.matlice.ingsw.model.data.Settings.Day::compareTo)
                 .toList();
 
         List<Interval> intervals = Interval.mergeIntervals(
