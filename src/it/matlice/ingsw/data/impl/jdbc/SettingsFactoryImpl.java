@@ -43,13 +43,13 @@ public class SettingsFactoryImpl implements SettingsFactory {
 
     @Override
     public Settings readSettings() throws SQLException {
-        var settings = settingsDAO.queryForAll();
+        var settings = this.settingsDAO.queryForAll();
         if(settings.size() == 0)
-            return null; //todo il configuratore deve essere obbligato a fare i settings quando la loro lettura fallisce.
+            return null;
         var setting = settings.get(0);
-        var locations = locationsDAO.query(this.locationsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
-        var days = daysDAO.query(this.daysDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
-        var intervals = intervalsDAO.query(this.intervalsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
+        var locations = this.locationsDAO.query(this.locationsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
+        var days = this.daysDAO.query(this.daysDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
+        var intervals = this.intervalsDAO.query(this.intervalsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
         return new SettingsImpl(this, setting, locations, intervals, days);
     }
 
@@ -85,7 +85,6 @@ public class SettingsFactoryImpl implements SettingsFactory {
     }
 
     private void addInterval(SettingsDB db, Interval i) throws SQLException {
-        //todo check for overlapping intervals and stuff...
         this.intervalsDAO.create(new IntervalsDB(db, i));
     }
 
@@ -97,16 +96,16 @@ public class SettingsFactoryImpl implements SettingsFactory {
     }
 
     private void removeDays(SettingsDB db) throws SQLException {
-        DeleteBuilder<DaysDB, Integer> locationDeleteBuilder = this.daysDAO.deleteBuilder();
-        locationDeleteBuilder.where().eq("ref_id", db.getId());
-        PreparedDelete<DaysDB> preparedDelete = locationDeleteBuilder.prepare();
+        DeleteBuilder<DaysDB, Integer> dayDeleteBuilder = this.daysDAO.deleteBuilder();
+        dayDeleteBuilder.where().eq("ref_id", db.getId());
+        PreparedDelete<DaysDB> preparedDelete = dayDeleteBuilder.prepare();
         this.daysDAO.delete(preparedDelete);
     }
 
     private void removeIntervals(SettingsDB db) throws SQLException {
-        DeleteBuilder<IntervalsDB, Integer> locationDeleteBuilder = this.intervalsDAO.deleteBuilder();
-        locationDeleteBuilder.where().eq("ref_id", db.getId());
-        PreparedDelete<IntervalsDB> preparedDelete = locationDeleteBuilder.prepare();
+        DeleteBuilder<IntervalsDB, Integer> intervalDeleteBuilder = this.intervalsDAO.deleteBuilder();
+        intervalDeleteBuilder.where().eq("ref_id", db.getId());
+        PreparedDelete<IntervalsDB> preparedDelete = intervalDeleteBuilder.prepare();
         this.intervalsDAO.delete(preparedDelete);
     }
 

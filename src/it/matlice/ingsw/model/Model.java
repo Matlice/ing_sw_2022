@@ -172,7 +172,8 @@ public class Model {
             password = this.genRandomPassword();
         }
 
-        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, true); //todo assert type
+        assert u.getAuthMethods().get(0) instanceof PasswordAuthMethod;
+        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, true);
         this.uf.saveUser(u);
         return password;
     }
@@ -191,7 +192,8 @@ public class Model {
         if (!isPasswordValid(password)) throw new InvalidPasswordException();
 
         var u = this.createUser(username, User.UserTypes.CUSTOMER);
-        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, false); //todo assert type
+        assert u.getAuthMethods().get(0) instanceof PasswordAuthMethod;
+        ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, false);
         u.setLastLoginTime(0);
         this.uf.saveUser(u);
     }
@@ -297,9 +299,13 @@ public class Model {
             } else {
                 assert set.getCity() != null;
                 assert city.equals(set.getCity());
+
+                // remove old locations, days and intervals
                 this.sf.removeLocations(set);
                 this.sf.removeDays(set);
                 this.sf.removeIntervals(set);
+
+                // add the new configuration
                 this.sf.setDue(set, daysDue);
                 for(var l: locations) this.sf.addLocation(set, l);
                 for(var d: days) this.sf.addDay(set, d);

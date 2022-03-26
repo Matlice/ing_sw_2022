@@ -96,7 +96,7 @@ public class Controller {
                 this.model.finalizeLogin(this.currentUser);
 
                 if (this.currentUser.getUser() instanceof ConfiguratorUser && !this.model.hasConfiguredSettings()) {
-                    configureSettings(true);
+                    this.configureSettings(true);
                 }
 
             } catch (SQLException e) {
@@ -503,7 +503,7 @@ public class Controller {
      */
     private void configureSettings(boolean firstConfiguration) {
 
-        String city = null;
+        String city;
         if (firstConfiguration) {
             this.view.warn("È necessario procedere alla prima configurazione dei parametri", true);
             city = this.view.get("Inserire la piazza di scambio");

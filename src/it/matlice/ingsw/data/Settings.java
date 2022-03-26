@@ -2,8 +2,10 @@ package it.matlice.ingsw.data;
 
 import it.matlice.ingsw.model.exceptions.CannotParseDayException;
 
+import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public abstract class Settings {
@@ -41,22 +43,22 @@ public abstract class Settings {
         public static final Map<String, Day> dayMap = new HashMap<>();
 
         static {
-            dayMap.put("lunedi", Settings.Day.MON);
-            dayMap.put("lunedì", Settings.Day.MON);
-            dayMap.put("martedi", Settings.Day.TUE);
-            dayMap.put("martedì", Settings.Day.TUE);
-            dayMap.put("mercoledi", Settings.Day.WED);
-            dayMap.put("mercoledì", Settings.Day.WED);
-            dayMap.put("giovedi", Settings.Day.THU);
-            dayMap.put("giovedì", Settings.Day.THU);
-            dayMap.put("venerdi", Settings.Day.FRI);
-            dayMap.put("venerdì", Settings.Day.FRI);
-            dayMap.put("sabato", Settings.Day.SAT);
-            dayMap.put("domenica", Settings.Day.SUN);
+            for(var d: Day.values()) {
+                // adds to the map the normalized day string
+                dayMap.put(
+                        Normalizer.normalize(
+                                d.getName().toLowerCase(),
+                                Normalizer.Form.NFD)
+                            .replaceAll("[\\p{InCombiningDiacriticalMarks}]", ""),
+                        d);
+            }
         }
 
         public static Day fromString(String day) throws CannotParseDayException {
-            Day r = dayMap.get(day);
+            // to lower case and strip accents
+            String normalizedDay = Normalizer.normalize(day.toLowerCase(), Normalizer.Form.NFD);
+            normalizedDay = normalizedDay.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+            Day r = dayMap.get(normalizedDay);
             if (r != null) {
                 return r;
             } else {
