@@ -1,27 +1,27 @@
 \begin{minipage}{\textwidth}
     \subsubsection{Creazione nuovo account configuratore}
-    Per questo caso d'uso è stato considerato un terzo tipo di attore, ovvero
-    l'amministratore. Esso può accedere direttamente all'applicativo, modificandone
-    i file, ma non è utente dell'applicativo.
     \usecase
         {Creazione nuovo account configuratore}
-        {Configuratore o Amministratore}
+        {Configuratore}
         {
             \begin{tabular}{l}
-                1. \textit{Precondizione: l'amministratore ha accesso alla macchina su}\\
-                \textit{cui è eseguito l'applicativo, oppure il configuratore è loggato}\\
-                2. L'utente inserisce il nome del nuovo account configuratore\\
+                1. \textit{Precondizione: l'applicativo viene avviato per la prima volta da}\\
+                \textit{un utente configuratore}\\
+                2. Vengono comunicate all'utente le credenziali di default con cui\\accedere\\
                 \textit{Postcondizione: Un nuovo account configuratore viene creato} \\
-                \textit{con password randomica (da modificare al primo accesso)}\\
+                \textit{con password di default (da modificare al primo accesso)}\\
                 Fine
             \end{tabular} \\
             
             \auxcase{
                 \begin{tabular}{l}
-                    2.a \textit{Precondizione: il nome utente inserito è già esistente}\\
-                    Torna al punto 1
+                    2.a \textit{Precondizione: esiste già almeno un utente configuratore}\\
+                    Fine
                 \end{tabular}
             }
         }
         \vspace{0.5cm}
+        \textbf{Nota:} questo caso d'uso riguarda esclusivamente la prima interazione di un
+        utente con l'applicazione. Al primo avvio, infatti, sono generate delle credenziali
+        di default per il primo configuratore
 \end{minipage}

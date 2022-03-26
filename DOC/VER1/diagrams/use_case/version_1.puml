@@ -2,13 +2,11 @@
 
 :Utente di sistema: as user
 :Configuratore: as conf
-:Amministratore: as adm
 
 conf -up-|> user
 conf --> (Accesso Configuratore)
 conf --> (Creazione gerarchia)
 
-adm --> (Creazione nuovo \naccount configuratore)
 conf --> (Creazione nuovo \naccount configuratore)
 conf --> (Visualizzazione gerarchia)
 
