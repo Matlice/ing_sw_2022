@@ -1,13 +1,13 @@
 package it.matlice.ingsw.controller;
 
-import it.matlice.ingsw.auth.AuthData;
-import it.matlice.ingsw.auth.AuthMethod;
-import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
-import it.matlice.ingsw.auth.password.PasswordAuthMethod;
+import it.matlice.ingsw.model.auth.AuthData;
+import it.matlice.ingsw.model.auth.AuthMethod;
+import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
+import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.Authentication;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.exceptions.*;
-import it.matlice.ingsw.data.*;
+import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.view.View;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
