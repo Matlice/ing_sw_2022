@@ -30,7 +30,7 @@ public class SettingsImpl extends Settings {
 
     @Override
     public String getCity() {
-        return dbData.getCity();
+        return this.dbData.getCity();
     }
 
     public SettingsDB getDbData() {
@@ -81,7 +81,7 @@ public class SettingsImpl extends Settings {
     }
 
     @Override
-    public List<Day> getDay() {
+    public List<Day> getDays() {
         return this.dbDays.stream().map(e -> e.getDay()).toList();
     }
 

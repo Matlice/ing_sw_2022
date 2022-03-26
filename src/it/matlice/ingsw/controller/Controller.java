@@ -29,6 +29,8 @@ public class Controller {
             new MenuAction<>("Logout", User.class, this::logout, false, 0, -1),
             new MenuAction<>("Aggiungi nuova gerarchia", ConfiguratorUser.class, this::createHierarchy),
             new MenuAction<>("Mostra gerarchie", User.class, this::showHierarchies),
+            new MenuAction<>("Mostra parametri di configurazione", User.class, this::showConfParameters),
+            new MenuAction<>("Modifica parametri di configurazione", ConfiguratorUser.class, this::editConfParameters),
             new MenuAction<>("Aggiungi nuovo configuratore", ConfiguratorUser.class, this::createConfigurator),
             new MenuAction<>("Cambia password", User.class, this::changePassword)
     );
@@ -43,7 +45,8 @@ public class Controller {
 
     /**
      * Costruttore per Controller
-     * @param view la view per l'interazione utente
+     *
+     * @param view  la view per l'interazione utente
      * @param model il model a cui richiedere i dati
      */
     public Controller(View view, Model model) {
@@ -53,6 +56,7 @@ public class Controller {
 
     /**
      * Mainloop dell'applicazione
+     *
      * @return false se l'esecuzione deve essere interrotta
      */
     public boolean mainloop() {
@@ -69,6 +73,7 @@ public class Controller {
 
     /**
      * Effettua il logout dell'utente
+     *
      * @return true
      */
     private boolean logout() {
@@ -78,6 +83,7 @@ public class Controller {
 
     /**
      * Permette all'utente di effettuare il login
+     *
      * @return true
      */
     private boolean performLogin() {
@@ -104,9 +110,10 @@ public class Controller {
 
     /**
      * Permette ad un nuovo utente di registrarsi come fruitore
+     *
      * @return true
      */
-    public boolean registerUser(){
+    public boolean registerUser() {
         var username = this.view.get("Utente");
         var psw = this.getNewPassword();
 
@@ -125,6 +132,7 @@ public class Controller {
 
     /**
      * Permette all'utente di cambiare la password
+     *
      * @return true
      */
     private boolean changePassword() {
@@ -161,6 +169,7 @@ public class Controller {
 
     /**
      * Permette all'utente di creare un nuovo utente configuratore
+     *
      * @return true
      */
     private boolean createConfigurator() {
@@ -230,12 +239,13 @@ public class Controller {
 
     /**
      * Permette all'utente di visualizzare le gerarchie a sistema
+     *
      * @return true
      */
     private boolean showHierarchies() {
         // mostra la lista di gerarchie disponibili
         List<Hierarchy> hierarchies = this.model.getHierarchies();
-        if(hierarchies.size() == 0){
+        if (hierarchies.size() == 0) {
             this.view.info("Nessuna gerarchia trovata");
             return true;
         }
@@ -254,12 +264,41 @@ public class Controller {
         return true;
     }
 
+    /**
+     * Mostra all'utente i parametri di configurazione attuali
+     *
+     * @return true
+     */
+    private boolean showConfParameters() {
+        Settings s = this.model.readSettings();
+
+        this.view.info("La piazza di scambio è " + s.getCity());
+        this.view.showList("I luoghi disponibili per lo scambio sono i seguenti:", s.getLocations());
+        this.view.showList("I giorni disponibili per lo scambio sono i seguenti:", s.getDays().stream().map(Settings.Day::getName).toList());
+        this.view.showList("Gli intervalli disponibili per lo scambio sono i seguenti:", s.getIntervals().stream().map(Interval::toString).toList());
+        this.view.info("La scadenza è impostata a " + s.getDue() + " giorni", true);
+
+        return true;
+    }
+
+    /**
+     * Permette al configuratore di modificare i parametri di configurazione,
+     * ad eccezione della piazza
+     *
+     * @return true
+     */
+    private boolean editConfParameters() {
+        this.configureSettings(false);
+        return true;
+    }
+
     //INTERNAL ACTIONS==============================================================
 
     /**
      * Permette di richiedere all'utente un'azione tramite un menu ed eseguire l'azione associata
+     *
      * @param actions lista di azioni disponibili
-     * @param prompt messaggio da comunicare all'utente
+     * @param prompt  messaggio da comunicare all'utente
      * @return booleano di ritorno dall'azione eseguita
      */
     private <T> T chooseAndRun(List<MenuAction<T>> actions, String prompt) {
@@ -284,7 +323,7 @@ public class Controller {
         List<AuthMethod> authType;
         try {
             authType = this.model.authenticationType(username);
-            for (var t: authType) {
+            for (var t : authType) {
                 var authData = this.getLoginData(t.getClass().getName());
                 this.currentUser = this.model.authenticate(t, authData);
                 if (this.currentUser != null) {
@@ -304,14 +343,15 @@ public class Controller {
     /**
      * Richiede all'utente l'inserimento di una nuova password,
      * permettendogli di inserirla due volte per conferma
+     *
      * @return password inserita
      */
-    private @NotNull String getNewPassword(){
+    private @NotNull String getNewPassword() {
         String psw;
-        while(true){
+        while (true) {
             psw = this.view.getPassword("Password");
 
-            if(!psw.equals(this.view.getPassword("Ripeti la password"))) {
+            if (!psw.equals(this.view.getPassword("Ripeti la password"))) {
                 this.view.error("Le password non corrispondono");
                 continue;
             }
@@ -322,6 +362,7 @@ public class Controller {
 
     /**
      * In base al tipo di autenticazione, permetta al model di richiedere i dati necessari all'utente tramite la view
+     *
      * @param method il metodo di autenticazione
      * @return dati relativi all'autenticazione
      */
@@ -336,17 +377,19 @@ public class Controller {
 
     /**
      * Permette la scelta riguardo l'aggiunta di campi alla categoria parametro
+     *
      * @param c categoria a cui aggiungere i campi
      */
-    private void makeFields(Category c){
+    private void makeFields(Category c) {
         while (this.chooseAndRun(Arrays.asList(
                 new MenuAction<>("No, torna all'inserimento categorie", ConfiguratorUser.class, () -> false, false, 0, -1),
                 new MenuAction<>("Sì, aggiungi campo nativo", ConfiguratorUser.class, () -> this.addField(c))
-        ), "Si vuole aggiungere un campo nativo?"));
+        ), "Si vuole aggiungere un campo nativo?")) ;
     }
 
     /**
      * Permette la creazione di un nuovo campo in una categoria
+     *
      * @param c categoria a cui aggiungere un campo
      * @return true
      */
@@ -354,15 +397,15 @@ public class Controller {
         // scelta del nome del campo, non deve essere già esistente tra i padri della categoria
         String name = null;
         while (name == null) {
-             name = this.view.getLine("Nome campo").trim();
-             while (name.length() == 0) {
-                 this.view.warn("Inserire un nome non vuoto");
-                 name = this.view.getLine("Nome campo").trim();
-             }
-             if (c.containsKey(name)) {
-                 this.view.error("Campo già esistente nella categoria");
-                 name = null;
-             }
+            name = this.view.getLine("Nome campo").trim();
+            while (name.length() == 0) {
+                this.view.warn("Inserire un nome non vuoto");
+                name = this.view.getLine("Nome campo").trim();
+            }
+            if (c.containsKey(name)) {
+                this.view.error("Campo già esistente nella categoria");
+                name = null;
+            }
         }
 
         // se ci sono più tipi di campo possibili permette di sceglierlo
@@ -371,9 +414,9 @@ public class Controller {
 
         if (TypeDefinition.TypeAssociation.values().length >= 2) {
             type = this.view.chooseOption(
-                Arrays.stream(TypeDefinition.TypeAssociation.values())
-                        .map(e -> new MenuAction<>(e.toString(), ConfiguratorUser.class, () -> e))
-                        .toList(), "Seleziona un tipo").getAction().run();
+                    Arrays.stream(TypeDefinition.TypeAssociation.values())
+                            .map(e -> new MenuAction<>(e.toString(), ConfiguratorUser.class, () -> e))
+                            .toList(), "Seleziona un tipo").getAction().run();
         }
 
         // chiede se la compilazione del campo è obbligatoria
@@ -392,13 +435,13 @@ public class Controller {
     private @NotNull Category createCategory(Category root) throws DuplicateCategoryException {
 
         String name = this.view.getLine("Nome").trim();
-        while(name.length() == 0) {
+        while (name.length() == 0) {
             this.view.warn("Inserire un nome non vuoto");
             name = this.view.getLine("Nome").trim();
         }
-        if (root==null && !this.model.isValidRootCategoryName(name))
+        if (root == null && !this.model.isValidRootCategoryName(name))
             throw new DuplicateCategoryException();
-        else if (root!=null && !root.isValidChildCategoryName(name))
+        else if (root != null && !root.isValidChildCategoryName(name))
             throw new DuplicateCategoryException();
 
         String description = this.view.getLine("Descrizione").trim();
@@ -410,7 +453,7 @@ public class Controller {
      * Permette di aggiungere una categoria figlia ad una padre
      *
      * @param father categoria padre
-     * @param child categoria figlia da aggiungere
+     * @param child  categoria figlia da aggiungere
      * @return la nuova categoria padre
      */
     private @NotNull NodeCategory appendCategory(Category father, Category child) {
@@ -423,7 +466,7 @@ public class Controller {
     /**
      * A partire da una categoria root, crea un menu che permette di scegliere una delle categorie figlie
      * Utilizzato per scegliere la categoria padre a cui aggiungere una categoria figlia
-     *
+     * <p>
      * Passo base della ricorsione
      *
      * @param root categoria radice
@@ -437,11 +480,11 @@ public class Controller {
     /**
      * A partire da una categoria root, crea un menu che permette di scegliere una delle categorie figlie
      * Utilizzato per scegliere la categoria padre a cui aggiungere una categoria figlia
-     *
+     * <p>
      * Passo ricorsivo, aggiunge le categorie figlie
      *
-     * @param root categoria radice
-     * @param acc lista a cui aggiungere le MenuAction
+     * @param root   categoria radice
+     * @param acc    lista a cui aggiungere le MenuAction
      * @param prefix prefisso da anteporre ai nomi delle categorie
      * @return la lista completa delle categorie figlie
      */
@@ -453,90 +496,51 @@ public class Controller {
         return acc;
     }
 
+    /**
+     * Richiede l'inserimento all'utente dei parametri di configurazione,
+     * se è la prima configurazione permette di modificare anche la piazza
+     * @param firstConfiguration true se prima configurazione
+     */
     private void configureSettings(boolean firstConfiguration) {
 
         String city = null;
         if (firstConfiguration) {
-            this.view.info(""); //todo brutto brutto, trova una soluzione migliore
-            this.view.warn("È necessario procedere alla prima configurazione dei parametri");
+            this.view.warn("È necessario procedere alla prima configurazione dei parametri", true);
             city = this.view.get("Inserire la piazza di scambio");
+        } else {
+            this.view.warn("Non è possibile modificare la piazza di scambio");
+            city = this.model.readSettings().getCity();
         }
 
-        List<String> places = this.getConfPlaces();
-        List<Settings.Day> days = this.getConfDays();
-        List<Interval> intervals = this.getConfIntervals();
+        List<String> places = this.view.getStringList("Inserire un luogo", true);
 
-        this.view.info("");
-        String daysDueString = this.view.get("Inserire la scadenza (in numero di giorni)");
-        int daysDue = -1;
-        while (daysDue < 0) {
-            try {
-                daysDue = Integer.parseInt(daysDueString);
-                if (daysDue < 0) {
-                    this.view.error("Numero inserito non valido");
-                }
-            } catch (NumberFormatException e) {
-                this.view.error("Valore inserito non valido");
-            }
-        }
-
-        this.model.configureSettings(city, daysDue, places, days, intervals);
-    }
-
-    private List<String> getConfPlaces() {
-        this.view.info(""); //todo same as b4
-        String lastPlace = "";
-        Set<String> places = new HashSet<>();
-        while (places.size() < 1 || lastPlace.trim().length() != 0) {
-            lastPlace = this.view.getLine("Inserire un luogo (oppure nulla per terminare l'inserimento)");
-            if (lastPlace.trim().length() >= 1) {
-                places.add(lastPlace);
-            }
-        }
-        return places.stream().toList();
-    }
-
-    private List<Settings.Day> getConfDays() {
-        this.view.info(""); //todo same as b4
-        String lastDay = "";
-        List<Settings.Day> days = new ArrayList<>();
-        while (days.size() < 1 || lastDay.trim().length() != 0) {
-            lastDay = this.view.getLine("Inserire un giorno (oppure nulla per terminare l'inserimento)");
-            if (lastDay.trim().length() >= 1) {
-
-                try {
-                    Settings.Day dayToAdd = Settings.Day.fromString(lastDay);
-                    if (!days.contains(dayToAdd)) {
-                        days.add(dayToAdd);
-                    } else {
-                        this.view.warn("Giorno già inserito");
+        List<Settings.Day> days = this.view.getGenericList("Inserire un giorno", true,
+                (v) -> {
+                    try {
+                        return Settings.Day.fromString(v);
+                    } catch (CannotParseDayException e) {
+                        return null;
                     }
-                } catch (CannotParseDayException e) {
-                    this.view.error("Giorno errato");
-                }
-            }
-        }
-        return days.stream().toList();
-    }
+                }).stream() // sort the days, so it does not depend on input order
+                .sorted(it.matlice.ingsw.data.Settings.Day::compareTo)
+                .toList();
 
-    private List<Interval> getConfIntervals() {
-        this.view.info("");
-        String lastInterval = "";
-        List<Interval> intervals = new ArrayList<>();
-        while (intervals.size() < 1 || lastInterval.trim().length() != 0) {
-            lastInterval = this.view.getLine("Inserire un intervallo [es. 15:30-17:00] (oppure nulla per terminare l'inserimento)");
-            if (lastInterval.trim().length() >= 1) {
-                try {
-                    Interval intvToAdd = Interval.fromString(lastInterval);
-                    intervals.add(intvToAdd);
-                } catch (CannotParseIntervalException e) {
-                    this.view.error("Intervallo nel formato errato");
-                } catch (InvalidIntervalException e) {
-                    this.view.error("Intervallo non valido");
-                }
-            }
+        List<Interval> intervals = this.view.getGenericList("Inserire un intervallo orario [es. 15:30-17:00]", true,
+                (v) -> {
+                    try {
+                        return Interval.fromString(v);
+                    } catch (CannotParseIntervalException | InvalidIntervalException e) {
+                        return null;
+                    }
+                });
+
+        int daysDue = this.view.getInt("Inserire la scadenza (in numero di giorni)", (e) -> e > 0);
+
+        if (firstConfiguration) {
+            this.model.configureSettings(city, daysDue, places, days, intervals);
+        } else {
+            this.model.configureSettings(city, daysDue, places, days, intervals);
         }
-        return intervals.stream().toList();
 
     }
 

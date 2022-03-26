@@ -2,7 +2,6 @@ package it.matlice.ingsw.data;
 
 import it.matlice.ingsw.model.exceptions.CannotParseDayException;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,13 +20,24 @@ public abstract class Settings {
     public abstract void setIntervals(List<Interval> intervals) throws Exception;
     public abstract void addInterval(Interval interval) throws Exception;
 
-    public abstract List<Day> getDay();
+    public abstract List<Day> getDays();
     public abstract void setDays(List<Day> days) throws Exception;
     public abstract void addDay(Day day) throws Exception;
 
     public static enum Day{
-        MON, TUE, WED, THU, FRI, SAT, SUN;
+        MON("Lunedì"),
+        TUE("Martedì"),
+        WED("Mercoledì"),
+        THU("Giovedì"),
+        FRI("Venerdì"),
+        SAT("Sabato"),
+        SUN("Domenica");
 
+        Day(String s) {
+            this.str = s;
+        }
+
+        private String str;
         public static final Map<String, Day> dayMap = new HashMap<>();
 
         static {
@@ -53,6 +63,11 @@ public abstract class Settings {
                 throw new CannotParseDayException();
             }
         }
+
+        public String getName() {
+            return this.str;
+        }
+
     }
 
 

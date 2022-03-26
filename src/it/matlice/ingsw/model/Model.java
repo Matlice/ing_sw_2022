@@ -51,7 +51,7 @@ public class Model {
     /**
      * Permette il cambio password all'utente
      *
-     * @param auth autenticazione, permette di indetificare l'utente e verificare sia loggato
+     * @param auth autenticazione, permette di identificare l'utente e verificare sia loggato
      * @param newPassword nuova password che si vuole impostare
      * @throws SQLException errore di connessione col database
      * @throws InvalidPasswordException password non rispettante i requisiti di sicurezza
@@ -107,7 +107,7 @@ public class Model {
      * Ultimo passaggio per completare il login
      * Imposta l'ultimo accesso dell'utente
      *
-     * @param auth autenticazione, permette di indetificare l'utente e verificare sia loggato
+     * @param auth autenticazione, permette di identificare l'utente e verificare sia loggato
      * @throws SQLException errore di connessione col database
      */
     public void finalizeLogin(@NotNull Authentication auth) throws SQLException {
@@ -268,10 +268,48 @@ public class Model {
         return false;
     }
 
-    public void configureSettings(String city, int daysDue, List<String> places, List<it.matlice.ingsw.data.Settings.Day> days, List<Interval> intervals) {
-        // todo
+    /**
+     * Ritorna i parametri di configurazione attuali
+     */
+    public it.matlice.ingsw.data.Settings readSettings() {
+        try {
+            return this.sf.readSettings();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
     }
 
+    /**
+     * Imposta i parametri di configurazione
+     * @param city piazza di scambio
+     * @param daysDue giorni di scadenza
+     * @param locations luoghi
+     * @param days giorni
+     * @param intervals intervalli
+     */
+    public void configureSettings(String city, int daysDue, List<String> locations, List<it.matlice.ingsw.data.Settings.Day> days, List<Interval> intervals) {
+        try {
+            it.matlice.ingsw.data.Settings set = this.sf.readSettings();
+            if (set == null) {
+                this.sf.makeSettings(city, daysDue, locations, days, intervals);
+            } else {
+                assert set.getCity() != null;
+                assert city.equals(set.getCity());
+                this.sf.removeLocations(set);
+                this.sf.removeDays(set);
+                this.sf.removeIntervals(set);
+                this.sf.setDue(set, daysDue);
+                for(var l: locations) this.sf.addLocation(set, l);
+                for(var d: days) this.sf.addDay(set, d);
+                for(var i: intervals) this.sf.addInterval(set, i);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
     /**
      * Classe che gestisce l'autenticazione dell'utente

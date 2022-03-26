@@ -2,6 +2,10 @@ package it.matlice.ingsw.data.impl.jdbc;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
+import com.j256.ormlite.stmt.PreparedUpdate;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.data.Interval;
 import it.matlice.ingsw.data.Settings;
@@ -64,6 +68,14 @@ public class SettingsFactoryImpl implements SettingsFactory {
         return this.readSettings();
     }
 
+    private void setDue(SettingsDB db, int due) throws SQLException {
+        UpdateBuilder<SettingsDB, Integer> settingsUpdateBuilder = this.settingsDAO.updateBuilder();
+        settingsUpdateBuilder.updateColumnValue("due", due)
+                .where().eq("id", db.getId());
+        PreparedUpdate<SettingsDB> preparedUpdate = settingsUpdateBuilder.prepare();
+        this.settingsDAO.update(preparedUpdate);
+    }
+
     private void addLocation(SettingsDB db, String l) throws SQLException {
         this.locationsDAO.create(new LocationsDB(db, l));
     }
@@ -78,43 +90,63 @@ public class SettingsFactoryImpl implements SettingsFactory {
     }
 
     private void removeLocations(SettingsDB db) throws SQLException {
-        this.locationsDAO.query(this.locationsDAO.deleteBuilder().where().eq("ref_id", db.getId()).prepare());
+        DeleteBuilder<LocationsDB, Integer> locationDeleteBuilder = this.locationsDAO.deleteBuilder();
+        locationDeleteBuilder.where().eq("ref_id", db.getId());
+        PreparedDelete<LocationsDB> preparedDelete = locationDeleteBuilder.prepare();
+        this.locationsDAO.delete(preparedDelete);
     }
 
     private void removeDays(SettingsDB db) throws SQLException {
-        this.daysDAO.query(this.daysDAO.deleteBuilder().where().eq("ref_id", db.getId()).prepare());
+        DeleteBuilder<DaysDB, Integer> locationDeleteBuilder = this.daysDAO.deleteBuilder();
+        locationDeleteBuilder.where().eq("ref_id", db.getId());
+        PreparedDelete<DaysDB> preparedDelete = locationDeleteBuilder.prepare();
+        this.daysDAO.delete(preparedDelete);
     }
 
     private void removeIntervals(SettingsDB db) throws SQLException {
-        this.intervalsDAO.query(this.intervalsDAO.deleteBuilder().where().eq("ref_id", db.getId()).prepare());
-
+        DeleteBuilder<IntervalsDB, Integer> locationDeleteBuilder = this.intervalsDAO.deleteBuilder();
+        locationDeleteBuilder.where().eq("ref_id", db.getId());
+        PreparedDelete<IntervalsDB> preparedDelete = locationDeleteBuilder.prepare();
+        this.intervalsDAO.delete(preparedDelete);
     }
 
+    @Override
+    public void setDue(Settings db, int due) throws SQLException {
+        assert db instanceof SettingsImpl;
+        this.setDue(((SettingsImpl) db).getDbData(), due);
+    }
+
+    @Override
     public void addLocation(Settings db, String l) throws SQLException {
         assert db instanceof SettingsImpl;
         this.addLocation(((SettingsImpl) db).getDbData(), l);
     }
 
+    @Override
     public void addDay(Settings db, Settings.Day d) throws SQLException {
         assert db instanceof SettingsImpl;
         this.addDay(((SettingsImpl) db).getDbData(), d);
     }
 
+    @Override
     public void addInterval(Settings db, Interval i) throws SQLException {
         assert db instanceof SettingsImpl;
         this.addInterval(((SettingsImpl) db).getDbData(), i);
     }
 
+    @Override
     public void removeLocations(Settings db) throws SQLException {
         assert db instanceof SettingsImpl;
         this.removeLocations(((SettingsImpl) db).getDbData());
     }
 
+    @Override
     public void removeDays(Settings db) throws SQLException {
         assert db instanceof SettingsImpl;
         this.removeDays(((SettingsImpl) db).getDbData());
     }
 
+    @Override
     public void removeIntervals(Settings db) throws SQLException {
         assert db instanceof SettingsImpl;
         this.removeIntervals(((SettingsImpl) db).getDbData());

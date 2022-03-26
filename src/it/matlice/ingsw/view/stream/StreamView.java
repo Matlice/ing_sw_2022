@@ -6,8 +6,8 @@ import it.matlice.ingsw.view.menu.Menu;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintStream;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * Classe che implementa l'interfaccia View dell'applicazione
@@ -32,10 +32,34 @@ public class StreamView implements View {
      * Comunica un messaggio all'utente
      *
      * @param text il testo del messaggio
+     * @param separated true se si separa dal contesto del precedente messaggio
+     */
+    @Override
+    public void info(String text, boolean separated) {
+        if (separated) this.out.println();
+        this.out.println(text);
+    }
+
+    /**
+     * Comunica un messaggio all'utente
+     *
+     * @param text il testo del messaggio
      */
     @Override
     public void info(String text) {
-        this.out.println(text);
+        this.info(text, false);
+    }
+
+    /**
+     * Comunica un avvertimento all'utente
+     *
+     * @param text il testo del messaggio
+     * @param separated true se si separa dal contesto del precedente messaggio
+     */
+    @Override
+    public void warn(String text, boolean separated) {
+        if (separated) this.out.println();
+        this.out.println("AVVISO: " + text);
     }
 
     /**
@@ -45,7 +69,7 @@ public class StreamView implements View {
      */
     @Override
     public void warn(String text) {
-        this.out.println("AVVISO: " + text);
+        this.warn(text, false);
     }
 
     /**
@@ -56,6 +80,21 @@ public class StreamView implements View {
     @Override
     public void error(String text) {
         this.out.println("ERRORE: " + text);
+    }
+
+    /**
+     * Show a list of objects as strings
+     *
+     * @param message message to show before the list
+     * @param list    list of string to show
+     */
+    @Override
+    public void showList(String message, List<String> list) {
+        StringJoiner sj = new StringJoiner("\n\t");
+        sj.add(message);
+        list.forEach(sj::add);
+        this.out.println();
+        this.info(sj.toString());
     }
 
     /**
@@ -105,6 +144,127 @@ public class StreamView implements View {
     public String getLine(String prompt) {
         this.out.print(prompt + "> ");
         return this.in.nextLine();
+    }
+
+    /**
+     * Richiede all'utente l'inserimento di un valore intero
+     *
+     * @param prompt    messaggio di richiesta all'utente
+     * @param available returns true se l'intero inserito è valido, false per richiederlo
+     * @param nonValidErrorMessage messaggio di errore per valori non validi
+     * @return l'intero inserito
+     */
+    @Override
+    public int getInt(String prompt, Function<Integer, Boolean> available, String nonValidErrorMessage) {
+        this.out.println();
+        String input = this.getLine(prompt);
+        while (true) {
+            try {
+                int v = Integer.parseInt(input);
+
+                if (available.apply(v))
+                    return v;
+
+                this.error(nonValidErrorMessage);
+                input = this.getLine(prompt);
+
+            } catch (NumberFormatException e) {
+                this.error(nonValidErrorMessage);
+            }
+        }
+    }
+
+    /**
+     * Richiede all'utente l'inserimento di un valore intero
+     *
+     * @param prompt    messaggio di richiesta all'utente
+     * @param available returns true se l'intero inserito è valido, false per richiederlo
+     * @return l'intero inserito
+     */
+    @Override
+    public int getInt(String prompt, Function<Integer, Boolean> available) {
+        return this.getInt(prompt, available, "Valore inserito non valido");
+    }
+
+    /**
+     * Richiede all'utente l'inserimento di un valore intero
+     *
+     * @param prompt messaggio di richiesta all'utente
+     * @return l'intero inserito
+     */
+    @Override
+    public int getInt(String prompt) {
+        return this.getInt(prompt, (e) -> true);
+    }
+
+    /**
+     * Ritorna una lista di oggetti, inseriti dall'utente come stringa dall'utente
+     * e convertiti tramite una mappa di conversione
+     *
+     * @param prompt messaggio per l'inserimento
+     * @param unique true se non ci possono essere ripetizioni
+     * @param conversionMap funzione che mappa i possibili input (stringhe) agli oggetti V
+     *                      deve ritornare null per valori di stringhe non validi
+     * @param duplicateErrorMessage messaggio di errore per valori già inseriti
+     * @param nonValidErrorMessage messaggio di errore per valori non validi
+     * @return lista di oggetti inseriti dall'utente
+     */
+    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap, String duplicateErrorMessage, String nonValidErrorMessage) {
+        this.out.println();
+        String lastInput = "";
+        List<V> list = new ArrayList<>();
+        while (list.size() < 1 || lastInput.length() != 0) {
+            lastInput = this.getLine(prompt + " (oppure nulla per terminare l'inserimento)").trim();
+            if (lastInput.length() >= 1) {
+                V toAdd = conversionMap.apply(lastInput);
+                if (!unique || !list.contains(toAdd)) {
+                    if (toAdd != null) {
+                        list.add(toAdd);
+                    } else {
+                        this.error(nonValidErrorMessage);
+                    }
+                } else {
+                    this.error(duplicateErrorMessage);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Ritorna una lista di oggetti, inseriti dall'utente come stringa dall'utente
+     * e convertiti tramite una mappa di conversione
+     *
+     * @param prompt messaggio per l'inserimento
+     * @param unique true se non ci possono essere ripetizioni
+     * @param conversionMap funzione che mappa i possibili input (stringhe) agli oggetti V
+     *                      deve ritornare null per valori di stringhe non validi
+     * @return lista di oggetti inseriti dall'utente
+     */
+    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap) {
+        return this.getGenericList(prompt, unique, conversionMap, "Valore già inserito", "Valore non valido");
+    }
+
+    /**
+     * Ritorna una lista di stringhe non vuote inserite dall'utente
+     * @param prompt messaggio per l'inserimento
+     * @param unique true se non ci possono essere ripetizioni
+     * @param duplicateErrorMessage messaggio di errore per valori già inseriti
+     * @param nonValidErrorMessage messaggio di errore per valori non validi
+     * @return lista di stringhe inserite dall'utente
+     */
+    public List<String> getStringList(String prompt, boolean unique, String duplicateErrorMessage, String nonValidErrorMessage) {
+        return this.getGenericList(prompt, unique, (e) -> e, duplicateErrorMessage, nonValidErrorMessage);
+    }
+
+    /**
+     * Ritorna una lista di stringhe non vuote inserite dall'utente
+     * @param prompt messaggio per l'inserimento
+     * @param unique true se non ci possono essere ripetizioni
+     * @return lista di stringhe inserite dall'utente
+     */
+    public List<String> getStringList(String prompt, boolean unique) {
+        return this.getGenericList(prompt, unique, (e) -> e);
     }
 
     /**
