@@ -2,19 +2,12 @@ package it.matlice.ingsw;
 
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
-import it.matlice.ingsw.data.Interval;
-import it.matlice.ingsw.data.Settings;
-import it.matlice.ingsw.data.impl.jdbc.*;
+import it.matlice.ingsw.model.data.impl.jdbc.*;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.controller.Controller;
-import it.matlice.ingsw.model.exceptions.CannotParseIntervalException;
-import it.matlice.ingsw.model.exceptions.InvalidIntervalException;
 import it.matlice.ingsw.view.stream.StreamView;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 /**

@@ -1,6 +1,6 @@
 package it.matlice.ingsw.controller;
 
-import it.matlice.ingsw.data.User;
+import it.matlice.ingsw.model.data.User;
 
 public class MenuAction<T> {
 
