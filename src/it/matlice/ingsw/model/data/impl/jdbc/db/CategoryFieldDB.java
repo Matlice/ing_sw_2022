@@ -16,7 +16,7 @@ public class CategoryFieldDB {
     @DatabaseField(uniqueCombo = true)
     private String fieldName;
 
-    @DatabaseField(foreign = true, uniqueCombo = true)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, uniqueCombo = true)
     private CategoryDB category;
 
     @DatabaseField(canBeNull = false)

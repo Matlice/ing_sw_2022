@@ -74,7 +74,7 @@ public final class TypeDefinition {
             return this.ser.apply(o);
         }
 
-        public Object getDeserialize(String o) {
+        public Object deserialize(String o) {
             return this.deser.apply(o);
         }
     }

@@ -9,10 +9,10 @@ public class ArticleFieldDB {
     @DatabaseField(generatedId = true)
     private Integer id;
 
-    @DatabaseField(foreign = true, canBeNull = false)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, canBeNull = false)
     private CategoryFieldDB ref;
 
-    @DatabaseField(foreign = true, canBeNull = false)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, canBeNull = false)
     private ArticleDB article_ref;
 
     @DatabaseField(canBeNull = false)

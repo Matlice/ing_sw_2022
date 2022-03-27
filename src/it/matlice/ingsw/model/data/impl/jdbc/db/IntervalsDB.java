@@ -7,7 +7,7 @@ import it.matlice.ingsw.model.data.Interval;
 @DatabaseTable(tableName = "intervals")
 public class IntervalsDB {
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     private SettingsDB ref;
 
     @DatabaseField(canBeNull = false)

@@ -12,7 +12,7 @@ public class HierarchyDB {
     @DatabaseField(generatedId = true)
     private int hierarchy_id;
 
-    @DatabaseField(canBeNull = true, foreign = true)
+    @DatabaseField(canBeNull = true, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     private CategoryDB root;
 
     HierarchyDB() {

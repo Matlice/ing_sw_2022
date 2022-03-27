@@ -24,7 +24,7 @@ public class CategoryDB {
     @DatabaseField(canBeNull = false)
     private String category_description;
 
-    @DatabaseField(foreign = true, uniqueCombo = true)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, uniqueCombo = true)
     private CategoryDB father;
 
     public CategoryDB(String category_name, String category_description, CategoryDB father) {

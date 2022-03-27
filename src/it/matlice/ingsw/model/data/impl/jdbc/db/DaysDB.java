@@ -7,7 +7,7 @@ import it.matlice.ingsw.model.data.Settings;
 @DatabaseTable(tableName = "days")
 public class DaysDB {
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     private SettingsDB ref;
 
     @DatabaseField(canBeNull = false)

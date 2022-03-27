@@ -8,6 +8,7 @@ import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.model.data.factories.ArticleFactory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleFieldDB;
+import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.*;
 import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
@@ -79,25 +80,44 @@ public class ArticleFactoryImpl implements ArticleFactory {
     }
 
     private LeafCategory findCategory(List<Hierarchy> hierarchyList, int id){
-        //todo
-        throw new RuntimeException();
+        LeafCategory c;
+        for (Hierarchy e: hierarchyList) {
+            c = findCategory(e.getRootCategory(), id);
+            if(c != null) return c;
+        }
+        throw new RuntimeException("Category not found but should be.");
+    }
+
+    private LeafCategory findCategory(Category cat, int id){
+        assert cat instanceof CategoryImpl;
+        if(((CategoryImpl) cat).getDbData().getCategoryId() == id){
+            assert cat instanceof LeafCategoryImpl;
+            return (LeafCategory) cat;
+        }
+
+        assert cat instanceof NodeCategoryImpl;
+        for (var child : ((NodeCategoryImpl) cat).getChildren()) {
+            var r = findCategory(child, id);
+            if(r != null) return r;
+        }
+        return null;
     }
 
     public List<Article> getUserArticles(User owner, List<Hierarchy> hierarchyList) throws SQLException {
         assert owner instanceof UserImpl;
 
-        var articles_db = articleDAO.query(
-                articleDAO.queryBuilder().where().eq("owner_id", ((UserImpl) owner).getDbData()).prepare()
-        );
+        var articles_db = articleDAO.queryForEq("owner_id",  ((UserImpl) owner).getDbData());
 
         var articles = new LinkedList<Article>();
         for(var a: articles_db){
-            var fields = articleFieldDAO.query(articleFieldDAO.queryBuilder().where().eq("article_ref_id", a.getId()).prepare());
+            var fields = articleFieldDAO.queryForEq("article_ref_id", a.getId());
             var art = new ArticleImpl(a, findCategory(hierarchyList, a.getCategory().getCategoryId()), owner);
-            fields.forEach(e -> art.put(e.getRef().getFieldName(), e.getValue()));
+            fields.forEach(e -> {
+                if(art.getCategory().containsKey(e.getRef().getFieldName()))
+                    art.put(e.getRef().getFieldName(), art.getCategory().get(e.getRef().getFieldName()).type().deserialize(e.getValue())); //java é un po' bruttino eh
+            });
             articles.add(art);
         }
-        return articles; //todo test perché sono stanco
+        return articles; //todo test perché sono stane.getRef().getFieldName()co
     }
-
 }

@@ -12,10 +12,10 @@ public class ArticleDB {
     @DatabaseField(canBeNull = false)
     private String name;
 
-    @DatabaseField(foreign = true, canBeNull = false)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, canBeNull = false)
     private UserDB owner;
 
-    @DatabaseField(foreign = true, canBeNull = false)
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, canBeNull = false)
     private CategoryDB category;
 
     ArticleDB() {
