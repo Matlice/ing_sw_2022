@@ -1,25 +1,22 @@
 package it.matlice.ingsw.model.data.impl.jdbc.types;
 
-import it.matlice.ingsw.model.data.Article;
-import it.matlice.ingsw.model.data.Category;
+import it.matlice.ingsw.model.data.Offer;
 import it.matlice.ingsw.model.data.LeafCategory;
 import it.matlice.ingsw.model.data.User;
-import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleDB;
+import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
 
-import java.util.Map;
+public class OfferImpl extends Offer {
 
-public class ArticleImpl extends Article {
-
-    private ArticleDB dbData;
+    private OfferDB dbData;
 
     private LeafCategory category;
     private User owner;
 
-    public ArticleDB getDbData() {
+    public OfferDB getDbData() {
         return this.dbData;
     }
 
-    public ArticleImpl(ArticleDB dbData, LeafCategory category, User owner) {
+    public OfferImpl(OfferDB dbData, LeafCategory category, User owner) {
         this.dbData = dbData;
         this.category = category;
         this.owner = owner;
@@ -28,6 +25,11 @@ public class ArticleImpl extends Article {
     @Override
     public User getOwner() {
         return this.owner;
+    }
+
+    @Override
+    public OfferStatus getStatus() {
+        return this.dbData.getStatus();
     }
 
     @Override

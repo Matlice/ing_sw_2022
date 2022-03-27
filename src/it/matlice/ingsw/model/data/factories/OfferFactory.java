@@ -13,10 +13,14 @@ import java.util.Map;
  * rappresenta una classe che si occuperà di istanziare implementazioni di articoli,
  * con i campi compilati opportunamente e associati al proprietario
  */
-public interface ArticleFactory {
+public interface OfferFactory {
 
-    Article makeArticle(@NotNull String name, User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException;
+    Offer makeOffer(@NotNull String name, User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException;
 
-    List<Article> getUserArticles(User owner, List<Hierarchy> hierarchyList) throws SQLException;
+    List<Offer> getUserOffers(User owner) throws SQLException;
+
+    public void setOfferStatus(Offer offer, Offer.OfferStatus status) throws SQLException;
+
+    public List<Offer> getCategoryOffers(LeafCategory cat) throws SQLException;
 
 }

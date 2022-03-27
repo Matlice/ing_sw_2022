@@ -5,35 +5,35 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.*;
-import it.matlice.ingsw.model.data.factories.ArticleFactory;
-import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleDB;
-import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleFieldDB;
-import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
+import it.matlice.ingsw.model.data.factories.OfferFactory;
+import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
+import it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.*;
+import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.*;
 
-public class ArticleFactoryImpl implements ArticleFactory {
+public class OfferFactoryImpl implements OfferFactory {
 
-    private final Dao<ArticleDB, Integer> articleDAO;
-    private final Dao<ArticleFieldDB, Integer> articleFieldDAO;
+    private final Dao<OfferDB, Integer> offerDAO;
+    private final Dao<OfferFieldDB, Integer> offerFieldDAO;
     private final Dao<CategoryFieldDB, Integer> categoryFieldDAO;
 
-    public ArticleFactoryImpl() throws SQLException {
+    public OfferFactoryImpl() throws SQLException {
         var connectionSource = JdbcConnection.getInstance().getConnectionSource();
 
-        this.articleDAO = DaoManager.createDao(connectionSource, ArticleDB.class);
-        this.articleFieldDAO = DaoManager.createDao(connectionSource, ArticleFieldDB.class);
+        this.offerDAO = DaoManager.createDao(connectionSource, OfferDB.class);
+        this.offerFieldDAO = DaoManager.createDao(connectionSource, OfferFieldDB.class);
         this.categoryFieldDAO = DaoManager.createDao(connectionSource, CategoryFieldDB.class);
 
-        if (!this.articleDAO.isTableExists())
-            TableUtils.createTable(connectionSource, ArticleDB.class);
-        if (!this.articleFieldDAO.isTableExists())
-            TableUtils.createTable(connectionSource, ArticleFieldDB.class);
+        if (!this.offerDAO.isTableExists())
+            TableUtils.createTable(connectionSource, OfferDB.class);
+        if (!this.offerFieldDAO.isTableExists())
+            TableUtils.createTable(connectionSource, OfferFieldDB.class);
         if (!this.categoryFieldDAO.isTableExists())
             TableUtils.createTable(connectionSource, CategoryFieldDB.class);
     }
@@ -48,7 +48,8 @@ public class ArticleFactoryImpl implements ArticleFactory {
         return query;
     }
 
-    public Article makeArticle(@NotNull String name, User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException {
+    @Override
+    public Offer makeOffer(@NotNull String name, User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException {
         assert category instanceof LeafCategoryImpl;
         assert owner instanceof UserImpl;
 
@@ -70,13 +71,13 @@ public class ArticleFactoryImpl implements ArticleFactory {
 
         }
 
-        var article = new ArticleDB(name, ((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData());
-        articleDAO.create(article);
+        var offer = new OfferDB(name, ((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData(), Offer.OfferStatus.APERTA);
+        offerDAO.create(offer);
         for(var field: values.entrySet()){
-            articleFieldDAO.create(new ArticleFieldDB(field.getKey(), article, field.getValue()));
+            offerFieldDAO.create(new OfferFieldDB(field.getKey(), offer, field.getValue()));
         }
 
-        return new ArticleImpl(article, category, owner);
+        return new OfferImpl(offer, category, owner);
     }
 
     private LeafCategory findCategory(List<Hierarchy> hierarchyList, int id){
@@ -103,21 +104,50 @@ public class ArticleFactoryImpl implements ArticleFactory {
         return null;
     }
 
-    public List<Article> getUserArticles(User owner, List<Hierarchy> hierarchyList) throws SQLException {
+    @Override
+    public List<Offer> getUserOffers(User owner) throws SQLException {
         assert owner instanceof UserImpl;
 
-        var articles_db = articleDAO.queryForEq("owner_id",  ((UserImpl) owner).getDbData());
+        var offer_db = offerDAO.queryForEq("owner_id",  ((UserImpl) owner).getDbData());
 
-        var articles = new LinkedList<Article>();
-        for(var a: articles_db){
-            var fields = articleFieldDAO.queryForEq("article_ref_id", a.getId());
-            var art = new ArticleImpl(a, findCategory(hierarchyList, a.getCategory().getCategoryId()), owner);
+        var offers = new LinkedList<Offer>();
+        for(var a: offer_db){
+            var fields = offerFieldDAO.queryForEq("offer_ref_id", a.getId());
+            var art = new OfferImpl(a, findCategory(new HierarchyFactoryImpl().getHierarchies(), a.getCategory().getCategoryId()), owner);
             fields.forEach(e -> {
                 if(art.getCategory().containsKey(e.getRef().getFieldName()))
                     art.put(e.getRef().getFieldName(), art.getCategory().get(e.getRef().getFieldName()).type().deserialize(e.getValue())); //java é un po' bruttino eh
             });
-            articles.add(art);
+            offers.add(art);
         }
-        return articles; //todo test perché sono stane.getRef().getFieldName()co
+        return offers;
+    }
+
+    @Override
+    public List<Offer> getCategoryOffers(LeafCategory cat) throws SQLException{
+        assert cat instanceof LeafCategoryImpl;
+
+        var offer_db = offerDAO.queryForEq("category_id", ((LeafCategoryImpl) cat).getDbData().getCategoryId());
+
+        var offers = new LinkedList<Offer>();
+        for(var a: offer_db){
+            var fields = offerFieldDAO.queryForEq("offer_ref_id", a.getId());
+            try {
+                var art = new OfferImpl(a, cat, new UserFactoryImpl().getUser(a.getOwner().getUsername()));
+                fields.forEach(e -> {
+                    if(art.getCategory().containsKey(e.getRef().getFieldName()))
+                        art.put(e.getRef().getFieldName(), art.getCategory().get(e.getRef().getFieldName()).type().deserialize(e.getValue())); //java é un po' bruttino eh
+                });
+                offers.add(art);
+            } catch (InvalidUserException e) {/*impossibile*/}
+        }
+        return offers;
+    }
+
+    @Override
+    public void setOfferStatus(Offer offer, Offer.OfferStatus status) throws SQLException {
+        assert offer instanceof OfferImpl;
+        ((OfferImpl) offer).getDbData().setStatus(status);
+        this.offerDAO.update(((OfferImpl) offer).getDbData());
     }
 }

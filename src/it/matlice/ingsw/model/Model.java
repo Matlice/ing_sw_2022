@@ -5,7 +5,6 @@ import it.matlice.ingsw.model.auth.AuthMethod;
 import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.data.factories.*;
-import it.matlice.ingsw.model.data.impl.jdbc.SettingsFactoryImpl;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.model.data.*;
 import org.jetbrains.annotations.Contract;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +27,7 @@ public class Model {
     private final CategoryFactory cf;
     private final UserFactory uf;
     private final SettingsFactory sf;
-    private final ArticleFactory af;
+    private final OfferFactory af;
 
     /**
      * Costruttore del Model
@@ -39,7 +37,7 @@ public class Model {
      * @param sf la settings factory che permette di interfacciarsi col DB per i parametri di configurazione
      * @param af la article factory che permette di interfacciarsi col DB per gli articoli
      */
-    public Model(@NotNull HierarchyFactory hf, @NotNull CategoryFactory cf, @NotNull UserFactory uf, @NotNull SettingsFactory sf, @NotNull ArticleFactory af) {
+    public Model(@NotNull HierarchyFactory hf, @NotNull CategoryFactory cf, @NotNull UserFactory uf, @NotNull SettingsFactory sf, @NotNull OfferFactory af) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
@@ -333,9 +331,9 @@ public class Model {
      * @param e categoria a cui appartiene l'articolo da creare
      * @return articolo creato
      */
-    public Article createArticle(User u, String name, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
+    public Offer createArticle(User u, String name, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
         try {
-            return this.af.makeArticle(name, u, e, fields);
+            return this.af.makeOffer(name, u, e, fields);
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.exit(1);

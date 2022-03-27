@@ -50,7 +50,7 @@ public class SettingsFactoryImpl implements SettingsFactory {
         var locations = this.locationsDAO.query(this.locationsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
         var days = this.daysDAO.query(this.daysDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
         var intervals = this.intervalsDAO.query(this.intervalsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
-        return new SettingsImpl(this, setting, locations, intervals, days);
+        return new SettingsImpl(setting, locations, intervals, days);
     }
 
     @Override

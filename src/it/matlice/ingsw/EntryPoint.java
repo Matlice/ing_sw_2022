@@ -2,17 +2,12 @@ package it.matlice.ingsw;
 
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
-import it.matlice.ingsw.model.data.LeafCategory;
-import it.matlice.ingsw.model.data.NodeCategory;
 import it.matlice.ingsw.model.data.impl.jdbc.*;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.controller.Controller;
-import it.matlice.ingsw.model.exceptions.InvalidUserException;
-import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
 import it.matlice.ingsw.view.stream.StreamView;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -34,7 +29,7 @@ public class EntryPoint {
             var cf = new CategoryFactoryImpl();
             var hf = new HierarchyFactoryImpl();
             var sf = new SettingsFactoryImpl();
-            var af = new ArticleFactoryImpl();
+            var af = new OfferFactoryImpl();
 
             var model = new Model(hf, cf, uf, sf, af);
 
