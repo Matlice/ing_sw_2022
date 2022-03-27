@@ -5,6 +5,9 @@ import it.matlice.ingsw.model.data.NodeCategory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
@@ -29,6 +32,11 @@ public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
     }
 
     @Override
+    public List<LeafCategory> getChildLeafs() {
+        return List.of(this);
+    }
+
+    @Override
     public boolean isValidChildCategoryName(String name) {
         return !name.equals(this.getName());
     }
@@ -44,4 +52,5 @@ public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
             father.addChild(r);
         return r;
     }
+
 }

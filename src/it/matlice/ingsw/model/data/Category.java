@@ -130,6 +130,37 @@ public abstract class Category extends HashMap<String, TypeDefinition> {
     public abstract String getDescription();
 
     /**
+     * @return tutte le categorie foglia discendenti (o se stessa se è foglia)
+     */
+    public abstract List<LeafCategory> getChildLeafs();
+
+    /**
+     * Ritorna una stringa che rappresenta la categoria
+     * a partire dalla categoria radice
+     * (es. "Libro > Romanzo > Romanzo Giallo")
+     * @return stringa
+     */
+    public String fullToString() {
+        return this.fullToString(true);
+    }
+
+    String fullToString(boolean addDescription) {
+        String r;
+
+        if (addDescription && this.getDescription().length() > 0) {
+            r = this.getName() + " (" + this.getDescription() + ")";
+        } else {
+            r = this.getName();
+        }
+
+        if (this.father != null) {
+            return this.father.fullToString(false) + " > " + r;
+        } else {
+            return r;
+        }
+    }
+
+    /**
      * Formatta la categoria in una stringa secondo una struttura ad albero
      * @return stringa rappresentante la categoria
      */

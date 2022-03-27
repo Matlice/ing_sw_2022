@@ -5,9 +5,9 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.*;
+import it.matlice.ingsw.model.data.factories.ArticleFactory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleFieldDB;
-import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.*;
 import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
@@ -15,7 +15,7 @@ import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
 import java.sql.SQLException;
 import java.util.*;
 
-public class ArticleFactoryImpl {
+public class ArticleFactoryImpl implements ArticleFactory {
 
     private final Dao<ArticleDB, Integer> articleDAO;
     private final Dao<ArticleFieldDB, Integer> articleFieldDAO;
@@ -46,7 +46,7 @@ public class ArticleFactoryImpl {
         return query;
     }
 
-    public Article makeArticle(LeafCategory category, User owner, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException {
+    public Article makeArticle(User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException {
         assert category instanceof LeafCategoryImpl;
         assert owner instanceof UserImpl;
 

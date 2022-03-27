@@ -25,21 +25,21 @@ public class EntryPoint {
      * @param args nessuno
      */
     public static void main(String[] args) throws SQLException, InvalidUserException, RequiredFieldConstrainException {
-        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
-
-        var u = new UserFactoryImpl();
-        var c = new CategoryFactoryImpl();
-        var f = new ArticleFactoryImpl();
-
-        var cat = ((NodeCategory) c.getCategory(1)).getChildren()[0];
-        var usr = u.getUser("admin");
-
-        var map = new HashMap<String, Object>();
-        map.put("Stato di conservazione", "caldo");
-        map.put("coso", "si");
-        map.put("nativonativo", "forse");
-
-        f.makeArticle((LeafCategory) cat, usr, map);
+//        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+//
+//        var u = new UserFactoryImpl();
+//        var c = new CategoryFactoryImpl();
+//        var f = new ArticleFactoryImpl();
+//
+//        var cat = ((NodeCategory) c.getCategory(1)).getChildren()[0];
+//        var usr = u.getUser("admin");
+//
+//        var map = new HashMap<String, Object>();
+//        map.put("Stato di conservazione", "caldo");
+//        map.put("coso", "si");
+//        map.put("nativonativo", "forse");
+//
+//        f.makeArticle((LeafCategory) cat, usr, map);
 
 
         try {
@@ -51,8 +51,9 @@ public class EntryPoint {
             var cf = new CategoryFactoryImpl();
             var hf = new HierarchyFactoryImpl();
             var sf = new SettingsFactoryImpl();
+            var af = new ArticleFactoryImpl();
 
-            var model = new Model(hf, cf, uf, sf);
+            var model = new Model(hf, cf, uf, sf, af);
 
             // istanzia una view sugli stream stdin e stdout
             var view = new StreamView(System.out, new Scanner(System.in));

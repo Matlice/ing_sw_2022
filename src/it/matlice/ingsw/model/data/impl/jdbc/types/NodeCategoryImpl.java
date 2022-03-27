@@ -1,11 +1,13 @@
 package it.matlice.ingsw.model.data.impl.jdbc.types;
 
 import it.matlice.ingsw.model.data.Category;
+import it.matlice.ingsw.model.data.LeafCategory;
 import it.matlice.ingsw.model.data.NodeCategory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class NodeCategoryImpl extends NodeCategory implements CategoryImpl {
     private final CategoryDB dbData;
@@ -26,6 +28,17 @@ public class NodeCategoryImpl extends NodeCategory implements CategoryImpl {
     @Override
     public String getDescription() {
         return this.dbData.getCategoryDescription();
+    }
+
+    @Override
+    public List<LeafCategory> getChildLeafs() {
+        // richiama getChildLeafs() sulle categorie figlie ricorsivamente
+        // il caso base è in LeafCategoryImpl, in cui ritorna una lista con se stessa
+        return Arrays
+                .stream(this.getChildren())
+                .map(Category::getChildLeafs)
+                .flatMap(List::stream)
+                .toList();
     }
 
     @Override

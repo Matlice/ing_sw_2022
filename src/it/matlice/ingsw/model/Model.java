@@ -4,22 +4,18 @@ import it.matlice.ingsw.model.auth.AuthData;
 import it.matlice.ingsw.model.auth.AuthMethod;
 import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
-import it.matlice.ingsw.model.data.factories.CategoryFactory;
-import it.matlice.ingsw.model.data.factories.HierarchyFactory;
-import it.matlice.ingsw.model.data.factories.SettingsFactory;
-import it.matlice.ingsw.model.data.factories.UserFactory;
+import it.matlice.ingsw.model.data.factories.*;
 import it.matlice.ingsw.model.data.impl.jdbc.SettingsFactoryImpl;
-import it.matlice.ingsw.model.exceptions.DuplicateUserException;
-import it.matlice.ingsw.model.exceptions.InvalidUserException;
-import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
-import it.matlice.ingsw.model.exceptions.LoginInvalidException;
+import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.model.data.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static it.matlice.ingsw.model.auth.password.PasswordAuthMethod.isPasswordValid;
 import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
@@ -33,6 +29,7 @@ public class Model {
     private final CategoryFactory cf;
     private final UserFactory uf;
     private final SettingsFactory sf;
+    private final ArticleFactory af;
 
     /**
      * Costruttore del Model
@@ -40,12 +37,14 @@ public class Model {
      * @param cf la category factory che permette di interfacciarsi col DB per le categorie
      * @param uf la user factory che permette di interfacciarsi col DB per gli utenti
      * @param sf la settings factory che permette di interfacciarsi col DB per i parametri di configurazione
+     * @param af la article factory che permette di interfacciarsi col DB per gli articoli
      */
-    public Model(@NotNull HierarchyFactory hf, @NotNull CategoryFactory cf, @NotNull UserFactory uf, SettingsFactoryImpl sf) {
+    public Model(@NotNull HierarchyFactory hf, @NotNull CategoryFactory cf, @NotNull UserFactory uf, @NotNull SettingsFactory sf, @NotNull ArticleFactory af) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
         this.sf = sf;
+        this.af = af;
     }
 
     /**
@@ -256,6 +255,18 @@ public class Model {
     }
 
     /**
+     * Ritorna una lista con tutte le categorie foglia di ogni gerarchia
+     * @return lista di categorie
+     */
+    public List<LeafCategory> getLeafCategories() {
+        return this.getHierarchies()
+                .stream()
+                .map((e) -> e.getRootCategory().getChildLeafs())
+                .flatMap(List::stream)
+                .toList();
+    }
+
+    /**
      * Ritorna true se sono stati configurati i parametri dell'applicazione
      * (piazza, scadenza, giorni, orari, luoghi)
      * @return boolean
@@ -315,6 +326,21 @@ public class Model {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    /**
+     * Crea un nuovo articolo
+     * @param e categoria a cui appartiene l'articolo da creare
+     * @return articolo creato
+     */
+    public Article createArticle(User u, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
+        try {
+            return this.af.makeArticle(u, e, fields);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
+        return null;
     }
 
     /**

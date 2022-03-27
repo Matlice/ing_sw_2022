@@ -6,6 +6,7 @@ import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.Authentication;
 import it.matlice.ingsw.model.Model;
+import it.matlice.ingsw.model.data.impl.jdbc.types.ArticleImpl;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.view.View;
@@ -27,6 +28,7 @@ public class Controller {
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
             new MenuAction<>("Logout", User.class, this::logout, false, 0, -1),
+            new MenuAction<>("Aggiungi nuovo articolo", CustomerUser.class, this::createArticle),
             new MenuAction<>("Aggiungi nuova gerarchia", ConfiguratorUser.class, this::createHierarchy),
             new MenuAction<>("Mostra gerarchie", User.class, this::showHierarchies),
             new MenuAction<>("Mostra parametri di configurazione", User.class, this::showConfParameters),
@@ -182,6 +184,28 @@ public class Controller {
         } catch (InvalidUserTypeException | InvalidPasswordException | SQLException e) {
             this.view.error("Impossibile creare un nuovo configuratore");
         }
+        return true;
+    }
+
+    /**
+     * Permette all'utente fruitore di creare un nuovo articolo
+     * appartenente ad una categoria foglia
+     *
+     * @return true
+     */
+    private boolean createArticle() {
+
+        // scelta della categoria in cui inserire l'articolo
+        this.view.chooseOption(
+                this.model.getLeafCategories().stream()
+                        .map((e) -> new MenuAction<>(e.fullToString(), User.class, () -> {
+                            this.addArticle(e);
+                            return true;
+                        }))
+                        .collect(Collectors.toList()),
+                "A quale categoria appartiene l'articolo da creare?"
+        ).getAction().run();
+
         return true;
     }
 
@@ -545,6 +569,69 @@ public class Controller {
             this.model.configureSettings(city, daysDue, places, days, intervals);
         }
 
+    }
+
+    /**
+     * Permette di creare un nuovo articolo appartenente alla categoria data
+     * @param e categoria foglia a cui appartiene il nuovo articolo
+     */
+    private void addArticle(LeafCategory e) {
+
+        Map<String, Object> fields = new HashMap<>();
+
+        boolean needRequiredField;
+        boolean saveArticle;
+        do {
+            // cerca se ci sono campi obbligatori da compilare
+            needRequiredField = e.fullEntrySet()
+                    .stream()
+                    .filter((f) -> !fields.containsKey(f.getKey()))
+                    .anyMatch((f) -> f.getValue().required());
+
+            // crea la lista di campi compilabili
+            var actions = e.fullEntrySet()
+                    .stream()
+                    .filter((f) -> !fields.containsKey(f.getKey()))
+                    .map((k) -> new MenuAction<>(k.getKey() + (k.getValue().required() ? " [R]" : ""), User.class, () -> {
+                        fields.put(k.getKey(), this.getFieldValue(k));
+                        return false;
+                    })).collect(Collectors.toCollection(ArrayList::new));
+
+            if (actions.size() == 0) {
+                break;
+            }
+
+            // aggiunge alla lista delle azioni l'azione che permette di salvare
+            // è attiva solo se non ci sono campi obbligatori da compilare
+            actions.add(0, new MenuAction<>("Salva articolo", User.class, () -> true, needRequiredField, 0, -1));
+
+            // scelta del campo da compilare
+            saveArticle = this.view.chooseOption(
+                    actions,
+                    "Scegliere quale campo si vuole compilare (oppure salva)"
+            ).getAction().run();
+        } while (needRequiredField || !saveArticle);
+
+        try {
+            this.model.createArticle(this.currentUser.getUser(), e, fields);
+            this.view.warn("L'articolo è stato salvato con successo");
+            // todo mark the created article as offerta aperta by default
+        } catch (RequiredFieldConstrainException ex) {
+            this.view.error("Impossibile creare l'articolo, campo obbligatorio mancante");
+        }
+    }
+
+    /**
+     * Permette di compilare il campo k per l'articolo a
+     * @param k campo da compilare
+     */
+    private Object getFieldValue(Map.Entry<String, TypeDefinition> k) {
+
+        // in base al tipo di campo da compilare lo richiede all'utente
+        // per ora sono supportate solo le stringhe
+        return switch (k.getValue().type()) {
+            case STRING -> this.view.getLine(String.format("Inserire il valore per il campo '%s'", k.getKey()));
+        };
     }
 
 }
