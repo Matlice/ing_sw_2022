@@ -3,7 +3,7 @@
 set -x
 
 [ -d ./bin ] || mkdir ./bin
-[ -f ./bin/plantuml.jar ] || wget https://github.com/plantuml/plantuml/releases/download/v1.2022.1/plantuml-1.2022.1.jar -O ./bin/plantuml.jar
+[ -f ./bin/plantuml.jar ] || wget https://github.com/plantuml/plantuml/releases/download/v1.2022.2/plantuml-1.2022.2.jar -O ./bin/plantuml.jar
 
 export PLANTUML_JAR=./bin/plantuml.jar
 
