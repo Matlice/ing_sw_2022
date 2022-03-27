@@ -23,6 +23,11 @@ public class OfferImpl extends Offer {
     }
 
     @Override
+    public String getName() {
+        return this.dbData.getName();
+    }
+
+    @Override
     public User getOwner() {
         return this.owner;
     }

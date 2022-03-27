@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Controller {
 
@@ -196,18 +197,9 @@ public class Controller {
      * @return true
      */
     private boolean createArticle() {
-
         // scelta della categoria in cui inserire l'articolo
-        this.view.chooseOption(
-                this.model.getLeafCategories().stream()
-                        .map((e) -> new MenuAction<>(e.fullToString(), User.class, () -> {
-                            this.addArticle(e);
-                            return true;
-                        }))
-                        .collect(Collectors.toList()),
-                "A quale categoria appartiene l'articolo da creare?"
-        ).getAction().run();
-
+        LeafCategory cat = this.chooseLeafCategory("A quale categoria appartiene l'articolo da creare?");
+        this.addArticle(cat);
         return true;
     }
 
@@ -216,7 +208,29 @@ public class Controller {
      * @return true
      */
     private boolean retractOffer() {
-        // todo
+        List<Offer> offers = this.model.getOffersByUser(this.currentUser.getUser())
+                .stream()
+                .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED) // todo fixare in v4
+                .toList();
+
+        if (offers.size() == 0) {
+            this.view.warn("Non ci sono offerte ritirabili");
+            return true;
+        }
+
+        // permette all'utente di scegliere quale offerta ritirare
+        var actions = offers
+                .stream()
+                .map((p) -> new MenuAction<>(p.toString(), User.class, () -> p))
+                .collect(Collectors.toCollection(ArrayList::new));
+        actions.add(0, new MenuAction<>("Esci", User.class, () -> null, false, 0, -1));
+        var offerToRetract = this.chooseAndRun(actions, "Quale offerta si vuole ritirare?");
+
+        if (offerToRetract == null) return true;
+
+        this.model.retractOffer(offerToRetract);
+        this.view.info("Offerta ritirata con successo");
+
         return true;
     }
 
@@ -227,18 +241,24 @@ public class Controller {
      * @return true
      */
     private boolean showOffersByUser() {
-        // todo
+        List<Offer> offers = this.model.getOffersByUser(this.currentUser.getUser());
+        this.showOffers("Le tue offerte sono le seguenti: ", offers);
         return true;
     }
 
     /**
-     * Permette all'utente di visualizzare tutte
-     * le offerte aperte relative ad una categoria foglia
+     * Permette all'utente di visualizzare tutte le
+     * offerte aperte relative ad una categoria foglia
      *
      * @return true
      */
     private boolean showOpenOffersByCategory() {
-        // todo
+        LeafCategory cat = this.chooseLeafCategory("Di quale categoria si vogliono visualizzare le offerte aperte?");
+        List<Offer> offers = this.model.getOffersByCategory(cat)
+                .stream()
+                .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED)
+                .toList();
+        this.showOffers("Le offerte aperte della categoria sono le seguenti: ", offers);
         return true;
     }
 
@@ -349,8 +369,9 @@ public class Controller {
         return true;
     }
 
-    //INTERNAL ACTIONS==============================================================
 
+
+    //INTERNAL ACTIONS==============================================================
     /**
      * Permette di richiedere all'utente un'azione tramite un menu ed eseguire l'azione associata
      *
@@ -368,7 +389,6 @@ public class Controller {
             }
         }
     }
-
     /**
      * Permette all'utente di effettuare il login
      *
@@ -605,6 +625,20 @@ public class Controller {
     }
 
     /**
+     * Premette all'utente di scegliere una categoria foglia
+     * @param message messaggio
+     * @return la categoria foglia scelta
+     */
+    private LeafCategory chooseLeafCategory(String message) {
+        return this.view.chooseOption(
+                this.model.getLeafCategories().stream()
+                        .map((e) -> new MenuAction<>(e.fullToString(), User.class, () -> e))
+                        .collect(Collectors.toList()),
+                message
+        ).getAction().run();
+    }
+
+    /**
      * Permette di creare un nuovo articolo appartenente alla categoria data
      * @param e categoria foglia a cui appartiene il nuovo articolo
      */
@@ -648,7 +682,7 @@ public class Controller {
         } while (needRequiredField || !saveArticle);
 
         try {
-            this.model.createArticle(this.currentUser.getUser(), name, e, fields);
+            this.model.createOffer(this.currentUser.getUser(), name, e, fields);
             this.view.warn("L'articolo è stato salvato con successo");
             // todo mark the created article as offerta aperta by default
         } catch (RequiredFieldConstrainException ex) {
@@ -667,6 +701,21 @@ public class Controller {
         return switch (k.getValue().type()) {
             case STRING -> this.view.getLine(String.format("Inserire il valore per il campo '%s'", k.getKey()));
         };
+    }
+
+    /**
+     * Show a list of offers
+     * @param prompt message
+     * @param offers list of offers
+     */
+    private void showOffers(String prompt, List<Offer> offers) {
+
+        if (offers.size() == 0) {
+            this.view.warn("Non sono state trovate offerte");
+            return;
+        }
+
+        this.view.showList(prompt, offers.stream().map(Offer::toString).toList());
     }
 
 }

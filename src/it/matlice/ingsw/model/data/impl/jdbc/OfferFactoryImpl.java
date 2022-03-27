@@ -71,7 +71,7 @@ public class OfferFactoryImpl implements OfferFactory {
 
         }
 
-        var offer = new OfferDB(name, ((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData(), Offer.OfferStatus.APERTA);
+        var offer = new OfferDB(name, ((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData(), Offer.OfferStatus.OPEN);
         offerDAO.create(offer);
         for(var field: values.entrySet()){
             offerFieldDAO.create(new OfferFieldDB(field.getKey(), offer, field.getValue()));
@@ -150,4 +150,5 @@ public class OfferFactoryImpl implements OfferFactory {
         ((OfferImpl) offer).getDbData().setStatus(status);
         this.offerDAO.update(((OfferImpl) offer).getDbData());
     }
+
 }

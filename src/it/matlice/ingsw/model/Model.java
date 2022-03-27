@@ -27,7 +27,7 @@ public class Model {
     private final CategoryFactory cf;
     private final UserFactory uf;
     private final SettingsFactory sf;
-    private final OfferFactory af;
+    private final OfferFactory of;
 
     /**
      * Costruttore del Model
@@ -42,7 +42,7 @@ public class Model {
         this.cf = cf;
         this.uf = uf;
         this.sf = sf;
-        this.af = af;
+        this.of = af;
     }
 
     /**
@@ -331,14 +331,58 @@ public class Model {
      * @param e categoria a cui appartiene l'articolo da creare
      * @return articolo creato
      */
-    public Offer createArticle(User u, String name, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
+    public Offer createOffer(User u, String name, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
         try {
-            return this.af.makeOffer(name, u, e, fields);
+            return this.of.makeOffer(name, u, e, fields);
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.exit(1);
         }
         return null;
+    }
+
+    /**
+     * Ritorna la lista delle offerte relative all'utente
+     * @param user utente
+     * @return liste di offerte dell'utente
+     */
+    public List<Offer> getOffersByUser(User user) {
+        try {
+            return this.of.getUserOffers(user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
+    }
+
+    /**
+     * Ritorna la lista delle offerte di una certa categoria
+     * @param cat categoria
+     * @return liste di offerte dell'utente
+     */
+    public List<Offer> getOffersByCategory(LeafCategory cat) {
+        try {
+            return this.of.getCategoryOffers(cat);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
+    }
+
+    /**
+     * Ritira un'offerta
+     * @param offerToRetract offerta da ritirare
+     */
+    public void retractOffer(Offer offerToRetract) {
+        // todo condizioni per ritirare l'offerta?
+        try {
+            this.of.setOfferStatus(offerToRetract, Offer.OfferStatus.RETRACTED);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**

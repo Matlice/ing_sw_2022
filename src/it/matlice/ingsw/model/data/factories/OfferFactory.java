@@ -22,5 +22,4 @@ public interface OfferFactory {
     public void setOfferStatus(Offer offer, Offer.OfferStatus status) throws SQLException;
 
     public List<Offer> getCategoryOffers(LeafCategory cat) throws SQLException;
-
 }

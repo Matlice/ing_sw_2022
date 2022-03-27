@@ -171,7 +171,7 @@ public class Menu {
         if (this.prompt != null) out.println("\n" + this.prompt);
 
         for (MenuEntry e : this.entries)
-            out.println(e);
+            out.println(e.toString().replaceAll("\n", "\n\t"));
     }
 
     /**
