@@ -6,7 +6,6 @@ import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.Authentication;
 import it.matlice.ingsw.model.Model;
-import it.matlice.ingsw.model.data.impl.jdbc.types.ArticleImpl;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.view.View;
@@ -29,6 +28,9 @@ public class Controller {
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
             new MenuAction<>("Logout", User.class, this::logout, false, 0, -1),
             new MenuAction<>("Aggiungi nuovo articolo", CustomerUser.class, this::createArticle),
+            new MenuAction<>("Ritira un'offerta aperta", CustomerUser.class, this::retractOffer),
+            new MenuAction<>("Mostra le mie offerte", CustomerUser.class, this::showOffersByUser),
+            new MenuAction<>("Mostra offerte per categoria", User.class, this::showOpenOffersByCategory),
             new MenuAction<>("Aggiungi nuova gerarchia", ConfiguratorUser.class, this::createHierarchy),
             new MenuAction<>("Mostra gerarchie", User.class, this::showHierarchies),
             new MenuAction<>("Mostra parametri di configurazione", User.class, this::showConfParameters),
@@ -206,6 +208,37 @@ public class Controller {
                 "A quale categoria appartiene l'articolo da creare?"
         ).getAction().run();
 
+        return true;
+    }
+
+    /**
+     * Permette all'utente di ritirare una propria offerta aperta
+     * @return true
+     */
+    private boolean retractOffer() {
+        // todo
+        return true;
+    }
+
+    /**
+     * Permette all'utente fruitore di visualizzare tutte
+     * le proprie offerte, indipendentemente dallo stato e dalla categoria
+     *
+     * @return true
+     */
+    private boolean showOffersByUser() {
+        // todo
+        return true;
+    }
+
+    /**
+     * Permette all'utente di visualizzare tutte
+     * le offerte aperte relative ad una categoria foglia
+     *
+     * @return true
+     */
+    private boolean showOpenOffersByCategory() {
+        // todo
         return true;
     }
 
@@ -579,6 +612,8 @@ public class Controller {
 
         Map<String, Object> fields = new HashMap<>();
 
+        String name = this.view.getTrimmedLine("Inserire il nome del nuovo articolo", false);
+
         boolean needRequiredField;
         boolean saveArticle;
         do {
@@ -613,7 +648,7 @@ public class Controller {
         } while (needRequiredField || !saveArticle);
 
         try {
-            this.model.createArticle(this.currentUser.getUser(), e, fields);
+            this.model.createArticle(this.currentUser.getUser(), name, e, fields);
             this.view.warn("L'articolo è stato salvato con successo");
             // todo mark the created article as offerta aperta by default
         } catch (RequiredFieldConstrainException ex) {

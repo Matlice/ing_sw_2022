@@ -74,9 +74,20 @@ public interface View {
 
     /**
      * Richiede all'utente l'inserimento di una stringa (compresa di blanks)
+     * @param prompt messaggio di richiesta all'utente
      * @return la stringa inserita
      */
     String getLine(String prompt);
+
+    /**
+     * Richiede all'utente l'inserimento di una stringa (a cui sono rimossi i blank iniziali e finali)
+     * Permette di specificare se la stringa immessa deve essere non vuota
+     *
+     * @param prompt messaggio di richiesta all'utente
+     * @param canBeEmpty false if the input string must not be empty
+     * @return la stringa inserita
+     */
+    String getTrimmedLine(String prompt, boolean canBeEmpty);
 
     /**
      * Richiede all'utente l'inserimento di un valore intero

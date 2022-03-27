@@ -11,6 +11,7 @@ import it.matlice.ingsw.model.data.impl.jdbc.db.ArticleFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.*;
 import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -46,7 +47,7 @@ public class ArticleFactoryImpl implements ArticleFactory {
         return query;
     }
 
-    public Article makeArticle(User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException {
+    public Article makeArticle(@NotNull String name, User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException {
         assert category instanceof LeafCategoryImpl;
         assert owner instanceof UserImpl;
 
@@ -68,7 +69,7 @@ public class ArticleFactoryImpl implements ArticleFactory {
 
         }
 
-        var article = new ArticleDB(((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData());
+        var article = new ArticleDB(name, ((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData());
         articleDAO.create(article);
         for(var field: values.entrySet()){
             articleFieldDAO.create(new ArticleFieldDB(field.getKey(), article, field.getValue()));

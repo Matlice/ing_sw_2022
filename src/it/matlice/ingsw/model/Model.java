@@ -333,9 +333,9 @@ public class Model {
      * @param e categoria a cui appartiene l'articolo da creare
      * @return articolo creato
      */
-    public Article createArticle(User u, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
+    public Article createArticle(User u, String name, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
         try {
-            return this.af.makeArticle(u, e, fields);
+            return this.af.makeArticle(name, u, e, fields);
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.exit(1);

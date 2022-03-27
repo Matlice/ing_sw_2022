@@ -3,6 +3,7 @@ package it.matlice.ingsw.model.data.factories;
 
 import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public interface ArticleFactory {
 
-    Article makeArticle(User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException;
+    Article makeArticle(@NotNull String name, User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException;
 
     List<Article> getUserArticles(User owner, List<Hierarchy> hierarchyList) throws SQLException;
 

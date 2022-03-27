@@ -9,6 +9,9 @@ public class ArticleDB {
     @DatabaseField(generatedId = true)
     private Integer id;
 
+    @DatabaseField(canBeNull = false)
+    private String name;
+
     @DatabaseField(foreign = true, canBeNull = false)
     private UserDB owner;
 
@@ -18,7 +21,8 @@ public class ArticleDB {
     ArticleDB() {
     }
 
-    public ArticleDB(UserDB owner, CategoryDB category) {
+    public ArticleDB(String name, UserDB owner, CategoryDB category) {
+        this.name = name;
         this.owner = owner;
         this.category = category;
     }
@@ -27,6 +31,9 @@ public class ArticleDB {
         return this.id;
     }
 
+    public String getName() {
+        return this.name;
+    }
     public UserDB getOwner() {
         return this.owner;
     }

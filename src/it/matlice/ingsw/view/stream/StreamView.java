@@ -136,8 +136,9 @@ public class StreamView implements View {
 
     /**
      * Richiede all'utente l'inserimento di una stringa (compresa di blanks)
+     * Ritorna anche stringa vuota
      *
-     * @param prompt
+     * @param prompt messaggio di richiesta all'utente
      * @return la stringa inserita
      */
     @Override
@@ -147,9 +148,29 @@ public class StreamView implements View {
     }
 
     /**
+     * Richiede all'utente l'inserimento di una stringa (a cui sono rimossi i blank iniziali e finali)
+     * Permette di specificare se la stringa immessa deve essere non vuota
+     *
+     * @param prompt messaggio di richiesta all'utente
+     * @param canBeEmpty false if the input string must not be empty
+     * @return la stringa inserita
+     */
+    @Override
+    public String getTrimmedLine(String prompt, boolean canBeEmpty) {
+        String r = this.getLine(prompt).trim();
+
+        while (!canBeEmpty && r.length() == 0) {
+            this.error("La stringa inserita non deve essere vuota");
+            r = this.getLine(prompt).trim();
+        }
+
+        return r;
+    }
+
+    /**
      * Richiede all'utente l'inserimento di un valore intero
      *
-     * @param prompt    messaggio di richiesta all'utente
+     * @param prompt messaggio di richiesta all'utente
      * @param available returns true se l'intero inserito è valido, false per richiederlo
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return l'intero inserito
