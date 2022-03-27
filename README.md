@@ -182,10 +182,10 @@ Inoltre, il **fruitore** può visualizzare tutte le `Offerte aperte` e le `Offer
 
 #### Progresso
 
-- [ ] Creazione di offerte
-- [ ] Modifica degli stati dell'offerta
-- [ ] Visualizzazione offerte in gerarchia e ricerca
-- [ ] Visualizzazione offerte utente
+- [x] Creazione di offerte
+- [x] Modifica degli stati dell'offerta
+- [x] Visualizzazione offerte in gerarchia e ricerca
+- [x] Visualizzazione offerte utente
 
 ### Versione 4
 
