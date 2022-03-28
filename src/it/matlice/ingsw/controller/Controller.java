@@ -94,9 +94,13 @@ public class Controller {
             }
             try {
                 this.model.finalizeLogin(this.currentUser);
-
-                if (this.currentUser.getUser() instanceof ConfiguratorUser && !this.model.hasConfiguredSettings()) {
-                    this.configureSettings(true);
+                if(!this.model.hasConfiguredSettings()){
+                    if (this.currentUser.getUser() instanceof ConfiguratorUser)
+                        this.configureSettings(true);
+                    else {
+                        this.view.error("Il sistema non è ancora utilizzabile. Contattare un configuratore.");
+                        this.logout();
+                    }
                 }
 
             } catch (SQLException e) {
@@ -119,6 +123,7 @@ public class Controller {
 
         try {
             this.model.registerUser(username, psw);
+            this.view.warn("Utente registrato con successo.");
         } catch (InvalidPasswordException e) {
             this.view.error("La password inserita non rispetta i requisiti di sicurezza");
         } catch (DuplicateUserException e) {
@@ -246,7 +251,7 @@ public class Controller {
         // mostra la lista di gerarchie disponibili
         List<Hierarchy> hierarchies = this.model.getHierarchies();
         if (hierarchies.size() == 0) {
-            this.view.info("Nessuna gerarchia trovata");
+            this.view.warn("Nessuna gerarchia trovata");
             return true;
         }
 
