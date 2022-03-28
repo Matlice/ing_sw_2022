@@ -372,6 +372,18 @@ public class Model {
     }
 
     /**
+     * Ritorna una lista di offerte che possono essere ritirate dall'utente
+     * @param user utente
+     * @return lista di offerte ritirabili
+     */
+    public List<Offer> getRetractableOffers(User user) {
+        return this.getOffersByUser(user)
+                .stream()
+                .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED) // todo fixare in v4
+                .toList();
+    }
+
+    /**
      * Ritira un'offerta
      * @param offerToRetract offerta da ritirare
      */

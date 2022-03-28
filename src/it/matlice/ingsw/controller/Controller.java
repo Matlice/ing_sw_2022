@@ -218,10 +218,7 @@ public class Controller {
      * @return true
      */
     private boolean retractOffer() {
-        List<Offer> offers = this.model.getOffersByUser(this.currentUser.getUser())
-                .stream()
-                .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED) // todo fixare in v4
-                .toList();
+        List<Offer> offers = this.model.getRetractableOffers(this.currentUser.getUser());
 
         if (offers.size() == 0) {
             this.view.warn("Non ci sono offerte ritirabili");
