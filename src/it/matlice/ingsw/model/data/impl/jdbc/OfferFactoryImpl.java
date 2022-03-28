@@ -96,10 +96,11 @@ public class OfferFactoryImpl implements OfferFactory {
             return (LeafCategory) cat;
         }
 
-        assert cat instanceof NodeCategoryImpl;
-        for (var child : ((NodeCategoryImpl) cat).getChildren()) {
-            var r = findCategory(child, id);
-            if(r != null) return r;
+        if(cat instanceof NodeCategoryImpl){
+            for (var child : ((NodeCategoryImpl) cat).getChildren()) {
+                var r = findCategory(child, id);
+                if(r != null) return r;
+            }
         }
         return null;
     }

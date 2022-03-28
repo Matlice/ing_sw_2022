@@ -100,8 +100,13 @@ public class Controller {
             try {
                 this.model.finalizeLogin(this.currentUser);
 
-                if (this.currentUser.getUser() instanceof ConfiguratorUser && !this.model.hasConfiguredSettings()) {
-                    this.configureSettings(true);
+                if(!this.model.hasConfiguredSettings()){
+                    if (this.currentUser.getUser() instanceof ConfiguratorUser)
+                        this.configureSettings(true);
+                    else {
+                        this.view.error("Il sistema non è ancora utilizzabile. Contattare un configuratore.");
+                        this.logout();
+                    }
                 }
 
             } catch (SQLException e) {
@@ -124,6 +129,7 @@ public class Controller {
 
         try {
             this.model.registerUser(username, psw);
+            this.view.warn("Utente registrato con successo.");
         } catch (InvalidPasswordException e) {
             this.view.error("La password inserita non rispetta i requisiti di sicurezza");
         } catch (DuplicateUserException e) {
@@ -198,6 +204,10 @@ public class Controller {
      */
     private boolean createArticle() {
         // scelta della categoria in cui inserire l'articolo
+        if(this.model.getLeafCategories().size() == 0){
+            this.view.warn("Non ci sono ancora categorie a cui associare un articolo. Contattare un configuratore");
+            return true;
+        }
         LeafCategory cat = this.chooseLeafCategory("A quale categoria appartiene l'articolo da creare?");
         this.addArticle(cat);
         return true;
@@ -253,6 +263,10 @@ public class Controller {
      * @return true
      */
     private boolean showOpenOffersByCategory() {
+        if(this.model.getLeafCategories().size() == 0){
+            this.view.warn("Non ci sono ancora categorie a cui associare un articolo. Contattare un configuratore");
+            return true;
+        }
         LeafCategory cat = this.chooseLeafCategory("Di quale categoria si vogliono visualizzare le offerte aperte?");
         List<Offer> offers = this.model.getOffersByCategory(cat)
                 .stream()
@@ -323,7 +337,7 @@ public class Controller {
         // mostra la lista di gerarchie disponibili
         List<Hierarchy> hierarchies = this.model.getHierarchies();
         if (hierarchies.size() == 0) {
-            this.view.info("Nessuna gerarchia trovata");
+            this.view.warn("Nessuna gerarchia trovata");
             return true;
         }
 
