@@ -43,7 +43,7 @@ public interface OfferFactory {
      * @param status stato dell'offerta
      * @throws SQLException .
      */
-    public void setOfferStatus(Offer offer, Offer.OfferStatus status) throws SQLException;
+    void setOfferStatus(Offer offer, Offer.OfferStatus status) throws SQLException;
 
     /**
      * Ottiene la lista di offerte associate a una categoria.
@@ -53,6 +53,13 @@ public interface OfferFactory {
      * @return offerte associate alla categoria
      * @throws SQLException .
      */
-    public List<Offer> getCategoryOffers(LeafCategory cat) throws SQLException;
+    List<Offer> getCategoryOffers(LeafCategory cat) throws SQLException;
 
+    /**
+     * Permette di accoppiare due offerte, la prima è dell'utente che propone lo scambio
+     * @param offerToTrade offerta accoppiata
+     * @param offerToAccept offerta selezionata
+     * @throws SQLException
+     */
+    void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws SQLException;
 }

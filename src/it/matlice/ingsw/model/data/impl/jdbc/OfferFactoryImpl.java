@@ -2,13 +2,13 @@ package it.matlice.ingsw.model.data.impl.jdbc;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.stmt.Where;
+import com.j256.ormlite.stmt.*;
 import com.j256.ormlite.table.TableUtils;
+import it.matlice.ingsw.model.Settings;
 import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.model.data.factories.OfferFactory;
-import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
-import it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB;
-import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
+import it.matlice.ingsw.model.data.factories.SettingsFactory;
+import it.matlice.ingsw.model.data.impl.jdbc.db.*;
 import it.matlice.ingsw.model.data.impl.jdbc.types.*;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
@@ -22,8 +22,9 @@ public class OfferFactoryImpl implements OfferFactory {
     private final Dao<OfferDB, Integer> offerDAO;
     private final Dao<OfferFieldDB, Integer> offerFieldDAO;
     private final Dao<CategoryFieldDB, Integer> categoryFieldDAO;
+    private final SettingsFactory settingsFactory;
 
-    public OfferFactoryImpl() throws SQLException {
+    public OfferFactoryImpl(SettingsFactory sf) throws SQLException {
         var connectionSource = JdbcConnection.getInstance().getConnectionSource();
 
         this.offerDAO = DaoManager.createDao(connectionSource, OfferDB.class);
@@ -36,10 +37,12 @@ public class OfferFactoryImpl implements OfferFactory {
             TableUtils.createTable(connectionSource, OfferFieldDB.class);
         if (!this.categoryFieldDAO.isTableExists())
             TableUtils.createTable(connectionSource, CategoryFieldDB.class);
+
+        this.settingsFactory = sf;
     }
 
     private Where<CategoryFieldDB, Integer> fieldQuery(Category category) throws SQLException {
-        var query = categoryFieldDAO.queryBuilder().where().eq("category_id", ((LeafCategoryImpl) category).getDbData());
+        var query = this.categoryFieldDAO.queryBuilder().where().eq("category_id", ((LeafCategoryImpl) category).getDbData());
         NodeCategoryImpl curcat = (NodeCategoryImpl) category.getFather();
         while(curcat != null){
             query = query.or().eq("category_id", curcat.getDbData().getCategoryId());
@@ -56,8 +59,8 @@ public class OfferFactoryImpl implements OfferFactory {
         Map<CategoryFieldDB, String> values = new HashMap<>();
         for(var field: category.fullEntrySet()){
 
-            var db_field = categoryFieldDAO.query(
-                    fieldQuery(category).and().eq("fieldName",field.getKey()).prepare()
+            var db_field = this.categoryFieldDAO.query(
+                    this.fieldQuery(category).and().eq("fieldName",field.getKey()).prepare()
             );
 
             if(db_field.size() == 0)
@@ -71,19 +74,19 @@ public class OfferFactoryImpl implements OfferFactory {
 
         }
 
-        var offer = new OfferDB(name, ((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData(), Offer.OfferStatus.OPEN);
-        offerDAO.create(offer);
+        var offer = new OfferDB(name, ((UserImpl) owner).getDbData(), ((LeafCategoryImpl) category).getDbData(), Offer.OfferStatus.OPEN, null, null);
+        this.offerDAO.create(offer);
         for(var field: values.entrySet()){
-            offerFieldDAO.create(new OfferFieldDB(field.getKey(), offer, field.getValue()));
+            this.offerFieldDAO.create(new OfferFieldDB(field.getKey(), offer, field.getValue()));
         }
 
-        return new OfferImpl(offer, category, owner);
+        return new OfferImpl(offer, category, owner, null);
     }
 
     private LeafCategory findCategory(List<Hierarchy> hierarchyList, int id){
         LeafCategory c;
         for (Hierarchy e: hierarchyList) {
-            c = findCategory(e.getRootCategory(), id);
+            c = this.findCategory(e.getRootCategory(), id);
             if(c != null) return c;
         }
         throw new RuntimeException("Category not found but should be.");
@@ -98,49 +101,95 @@ public class OfferFactoryImpl implements OfferFactory {
 
         if(cat instanceof NodeCategoryImpl){
             for (var child : ((NodeCategoryImpl) cat).getChildren()) {
-                var r = findCategory(child, id);
+                var r = this.findCategory(child, id);
                 if(r != null) return r;
             }
         }
         return null;
     }
 
+    private void checkForDueDate() throws SQLException {
+        var time = System.currentTimeMillis() / 1000L; // actual time
+        var due_delta = this.settingsFactory.readSettings().getDue()*24*60*60; // expiration time
+
+        // if time > proposed_time + due_delta then the offer has expired
+        // proposed_time < time - due_delta
+        var due = time - due_delta;
+
+        UpdateBuilder<OfferDB, Integer> offerUpdateBuilder = this.offerDAO.updateBuilder();
+        offerUpdateBuilder.updateColumnValue("status", Offer.OfferStatus.OPEN.toString())
+                .updateColumnValue("proposed_time", null)
+                .updateColumnValue("linked_offer_id", null)
+                .where().lt("proposed_time", due)
+                .and()
+                .ne("status", Offer.OfferStatus.RETRACTED)
+                .ne("status", Offer.OfferStatus.CLOSED);
+        PreparedUpdate<OfferDB> preparedUpdate = offerUpdateBuilder.prepare();
+        this.offerDAO.update(preparedUpdate);
+    }
+
+    private OfferImpl instantiateOffer(@NotNull OfferDB offerDb, OfferImpl linkedOffer) {
+        try {
+            List<OfferFieldDB> fields = this.offerFieldDAO.queryForEq("offer_ref_id", offerDb.getId());
+            OfferImpl art = null;
+            if (offerDb.getLinkedOffer() == null) {
+                art = new OfferImpl(offerDb,
+                        this.findCategory(new HierarchyFactoryImpl().getHierarchies(), offerDb.getCategory().getCategoryId()),
+                        new UserFactoryImpl().getUser(offerDb.getOwner().getUsername()),
+                        null);
+            } else if (linkedOffer != null && offerDb.getLinkedOffer().getId().equals(linkedOffer.getDbData().getId())) {
+                art = new OfferImpl(offerDb,
+                        this.findCategory(new HierarchyFactoryImpl().getHierarchies(), offerDb.getCategory().getCategoryId()),
+                        new UserFactoryImpl().getUser(offerDb.getOwner().getUsername()),
+                        linkedOffer);
+            } else {
+                art = new OfferImpl(offerDb,
+                        this.findCategory(new HierarchyFactoryImpl().getHierarchies(), offerDb.getCategory().getCategoryId()),
+                        new UserFactoryImpl().getUser(offerDb.getOwner().getUsername()),
+                        null);
+
+                OfferImpl linked = this.instantiateOffer(offerDb.getLinkedOffer(), art);
+
+                art.setLinkedOffer(linked);
+            }
+
+            for (var f : fields) {
+                if(art.getCategory().containsKey(f.getRef().getFieldName()))
+                    art.put(f.getRef().getFieldName(),
+                            art.getCategory().get(f.getRef().getFieldName()).type().deserialize(f.getValue()));
+            }
+            return art;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        } catch (InvalidUserException e) {/* impossible */}
+        return null;
+    }
+
     @Override
     public List<Offer> getUserOffers(User owner) throws SQLException {
+        this.checkForDueDate();
         assert owner instanceof UserImpl;
 
-        var offer_db = offerDAO.queryForEq("owner_id",  ((UserImpl) owner).getDbData());
+        var offer_db = this.offerDAO.queryForEq("owner_id",  ((UserImpl) owner).getDbData());
 
         var offers = new LinkedList<Offer>();
         for(var a: offer_db){
-            var fields = offerFieldDAO.queryForEq("offer_ref_id", a.getId());
-            var art = new OfferImpl(a, findCategory(new HierarchyFactoryImpl().getHierarchies(), a.getCategory().getCategoryId()), owner);
-            fields.forEach(e -> {
-                if(art.getCategory().containsKey(e.getRef().getFieldName()))
-                    art.put(e.getRef().getFieldName(), art.getCategory().get(e.getRef().getFieldName()).type().deserialize(e.getValue())); //java é un po' bruttino eh
-            });
-            offers.add(art);
+            offers.add(this.instantiateOffer(a, null));
         }
         return offers;
     }
 
     @Override
     public List<Offer> getCategoryOffers(LeafCategory cat) throws SQLException{
+        this.checkForDueDate();
         assert cat instanceof LeafCategoryImpl;
 
-        var offer_db = offerDAO.queryForEq("category_id", ((LeafCategoryImpl) cat).getDbData().getCategoryId());
+        var offer_db = this.offerDAO.queryForEq("category_id", ((LeafCategoryImpl) cat).getDbData().getCategoryId());
 
         var offers = new LinkedList<Offer>();
         for(var a: offer_db){
-            var fields = offerFieldDAO.queryForEq("offer_ref_id", a.getId());
-            try {
-                var art = new OfferImpl(a, cat, new UserFactoryImpl().getUser(a.getOwner().getUsername()));
-                fields.forEach(e -> {
-                    if(art.getCategory().containsKey(e.getRef().getFieldName()))
-                        art.put(e.getRef().getFieldName(), art.getCategory().get(e.getRef().getFieldName()).type().deserialize(e.getValue())); //java é un po' bruttino eh
-                });
-                offers.add(art);
-            } catch (InvalidUserException e) {/*impossibile*/}
+            offers.add(this.instantiateOffer(a, null));
         }
         return offers;
     }
@@ -152,4 +201,27 @@ public class OfferFactoryImpl implements OfferFactory {
         this.offerDAO.update(((OfferImpl) offer).getDbData());
     }
 
+    private void setOfferLinked(Offer offerToAccept, Offer offerToTrade) throws SQLException {
+        assert offerToAccept instanceof OfferImpl;
+        assert offerToTrade instanceof OfferImpl;
+        ((OfferImpl) offerToAccept).setLinkedOffer((OfferImpl) offerToTrade);
+        this.offerDAO.update(((OfferImpl) offerToAccept).getDbData());
+    }
+
+    private void setOfferProposedTime(Offer offer, long time) throws SQLException {
+        assert offer instanceof OfferImpl;
+        ((OfferImpl) offer).getDbData().setProposedTime(time);
+        this.offerDAO.update(((OfferImpl) offer).getDbData());
+    }
+
+    @Override
+    public void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws SQLException {
+        this.setOfferStatus(offerToTrade, Offer.OfferStatus.COUPLED);
+        this.setOfferStatus(offerToAccept, Offer.OfferStatus.SELECTED);
+        this.setOfferLinked(offerToAccept, offerToTrade);
+        this.setOfferLinked(offerToTrade, offerToAccept);
+        var time = System.currentTimeMillis() / 1000L;
+        this.setOfferProposedTime(offerToTrade, time);
+        this.setOfferProposedTime(offerToAccept, time);
+    }
 }

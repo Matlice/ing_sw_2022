@@ -22,14 +22,22 @@ public class OfferDB {
     @DatabaseField(canBeNull = false)
     private String status;
 
+    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
+    private OfferDB linked_offer;
+
+    @DatabaseField()
+    private Long proposed_time;
+
     OfferDB() {
     }
 
-    public OfferDB(String name, UserDB owner, CategoryDB category, Offer.OfferStatus status) {
+    public OfferDB(String name, UserDB owner, CategoryDB category, Offer.OfferStatus status, OfferDB linked_offer, Long proposed_time) {
         this.name = name;
         this.owner = owner;
         this.category = category;
         this.status = status.toString();
+        this.linked_offer = linked_offer;
+        this.proposed_time = proposed_time;
     }
 
     public Integer getId() {
@@ -47,9 +55,24 @@ public class OfferDB {
     public Offer.OfferStatus getStatus() {
         return Offer.OfferStatus.valueOf(this.status);
     }
+    public OfferDB getLinkedOffer() {
+        return this.linked_offer;
+    }
+    public Long getProposedTime() {
+        return this.proposed_time;
+    }
+
     public void setStatus(Offer.OfferStatus status) {
-        this.status = status.toString()
-;    }
+        this.status = status.toString();
+    }
+
+    public void setLinkedOffer(OfferDB dbData) {
+        this.linked_offer = dbData;
+    }
+
+    public void setProposedTime(long time) {
+        this.proposed_time = time;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -57,4 +80,5 @@ public class OfferDB {
         if (this.id == null) return false;
         return this.id.equals(((OfferDB) obj).id);
     }
+
 }

@@ -5,23 +5,23 @@ import it.matlice.ingsw.model.data.LeafCategory;
 import it.matlice.ingsw.model.data.User;
 import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
 
-import java.util.Objects;
-
 public class OfferImpl extends Offer {
 
     private OfferDB dbData;
 
     private LeafCategory category;
     private User owner;
+    private Offer linked_offer;
 
     public OfferDB getDbData() {
         return this.dbData;
     }
 
-    public OfferImpl(OfferDB dbData, LeafCategory category, User owner) {
+    public OfferImpl(OfferDB dbData, LeafCategory category, User owner, Offer linked_offer) {
         this.dbData = dbData;
         this.category = category;
         this.owner = owner;
+        this.linked_offer = linked_offer;
     }
 
     @Override
@@ -44,5 +44,19 @@ public class OfferImpl extends Offer {
         return this.category;
     }
 
+    @Override
+    public Offer getLinkedOffer() {
+        return this.linked_offer;
+    }
+
+    @Override
+    public Long getProposedTime() {
+        return this.dbData.getProposedTime();
+    }
+
+    public void setLinkedOffer(OfferImpl linked) {
+        this.linked_offer = linked;
+        this.dbData.setLinkedOffer(linked.dbData);
+    }
 
 }

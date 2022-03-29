@@ -29,7 +29,7 @@ public class EntryPoint {
             var cf = new CategoryFactoryImpl();
             var hf = new HierarchyFactoryImpl();
             var sf = new SettingsFactoryImpl();
-            var af = new OfferFactoryImpl();
+            var af = new OfferFactoryImpl(sf);
 
             var model = new Model(hf, cf, uf, sf, af);
 

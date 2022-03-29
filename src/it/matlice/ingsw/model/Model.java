@@ -449,7 +449,14 @@ public class Model {
         if (!offerToTrade.getCategory().equals(offerToAccept.getCategory())) throw new InvalidTradeOfferException();
         if (offerToTrade.getOwner().equals(offerToAccept.getOwner())) throw new InvalidTradeOfferException();
 
-        // todo
+        try {
+            this.of.createTradeOffer(offerToTrade, offerToAccept);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        // todo far ritornare aperte entrambe dopo scadenza
 
     }
 
