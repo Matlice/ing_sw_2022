@@ -694,8 +694,7 @@ public class Controller {
 
         try {
             this.model.createOffer(this.currentUser.getUser(), name, e, fields);
-            this.view.warn("L'articolo è stato salvato con successo");
-            // todo mark the created article as offerta aperta by default
+            this.view.warn("L'articolo è stato salvato con successo, è ora disponibile allo scambio");
         } catch (RequiredFieldConstrainException ex) {
             this.view.error("Impossibile creare l'articolo, campo obbligatorio mancante");
         }

@@ -373,13 +373,14 @@ public class Model {
 
     /**
      * Ritorna una lista di offerte che possono essere ritirate dall'utente
+     * Possono essere ritirate le offerte in stato non RETRACTED
      * @param user utente
      * @return lista di offerte ritirabili
      */
     public List<Offer> getRetractableOffers(User user) {
         return this.getOffersByUser(user)
                 .stream()
-                .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED) // todo fixare in v4
+                .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED)
                 .toList();
     }
 
@@ -388,9 +389,9 @@ public class Model {
      * @param offerToRetract offerta da ritirare
      */
     public void retractOffer(Offer offerToRetract) {
-        // todo condizioni per ritirare l'offerta?
         try {
-            this.of.setOfferStatus(offerToRetract, Offer.OfferStatus.RETRACTED);
+            if (offerToRetract.getStatus() != Offer.OfferStatus.RETRACTED)
+                this.of.setOfferStatus(offerToRetract, Offer.OfferStatus.RETRACTED);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
