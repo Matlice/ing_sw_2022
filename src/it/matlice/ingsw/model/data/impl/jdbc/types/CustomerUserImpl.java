@@ -71,5 +71,11 @@ public class CustomerUserImpl extends CustomerUser implements PasswordAuthentica
         this.dbData.setPasswordSalt(Base64.getEncoder().encodeToString(salt));
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CustomerUserImpl)) return false;
+        if (this.dbData == null) return false;
+        return this.dbData.equals(((CustomerUserImpl) obj).dbData);
+    }
 
 }

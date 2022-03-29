@@ -65,4 +65,12 @@ public class UserDB {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof UserDB)) return false;
+        if (this.username == null) return false;
+        return this.username.equals(((UserDB) obj).username);
+    }
+
 }

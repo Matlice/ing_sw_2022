@@ -71,5 +71,11 @@ public class ConfiguratorUserImpl extends ConfiguratorUser implements PasswordAu
         this.dbData.setPasswordSalt(Base64.getEncoder().encodeToString(salt));
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ConfiguratorUserImpl)) return false;
+        if (this.dbData == null) return false;
+        return this.dbData.equals(((ConfiguratorUserImpl) obj).dbData);
+    }
 
 }

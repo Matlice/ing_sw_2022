@@ -4,6 +4,7 @@ import it.matlice.ingsw.model.data.LeafCategory;
 import it.matlice.ingsw.model.data.NodeCategory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
+import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +52,13 @@ public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
         if (father != null)
             father.addChild(r);
         return r;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof LeafCategoryImpl)) return false;
+        if (this.dbData == null) return false;
+        return this.dbData.equals(((LeafCategoryImpl) obj).dbData);
     }
 
 }

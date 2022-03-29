@@ -50,4 +50,11 @@ public class OfferDB {
     public void setStatus(Offer.OfferStatus status) {
         this.status = status.toString()
 ;    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof OfferDB)) return false;
+        if (this.id == null) return false;
+        return this.id.equals(((OfferDB) obj).id);
+    }
 }

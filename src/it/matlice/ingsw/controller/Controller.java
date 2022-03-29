@@ -28,6 +28,7 @@ public class Controller {
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
             new MenuAction<>("Logout", User.class, this::logout, false, 0, -1),
+            new MenuAction<>("Proponi uno scambio", CustomerUser.class, this::offerTrade),
             new MenuAction<>("Aggiungi nuovo articolo", CustomerUser.class, this::createArticle),
             new MenuAction<>("Ritira un'offerta aperta", CustomerUser.class, this::retractOffer),
             new MenuAction<>("Mostra le mie offerte", CustomerUser.class, this::showOffersByUser),
@@ -197,6 +198,47 @@ public class Controller {
     }
 
     /**
+     * Permette all'utente fruitore di proporre un suo articolo
+     * in scambio con un altro articolo di un altro utente appartenente alla stessa categoria
+     *
+     * @return true
+     */
+    private boolean offerTrade() {
+
+        // scelta del proprio articolo da scambiare
+        List<Offer> userOffers = this.model.getTradableOffers(this.currentUser.getUser());
+
+        if (userOffers.size() == 0) {
+            this.view.warn("Non hai offerte disponibili allo scambio");
+            return true;
+        }
+        var offerToTrade = this.selectOffer("Quale offerta si vuole proporre in scambio?", "Esci", userOffers);
+        if (offerToTrade == null) {
+            return true;
+        }
+
+        // scelta dell'articolo che si vuole accettare in scambio
+        List<Offer> offers = this.model.getTradableOffers(offerToTrade);
+        if (offers.size() == 0) {
+            this.view.warn("Non ci sono offerte disponibili allo scambio");
+            return true;
+        }
+        var offerToAccept = this.selectOffer("Quale offerta si vuole accettare in scambio?", "Esci", offers);
+        if (offerToAccept == null) {
+            return true;
+        }
+
+        try {
+            this.model.createTradeOffer(offerToTrade, offerToAccept);
+            this.view.warn("Proposta di scambio confermata");
+        } catch (Exception e) {
+            this.view.error("Impossibile proporre lo scambio");
+        }
+
+        return true;
+    }
+
+    /**
      * Permette all'utente fruitore di creare un nuovo articolo
      * appartenente ad una categoria foglia
      *
@@ -226,13 +268,7 @@ public class Controller {
         }
 
         // permette all'utente di scegliere quale offerta ritirare
-        var actions = offers
-                .stream()
-                .map((p) -> new MenuAction<>(p.toString(), User.class, () -> p))
-                .collect(Collectors.toCollection(ArrayList::new));
-        actions.add(0, new MenuAction<>("Esci", User.class, () -> null, false, 0, -1));
-        var offerToRetract = this.chooseAndRun(actions, "Quale offerta si vuole ritirare?");
-
+        var offerToRetract = this.selectOffer("Quale offerta si vuole ritirare?", "Esci", offers);
         if (offerToRetract == null) return true;
 
         this.model.retractOffer(offerToRetract);
@@ -726,6 +762,24 @@ public class Controller {
         }
 
         this.view.showList(prompt, offers.stream().map(Offer::toString).toList());
+    }
+
+    /**
+     * Permette all'utente di scegliere un'offerta da una lista di offerte
+     * Ritorna null se l'utente vuole annullare l'operazione
+     *
+     * @param prompt messaggio per l'utente
+     * @param cancel messaggio per annullare
+     * @param offers offerte tra cui scegliere
+     * @return
+     */
+    private Offer selectOffer(String prompt, String cancel, List<Offer> offers) {
+        var actions = offers
+                .stream()
+                .map((p) -> new MenuAction<>(p.toString(), User.class, () -> p))
+                .collect(Collectors.toCollection(ArrayList::new));
+        actions.add(0, new MenuAction<>(cancel, User.class, () -> null, false, 0, -1));
+        return this.chooseAndRun(actions, prompt);
     }
 
 }

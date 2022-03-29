@@ -54,4 +54,5 @@ public interface OfferFactory {
      * @throws SQLException .
      */
     public List<Offer> getCategoryOffers(LeafCategory cat) throws SQLException;
+
 }

@@ -62,4 +62,12 @@ public class NodeCategoryImpl extends NodeCategory implements CategoryImpl {
         ((CategoryImpl) child).getDbData().setFather(null);
         return super.removeChild(child);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof NodeCategoryImpl)) return false;
+        if (this.dbData == null) return false;
+        return this.dbData.equals(((NodeCategoryImpl) obj).dbData);
+    }
+
 }

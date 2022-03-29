@@ -399,6 +399,61 @@ public class Model {
     }
 
     /**
+     * Ritorna una lista di aticoli dell'utente disponibili allo scambio,
+     * ovvero la lista delle sue offerte aperte
+     * @param owner proprietario
+     * @return lista di offerte scambiabili
+     */
+    public List<Offer> getTradableOffers(User owner) {
+        try {
+            return this.of.getUserOffers(owner)
+                    .stream()
+                    .filter((e) -> e.getStatus().equals(Offer.OfferStatus.OPEN))
+                    .toList();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
+    }
+
+    /**
+     * Ritorna una lisa di articoli scambiabili con l'articolo dato,
+     * ovvero tutte le offerte aperte aperte di altri utenti appartenenti
+     * alla stessa caategoria foglia dell'offerta data
+     * @param offerToTrade offerta da scambiaare
+     * @return lista di offerte scambiabili
+     */
+    public List<Offer> getTradableOffers(Offer offerToTrade) {
+        try {
+            return this.of.getCategoryOffers(offerToTrade.getCategory())
+                    .stream()
+                    .filter((e) -> !e.getOwner().equals(offerToTrade.getOwner()))
+                    .filter((e) -> e.getStatus().equals(Offer.OfferStatus.OPEN))
+                    .toList();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
+    }
+
+    /**
+     * Aggiunge una proposta di scambio tra due offerte
+     * @param offerToTrade articolo dell'utente che propone lo scambio
+     * @param offerToAccept articolo richiesto in cambio
+     */
+    public void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws InvalidTradeOfferException {
+        if (offerToTrade.getStatus() != Offer.OfferStatus.OPEN) throw new InvalidTradeOfferException();
+        if (offerToAccept.getStatus() != Offer.OfferStatus.OPEN) throw new InvalidTradeOfferException();
+        if (!offerToTrade.getCategory().equals(offerToAccept.getCategory())) throw new InvalidTradeOfferException();
+        if (offerToTrade.getOwner().equals(offerToAccept.getOwner())) throw new InvalidTradeOfferException();
+
+        // todo
+
+    }
+
+    /**
      * Classe che gestisce l'autenticazione dell'utente
      */
     private static class AuthImpl implements Authentication {

@@ -5,6 +5,8 @@ import it.matlice.ingsw.model.data.LeafCategory;
 import it.matlice.ingsw.model.data.User;
 import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
 
+import java.util.Objects;
+
 public class OfferImpl extends Offer {
 
     private OfferDB dbData;
@@ -41,5 +43,6 @@ public class OfferImpl extends Offer {
     public LeafCategory getCategory() {
         return this.category;
     }
+
 
 }

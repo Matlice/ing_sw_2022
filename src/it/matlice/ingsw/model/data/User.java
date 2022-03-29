@@ -33,4 +33,5 @@ public abstract class User implements Authenticable {
             return this.typeRepresentation;
         }
     }
+
 }
