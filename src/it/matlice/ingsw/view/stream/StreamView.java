@@ -89,11 +89,11 @@ public class StreamView implements View {
      * @param list    list of string to show
      */
     @Override
-    public void showList(String message, List<String> list) {
+    public <T> void showList(String message, List<T> list) {
         StringJoiner sj = new StringJoiner("\n\t");
         sj.add(message);
         list.forEach((e) -> {
-            sj.add(e.replaceAll("\n", "\n\t"));
+            sj.add(e.toString().replaceAll("\n", "\n\t"));
         });
         this.out.println();
         this.info(sj.toString());

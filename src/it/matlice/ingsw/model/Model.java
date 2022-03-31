@@ -5,6 +5,7 @@ import it.matlice.ingsw.model.auth.AuthMethod;
 import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.data.factories.*;
+import it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.model.data.*;
 import org.jetbrains.annotations.Contract;
@@ -28,6 +29,9 @@ public class Model {
     private final UserFactory uf;
     private final SettingsFactory sf;
     private final OfferFactory of;
+    private final MessageFactory mf;
+
+    private it.matlice.ingsw.model.data.Settings settings = null;
 
     /**
      * Costruttore del Model
@@ -37,12 +41,13 @@ public class Model {
      * @param sf la settings factory che permette di interfacciarsi col DB per i parametri di configurazione
      * @param af la article factory che permette di interfacciarsi col DB per gli articoli
      */
-    public Model(@NotNull HierarchyFactory hf, @NotNull CategoryFactory cf, @NotNull UserFactory uf, @NotNull SettingsFactory sf, @NotNull OfferFactory af) {
+    public Model(@NotNull HierarchyFactory hf, @NotNull CategoryFactory cf, @NotNull UserFactory uf, @NotNull SettingsFactory sf, @NotNull OfferFactory af, @NotNull MessageFactory mf) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
         this.sf = sf;
         this.of = af;
+        this.mf = mf;
     }
 
     /**
@@ -284,7 +289,8 @@ public class Model {
      */
     public it.matlice.ingsw.model.data.Settings readSettings() {
         try {
-            return this.sf.readSettings();
+            if(this.settings == null) this.settings = this.sf.readSettings();
+            return this.settings;
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -348,7 +354,7 @@ public class Model {
      */
     public List<Offer> getOffersByUser(User user) {
         try {
-            return this.of.getUserOffers(user);
+            return this.of.getOffers(user);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -363,7 +369,7 @@ public class Model {
      */
     public List<Offer> getOffersByCategory(LeafCategory cat) {
         try {
-            return this.of.getCategoryOffers(cat);
+            return this.of.getOffers(cat);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -406,7 +412,7 @@ public class Model {
      */
     public List<Offer> getTradableOffers(User owner) {
         try {
-            return this.of.getUserOffers(owner)
+            return this.of.getOffers(owner)
                     .stream()
                     .filter((e) -> e.getStatus().equals(Offer.OfferStatus.OPEN))
                     .toList();
@@ -426,7 +432,7 @@ public class Model {
      */
     public List<Offer> getTradableOffers(Offer offerToTrade) {
         try {
-            return this.of.getCategoryOffers(offerToTrade.getCategory())
+            return this.of.getOffers(offerToTrade.getCategory())
                     .stream()
                     .filter((e) -> !e.getOwner().equals(offerToTrade.getOwner()))
                     .filter((e) -> e.getStatus().equals(Offer.OfferStatus.OPEN))
@@ -458,6 +464,25 @@ public class Model {
 
         // todo far ritornare aperte entrambe dopo scadenza
 
+    }
+
+    public void timeIteration() {
+        try {
+            this.of.checkForDueDate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public List<Offer> getSelectedOffers(Authentication auth){
+        try {
+            return this.of.getSelectedOffers(auth.getUser());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
     }
 
     /**

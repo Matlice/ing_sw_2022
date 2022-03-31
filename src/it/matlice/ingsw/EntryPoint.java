@@ -8,6 +8,7 @@ import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.view.stream.StreamView;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -20,6 +21,28 @@ public class EntryPoint {
      * @param args nessuno
      */
     public static void main(String[] args) {
+//
+//        try {
+//            JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+//            var uf = new UserFactoryImpl();
+//            var cf = new CategoryFactoryImpl();
+//            var hf = new HierarchyFactoryImpl();
+//            var sf = new SettingsFactoryImpl();
+//            var af = new OfferFactoryImpl(sf);
+//            var mf = new MessageFactoryImpl();
+//
+//            var u = uf.getUser("pippo");
+//            var o = af.getOffers(u).get(0);
+//            var m1 = mf.send(o.getLinkedOffer(), "ciao", new Date(10));
+//
+//            var u2 = uf.getUser("pluto");
+//            var ms = mf.getUserMessages(u2);
+//            System.out.println(ms);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        System.exit(0);
+
         try {
             Logger.setGlobalLogLevel(Level.WARNING);
             JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
@@ -30,8 +53,9 @@ public class EntryPoint {
             var hf = new HierarchyFactoryImpl();
             var sf = new SettingsFactoryImpl();
             var af = new OfferFactoryImpl(sf);
+            var mf = new MessageFactoryImpl();
 
-            var model = new Model(hf, cf, uf, sf, af);
+            var model = new Model(hf, cf, uf, sf, af, mf);
 
             // istanzia una view sugli stream stdin e stdout
             var view = new StreamView(System.out, new Scanner(System.in));
@@ -43,7 +67,7 @@ public class EntryPoint {
             }
 
             // esecuzione in loop del programma
-            while (controller.mainloop()) ;
+            while (controller.mainloop());
 
         } catch (SQLException e) {
             // errore durante la connessione al database, interrompe l'esecuzione

@@ -49,7 +49,7 @@ public interface View {
      * @param message message to show before the list
      * @param list list of string to show
      */
-    void showList(String message, List<String> list);
+    <T> void showList(String message, List<T> list);
 
     /**
      * Richiede all'utente l'inserimento di una password

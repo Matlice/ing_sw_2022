@@ -29,6 +29,10 @@ public class Controller {
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
             new MenuAction<>("Logout", User.class, this::logout, false, 0, -1),
             new MenuAction<>("Proponi uno scambio", CustomerUser.class, this::offerTrade),
+
+            new MenuAction<>("Accetta uno scambio", CustomerUser.class, this::acceptTrade),
+            new MenuAction<>("Rispondi a un messaggio", CustomerUser.class, this::answerMessage),
+
             new MenuAction<>("Aggiungi nuovo articolo", CustomerUser.class, this::createArticle),
             new MenuAction<>("Ritira un'offerta aperta", CustomerUser.class, this::retractOffer),
             new MenuAction<>("Mostra le mie offerte", CustomerUser.class, this::showOffersByUser),
@@ -66,8 +70,16 @@ public class Controller {
      * @return false se l'esecuzione deve essere interrotta
      */
     public boolean mainloop() {
+
+        this.model.timeIteration();
+
         if (this.currentUser == null)
             return this.chooseAndRun(this.public_actions, "Scegliere un'opzione");
+
+        var selected = this.model.getSelectedOffers(this.currentUser);
+        if(selected.size() > 0){
+            this.view.showList("Sei stato selezionato per degli scambi!", selected);
+        }
 
         return this.chooseAndRun(
                 this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList(),
@@ -235,6 +247,14 @@ public class Controller {
             this.view.error("Impossibile proporre lo scambio");
         }
 
+        return true;
+    }
+
+    private boolean acceptTrade(){
+        return true;
+    }
+
+    private boolean answerMessage(){
         return true;
     }
 
@@ -746,6 +766,7 @@ public class Controller {
         // per ora sono supportate solo le stringhe
         return switch (k.getValue().type()) {
             case STRING -> this.view.getLine(String.format("Inserire il valore per il campo '%s'", k.getKey()));
+            default -> throw new RuntimeException();
         };
     }
 
@@ -761,7 +782,7 @@ public class Controller {
             return;
         }
 
-        this.view.showList(prompt, offers.stream().map(Offer::toString).toList());
+        this.view.showList(prompt, offers);
     }
 
     /**

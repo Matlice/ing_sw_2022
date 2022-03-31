@@ -35,7 +35,7 @@ public interface OfferFactory {
      * @return Ritorna tutte le offerte associate all'utente
      * @throws SQLException .
      */
-    List<Offer> getUserOffers(User owner) throws SQLException;
+    List<Offer> getOffers(User owner) throws SQLException;
 
     /**
      * Imposta lo stato di un'offerta
@@ -53,7 +53,9 @@ public interface OfferFactory {
      * @return offerte associate alla categoria
      * @throws SQLException .
      */
-    List<Offer> getCategoryOffers(LeafCategory cat) throws SQLException;
+    List<Offer> getOffers(LeafCategory cat) throws SQLException;
+
+    List<Offer> getSelectedOffers(User owner) throws SQLException;
 
     /**
      * Permette di accoppiare due offerte, la prima è dell'utente che propone lo scambio
@@ -62,4 +64,6 @@ public interface OfferFactory {
      * @throws SQLException
      */
     void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws SQLException;
+
+    void checkForDueDate() throws SQLException;
 }
