@@ -79,7 +79,25 @@ public interface View {
      */
     String getLine(String prompt);
 
+    /**
+     * Richiede all'utente l'inserimento di una stringa (compresa di blanks),
+     * validata secondo una funzione
+     * @param prompt messaggio di richiesta all'utente
+     * @param available funzione che ritorna true se la stringa in input è valida
+     * @return la stringa inserita
+     */
     String getLine(String prompt, Function<String, Boolean> available);
+
+    /**
+     * Richiede all'utente l'inserimento di una stringa, che verrà convertita in un oggetto
+     * tramite una funzione di conversione
+     * @param prompt messaggio di richiesta all'utente
+     * @param conversionMap funzione di conversione
+     * @param nonValidErrorMessage errore durante il parsing
+     * @param <V> tipo di ritorno
+     * @return oggetto creato da stringa
+     */
+    <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, String nonValidErrorMessage);
 
     /**
      * Richiede all'utente l'inserimento di una stringa (a cui sono rimossi i blank iniziali e finali)

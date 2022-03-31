@@ -15,6 +15,7 @@ import it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl;
 import it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl;
 
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class MessageFactoryImpl implements MessageFactory {
     }
 
     @Override
-    public Message send(Offer offer, String location, Date date) throws SQLException {
-        return this.createMessage(offer, location, date.getTime() / 1000L, null);
+    public Message send(Offer offer, String location, Calendar date) throws SQLException {
+        return this.createMessage(offer, location, date.getTimeInMillis() / 1000L, null);
     }
     @Override
     public Message answer(Message msg, Offer offer, String location, Date date) throws SQLException {
@@ -53,7 +54,7 @@ public class MessageFactoryImpl implements MessageFactory {
                                         .where()
                                         .eq("owner_id", ((UserImpl) u).getDbData().getUsername())
                                         .and()
-                                        .eq("state", Offer.OfferStatus.EXCHANGE)
+                                        .eq("status", Offer.OfferStatus.EXCHANGE)
                                         .queryBuilder())
                         .where()
                         .isNull("answer_id")

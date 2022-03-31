@@ -3,6 +3,7 @@ package it.matlice.ingsw.model.data;
 import it.matlice.ingsw.model.exceptions.CannotParseDayException;
 
 import java.text.Normalizer;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,19 +20,21 @@ public abstract class Settings {
     public abstract List<Day> getDays();
 
     public static enum Day{
-        MON("Lunedì"),
-        TUE("Martedì"),
-        WED("Mercoledì"),
-        THU("Giovedì"),
-        FRI("Venerdì"),
-        SAT("Sabato"),
-        SUN("Domenica");
+        MON("Lunedì", Calendar.MONDAY),
+        TUE("Martedì", Calendar.TUESDAY),
+        WED("Mercoledì", Calendar.WEDNESDAY),
+        THU("Giovedì", Calendar.THURSDAY),
+        FRI("Venerdì", Calendar.FRIDAY),
+        SAT("Sabato", Calendar.SATURDAY),
+        SUN("Domenica", Calendar.SUNDAY);
 
-        Day(String s) {
+        Day(String s, int calendar_day) {
             this.str = s;
+            this.calendar_day = calendar_day;
         }
 
         private String str;
+        private int calendar_day;
         public static final Map<String, Day> dayMap = new HashMap<>();
 
         static {
@@ -62,6 +65,9 @@ public abstract class Settings {
             return this.str;
         }
 
+        public int getCalendarDay() {
+            return this.calendar_day;
+        }
     }
 
 

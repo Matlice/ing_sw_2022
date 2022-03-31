@@ -7,6 +7,7 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.*;
+import it.matlice.ingsw.model.data.factories.MessageFactory;
 import it.matlice.ingsw.model.data.factories.OfferFactory;
 import it.matlice.ingsw.model.data.factories.SettingsFactory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
@@ -18,10 +19,7 @@ import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OfferFactoryImpl implements OfferFactory {
 
@@ -213,7 +211,7 @@ public class OfferFactoryImpl implements OfferFactory {
                         .where()
                         .eq("owner_id", ((UserImpl) owner).getDbData())
                         .and()
-                        .eq("state", Offer.OfferStatus.SELECTED.toString())
+                        .eq("status", Offer.OfferStatus.SELECTED.toString())
                         .prepare()
         );
 
@@ -254,5 +252,20 @@ public class OfferFactoryImpl implements OfferFactory {
         var time = System.currentTimeMillis() / 1000L;
         this.setOfferProposedTime(offerToTrade, time);
         this.setOfferProposedTime(offerToAccept, time);
+    }
+
+    @Override
+    public void acceptTradeOffer(Offer offer, MessageFactory mf, String location, Calendar date) throws SQLException {
+        assert offer.getLinkedOffer() != null;
+        assert offer.getLinkedOffer().getLinkedOffer().equals(offer);
+
+        this.setOfferStatus(offer, Offer.OfferStatus.EXCHANGE);
+        this.setOfferStatus(offer.getLinkedOffer(), Offer.OfferStatus.EXCHANGE);
+
+        var time = System.currentTimeMillis() / 1000L;
+        this.setOfferProposedTime(offer, time);
+        this.setOfferProposedTime(offer.getLinkedOffer(), time);
+
+        mf.send(offer.getLinkedOffer(), location, date);
     }
 }

@@ -151,11 +151,33 @@ public class StreamView implements View {
 
     @Override
     public String getLine(String prompt, Function<String, Boolean> available) {
-        this.out.print(prompt + "> ");
         String in;
-        while(!available.apply( in = this.in.nextLine() ))
+        while(!available.apply( in = this.getLine(prompt) ))
             this.error("Valore non valido");
         return in;
+    }
+
+    /**
+     * Richiede all'utente l'inserimento di una stringa, che verrà convertita in un oggetto
+     * tramite una funzione di conversione
+     *
+     * @param prompt               messaggio di richiesta all'utente
+     * @param conversionMap        funzione di conversione
+     * @param nonValidErrorMessage errore durante il parsing
+     * @return oggetto creato da stringa
+     */
+    @Override
+    public <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, String nonValidErrorMessage) {
+        String input;
+        while (true) {
+            input = this.getLine(prompt).trim();
+            V r = conversionMap.apply(input);
+            if (r != null) {
+                return r;
+            } else {
+                this.error(nonValidErrorMessage);
+            }
+        }
     }
 
     /**

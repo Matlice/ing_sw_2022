@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -80,9 +82,13 @@ public class Controller {
             this.view.showList("Sei stato selezionato per degli scambi!", selected);
         }
 
-        var messages = this.model.getUserMessages(this.currentUser);
+        var messages = this.model.getUserMessages(this.currentUser.getUser());
         if(messages.size() > 0){
-            this.view.showList("HAI (" + messages.size() + ") nuovi messaggi!", messages);
+            if (messages.size() == 1) {
+                this.view.showList("Hai un nuovo messaggio!", messages);
+            } else {
+                this.view.showList("Hai " + messages.size() + " nuovi messaggi!", messages);
+            }
         }
 
         return this.chooseAndRun(
@@ -255,20 +261,70 @@ public class Controller {
     }
 
     private boolean acceptTrade(){
-        this.model.acceptTrade(
-                this.view.chooseOption(
-                        this.model.getSelectedOffers(this.currentUser).stream()
-                                .map(e -> new MenuAction<Offer>(e.toString(), null, () -> e) )
-                                .toList(),
-                        "Scegliere un'offerta da accettare."
-                ).getAction().run(),
-                this.view.getLine("Luogo di scambio", (e) -> this.model.readSettings().getLocations().contains(e)),
-                this.view.get("Data di scambio") //todo check for day of week and for time
-        );
+        var selected_offers = this.model.getSelectedOffers(this.currentUser);
+
+        if (selected_offers.size() == 0) {
+            this.view.warn("Non ci sono proposte di scambio accettabili al momento");
+            return true;
+        }
+
+        var offer = this.selectOffer("Scegliere una proposta di scambio da accettare?", "Esci", selected_offers);
+        if (offer == null) {
+            return true;        }
+
+        // exchange place
+        var places = this.model.readSettings().getLocations();
+        var place = this.view.chooseOption(
+                places.stream()
+                        .map((e) -> new MenuAction<>(e, User.class, () -> e))
+                        .collect(Collectors.toList()),
+                "Luogo di scambio"
+        ).getAction().run();
+
+        // exchange day
+        StringJoiner sj_day = new StringJoiner(", ");
+        this.model.readSettings().getDays().forEach((e) -> sj_day.add(e.getName().toLowerCase()));
+        this.view.info("I giorni disponibili per lo scambio sono: " + sj_day.toString(), true);
+        var day = this.view.getLineWithConversion("Giorno di scambio", (e) -> {
+            try {
+                var d = Settings.Day.fromString(e);
+                if (this.model.readSettings().getDays().contains(d)) {
+                    return d;
+                } else {
+                    return null;
+                }
+            } catch (CannotParseDayException ex) {
+                return null;
+            }
+        }, "Giorno non valido");
+
+        // exchange time
+        StringJoiner sj_time = new StringJoiner(", ");
+        this.model.readSettings().getIntervals().forEach((e) -> sj_time.add(e.toString()));
+        this.view.info("Gli intervalli orari disponibili per lo scambio sono: " + sj_time.toString(), true);
+        var time = this.view.getLineWithConversion("Ora di scambio", (e) -> {
+            try {
+                var t = Interval.Time.fromString(e);
+                if (this.model.readSettings().getIntervals().stream().anyMatch((i) -> i.includes(t))) {
+                    return t;
+                } else {
+                    return null;
+                }
+            } catch (CannotParseTimeException | InvalidTimeException ex) {
+                return null;
+            }
+        }, "Ora non valida");
+
+        var date = this.model.acceptTrade(offer, place, day, time);
+        System.out.println("Proposto lo scambio per il giorno " + day.getName() + " "
+                + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
+                + String.format("%02d", date.get(Calendar.MONTH)+1) + " alle ore " + time);
+
         return true;
     }
 
     private boolean answerMessage(){
+        this.model.getUserMessages(this.currentUser.getUser());
         return true;
     }
 

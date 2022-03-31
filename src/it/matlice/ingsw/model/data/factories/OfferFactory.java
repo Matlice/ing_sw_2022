@@ -6,6 +6,7 @@ import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +65,8 @@ public interface OfferFactory {
      * @throws SQLException
      */
     void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws SQLException;
+
+    void acceptTradeOffer(Offer offer, MessageFactory mf, String location, Calendar date) throws SQLException;
 
     void checkForDueDate() throws SQLException;
 }

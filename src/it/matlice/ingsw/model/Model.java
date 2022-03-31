@@ -14,9 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static it.matlice.ingsw.model.auth.password.PasswordAuthMethod.isPasswordValid;
 import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
@@ -487,9 +485,9 @@ public class Model {
         return null;
     }
 
-    public List<Message> getUserMessages(Authentication auth) {
+    public List<Message> getUserMessages(User user) {
         try {
-            return this.mf.getUserMessages(auth.getUser());
+            return this.mf.getUserMessages(user);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -497,14 +495,43 @@ public class Model {
         return null;
     }
 
-    public void acceptTrade(Offer chooseOption, String location, String date) {
-        assert chooseOption.getStatus() == Offer.OfferStatus.SELECTED;
+    /**
+     * Permette di accettare una proposta di scambio,
+     * avanzando una prima proposta iniziale di giorno, data e ora
+     * @param offer offerta da accettare
+     * @param location proposta di luogo di scambio
+     * @param day proposta di giorno di scambio
+     * @param time proposta di ora di scambio
+     * @return momento dello scambio
+     */
+    public Calendar acceptTrade(Offer offer, String location, it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
+        assert offer.getStatus() == Offer.OfferStatus.SELECTED;
         try {
-            this.mf.send(chooseOption.getLinkedOffer(), location, new Date(date));
+            var date = convertToDate(day, time);
+            this.of.acceptTradeOffer(offer, this.mf, location, date);
+            return date;
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
         }
+        return null;
+    }
+
+    private static Calendar convertToDate(it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
+        var d = nextDayOfWeek(day.getCalendarDay());
+        d.set(Calendar.HOUR_OF_DAY, time.getHour());
+        d.set(Calendar.MINUTE, time.getMinute());
+        return d;
+    }
+
+    private static Calendar nextDayOfWeek(int dow) {
+        Calendar date = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        int diff = dow - date.get(Calendar.DAY_OF_WEEK);
+        if (diff <= 0) {
+            diff += 7;
+        }
+        date.add(Calendar.DAY_OF_MONTH, diff);
+        return date;
     }
 
     /**

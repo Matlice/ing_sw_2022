@@ -4,7 +4,9 @@ import it.matlice.ingsw.model.data.Message;
 import it.matlice.ingsw.model.data.Offer;
 import it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class MessageImpl extends Message {
 
@@ -31,7 +33,9 @@ public class MessageImpl extends Message {
     }
 
     @Override
-    public Date getDate() {
-        return new Date(this.dbData.getProposedDate() * 1000);
+    public Calendar getDate() {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        cal.setTimeInMillis(this.dbData.getProposedDate() * 1000);
+        return cal;
     }
 }
