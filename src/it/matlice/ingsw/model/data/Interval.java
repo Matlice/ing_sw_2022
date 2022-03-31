@@ -77,6 +77,8 @@ public class Interval implements Comparable<Interval> {
             var start = Time.fromString(times[0]);
             var end = Time.fromString(times[1]);
 
+            if (start.getTime() > end.getTime()) throw new InvalidIntervalException();
+
             return new Interval(start.getTime(), end.getTime());
         } catch (RuntimeException | CannotParseTimeException | InvalidTimeException e) {
             throw new CannotParseIntervalException();
