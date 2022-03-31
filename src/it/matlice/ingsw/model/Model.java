@@ -1,5 +1,6 @@
 package it.matlice.ingsw.model;
 
+import it.matlice.ingsw.controller.MenuAction;
 import it.matlice.ingsw.model.auth.AuthData;
 import it.matlice.ingsw.model.auth.AuthMethod;
 import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -483,6 +485,26 @@ public class Model {
             System.exit(1);
         }
         return null;
+    }
+
+    public List<Message> getUserMessages(Authentication auth) {
+        try {
+            return this.mf.getUserMessages(auth.getUser());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
+    }
+
+    public void acceptTrade(Offer chooseOption, String location, String date) {
+        assert chooseOption.getStatus() == Offer.OfferStatus.SELECTED;
+        try {
+            this.mf.send(chooseOption.getLinkedOffer(), location, new Date(date));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**

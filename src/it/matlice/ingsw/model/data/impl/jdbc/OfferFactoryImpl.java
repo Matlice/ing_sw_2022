@@ -137,7 +137,7 @@ public class OfferFactoryImpl implements OfferFactory {
         this.offerDAO.update(preparedUpdate);
     }
 
-    private OfferImpl instantiateOffer(@NotNull OfferDB offerDb, OfferImpl linkedOffer) {
+    OfferImpl instantiateOffer(@NotNull OfferDB offerDb, OfferImpl linkedOffer) {
         try {
             List<OfferFieldDB> fields = this.offerFieldDAO.queryForEq("offer_ref_id", offerDb.getId());
             OfferImpl art = null;

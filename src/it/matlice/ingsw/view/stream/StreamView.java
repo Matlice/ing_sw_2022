@@ -149,6 +149,15 @@ public class StreamView implements View {
         return this.in.nextLine();
     }
 
+    @Override
+    public String getLine(String prompt, Function<String, Boolean> available) {
+        this.out.print(prompt + "> ");
+        String in;
+        while(!available.apply( in = this.in.nextLine() ))
+            this.error("Valore non valido");
+        return in;
+    }
+
     /**
      * Richiede all'utente l'inserimento di una stringa (a cui sono rimossi i blank iniziali e finali)
      * Permette di specificare se la stringa immessa deve essere non vuota

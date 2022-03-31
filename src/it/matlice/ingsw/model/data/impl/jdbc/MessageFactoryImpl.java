@@ -59,7 +59,8 @@ public class MessageFactoryImpl implements MessageFactory {
                         .isNull("answer_id")
                         .prepare()
         );
-        return messages.stream().map(e -> (Message) new MessageImpl(e)).toList();
+        var factory = new OfferFactoryImpl(new SettingsFactoryImpl());
+        return messages.stream().map(e -> (Message) new MessageImpl(e, factory.instantiateOffer(e.getRelative_offer(), null))).toList();
     }
 
     private MessageImpl createMessage(Offer offer, String location, Long date, MessageImpl answer_to) throws SQLException {
@@ -70,7 +71,7 @@ public class MessageFactoryImpl implements MessageFactory {
             answer_to.getDbData().setAnswer(msg);
             this.messageDAO.update(answer_to.getDbData());
         }
-        return new MessageImpl(msg);
+        return new MessageImpl(msg, offer);
     }
 
 }

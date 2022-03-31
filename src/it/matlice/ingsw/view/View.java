@@ -79,6 +79,8 @@ public interface View {
      */
     String getLine(String prompt);
 
+    String getLine(String prompt, Function<String, Boolean> available);
+
     /**
      * Richiede all'utente l'inserimento di una stringa (a cui sono rimossi i blank iniziali e finali)
      * Permette di specificare se la stringa immessa deve essere non vuota

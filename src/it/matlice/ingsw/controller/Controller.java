@@ -29,10 +29,8 @@ public class Controller {
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
             new MenuAction<>("Logout", User.class, this::logout, false, 0, -1),
             new MenuAction<>("Proponi uno scambio", CustomerUser.class, this::offerTrade),
-
             new MenuAction<>("Accetta uno scambio", CustomerUser.class, this::acceptTrade),
             new MenuAction<>("Rispondi a un messaggio", CustomerUser.class, this::answerMessage),
-
             new MenuAction<>("Aggiungi nuovo articolo", CustomerUser.class, this::createArticle),
             new MenuAction<>("Ritira un'offerta aperta", CustomerUser.class, this::retractOffer),
             new MenuAction<>("Mostra le mie offerte", CustomerUser.class, this::showOffersByUser),
@@ -71,7 +69,8 @@ public class Controller {
      */
     public boolean mainloop() {
 
-        this.model.timeIteration();
+        if(this.model.hasConfiguredSettings())
+            this.model.timeIteration();
 
         if (this.currentUser == null)
             return this.chooseAndRun(this.public_actions, "Scegliere un'opzione");
@@ -79,6 +78,11 @@ public class Controller {
         var selected = this.model.getSelectedOffers(this.currentUser);
         if(selected.size() > 0){
             this.view.showList("Sei stato selezionato per degli scambi!", selected);
+        }
+
+        var messages = this.model.getUserMessages(this.currentUser);
+        if(messages.size() > 0){
+            this.view.showList("HAI (" + messages.size() + ") nuovi messaggi!", messages);
         }
 
         return this.chooseAndRun(
@@ -251,6 +255,16 @@ public class Controller {
     }
 
     private boolean acceptTrade(){
+        this.model.acceptTrade(
+                this.view.chooseOption(
+                        this.model.getSelectedOffers(this.currentUser).stream()
+                                .map(e -> new MenuAction<Offer>(e.toString(), null, () -> e) )
+                                .toList(),
+                        "Scegliere un'offerta da accettare."
+                ).getAction().run(),
+                this.view.getLine("Luogo di scambio", (e) -> this.model.readSettings().getLocations().contains(e)),
+                this.view.get("Data di scambio") //todo check for day of week and for time
+        );
         return true;
     }
 
