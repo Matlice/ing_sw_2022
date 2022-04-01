@@ -39,10 +39,10 @@ public class MessageFactoryImpl implements MessageFactory {
         return this.createMessage(offer, location, date.getTimeInMillis() / 1000L, null);
     }
     @Override
-    public Message answer(Message msg, Offer offer, String location, Date date) throws SQLException {
+    public Message answer(Message msg, Offer offer, String location, Calendar date) throws SQLException {
         //todo reset date in offer
         assert msg instanceof MessageImpl;
-        return this.createMessage(offer, location, date.getTime() / 1000L, (MessageImpl) msg);
+        return this.createMessage(offer, location, date.getTimeInMillis() / 1000L, (MessageImpl) msg);
     }
     @Override
     public List<Message> getUserMessages(User u) throws SQLException {

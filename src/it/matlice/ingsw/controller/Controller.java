@@ -77,20 +77,6 @@ public class Controller {
         if (this.currentUser == null)
             return this.chooseAndRun(this.public_actions, "Scegliere un'opzione");
 
-        var selected = this.model.getSelectedOffers(this.currentUser);
-        if(selected.size() > 0){
-            this.view.showList("Sei stato selezionato per degli scambi!", selected);
-        }
-
-        var messages = this.model.getUserMessages(this.currentUser.getUser());
-        if(messages.size() > 0){
-            if (messages.size() == 1) {
-                this.view.showList("Hai un nuovo messaggio!", messages);
-            } else {
-                this.view.showList("Hai " + messages.size() + " nuovi messaggi!", messages);
-            }
-        }
-
         return this.chooseAndRun(
                 this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList(),
                 String.format("Benvenuto %s. Scegli un'opzione", this.currentUser.getUser().getUsername())
@@ -121,7 +107,7 @@ public class Controller {
                 this.changePassword();
             }
             try {
-                this.model.finalizeLogin(this.currentUser);
+                this.finalizeLogin();
 
                 if(!this.model.hasConfiguredSettings()){
                     if (this.currentUser.getUser() instanceof ConfiguratorUser)
@@ -139,6 +125,28 @@ public class Controller {
             return true;
         }
         return true;
+    }
+
+    private void finalizeLogin() throws SQLException {
+
+        this.model.finalizeLogin(this.currentUser);
+
+        if (this.currentUser.getUser() instanceof CustomerUser) {
+
+            var selected = this.model.getSelectedOffers(this.currentUser);
+            if (selected.size() > 0) {
+                this.view.showList("Sei stato selezionato per degli scambi!", selected);
+            }
+
+            var messages = this.model.getUserMessages(this.currentUser.getUser());
+            if (messages.size() > 0) {
+                if (messages.size() == 1) {
+                    this.view.showList("Hai un nuovo messaggio!", messages);
+                } else {
+                    this.view.showList("Hai " + messages.size() + " nuovi messaggi!", messages);
+                }
+            }
+        }
     }
 
     /**
@@ -234,7 +242,7 @@ public class Controller {
             this.view.warn("Non hai offerte disponibili allo scambio");
             return true;
         }
-        var offerToTrade = this.selectOffer("Quale offerta si vuole proporre in scambio?", "Esci", userOffers);
+        var offerToTrade = this.selectItem("Quale offerta si vuole proporre in scambio?", "Esci", userOffers);
         if (offerToTrade == null) {
             return true;
         }
@@ -245,7 +253,7 @@ public class Controller {
             this.view.warn("Non ci sono offerte disponibili allo scambio");
             return true;
         }
-        var offerToAccept = this.selectOffer("Quale offerta si vuole accettare in scambio?", "Esci", offers);
+        var offerToAccept = this.selectItem("Quale offerta si vuole accettare in scambio?", "Esci", offers);
         if (offerToAccept == null) {
             return true;
         }
@@ -260,6 +268,10 @@ public class Controller {
         return true;
     }
 
+    /**
+     * Permette all'utente di accettare la proposta di scambio
+     * @return true
+     */
     private boolean acceptTrade(){
         var selected_offers = this.model.getSelectedOffers(this.currentUser);
 
@@ -268,24 +280,44 @@ public class Controller {
             return true;
         }
 
-        var offer = this.selectOffer("Scegliere una proposta di scambio da accettare?", "Esci", selected_offers);
+        var offer = this.selectItem("Scegliere una proposta di scambio da accettare?", "Esci", selected_offers);
         if (offer == null) {
-            return true;        }
+            return true;
+        }
 
+        String place = this.chooseExchangePlace();
+        Settings.Day day = this.chooseExchangeDay();
+        Interval.Time time = this.chooseExchangeTime();
+
+        var date = this.model.acceptTrade(offer, place, day, time);
+
+        // info summary
+        this.view.info("Proposto lo scambio per il giorno " + day.getName() + " "
+                + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
+                + String.format("%02d", date.get(Calendar.MONTH)+1) + " alle ore " + time, true);
+
+        // todo se offerta è proposta può essere ritirata? che succede allo scambio?
+
+        return true;
+    }
+
+    private String chooseExchangePlace() {
         // exchange place
         var places = this.model.readSettings().getLocations();
-        var place = this.view.chooseOption(
+        return this.view.chooseOption(
                 places.stream()
                         .map((e) -> new MenuAction<>(e, User.class, () -> e))
                         .collect(Collectors.toList()),
                 "Luogo di scambio"
         ).getAction().run();
+    }
 
+    private Settings.Day chooseExchangeDay() {
         // exchange day
         StringJoiner sj_day = new StringJoiner(", ");
         this.model.readSettings().getDays().forEach((e) -> sj_day.add(e.getName().toLowerCase()));
         this.view.info("I giorni disponibili per lo scambio sono: " + sj_day.toString(), true);
-        var day = this.view.getLineWithConversion("Giorno di scambio", (e) -> {
+        return this.view.getLineWithConversion("Giorno di scambio", (e) -> {
             try {
                 var d = Settings.Day.fromString(e);
                 if (this.model.readSettings().getDays().contains(d)) {
@@ -297,12 +329,14 @@ public class Controller {
                 return null;
             }
         }, "Giorno non valido");
+    }
 
+    private Interval.Time chooseExchangeTime() {
         // exchange time
         StringJoiner sj_time = new StringJoiner(", ");
         this.model.readSettings().getIntervals().forEach((e) -> sj_time.add(e.toString()));
         this.view.info("Gli intervalli orari disponibili per lo scambio sono: " + sj_time.toString(), true);
-        var time = this.view.getLineWithConversion("Ora di scambio", (e) -> {
+        return this.view.getLineWithConversion("Ora di scambio", (e) -> {
             try {
                 var t = Interval.Time.fromString(e);
                 if (this.model.readSettings().getIntervals().stream().anyMatch((i) -> i.includes(t))) {
@@ -314,17 +348,49 @@ public class Controller {
                 return null;
             }
         }, "Ora non valida");
-
-        var date = this.model.acceptTrade(offer, place, day, time);
-        System.out.println("Proposto lo scambio per il giorno " + day.getName() + " "
-                + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
-                + String.format("%02d", date.get(Calendar.MONTH)+1) + " alle ore " + time);
-
-        return true;
     }
 
-    private boolean answerMessage(){
-        this.model.getUserMessages(this.currentUser.getUser());
+    private boolean answerMessage() {
+        var messages = this.model.getUserMessages(this.currentUser.getUser());
+
+        if (messages.size() == 0) {
+            this.view.warn("Non hai messaggi a cui rispondere");
+            return true;
+        }
+
+        var replyto = this.selectItem("A quale messaggio si vuol rispondere?", "Annulla", messages);
+        if (replyto == null) {
+            return true;
+        }
+
+        var actions = new ArrayList<MenuAction<Boolean>>();
+        actions.add(0, new MenuAction<>("Annulla", null, () -> null, false, 0, -1));
+        actions.add(new MenuAction<>("Accetta lo scambio", null, () -> true));
+        actions.add(new MenuAction<>("Fai una controproposta", null, () -> false));
+
+        var accept = this.chooseAndRun(actions, "Cosa si vuol fare?");
+        if (accept == null) {
+            return true;
+        }
+
+        if (accept) {
+            // proposta accettata
+            this.model.acceptTradeMessage(replyto);
+            this.view.warn("Scambio accettato con successo");
+        } else {
+            // proposta rifiutata, fai controproposta
+            String place = this.chooseExchangePlace();
+            Settings.Day day = this.chooseExchangeDay();
+            Interval.Time time = this.chooseExchangeTime();
+
+            var date = this.model.replyToMessage(replyto, place, day, time);
+
+            // info summary
+            this.view.info("Controproposta per il giorno " + day.getName() + " "
+                    + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
+                    + String.format("%02d", date.get(Calendar.MONTH)+1) + " alle ore " + time, true);
+        }
+
         return true;
     }
 
@@ -358,7 +424,7 @@ public class Controller {
         }
 
         // permette all'utente di scegliere quale offerta ritirare
-        var offerToRetract = this.selectOffer("Quale offerta si vuole ritirare?", "Esci", offers);
+        var offerToRetract = this.selectItem("Quale offerta si vuole ritirare?", "Esci", offers);
         if (offerToRetract == null) return true;
 
         this.model.retractOffer(offerToRetract);
@@ -856,16 +922,16 @@ public class Controller {
     }
 
     /**
-     * Permette all'utente di scegliere un'offerta da una lista di offerte
+     * Permette all'utente di scegliere un'oggetto da una lista di oggetti
      * Ritorna null se l'utente vuole annullare l'operazione
      *
      * @param prompt messaggio per l'utente
      * @param cancel messaggio per annullare
-     * @param offers offerte tra cui scegliere
-     * @return
+     * @param items oggetti tra cui scegliere
+     * @return oggetto selezionato
      */
-    private Offer selectOffer(String prompt, String cancel, List<Offer> offers) {
-        var actions = offers
+    private <V> V selectItem(String prompt, String cancel, List<@NotNull V> items) {
+        var actions = items
                 .stream()
                 .map((p) -> new MenuAction<>(p.toString(), User.class, () -> p))
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -874,3 +940,4 @@ public class Controller {
     }
 
 }
+

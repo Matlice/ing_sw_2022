@@ -16,7 +16,7 @@ public abstract class Message {
                 "Da %s: Proposta di scambio di\n\t%s\n\tper\n\t%s il %s alle ore %s in %s",
                 this.getReferencedOffer().getLinkedOffer().getOwner().getUsername(),
                 this.getReferencedOffer().toString().replaceAll("\n", "\n\t"),
-                this.getReferencedOffer().toString().replaceAll("\n", "\n\t"),
+                this.getReferencedOffer().getLinkedOffer().toString().replaceAll("\n", "\n\t"),
                 String.format("%02d", this.getDate().get(Calendar.DAY_OF_MONTH)) + "/" + String.format("%02d", this.getDate().get(Calendar.MONTH)+1),
                 this.getDate().get(Calendar.HOUR_OF_DAY) + ":" + String.format("%02d", this.getDate().get(Calendar.MINUTE)),
                 this.getLocation()

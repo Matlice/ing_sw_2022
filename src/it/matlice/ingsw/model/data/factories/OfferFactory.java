@@ -68,5 +68,7 @@ public interface OfferFactory {
 
     void acceptTradeOffer(Offer offer, MessageFactory mf, String location, Calendar date) throws SQLException;
 
+    void closeTradeOffer(Message m) throws SQLException;
+
     void checkForDueDate() throws SQLException;
 }

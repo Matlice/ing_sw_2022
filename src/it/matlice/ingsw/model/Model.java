@@ -517,6 +517,40 @@ public class Model {
         return null;
     }
 
+    /**
+     * Permette di rispondere ad una proposta di scambio in un luogo, giorno e ora
+     * con una controproposta
+     * @param replyto messaggio a cui rispondere
+     * @param place luogo della controproposta
+     * @param day giorno della controproposta
+     * @param time orario della controproposta
+     * @return momento dello scambio
+     */
+    public Calendar replyToMessage(Message replyto, String place, it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
+        try {
+            var date = convertToDate(day, time);
+            this.mf.answer(replyto, replyto.getReferencedOffer().getLinkedOffer(), place, date);
+            return date;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return null;
+    }
+
+    /**
+     * Accetta un luogo, giorno e ora per lo scambio,
+     * concludendo il processo di scambio
+     */
+    public void acceptTradeMessage(Message m) {
+        try {
+            this.of.closeTradeOffer(m);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
     private static Calendar convertToDate(it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
         var d = nextDayOfWeek(day.getCalendarDay());
         d.set(Calendar.HOUR_OF_DAY, time.getHour());

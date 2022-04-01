@@ -268,4 +268,17 @@ public class OfferFactoryImpl implements OfferFactory {
 
         mf.send(offer.getLinkedOffer(), location, date);
     }
+
+    @Override
+    public void closeTradeOffer(Message m) throws SQLException {
+        assert m.getReferencedOffer().getLinkedOffer() != null;
+        assert m.getReferencedOffer().getLinkedOffer().getLinkedOffer().equals(m.getReferencedOffer());
+
+        this.setOfferStatus(m.getReferencedOffer(), Offer.OfferStatus.CLOSED);
+        this.setOfferStatus(m.getReferencedOffer().getLinkedOffer(), Offer.OfferStatus.CLOSED);
+
+        var time = System.currentTimeMillis() / 1000L;
+        this.setOfferProposedTime(m.getReferencedOffer(), time);
+        this.setOfferProposedTime(m.getReferencedOffer().getLinkedOffer(), time);
+    }
 }
