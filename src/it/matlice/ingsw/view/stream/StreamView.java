@@ -105,7 +105,7 @@ public class StreamView implements View {
      */
     @Override
     public String getPassword() {
-        return this.getLine("Password");
+        return this.getPassword("Password");
     }
 
     /**
@@ -117,7 +117,11 @@ public class StreamView implements View {
      */
     @Override
     public String getPassword(String prompt) {
-        return this.getLine(prompt);
+        String password;
+        do {
+            password = this.getLine(prompt);
+        } while (password.isEmpty());
+        return password;
     }
 
     /**
