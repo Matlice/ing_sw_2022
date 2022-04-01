@@ -3,10 +3,10 @@ package it.matlice.ingsw;
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
 import it.matlice.ingsw.model.Model;
-import it.matlice.ingsw.data.impl.jdbc.CategoryFactoryImpl;
-import it.matlice.ingsw.data.impl.jdbc.HierarchyFactoryImpl;
-import it.matlice.ingsw.data.impl.jdbc.JdbcConnection;
-import it.matlice.ingsw.data.impl.jdbc.UserFactoryImpl;
+import it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl;
+import it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl;
+import it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection;
+import it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl;
 import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.view.stream.StreamView;
 

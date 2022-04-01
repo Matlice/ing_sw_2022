@@ -1,24 +1,20 @@
 package it.matlice.ingsw.model;
 
-import it.matlice.ingsw.auth.AuthData;
-import it.matlice.ingsw.auth.AuthMethod;
-import it.matlice.ingsw.auth.Authenticable;
-import it.matlice.ingsw.auth.exceptions.InvalidPasswordException;
-import it.matlice.ingsw.auth.password.PasswordAuthMethod;
+import it.matlice.ingsw.model.auth.AuthData;
+import it.matlice.ingsw.model.auth.AuthMethod;
+import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
+import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.exceptions.DuplicateUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
 import it.matlice.ingsw.model.exceptions.LoginInvalidException;
-import it.matlice.ingsw.data.*;
-import it.matlice.ingsw.controller.Controller;
+import it.matlice.ingsw.model.data.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
 
