@@ -1,5 +1,6 @@
 package it.matlice.ingsw.model.data;
 
+import it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -38,4 +39,13 @@ public abstract class NodeCategory extends Category {
     public Category[] getChildren() {
         return this.children.toArray(Category[]::new);
     }
+
+    /**
+     * Returns a shallow copy of this {@code HashMap} instance: the keys and
+     * values themselves are not cloned.
+     *
+     * @return a shallow copy of this map
+     */
+    @Override
+    public abstract Object clone();
 }

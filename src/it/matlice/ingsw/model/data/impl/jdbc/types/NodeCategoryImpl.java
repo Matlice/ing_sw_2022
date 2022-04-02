@@ -70,4 +70,18 @@ public class NodeCategoryImpl extends NodeCategory implements CategoryImpl {
         return this.dbData.equals(((NodeCategoryImpl) obj).dbData);
     }
 
+    /**
+     * Returns a shallow copy of this {@code HashMap} instance: the keys and
+     * values themselves are not cloned.
+     *
+     * @return a shallow copy of this map
+     */
+    @Override
+    public Object clone() {
+        var r = new NodeCategoryImpl(this.dbData);
+        for(var e: this.getChildren()) {
+            r.addChild(e);
+        }
+        return r;
+    }
 }

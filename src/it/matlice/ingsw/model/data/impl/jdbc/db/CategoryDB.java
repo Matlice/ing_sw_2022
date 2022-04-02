@@ -57,6 +57,9 @@ public class CategoryDB {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         CategoryDB that = (CategoryDB) o;
+        if (this.category_id == 0) {
+            return this.category_name.equals(that.category_name);
+        }
         return this.category_id == that.category_id;
     }
 
