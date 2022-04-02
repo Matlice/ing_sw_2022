@@ -463,7 +463,6 @@ public class Controller {
      */
     private @NotNull NodeCategory appendCategory(Category father, Category child) {
         var f = father instanceof LeafCategory ? ((LeafCategory) father).convertToNode() : (NodeCategory) father;
-        f.clone();
         f.addChild(child);
         return f;
     }
