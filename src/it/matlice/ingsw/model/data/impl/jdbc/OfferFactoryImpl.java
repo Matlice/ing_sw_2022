@@ -114,25 +114,31 @@ public class OfferFactoryImpl implements OfferFactory {
 
     @Override
     public void checkForDueDate() throws SQLException {
-        var time = System.currentTimeMillis() / 1000L; // actual time
-        var due_delta = this.settingsFactory.readSettings().getDue() * 24 * 60 * 60; // expiration time
 
-        // if time > proposed_time + due_delta then the offer has expired
-        // proposed_time < time - due_delta
-        var due = time - due_delta;
+        if (this.settingsFactory.readSettings() != null) {
+            var time = System.currentTimeMillis() / 1000L; // actual time
+            var due_delta = this.settingsFactory.readSettings().getDue() * 24 * 60 * 60; // expiration time
 
-        UpdateBuilder<OfferDB, Integer> offerUpdateBuilder = this.offerDAO.updateBuilder();
-        offerUpdateBuilder.updateColumnValue("status", Offer.OfferStatus.OPEN.toString())
-                .updateColumnValue("proposed_time", null)
-                .updateColumnValue("linked_offer_id", null)
-                .where()
-                .lt("proposed_time", due)
-                .and()
-                .ne("status", Offer.OfferStatus.RETRACTED)
-                .and()
-                .ne("status", Offer.OfferStatus.CLOSED);
-        PreparedUpdate<OfferDB> preparedUpdate = offerUpdateBuilder.prepare();
-        this.offerDAO.update(preparedUpdate);
+            // todo remove debug
+            due_delta = 60;
+
+            // if time > proposed_time + due_delta then the offer has expired
+            // proposed_time < time - due_delta
+            var due = time - due_delta;
+
+            UpdateBuilder<OfferDB, Integer> offerUpdateBuilder = this.offerDAO.updateBuilder();
+            offerUpdateBuilder.updateColumnValue("status", Offer.OfferStatus.OPEN.toString())
+                    .updateColumnValue("proposed_time", null)
+                    .updateColumnValue("linked_offer_id", null)
+                    .where()
+                    .lt("proposed_time", due)
+                    .and()
+                    .ne("status", Offer.OfferStatus.RETRACTED)
+                    .and()
+                    .ne("status", Offer.OfferStatus.CLOSED);
+            PreparedUpdate<OfferDB> preparedUpdate = offerUpdateBuilder.prepare();
+            this.offerDAO.update(preparedUpdate);
+        }
     }
 
     OfferImpl instantiateOffer(@NotNull OfferDB offerDb, OfferImpl linkedOffer) {

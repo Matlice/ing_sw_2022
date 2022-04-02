@@ -133,6 +133,8 @@ public class CategoryFactoryImpl implements CategoryFactory {
         for (var entry : category.entrySet()) {
             var field_name = entry.getKey();
             var field_type = entry.getValue();
+            // todo fix https://pastebin.com/BvPfMMuh
+            // todo fix https://pastebin.com/F193Zy3E
             this.fieldDAO.createOrUpdate(
                     new CategoryFieldDB(
                             field_name,
