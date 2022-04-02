@@ -261,7 +261,7 @@ public class Controller {
      */
     private boolean showOpenOffersByCategory() {
         if(this.model.getLeafCategories().size() == 0){
-            this.view.warn("Non ci sono ancora categorie a cui associare un articolo. Contattare un configuratore");
+            this.view.warn("Non sono presenti categorie di cui mostrare le offerte");
             return true;
         }
         LeafCategory cat = this.chooseLeafCategory("Di quale categoria si vogliono visualizzare le offerte aperte?");
@@ -546,7 +546,6 @@ public class Controller {
      */
     private @NotNull NodeCategory appendCategory(Category father, Category child) {
         var f = father instanceof LeafCategory ? ((LeafCategory) father).convertToNode() : (NodeCategory) father;
-        f.clone();
         f.addChild(child);
         return f;
     }
