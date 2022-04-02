@@ -461,9 +461,6 @@ public class Model {
             e.printStackTrace();
             System.exit(1);
         }
-
-        // todo far ritornare aperte entrambe dopo scadenza
-
     }
 
     public void timeIteration() {
@@ -485,9 +482,13 @@ public class Model {
         return null;
     }
 
-    public List<Message> getUserMessages(User user) {
+    public List<Message> getUserMessages(Authentication auth) {
         try {
-            return this.mf.getUserMessages(user);
+            return this.mf.getUserMessages(auth.getUser())
+                    .stream()
+                    .filter((e) -> e.getReferencedOffer().getStatus() == Offer.OfferStatus.EXCHANGE)
+                    .filter((e) -> Objects.equals(e.getReferencedOffer().getProposedTime(), e.getTime()))
+                    .toList();
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -529,6 +530,7 @@ public class Model {
     public Calendar replyToMessage(Message replyto, String place, it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
         try {
             var date = convertToDate(day, time);
+            this.of.updateDate(replyto.getReferencedOffer(), date);
             this.mf.answer(replyto, replyto.getReferencedOffer().getLinkedOffer(), place, date);
             return date;
         } catch (SQLException e) {

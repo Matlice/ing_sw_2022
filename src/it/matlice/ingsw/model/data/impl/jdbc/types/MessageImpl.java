@@ -33,6 +33,11 @@ public class MessageImpl extends Message {
     }
 
     @Override
+    public Long getTime() {
+        return this.dbData.getProposedDate();
+    }
+
+    @Override
     public Calendar getDate() {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         cal.setTimeInMillis(this.dbData.getProposedDate() * 1000);

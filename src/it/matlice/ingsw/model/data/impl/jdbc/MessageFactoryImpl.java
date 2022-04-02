@@ -35,12 +35,11 @@ public class MessageFactoryImpl implements MessageFactory {
     }
 
     @Override
-    public Message send(Offer offer, String location, Calendar date) throws SQLException {
-        return this.createMessage(offer, location, date.getTimeInMillis() / 1000L, null);
+    public Message send(Offer offer, String location, Calendar date, long time) throws SQLException {
+        return this.createMessage(offer, location, time, null);
     }
     @Override
     public Message answer(Message msg, Offer offer, String location, Calendar date) throws SQLException {
-        //todo reset date in offer
         assert msg instanceof MessageImpl;
         return this.createMessage(offer, location, date.getTimeInMillis() / 1000L, (MessageImpl) msg);
     }

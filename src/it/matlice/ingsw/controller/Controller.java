@@ -138,7 +138,7 @@ public class Controller {
                 this.view.showList("Sei stato selezionato per degli scambi!", selected);
             }
 
-            var messages = this.model.getUserMessages(this.currentUser.getUser());
+            var messages = this.model.getUserMessages(this.currentUser);
             if (messages.size() > 0) {
                 if (messages.size() == 1) {
                     this.view.showList("Hai un nuovo messaggio!", messages);
@@ -280,7 +280,13 @@ public class Controller {
             return true;
         }
 
-        var offer = this.selectItem("Scegliere una proposta di scambio da accettare?", "Esci", selected_offers);
+        var actions = selected_offers
+                .stream()
+                .map((p) -> new MenuAction<>(p.toString() + "\nper\n" + p.getLinkedOffer().toString(), User.class, () -> p))
+                .collect(Collectors.toCollection(ArrayList::new));
+        actions.add(0, new MenuAction<>("Esci", User.class, () -> null, false, 0, -1));
+
+        var offer = this.chooseAndRun(actions, "Scegliere una proposta di scambio da accettare?");
         if (offer == null) {
             return true;
         }
@@ -351,7 +357,7 @@ public class Controller {
     }
 
     private boolean answerMessage() {
-        var messages = this.model.getUserMessages(this.currentUser.getUser());
+        var messages = this.model.getUserMessages(this.currentUser);
 
         if (messages.size() == 0) {
             this.view.warn("Non hai messaggi a cui rispondere");
