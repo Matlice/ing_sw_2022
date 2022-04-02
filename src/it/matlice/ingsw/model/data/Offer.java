@@ -20,6 +20,8 @@ public abstract class Offer extends HashMap<String, Object> {
         for(var k: this.entrySet()) {
             sb.append("\t").append(k.getKey()).append(" = ").append(k.getValue().toString()).append("\n");
         }
+        sb.setLength(sb.length()-1);
+        sb.setLength(sb.length()-1);
         return sb.toString();
     }
 

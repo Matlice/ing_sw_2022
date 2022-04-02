@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.CancellationException;
 
 public class OfferFactoryImpl implements OfferFactory {
 
@@ -120,7 +121,7 @@ public class OfferFactoryImpl implements OfferFactory {
             var due_delta = this.settingsFactory.readSettings().getDue() * 24 * 60 * 60; // expiration time
 
             // todo remove debug
-            due_delta = 60;
+            //due_delta = 100;
 
             // if time > proposed_time + due_delta then the offer has expired
             // proposed_time < time - due_delta
@@ -272,7 +273,17 @@ public class OfferFactoryImpl implements OfferFactory {
         this.setOfferProposedTime(offer, time);
         this.setOfferProposedTime(offer.getLinkedOffer(), time);
 
-        mf.send(offer.getLinkedOffer(), location, date);
+        mf.send(offer.getLinkedOffer(), location, date, time);
+    }
+
+    @Override
+    public void updateDate(Offer offer, Calendar date) throws SQLException {
+        assert offer.getLinkedOffer() != null;
+        assert offer.getLinkedOffer().getLinkedOffer().equals(offer);
+
+        var time = date.getTimeInMillis() / 1000L;
+        this.setOfferProposedTime(offer, time);
+        this.setOfferProposedTime(offer.getLinkedOffer(), time);
     }
 
     @Override
