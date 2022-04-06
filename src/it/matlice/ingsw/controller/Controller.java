@@ -41,7 +41,9 @@ public class Controller {
             new MenuAction<>("Mostra gerarchie", User.class, this::showHierarchies),
             new MenuAction<>("Mostra parametri di configurazione", User.class, this::showConfParameters),
             new MenuAction<>("Modifica parametri di configurazione", ConfiguratorUser.class, this::editConfParameters),
+            new MenuAction<>("Importa informazioni da file testuale", ConfiguratorUser.class, this::importConfiguration),
             new MenuAction<>("Aggiungi nuovo configuratore", ConfiguratorUser.class, this::createConfigurator),
+
             new MenuAction<>("Cambia password", User.class, this::changePassword)
     );
 
@@ -575,6 +577,10 @@ public class Controller {
      */
     private boolean editConfParameters() {
         this.configureSettings(false);
+        return true;
+    }
+
+    private boolean importConfiguration(){
         return true;
     }
 

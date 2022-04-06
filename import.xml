@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <settings>
+        <city> Brescia </city>
+        <places>
+            <place> Piazza Arnaldo </place>
+            <place> Castello </place>
+            <place> Piazza Vittoria </place>
+            <place> Piazza Duomo </place>
+            <place> Stazione FS </place>
+            <place> McDonalds </place>
+        </places>
+        <days>
+            <day> Lunedi </day>
+            <day> Martedi </day>
+            <day> Venerdi </day>
+        </days>
+        <intervals>
+            <interval> 10:00-12:00 </interval>
+            <interval> 15:00-18:00 </interval>
+        </intervals>
+        <expiration> 3 </expiration>
+    </settings>
+    <hierarchies>
+        <hierarcy>
+            <name> Vestiti </name>
+            <description></description>
+            <fields>
+                <field required = "true"> Taglia </field>
+                <field required = "false"> Colore </field>
+            </fields>
+            <categories>
+                <category parent = "">
+                    <name> Pantaloni </name>
+                    <description></description>
+                    <fields>
+                    </fields>
+                </category>
+                <category parent = "">
+                    <name> Felpe </name>
+                    <description></description>
+                    <fields>
+                    </fields>
+                </category>
+                <category parent = "Pantaloni">
+                    <name> Jeans </name>
+                    <description></description>
+                    <fields>
+                    </fields>
+                </category>
+                <category parent = "Pantaloni">
+                    <name> Pantaloncini </name>
+                    <description></description>
+                    <fields>
+                    </fields>
+                </category>
+                <category parent = "Felpe">
+                    <name> Felpe con Cappuccio </name>
+                    <description></description>
+                    <fields>
+                    </fields>
+                </category>
+                <category parent = "Felpe">
+                    <name> Felpe senza Cappuccio </name>
+                    <description></description>
+                    <fields>
+                    </fields>
+                </category>
+            </categories>
+        </hierarcy>
+    </hierarchies>
+</configuration>
