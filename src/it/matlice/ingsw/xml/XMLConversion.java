@@ -2,6 +2,7 @@ package it.matlice.ingsw.xml;
 
 import it.matlice.ingsw.tree.MapNode;
 
+import javax.xml.stream.XMLStreamException;
 import java.util.TreeMap;
 
 public interface XMLConversion {
@@ -12,5 +13,5 @@ public interface XMLConversion {
      * @param children a TreeMap of already converted node children
      * @return the converted object
      */
-    Object convert(XMLNode node, TreeMap<String, Object> children, XMLNode parent, MapNode dinasty);
+    Object convert(XMLNode node, TreeMap<String, Object> children, XMLNode parent, MapNode dinasty) throws XMLStreamException;
 }

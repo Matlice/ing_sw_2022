@@ -22,51 +22,53 @@
         <expiration> 3 </expiration>
     </settings>
     <hierarchies>
-        <hierarcy>
+        <hierarchy>
             <name> Vestiti </name>
             <description></description>
             <fields>
                 <field required = "true"> Taglia </field>
                 <field required = "false"> Colore </field>
             </fields>
-            <categories>
-                <category parent = "">
+            <children>
+                <category>
                     <name> Pantaloni </name>
                     <description></description>
-                    <fields>
-                    </fields>
+                    <fields></fields>
+                    <children>
+                        <category>
+                            <name> Jeans </name>
+                            <description></description>
+                            <fields></fields>
+                            <children></children>
+                        </category>
+                        <category>
+                            <name> Pantaloncini </name>
+                            <description></description>
+                            <fields></fields>
+                            <children></children>
+                        </category>
+                    </children>
                 </category>
-                <category parent = "">
+                <category>
                     <name> Felpe </name>
                     <description></description>
-                    <fields>
-                    </fields>
+                    <fields></fields>
+                    <children>
+                        <category>
+                            <name> Felpe con Cappuccio </name>
+                            <description></description>
+                            <fields></fields>
+                            <children></children>
+                        </category>
+                        <category>
+                            <name> Felpe senza Cappuccio </name>
+                            <description></description>
+                            <fields></fields>
+                            <children></children>
+                        </category>
+                    </children>
                 </category>
-                <category parent = "Pantaloni">
-                    <name> Jeans </name>
-                    <description></description>
-                    <fields>
-                    </fields>
-                </category>
-                <category parent = "Pantaloni">
-                    <name> Pantaloncini </name>
-                    <description></description>
-                    <fields>
-                    </fields>
-                </category>
-                <category parent = "Felpe">
-                    <name> Felpe con Cappuccio </name>
-                    <description></description>
-                    <fields>
-                    </fields>
-                </category>
-                <category parent = "Felpe">
-                    <name> Felpe senza Cappuccio </name>
-                    <description></description>
-                    <fields>
-                    </fields>
-                </category>
-            </categories>
-        </hierarcy>
+            </children>
+        </hierarchy>
     </hierarchies>
 </configuration>
