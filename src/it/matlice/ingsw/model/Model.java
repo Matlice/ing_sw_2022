@@ -313,7 +313,7 @@ public class Model {
                 this.sf.makeSettings(city, daysDue, locations, days, intervals);
             } else {
                 assert set.getCity() != null;
-                assert city.equals(set.getCity());
+                // ignoring city parameter
 
                 // remove old locations, days and intervals
                 this.sf.removeLocations(set);

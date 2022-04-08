@@ -1,6 +1,5 @@
 package it.matlice.ingsw.model.data.impl.jdbc;
 
-import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.model.exceptions.CannotParseDayException;
 import it.matlice.ingsw.model.exceptions.CannotParseIntervalException;
@@ -160,9 +159,9 @@ public class XMLImport {
     public static class FieldXML {
         public String name;
         public boolean required;
-        public FieldTypeXML type = FieldTypeXML.STRING;
+        public TypeDefinition.TypeAssociation type = TypeDefinition.TypeAssociation.STRING;
 
-        public FieldXML(String name, boolean required, FieldTypeXML type) {
+        public FieldXML(String name, boolean required, TypeDefinition.TypeAssociation type) {
             this.name = name;
             this.required = required;
             this.type = type;
@@ -172,10 +171,6 @@ public class XMLImport {
             this.name = name;
             this.required = required;
         }
-    }
-
-    public enum FieldTypeXML {
-        STRING
     }
 
     public static class HierarchyXML {

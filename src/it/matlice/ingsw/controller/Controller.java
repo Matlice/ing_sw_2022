@@ -591,7 +591,26 @@ public class Controller {
             var file = new FileInputStream("import.xml");
             var im = new XMLImport(file);
             var config = im.parse();
-            System.out.println("a");
+
+            // importa le impostazioni (città, luoghi, giorni...)
+            XMLImport.SettingsXML settings = config.settings;
+            this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
+
+            // importa gerarchie
+            config.hierarchies.forEach((e) -> {
+                try {
+                    this.createHierarchyFromXML(e);
+                } catch (DuplicateCategoryException ex) {
+                    ex.printStackTrace(); // todo
+                } catch (InvalidCategoryException ex) {
+                    ex.printStackTrace();
+                } catch (DuplicateFieldException ex) {
+                    ex.printStackTrace();
+                } catch (InvalidFieldException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
         } catch (FileNotFoundException e) {
             this.view.error("Impossibile importare la configurazione, file non trovato!");
         } catch (XMLStreamException e) {
@@ -600,7 +619,113 @@ public class Controller {
         return true;
     }
 
+    /**
+     * Data una gerarchia parsata dall'XML la salva
+     *
+     * @param hierarchyXML la definizione della gerarchia da creare
+     */
+    private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException {
+        // creazione della categoria root
+        Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+        if (hierarchyXML.root.fields != null)
+            for (var e: hierarchyXML.root.fields) {
+                this.addFieldFromXML(root, e);
+            }
 
+        // aggiunge i campi default alla categoria radice
+        root.put("Stato di conservazione", new TypeDefinition(true));
+        root.put("Descrizione libera", new TypeDefinition(false));
+
+        // associa una CategoryXML all'istanza della Category padre già creata
+        var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+
+        if (hierarchyXML.root.categories != null)
+            for (var e: hierarchyXML.root.categories) {
+                categoryStack.add(new AbstractMap.SimpleEntry<>(e, root));
+            }
+
+        // creazione delle categorie figlie
+        while (categoryStack.size() != 0) {
+            var toInsert = categoryStack.pop();
+            Category father = toInsert.getValue();
+
+            NodeCategory r = null;
+            while (r == null) {
+                var newChild = this.createCategoryFromXML(root, toInsert.getKey());
+                r = this.appendCategory(father, newChild);
+
+                if (toInsert.getKey().fields != null)
+                    for (var f: toInsert.getKey().fields) {
+                        this.addFieldFromXML(newChild, f);
+                    }
+
+                if (toInsert.getKey().categories != null)
+                    for (var e: toInsert.getKey().categories) {
+                        categoryStack.add(new AbstractMap.SimpleEntry<>(e, newChild));
+                    }
+            }
+            // aggiorna i padri nello stack, serve perchè l'istanza potrebbe essere cambiata
+            var newCategoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+            for(var e: categoryStack) {
+                if (e.getValue() == father) {
+                    var newElem = new AbstractMap.SimpleEntry<>(e.getKey(), (Category) r);
+                    newCategoryStack.add(newElem);
+                } else {
+                    newCategoryStack.add(e);
+                }
+            }
+            categoryStack = newCategoryStack;
+
+            if (father == root) root = r;
+        }
+
+        try {
+            this.model.createHierarchy(root);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Data una gerarchia importata da XML la salva
+     *
+     * @param root categoria root della gerarchia
+     * @param categoryXML la definizione della categoria da creare
+     */
+    private @NotNull Category createCategoryFromXML(Category root, XMLImport.CategoryXML categoryXML) throws DuplicateCategoryException, InvalidCategoryException {
+
+        String name = categoryXML.name;
+        if (name == null || name.length() == 0)
+            throw new InvalidCategoryException();
+
+        if (root == null && !this.model.isValidRootCategoryName(name))
+            throw new DuplicateCategoryException();
+        else if (root != null && !root.isValidChildCategoryName(name))
+            throw new DuplicateCategoryException();
+
+        String descr = categoryXML.description != null ? categoryXML.description : "";
+
+        return this.model.createCategory(name, descr, null);
+    }
+
+    /**
+     * Data una categoria e dei campi caricati da XML, li aggiunge alla categoria data
+     *
+     * @param c categoria a cui aggiungere un campo
+     * @param fieldXML il parametro da aggiungere
+     */
+    private void addFieldFromXML(Category c, XMLImport.FieldXML fieldXML) throws InvalidFieldException, DuplicateFieldException {
+        // nome non deve essere già esistente tra i padri della categoria
+        String name = fieldXML.name;
+        if (name == null)
+            throw new InvalidFieldException();
+        if (name.length() == 0)
+            throw new InvalidFieldException();
+        if (c.containsKey(name))
+            throw new DuplicateFieldException();
+        c.put(name, new TypeDefinition(fieldXML.type, fieldXML.required));
+    }
 
     //INTERNAL ACTIONS==============================================================
     /**

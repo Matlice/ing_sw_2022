@@ -57,7 +57,9 @@
                         <category>
                             <name> Felpe senza Cappuccio </name>
                             <description></description>
-                            <fields></fields>
+                            <fields>
+                                <field required = "true"> Colore cappuccio</field>
+                            </fields>
                             <children></children>
                         </category>
                     </children>
