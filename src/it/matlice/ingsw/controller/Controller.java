@@ -302,8 +302,6 @@ public class Controller {
                 + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
                 + String.format("%02d", date.get(Calendar.MONTH)+1) + " alle ore " + time, true);
 
-        // todo se offerta è proposta può essere ritirata? che succede allo scambio?
-
         return true;
     }
 
