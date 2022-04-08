@@ -309,9 +309,7 @@ public class Controller {
         this.view.info("Proposto lo scambio per il giorno " + day.getName() + " "
                 + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
                 + String.format("%02d", date.get(Calendar.MONTH)+1) + " alle ore " + time, true);
-
-        // todo se offerta è proposta può essere ritirata? che succede allo scambio?
-
+        
         return true;
     }
 
@@ -594,23 +592,32 @@ public class Controller {
 
             // importa le impostazioni (città, luoghi, giorni...)
             XMLImport.SettingsXML settings = config.settings;
-            this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
+            if (settings != null) {
+                this.view.warn("Importando la configurazione...");
+                this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
+            }
 
-            // importa gerarchie
-            config.hierarchies.forEach((e) -> {
-                try {
-                    this.createHierarchyFromXML(e);
-                } catch (DuplicateCategoryException ex) {
-                    ex.printStackTrace(); // todo
-                } catch (InvalidCategoryException ex) {
-                    ex.printStackTrace();
-                } catch (DuplicateFieldException ex) {
-                    ex.printStackTrace();
-                } catch (InvalidFieldException ex) {
-                    ex.printStackTrace();
-                }
-            });
-
+            if (config.hierarchies != null) {
+                this.view.warn("Importando le gerarchie...", true);
+                // importa gerarchie
+                config.hierarchies.forEach((e) -> {
+                    try {
+                        this.createHierarchyFromXML(e);
+                        this.view.info(String.format("Gerarchia %s importata correttamente!", e.root.name));
+                    } catch (DuplicateCategoryException ex) {
+                        this.view.error(String.format("Impossibile importare la gerarchia %s: categoria duplicata", e.root.name));
+                    } catch (InvalidCategoryException ex) {
+                        this.view.error(String.format("Impossibile importare la gerarchia %s: categoria invalida (numero di categorie figlie non valido?)", e.root.name));
+                    } catch (DuplicateFieldException ex) {
+                        this.view.error(String.format("Impossibile importare la gerarchia %s: campo duplicato", e.root.name));
+                    } catch (InvalidFieldException ex) {
+                        this.view.error(String.format("Impossibile importare la gerarchia %s: campo invalido", e.root.name));
+                    } catch (SQLException ex) {
+                        this.view.error(String.format("Impossibile importare la gerarchia %s: assicurarsi che non si stiano importando elementi duplicati", e.root.name));
+                        ex.printStackTrace();
+                    }
+                });
+            }
         } catch (FileNotFoundException e) {
             this.view.error("Impossibile importare la configurazione, file non trovato!");
         } catch (XMLStreamException e) {
@@ -624,7 +631,7 @@ public class Controller {
      *
      * @param hierarchyXML la definizione della gerarchia da creare
      */
-    private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException {
+    private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException, SQLException {
         // creazione della categoria root
         Category root = this.createCategoryFromXML(null, hierarchyXML.root);
         if (hierarchyXML.root.fields != null)
@@ -639,10 +646,12 @@ public class Controller {
         // associa una CategoryXML all'istanza della Category padre già creata
         var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
 
-        if (hierarchyXML.root.categories != null)
+        if (hierarchyXML.root.categories != null) {
+            if (hierarchyXML.root.categories.size() == 1) throw new InvalidCategoryException();
             for (var e: hierarchyXML.root.categories) {
                 categoryStack.add(new AbstractMap.SimpleEntry<>(e, root));
             }
+        }
 
         // creazione delle categorie figlie
         while (categoryStack.size() != 0) {
@@ -659,10 +668,12 @@ public class Controller {
                         this.addFieldFromXML(newChild, f);
                     }
 
-                if (toInsert.getKey().categories != null)
-                    for (var e: toInsert.getKey().categories) {
+                if (toInsert.getKey().categories != null) {
+                    if (toInsert.getKey().categories.size() == 1) throw new InvalidCategoryException();
+                    for (var e : toInsert.getKey().categories) {
                         categoryStack.add(new AbstractMap.SimpleEntry<>(e, newChild));
                     }
+                }
             }
             // aggiorna i padri nello stack, serve perchè l'istanza potrebbe essere cambiata
             var newCategoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
@@ -679,12 +690,7 @@ public class Controller {
             if (father == root) root = r;
         }
 
-        try {
-            this.model.createHierarchy(root);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+        this.model.createHierarchy(root);
     }
 
     /**

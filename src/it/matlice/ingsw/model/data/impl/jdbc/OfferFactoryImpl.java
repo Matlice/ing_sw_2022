@@ -120,9 +120,6 @@ public class OfferFactoryImpl implements OfferFactory {
             var time = System.currentTimeMillis() / 1000L; // actual time
             var due_delta = this.settingsFactory.readSettings().getDue() * 24 * 60 * 60; // expiration time
 
-            // todo remove debug
-            //due_delta = 100;
-
             // if time > proposed_time + due_delta then the offer has expired
             // proposed_time < time - due_delta
             var due = time - due_delta;
