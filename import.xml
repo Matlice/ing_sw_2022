@@ -24,7 +24,6 @@
     <hierarchies>
         <hierarchy>
             <name> Vestiti </name>
-            <description></description>
             <fields>
                 <field required = "true"> Taglia </field>
                 <field required = "false"> Colore </field>
@@ -32,27 +31,22 @@
             <children>
                 <category>
                     <name> Pantaloni </name>
-                    <description></description>
-                    <fields></fields>
+                    <fields>
+                        <field> Giro vita </field>
+                    </fields>
                     <children>
                         <category>
                             <name> Jeans </name>
-                            <description></description>
-                            <fields></fields>
-                            <children></children>
                         </category>
                         <category>
                             <name> Pantaloncini </name>
-                            <description></description>
-                            <fields></fields>
-                            <children></children>
+                            <description>Quelli corti popo</description>
                         </category>
                     </children>
                 </category>
                 <category>
                     <name> Felpe </name>
                     <description></description>
-                    <fields></fields>
                     <children>
                         <category>
                             <name> Felpe con Cappuccio </name>

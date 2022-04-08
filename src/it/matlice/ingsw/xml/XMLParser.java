@@ -9,7 +9,6 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.Stack;
 import java.util.TreeMap;
 
@@ -77,13 +76,12 @@ public class XMLParser {
     }
 
     /**
-     * Parser of a XML file
+     * Parser of an XML file
      *
-     * @param out PrintStream object
-     * @return dta from an {@link MapNode}
+     * @return data from an {@link MapNode}
      * @throws XMLStreamException
      */
-    public Object parse(PrintStream out) throws XMLStreamException {
+    public Object parse() throws XMLStreamException {
         Stack<MapNode<Object>> last = new Stack<>();
         while (reader.hasNext()) {
             switch (reader.getEventType()) {
@@ -103,13 +101,20 @@ public class XMLParser {
             reader.next();
         }
 
+        final boolean[] flag = new boolean[]{false};
+
         root.reverse_BFT((r) -> {
             var node = (XMLNode) r.getData();
-            if (conversion_map.containsKey(node.getName()))
-                r.setData(conversion_map.get(node.getName()).convert((XMLNode) r.getData(), ((MapNode<Object>) r).getChildrenMap(), r.getParent() != null ? (XMLNode) r.getParent().getData() : null, (MapNode) r));
-            else
-                throw new XMLStreamException();
+            if (conversion_map.containsKey(node.getName())) {
+                try {
+                    r.setData(conversion_map.get(node.getName()).convert((XMLNode) r.getData(), ((MapNode<Object>) r).getChildrenMap(), r.getParent() != null ? (XMLNode) r.getParent().getData() : null, (MapNode) r));
+                } catch (XMLStreamException e) {
+                    flag[0] = true;
+                }
+            }
         });
+        if (flag[0])
+            throw new XMLStreamException();
         reader.close();
         return root.getData();
     }

@@ -6,6 +6,7 @@ import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.Authentication;
 import it.matlice.ingsw.model.Model;
+import it.matlice.ingsw.model.data.impl.jdbc.XMLImport;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.view.View;
@@ -13,6 +14,11 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.xml.stream.XMLStreamException;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -581,6 +587,16 @@ public class Controller {
     }
 
     private boolean importConfiguration(){
+        try {
+            var file = new FileInputStream("import.xml");
+            var im = new XMLImport(file);
+            var config = im.parse();
+            System.out.println("a");
+        } catch (FileNotFoundException e) {
+            this.view.error("Impossibile importare la configurazione, file non trovato!");
+        } catch (XMLStreamException e) {
+            this.view.error("Impossibile importare la configurazione, definizioni non valide!");
+        }
         return true;
     }
 
