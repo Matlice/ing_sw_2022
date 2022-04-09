@@ -467,6 +467,10 @@ public class Model {
         }
     }
 
+    /**
+     * Verifica tutte le condizioni legate al tempo,
+     * come ad esempio le scadenze delle offerte
+     */
     public void timeIteration() {
         try {
             this.of.checkForDueDate();
@@ -476,6 +480,11 @@ public class Model {
         }
     }
 
+    /**
+     * Ritorna la lista di offerte dell'utente che sono state selezionate allo scambio
+     * @param auth token di autenticazione dell'utente a cui le offerte son riferite
+     * @return lista di offerte selezionate
+     */
     public List<Offer> getSelectedOffers(Authentication auth){
         try {
             return this.of.getSelectedOffers(auth.getUser());
@@ -486,6 +495,12 @@ public class Model {
         return null;
     }
 
+    /**
+     * Ritorna la lista di messaggi per l'utente,
+     * relativi a offerte in scambio
+     * @param auth token di autenticazione dell'utente a cui le offerte son riferite
+     * @return lista di messaggi
+     */
     public List<Message> getUserMessages(Authentication auth) {
         try {
             return this.mf.getUserMessages(auth.getUser())
@@ -557,6 +572,12 @@ public class Model {
         }
     }
 
+    /**
+     * Converte un giorno e un orario a un'istanza di Date
+     * @param day giorno della settimana
+     * @param time orario del giorno
+     * @return istanza di Date corrispondente
+     */
     private static Calendar convertToDate(it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
         var d = nextDayOfWeek(day.getCalendarDay());
         d.set(Calendar.HOUR_OF_DAY, time.getHour());
@@ -564,6 +585,12 @@ public class Model {
         return d;
     }
 
+    /**
+     * Ritorna il prossimo giorno (es. 5 aprile) a partire dal giorno della settimana (es. Martedì)
+     *
+     * @param dow giorno della settimana, secondo le costanti di Calendar
+     * @return istanza di Date
+     */
     private static Calendar nextDayOfWeek(int dow) {
         Calendar date = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         int diff = dow - date.get(Calendar.DAY_OF_WEEK);

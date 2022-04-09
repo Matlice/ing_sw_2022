@@ -34,7 +34,18 @@ public interface UserFactory {
      */
     User createUser(String username, User.UserTypes userType) throws SQLException, InvalidUserTypeException;
 
+    /**
+     * Permette di salvare un utente a database
+     * @param u utente da salvare
+     * @return utente salvato
+     * @throws SQLException errore di database
+     */
     User saveUser(User u) throws SQLException;
 
+    /**
+     * Ritorna la lista degli utente a database
+     * @return lista di utenti
+     * @throws SQLException errore di database
+     */
     List<User> getUsers() throws SQLException;
 }
