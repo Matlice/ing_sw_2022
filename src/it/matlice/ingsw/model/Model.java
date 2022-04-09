@@ -289,8 +289,7 @@ public class Model {
      */
     public it.matlice.ingsw.model.data.Settings readSettings() {
         try {
-            if(this.settings == null) this.settings = this.sf.readSettings();
-            return this.settings;
+            return this.sf.readSettings();
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -305,8 +304,10 @@ public class Model {
      * @param locations luoghi
      * @param days giorni
      * @param intervals intervalli
+     *
+     * @return true se è stato effettuato un tentativo di sovrascrivere la città in memoria, false altrimenti
      */
-    public void configureSettings(String city, int daysDue, List<String> locations, List<it.matlice.ingsw.model.data.Settings.Day> days, List<Interval> intervals) {
+    public boolean configureSettings(String city, int daysDue, List<String> locations, List<it.matlice.ingsw.model.data.Settings.Day> days, List<Interval> intervals) {
         try {
             it.matlice.ingsw.model.data.Settings set = this.sf.readSettings();
             if (set == null) {
@@ -325,11 +326,14 @@ public class Model {
                 for(var l: locations) this.sf.addLocation(set, l);
                 for(var d: days) this.sf.addDay(set, d);
                 for(var i: intervals) this.sf.addInterval(set, i);
+
+                return city != null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
         }
+        return false;
     }
 
     /**

@@ -47,7 +47,7 @@ public class Controller {
             new MenuAction<>("Mostra gerarchie", User.class, this::showHierarchies),
             new MenuAction<>("Mostra parametri di configurazione", User.class, this::showConfParameters),
             new MenuAction<>("Modifica parametri di configurazione", ConfiguratorUser.class, this::editConfParameters),
-            new MenuAction<>("Importa informazioni da file testuale", ConfiguratorUser.class, this::importConfiguration),
+            new MenuAction<>("Importa informazioni da file testuale", ConfiguratorUser.class, () -> importConfiguration(false)),
             new MenuAction<>("Aggiungi nuovo configuratore", ConfiguratorUser.class, this::createConfigurator),
 
             new MenuAction<>("Cambia password", User.class, this::changePassword)
@@ -117,14 +117,18 @@ public class Controller {
             try {
                 this.finalizeLogin();
 
-                if(!this.model.hasConfiguredSettings()){
-                    if (this.currentUser.getUser() instanceof ConfiguratorUser)
+                if (this.currentUser.getUser() instanceof ConfiguratorUser)
+                    while (!this.model.hasConfiguredSettings()){
                         this.configureSettings(true);
-                    else {
+                    }
+
+                else {
+                    if(!this.model.hasConfiguredSettings()){
                         this.view.error("Il sistema non è ancora utilizzabile. Contattare un configuratore.");
                         this.logout();
                     }
                 }
+
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -584,21 +588,44 @@ public class Controller {
         return true;
     }
 
-    private boolean importConfiguration(){
+    private boolean importConfiguration(boolean firstConfiguration){
         try {
             var file = new FileInputStream("import.xml");
             var im = new XMLImport(file);
-            var config = im.parse();
+
+            XMLImport.ConfigurationXML config = null;
+
+            try {
+                config = im.parse();
+            } catch (RuntimeException e){
+                this.view.error("Impossibile decifrare il file di importazione. Controllare la presenza di eventuali errori.");
+                return true;
+            }
 
             // importa le impostazioni (città, luoghi, giorni...)
             XMLImport.SettingsXML settings = config.settings;
             if (settings != null) {
                 this.view.warn("Importando la configurazione...");
-                this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
+
+                boolean err = false;
+                int i;
+                if(settings.city == null && firstConfiguration) err = true;
+                if(settings.expiration <= 0) err = true;
+                if(settings.locations == null || settings.locations.isEmpty()) err = true;
+                if(settings.days == null || settings.days.isEmpty()) err = true;
+                if(settings.intervals == null || settings.intervals.isEmpty()) err = true;
+
+                if(err){
+                    this.view.error("Il file di importazione contiene informazioni non valide. Controllare la presenza di eventuali errori.");
+                    return true;
+                }
+                var cityOverride = this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
+                if(cityOverride) this.view.warn("La città di scambio non può essere sovrascritta, le altre configurazioni sono state correttamente importate");
+
             }
 
             if (config.hierarchies != null) {
-                this.view.warn("Importando le gerarchie...", true);
+                this.view.warn("Importando le gerarchie...");
                 // importa gerarchie
                 config.hierarchies.forEach((e) -> {
                     try {
@@ -607,7 +634,7 @@ public class Controller {
                     } catch (DuplicateCategoryException ex) {
                         this.view.error(String.format("Impossibile importare la gerarchia %s: categoria duplicata", e.root.name));
                     } catch (InvalidCategoryException ex) {
-                        this.view.error(String.format("Impossibile importare la gerarchia %s: categoria invalida (numero di categorie figlie non valido?)", e.root.name));
+                        this.view.error(String.format("Impossibile importare la gerarchia %s: categoria invalida", e.root.name));
                     } catch (DuplicateFieldException ex) {
                         this.view.error(String.format("Impossibile importare la gerarchia %s: campo duplicato", e.root.name));
                     } catch (InvalidFieldException ex) {
@@ -621,7 +648,7 @@ public class Controller {
         } catch (FileNotFoundException e) {
             this.view.error("Impossibile importare la configurazione, file non trovato!");
         } catch (XMLStreamException e) {
-            this.view.error("Impossibile importare la configurazione, definizioni non valide!");
+            this.view.error("Impossibile importare la configurazione!");
         }
         return true;
     }
@@ -943,7 +970,15 @@ public class Controller {
 
         String city;
         if (firstConfiguration) {
-            this.view.warn("È necessario procedere alla prima configurazione dei parametri", true);
+            boolean toImport = this.chooseAndRun(Arrays.asList(
+                    new MenuAction<>("No, aggiungi la configurazione manualmente", ConfiguratorUser.class, () -> false, false, 0, -1),
+            new MenuAction<>("Sì, importa le configurazioni automaticamente", ConfiguratorUser.class, () -> true)
+            ), "Si vuole importare la configurazione da file?");
+
+            if(toImport){
+                importConfiguration(true);
+                return;
+            }
             city = this.view.get("Inserire la piazza di scambio");
         } else {
             this.view.warn("Non è possibile modificare la piazza di scambio");

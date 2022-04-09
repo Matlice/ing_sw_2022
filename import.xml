@@ -6,7 +6,6 @@
             <place> Piazza Arnaldo </place>
             <place> Castello </place>
             <place> Piazza Vittoria </place>
-            <place> Piazza Duomo </place>
             <place> Stazione FS </place>
             <place> McDonalds </place>
         </places>
@@ -14,6 +13,7 @@
             <day> Lunedi </day>
             <day> Martedi </day>
             <day> Venerdi </day>
+            <day> Sabato </day>
         </days>
         <intervals>
             <interval> 10:00-12:00 </interval>
