@@ -19,6 +19,9 @@ public abstract class Settings {
 
     public abstract List<Day> getDays();
 
+    /**
+     * Classe che rappresenta i giorni della settimana
+     */
     public static enum Day{
         MON("Lunedì", Calendar.MONDAY),
         TUE("Martedì", Calendar.TUESDAY),
@@ -35,6 +38,8 @@ public abstract class Settings {
 
         private String str;
         private int calendar_day;
+
+        // mappa che permette di ottenere il giorno (come Enum) da una stringa
         public static final Map<String, Day> dayMap = new HashMap<>();
 
         static {
@@ -49,6 +54,12 @@ public abstract class Settings {
             }
         }
 
+        /**
+         * Permette di parsare un giorno a partire da una stringa
+         * @param day rappresentazione come stringa del giorno
+         * @return giorno parsato
+         * @throws CannotParseDayException errore durante il parsing
+         */
         public static Day fromString(String day) throws CannotParseDayException {
             // to lower case and strip accents
             String normalizedDay = Normalizer.normalize(day.toLowerCase(), Normalizer.Form.NFD);
@@ -61,10 +72,19 @@ public abstract class Settings {
             }
         }
 
+        /**
+         * Ritorna la rappresentazione (in italiano) del giorno
+         * @return
+         */
         public String getName() {
             return this.str;
         }
 
+        /**
+         * Ritorna l'intero corrispondente al giorno
+         * per la libreria java.util.Calendar
+         * @return
+         */
         public int getCalendarDay() {
             return this.calendar_day;
         }

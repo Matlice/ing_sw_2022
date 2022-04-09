@@ -21,29 +21,8 @@ public class EntryPoint {
      * @param args nessuno
      */
     public static void main(String[] args) {
-//
-//        try {
-//            JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
-//            var uf = new UserFactoryImpl();
-//            var cf = new CategoryFactoryImpl();
-//            var hf = new HierarchyFactoryImpl();
-//            var sf = new SettingsFactoryImpl();
-//            var af = new OfferFactoryImpl(sf);
-//            var mf = new MessageFactoryImpl();
-//
-//            var u = uf.getUser("pippo");
-//            var o = af.getOffers(u).get(0);
-//            var m1 = mf.send(o.getLinkedOffer(), "ciao", new Date(10));
-//
-//            var u2 = uf.getUser("pluto");
-//            var ms = mf.getUserMessages(u2);
-//            System.out.println(ms);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        System.exit(0);
-
         try {
+            // imposta il logger al livello di WARNING per togliere scritte non volute da stdout
             Logger.setGlobalLogLevel(Level.WARNING);
             JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
 
