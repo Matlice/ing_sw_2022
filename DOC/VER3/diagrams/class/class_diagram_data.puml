@@ -1,0 +1,65 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package data #FFFFFF {
+
+    interface CategoryFactory {
+    }
+
+    interface HierarchyFactory {
+    }
+
+    abstract class Category <<extends HashMap<String, TypeDefinition>>> {
+    }
+
+    class TypeDefinition<T   > {
+    }
+    
+    abstract class Hierarchy {}
+
+    abstract class NodeCategory extends Category {
+    }
+    
+    abstract class LeafCategory extends Category {}
+
+    interface OfferFactory {
+        + makeOffer(name: String, owner: User, category: LeafCategory, fields: Map<String, String>)
+        + getOffersByUser(owner: User)
+        + getOffersByCategory(category: LeafCategory)
+        + setOfferStatus(offer: Offer, status: Offer.OfferStatus)
+    }
+
+    abstract class Offer {
+        + getName(): String
+        + getOwner(): User
+        + getStatus(): OfferStatus
+        + getCategory(): LeafCategory
+    }
+
+    enum OfferStatus {
+        OPEN
+        RETRACTED
+    }
+
+}
+
+'Category --> "0..1" Category: father
+Hierarchy --> "1" Category: root
+NodeCategory "2..n" o--> Category
+
+Category .left.> TypeDefinition
+
+CategoryFactory .down.> Category: creates >
+HierarchyFactory .down.> Hierarchy: creates >
+OfferFactory .down.> Offer: creates >
+
+Offer +-- OfferStatus
+Offer -- OfferStatus
+Offer -- LeafCategory
+
+
+@enduml

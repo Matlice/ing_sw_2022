@@ -1,0 +1,79 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package data #FFFFFF {
+
+    interface CategoryFactory {
+    }
+
+    interface HierarchyFactory {
+    }
+
+    abstract class Category <<extends HashMap<String, TypeDefinition>>> {
+    }
+
+    class TypeDefinition<T   > {
+    }
+    
+    abstract class Hierarchy {}
+
+    abstract class NodeCategory extends Category {
+    }
+    
+    abstract class LeafCategory extends Category {}
+
+    interface OfferFactory {
+    }
+
+    abstract class Offer {
+    }
+
+    interface MessageFactory {
+
+    }
+
+    abstract class Message {
+            getReferencedOffer(): Offer
+            getLocation(): String
+            getTime(): Long
+            getDate(): Calendar
+    }
+
+    enum OfferStatus {
+        OPEN
+        RETRACTED
+        COUPLED
+        SELECTED
+        EXCHANGE
+        CLOSED
+    }
+
+}
+
+MessageFactory -[hidden]right- OfferFactory
+OfferFactory -[hidden]right-  HierarchyFactory
+HierarchyFactory -[hidden]right- CategoryFactory 
+
+'Category --> "0..1" Category: father
+Hierarchy --> "1" Category: root
+NodeCategory "2..n" o--> Category
+
+Category .left.> TypeDefinition
+
+CategoryFactory .down.> Category: creates >
+HierarchyFactory .down.> Hierarchy: creates >
+OfferFactory .down.> Offer: creates >
+
+MessageFactory .down.> Message: creates >
+
+Offer +-- OfferStatus
+Offer -- OfferStatus
+Offer -- LeafCategory
+
+Message -- Offer
+
+@enduml

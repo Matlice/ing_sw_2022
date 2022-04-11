@@ -1,0 +1,15 @@
+\subsubsection{Diagramma delle classi \texttt{impl.sqlite}}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{VER2/diagrams/class/class_diagram_db.puml}
+    \caption{Versione 2: Diagramma UML delle classi, package \texttt{impl.sqlite}}
+    \label{fig:class_db_v_2}
+\end{figure}
+
+Al package che si occupa della gestione del database sono state aggiunte diverse classi, tra cui \textit{SettingsDB}, \textit{LocationDB}, \textit{DayDB} e \textit{IntervalDB}
+rappresentano le tabelle a database. La responsabilità di leggere i dati dalle tabelle in database è delegata alla classe \textit{SettingsFactoryImpl} che implementa i metodi dall'interfaccia \textit{SettingsFactory}.
+
+\textit{SettingsImpl} è una classe che eredità dalla classe astratta \textit{Settings}.
+
+In questo modo, la gestione del database è completamente trasparente al model dell'applicazione; questo dovrà interfacciarsi solamente tramite \textit{SettingsFactory} e \textit{Settings} ignorando i dettagli di implementazione a livello di database.

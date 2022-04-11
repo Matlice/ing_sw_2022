@@ -1,0 +1,50 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package data #FFFFFF {
+    abstract class Offer
+
+    interface OfferFactory
+
+    package impl.sqlite #FFFFFF {
+        
+        class OfferDB {
+            - name: String
+            - owner: UserDB
+            - category: CategoryDB
+            - status: String
+            + getters()
+        }
+
+        class OfferFieldDB {
+            - ref: CategoryFieldDB
+            - offer_ref: OfferDB
+            - value: String
+            + getters()
+        }
+
+        class UserDB {}
+        class CategoryFieldDB {}
+
+        class OfferFactoryImpl implements OfferFactory {}
+
+        package types #FFFFFF {
+            class OfferImpl extends Offer {}
+        }
+
+    }
+}
+
+OfferFactoryImpl ..> OfferImpl: creates >
+
+OfferImpl -up-> "1" OfferDB
+
+OfferDB -- OfferFieldDB
+OfferFieldDB -left- CategoryFieldDB
+OfferDB -left- UserDB
+
+@enduml

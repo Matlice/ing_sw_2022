@@ -1,0 +1,62 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package controller #FFFFFF {
+
+    class Controller <<singleton>> {
+        + createConfigurator(auth: Authentication, username: String)
+        + createHierarchy(auth: Authentication, root: Category)
+        + showHierarchies()
+        + showConfParameters()
+        + editConfParameters(...)
+        + createOffer(u: User, name: String, cat: LeafCategory, fields: Map<String, String>)
+        + retractOffer(offer: Offer)
+        + showOffersByUser(user: User)
+        + showOpenOffersByCategory(category: LeafCategory)
+
+        + offerTrade(offerToTrade: Offer, offerToAccept: Offer)
+        + acceptTrade(offer: Offer, location: String, day: Day, time: Time)
+        + replyToMessage(replyToMessage(Message replyto, String place, Day day, Time time)
+
+    }
+
+    class AuthImpl implements Authentication {
+        - AuthImpl(user: User)
+    }
+
+    interface Authentication {
+        + getUser(): User
+        + getLoginTime(): int
+        + getExpirationTime(): int
+        + isExpired(): bool
+    }
+
+    class Settings {}
+}
+
+abstract class User
+
+interface UserFactory
+interface CategoryFactory
+interface HierarchyFactory
+interface SettingsFactory
+interface OfferFactory
+interface MessageFactory
+
+AuthImpl --> "1" User
+Controller +-down-> AuthImpl
+
+Controller ..> Settings
+
+Controller .up.> UserFactory
+Controller .up.> CategoryFactory
+Controller .up.> HierarchyFactory
+Controller .up.> SettingsFactory
+Controller .up.> OfferFactory
+Controller .up.> MessageFactory
+
+@enduml

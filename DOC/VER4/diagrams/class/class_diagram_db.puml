@@ -1,0 +1,41 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package data #FFFFFF {
+    abstract class Message
+
+    interface MessageFactory
+
+    package impl.sqlite #FFFFFF {
+        
+        class MessageDB {
+            - proposedDate: Long
+            - proposedLocation: String
+            - answer: MessageDB
+            - ref_offer: OfferDB
+        }
+
+        class OfferDB {
+        }
+
+        class MessageFactoryImpl implements MessageFactory {}
+
+        package types #FFFFFF {
+            class MessageImpl extends Message {}
+        }
+
+    }
+}
+
+MessageFactoryImpl ..> MessageImpl: creates >
+
+MessageDB -- MessageDB
+MessageDB -- OfferDB
+
+MessageImpl -up-> "1" MessageDB
+
+@enduml

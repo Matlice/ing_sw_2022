@@ -11,9 +11,11 @@ package controller #FFFFFF {
         + createConfigurator(auth: Authentication, username: String)
         + createHierarchy(auth: Authentication, root: Category)
         + showHierarchies()
+        + showConfParameters()
+        + editConfParameters(...)
     }
 
-    class AuthImpl implements Authentication{
+    class AuthImpl implements Authentication {
         - AuthImpl(user: User)
     }
 
@@ -28,14 +30,13 @@ package controller #FFFFFF {
 }
 
 abstract class User
-abstract class Hierarchy
 
 interface UserFactory
 interface CategoryFactory
 interface HierarchyFactory
+interface SettingsFactory
 
 AuthImpl --> "1" User
-Controller "1 " o--right--> "1..n" Hierarchy
 Controller +-down-> AuthImpl
 
 Controller ..> Settings
@@ -43,11 +44,6 @@ Controller ..> Settings
 Controller .down.> UserFactory
 Controller .down.> CategoryFactory
 Controller .down.> HierarchyFactory
-
-AuthImpl -left[hidden]- Authentication
-Hierarchy -[hidden]- UserFactory
-UserFactory -[hidden]- CategoryFactory
-CategoryFactory -[hidden]- HierarchyFactory
-
+Controller .down.> SettingsFactory
 
 @enduml

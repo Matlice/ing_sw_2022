@@ -1,0 +1,124 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>Controller</b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.Controller  [[../../../../it/matlice/ingsw/controller/Controller.html{it.matlice.ingsw.controller.Controller}]] {
+-View view
+-Model model
+-Authentication currentUser
+-List<MenuAction> user_actions
+-List<MenuAction> public_actions
++Controller(View view,Model model)
++boolean mainloop()
++boolean registerUser()
++void addDefaultConfigurator()
+-boolean logout()
+-boolean performLogin()
+-void finalizeLogin()
+-boolean changePassword()
+-boolean createConfigurator()
+-boolean offerTrade()
+-boolean acceptTrade()
+-String chooseExchangePlace()
+-Settings.Day chooseExchangeDay()
+-Interval.Time chooseExchangeTime()
+-boolean answerMessage()
+-boolean createArticle()
+-boolean retractOffer()
+-boolean showOffersByUser()
+-boolean showOpenOffersByCategory()
+-boolean createHierarchy()
+-boolean showHierarchies()
+-boolean showConfParameters()
+-boolean editConfParameters()
+-boolean importConfiguration(boolean firstConfiguration)
+-void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML)
+-Category createCategoryFromXML(Category root,XMLImport.CategoryXML categoryXML)
+-void addFieldFromXML(Category c,XMLImport.FieldXML fieldXML)
+-Object chooseAndRun(List<MenuAction> actions,String prompt)
+-boolean login()
+-String getNewPassword()
+-AuthData getLoginData(String method)
+-void makeFields(Category c)
+-boolean addField(Category c)
+-Category createCategory(Category root)
+-NodeCategory appendCategory(Category father,Category child)
+-List<MenuAction> getCategorySelectionMenu(Category root)
+-List<MenuAction> getCategorySelectionMenu(Category root,List<MenuAction> acc,String prefix)
+-void configureSettings(boolean firstConfiguration)
+-LeafCategory chooseLeafCategory(String message)
+-void addArticle(LeafCategory e)
+-Object getFieldValue(Map.Entry<String, TypeDefinition> k)
+-void showOffers(String prompt,List<Offer> offers)
+-Object selectItem(String prompt,String cancel,List<V> items)
+}
+
+
+interface "<b><size:14>View</b>\n<size:10>it.matlice.ingsw.view" as it.matlice.ingsw.view.View  [[../../../../it/matlice/ingsw/view/View.html{it.matlice.ingsw.view.View}]] #white {
+}
+
+hide it.matlice.ingsw.view.View fields
+hide it.matlice.ingsw.view.View methods
+
+it.matlice.ingsw.controller.Controller -->  "view" it.matlice.ingsw.view.View
+
+class "<b><size:14>Model</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Model  [[../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] #white {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+it.matlice.ingsw.controller.Controller -->  "model" it.matlice.ingsw.model.Model
+
+interface "<b><size:14>Authentication</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Authentication  [[../../../../it/matlice/ingsw/model/Authentication.html{it.matlice.ingsw.model.Authentication}]] #white {
+}
+
+hide it.matlice.ingsw.model.Authentication fields
+hide it.matlice.ingsw.model.Authentication methods
+
+it.matlice.ingsw.controller.Controller -->  "currentUser" it.matlice.ingsw.model.Authentication
+
+
+class "<b><size:14>MenuAction<Boolean></b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.MenuActionBoolean  [[../../../../it/matlice/ingsw/controller/MenuAction.html{it.matlice.ingsw.controller.MenuAction}]] {
+}
+
+hide it.matlice.ingsw.controller.MenuActionBoolean fields
+hide it.matlice.ingsw.controller.MenuActionBoolean methods
+
+it.matlice.ingsw.controller.Controller -->  "user_actions *" it.matlice.ingsw.controller.MenuActionBoolean
+
+
+it.matlice.ingsw.controller.Controller -->  "public_actions *" it.matlice.ingsw.controller.MenuActionBoolean
+
+
+
+
+
+
+
+
+
+
+
+
+class "<b><size:14>TypeDefinition</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.TypeDefinition  [[../../../../it/matlice/ingsw/model/data/TypeDefinition.html{it.matlice.ingsw.model.data.TypeDefinition}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.TypeDefinition fields
+hide it.matlice.ingsw.model.data.TypeDefinition methods
+
+it.matlice.ingsw.controller.Controller ..> it.matlice.ingsw.model.data.TypeDefinition
+
+
+class "<b><size:14>Offer</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Offer  [[../../../../it/matlice/ingsw/model/data/Offer.html{it.matlice.ingsw.model.data.Offer}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Offer fields
+hide it.matlice.ingsw.model.data.Offer methods
+
+it.matlice.ingsw.controller.Controller ..> it.matlice.ingsw.model.data.Offer
+
+
+
+@enduml

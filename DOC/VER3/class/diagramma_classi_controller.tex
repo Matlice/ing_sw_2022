@@ -1,0 +1,23 @@
+\subsubsection{Diagramma delle classi \texttt{controller}}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{VER3/diagrams/class/class_diagram_controller.puml}
+    \caption{Versione 3: Diagramma UML delle classi, package \texttt{controller}}
+    \label{fig:class_controller_v_3}
+\end{figure}
+
+Alla classe \textit{Controller} sono stati aggiunti i metodi che permettono all'utente di aggiungere, ritirare e visualizzare le offerte (filtrando per utente o per categoria):
+\begin{itemize}
+    \item createOffer(u: User, name: String, cat: LeafCategory, fields: Map<String, String>)
+    \item retractOffer(offer: Offer)
+    \item showOffersByUser(user: User)
+    \item showOpenOffersByCategory(category: LeafCategory)
+\end{itemize}
+
+In \texttt{retractOffer()} l'offerta è ritirabile solamente se si trova nello stato di \textit{Offerta aperta},
+in questa versione non fa differenza, ma sarà fondamentale nella versione successiva quando le offerte potranno essere
+selezionate ed accoppiate.
+
+Si è assunto che una volta che un'offerta è stata proposta in scambio (oppure selezionata per un potenziale scambio)
+essa non possa più essere ritirata, a meno che la proposta di scambio non scada dopo i giorni definiti in fase di configurazione.

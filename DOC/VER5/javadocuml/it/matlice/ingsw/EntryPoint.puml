@@ -1,13 +1,8 @@
 @startuml
 
-skinparam svgLinkTarget _parent
-skinparam linetype ortho
-set namespaceSeparator none
-class "<b><size:14>EntryPoint</b>\n<size:10>it.matlice.ingsw" as it.matlice.ingsw.EntryPoint  [[../../../it/matlice/ingsw/EntryPoint.html{it.matlice.ingsw.EntryPoint}]] {
+class EntryPoint {
 +EntryPoint()
 {static} +void main(String args)
 }
-
-
 
 @enduml
