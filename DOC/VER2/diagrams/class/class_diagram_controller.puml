@@ -10,6 +10,9 @@ package controller #FFFFFF {
     class Controller <<singleton>> {
         + createConfigurator(auth: Authentication, username: String)
         + createHierarchy(auth: Authentication, root: Category)
+        + showHierarchies()
+        + showConfParameters()
+        + editConfParameters(...)
     }
 
     class AuthImpl implements Authentication {

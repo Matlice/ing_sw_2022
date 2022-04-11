@@ -1,0 +1,17 @@
+\subsubsection{Diagramma delle classi \texttt{data}}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{VER3/diagrams/class/class_diagram_data.puml}
+    \caption{Versione 3: Diagramma UML delle classi, package \texttt{data}}
+    \label{fig:class_data_v_3}
+\end{figure}
+
+Al package \texttt{data} viene aggiunta un'interfaccia per la gestione delle offerte \textit{OfferFactory}.
+
+L'implementazione di questa si occupa di istanziare, a partire dai dati in database, la classe \textit{Offer}.
+Questa classe contiene il nome, la categoria foglia a cui è associata e l'utente proprietario; inoltre, possiede una mappa che associa i nomi dei campi al valore compilato in fase di inserimento dall'utente.
+
+Gli intervalli orari sono rappresentati dalla classe \textit{Interval} che a sua volta è definita tramite gli orari di inizio e fine, la rappresentazione
+degli orari è delegata alla classe \textit{Time}. È previsto un metodo overlaps() che permette di verificare se un intervallo sia sovrapposto
+ad un altro intervallo, e un metodo statico che permetta di riunire diversi intervalli nel minor numero possibile.
