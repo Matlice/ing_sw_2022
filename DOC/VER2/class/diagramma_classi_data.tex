@@ -1,0 +1,18 @@
+\subsubsection{Diagramma delle classi \texttt{data}}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{VER2/diagrams/class/class_diagram_data.puml}
+    \caption{Versione 2: Diagramma UML delle classi, package \texttt{data}}
+    \label{fig:class_data_v_2}
+\end{figure}
+
+Al package \texttt{data} viene aggiunta un'interfaccia per la gestione dei parametri di configurazione \textit{SettingsFactory}.
+
+Le implementazioni di questa si occupanno di istanziare, a partire dai dati in datase, la classe \textit{Settings}.
+Questa contiene la piazza di scambio, il numero di giorni di scadenza, una lista di luoghi (\textit{String}) dove è possibile fare gli scambi,
+una lista di giorni (\textit{Day} è un'enum) ed una lista di intervalli orari.
+
+Gli intervalli orari sono rappresentati dalla classe \textit{Interval} che a sua volta è definita tramite gli orari di inizio e fine, la rappresentazione
+degli orari è delegata alla classe \textit{Time}. È previsto un metodo overlaps() che permette di verificare se un intervallo sia sovrapposto
+ad un altro intervallo, e un metodo statico che permetta di riunire diversi intervalli nel minor numero possibile.

@@ -1,0 +1,54 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package data #FFFFFF {
+    abstract class Settings
+
+    interface SettingsFactory
+
+    package impl.sqlite #FFFFFF {
+        
+        class SettingsDB {
+            - city: String
+            - expiration: Integer
+        }
+
+        class LocationDB {
+            - ref: SettingsDB
+            - location: String
+        }
+
+        class DayDB {
+            - ref: SettingsDB
+            - day: String
+        }
+
+        class IntervalDB {
+            - ref: SettingsDB
+            - start: Integer
+            - end: Integer
+        }
+
+        class SettingsFactoryImpl implements SettingsFactory {}
+
+        package types #FFFFFF {
+            class SettingsImpl extends Settings {}
+        }
+
+    }
+
+}
+
+SettingsFactoryImpl ..> SettingsImpl: creates >
+
+SettingsImpl -up-> "1" SettingsDB
+
+SettingsDB -- DayDB
+SettingsDB -- IntervalDB
+SettingsDB -right- LocationDB
+
+@enduml

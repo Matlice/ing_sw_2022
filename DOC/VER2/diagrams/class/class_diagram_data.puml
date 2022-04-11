@@ -1,0 +1,108 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package data #FFFFFF {
+
+    interface CategoryFactory {
+    }
+
+    interface HierarchyFactory {
+    }
+
+    interface UserFactory {
+    }
+
+    enum UserTypes {
+        CONFIGURATOR
+        CUSTOMER
+    }
+
+    abstract class Category <<extends HashMap<String, TypeDefinition>>> {
+    }
+
+    class TypeDefinition<T   > {
+    }
+    
+    abstract class Hierarchy {}
+
+    abstract class User {
+    }
+
+    abstract class ConfiguratorUser extends User {}
+
+    abstract class CustomerUser extends User {}
+
+    abstract class NodeCategory extends Category {
+    }
+    
+    abstract class LeafCategory extends Category {}
+
+    interface SettingsFactory {
+        + readSettings(): Settings
+        + makeSettings(city: String, int: expiration, List<String>: location, List<Day>: days, List<Interval>: interval): Settings
+        + setExpiration(int: expiration)
+        + addLocation(String: location)
+        + addDay(Day: day)
+        + addInterval(Interval: interval)
+    }
+
+    abstract class Settings {
+        - String city
+        - int expiration
+        - List<String> location
+        - List<Day> days
+        - List<Interval> interval
+        + getters()
+    }
+
+    enum Day {
+        MON
+        TUE
+        WED
+        THU
+        FRI
+        SAT
+        SUN
+    }
+
+    class Interval {
+        - Time start
+        - Time end
+        + {static} mergeIntervals(List<Interval> intervals): List<Interval>
+        + overlaps(Interval other)
+    }
+
+    class Time {
+        - int start
+        + {static} Time fromMinute(int s)
+        + getMinute(): int
+    }
+
+}
+
+User ..|> Authenticable
+
+'Category --> "0..1" Category: father
+Hierarchy --> "1" Category: root
+NodeCategory "2..n" o--> Category
+
+Category .left.> TypeDefinition
+
+CategoryFactory .down.> Category: creates >
+HierarchyFactory .down.> Hierarchy: creates >
+UserFactory .down.> User: creates >
+SettingsFactory .down.> Settings: creates >
+Settings -- Interval
+Day -left- Settings
+Interval +-- Time
+UserFactory ..> UserTypes
+
+HierarchyFactory -left[hidden]- CategoryFactory
+UserFactory -left[hidden]- HierarchyFactory
+LeafCategory -left[hidden]- NodeCategory
+Authenticable -left- UserFactory
+@enduml
