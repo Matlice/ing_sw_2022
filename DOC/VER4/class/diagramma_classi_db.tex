@@ -1,0 +1,15 @@
+\subsubsection{Diagramma delle classi \texttt{impl.sqlite}}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{VER4/diagrams/class/class_diagram_db.puml}
+    \caption{Versione 4: Diagramma UML delle classi, package \texttt{impl.sqlite}}
+    \label{fig:class_db_v_4}
+\end{figure}
+
+Al package che si occupa della gestione del database è stata aggiunta la classe \textit{MessageDB}, rappresentante la tabella SQL relativa ai messaggi.
+
+L'implementazione è analoga alle altre tabelle dell'applicativo, in cui la responsabilità della creazione dell'istanza di \textit{Message} è delegata alla \textit{MessageFactoryImpl}.
+Essendo \textit{Message} una classe astratta, la classe effettivamente istanziata è \textit{MessageImpl}, di cui tuttavia il resto dell'applicativo non deve essere a conoscenza.
+
+La comunicazione col database per quanto riguarda i messaggi è mediata dall'interfaccia \textit{MessageFactory} e dalla classe \textit{Message}.

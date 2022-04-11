@@ -1,0 +1,19 @@
+\subsubsection{Diagramma delle classi \texttt{controller}}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{VER4/diagrams/class/class_diagram_controller.puml}
+    \caption{Versione 4: Diagramma UML delle classi, package \texttt{controller}}
+    \label{fig:class_controller_v_4}
+\end{figure}
+
+Alla classe \textit{Controller} sono stati aggiunti i metodi che permettono all'utente di proporre scambi, accettarli o rifiutarli con una controproposta:
+\begin{itemize}
+    \item offerTrade(offerToTrade: Offer, offerToAccept: Offer)
+    \item acceptTrade(offer: Offer, location: String, day: Day, time: Time)
+    \item replyToMessage(replyToMessage(Message replyto, String place, Day day, Time time)
+\end{itemize}
+
+La funzione \texttt{replyToMessage()} è così chiamata perchè, come si vedrà successivamente, la procedura che permette a due utenti di accordarsi sul luogo, giorno ed ora dello scambio
+è definita tramite uno scambio di messaggi. Essi, tuttavia, non debbono essere confusi col termine quotidiano di messaggio per cui si intende invio e ricezione di testo libero.
+All'utente infatti non sarà permesso di inviare un testo a proprio piacimento ma sarà obbligato a scegliere tra una serie di possibilità preimpostate in fase di configurazione.

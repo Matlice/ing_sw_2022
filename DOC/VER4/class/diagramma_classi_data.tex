@@ -1,0 +1,20 @@
+\subsubsection{Diagramma delle classi \texttt{data}}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{VER4/diagrams/class/class_diagram_data.puml}
+    \caption{Versione 4: Diagramma UML delle classi, package \texttt{data}}
+    \label{fig:class_data_v_4}
+\end{figure}
+
+Al package \texttt{data} viene aggiunta un'interfaccia per la gestione dei messaggi \textit{MessageFactory}.
+
+Un'attezione deve essere posta sul significato dello scambio dei messaggi, infatti questi non debbono essere interpretati come si farebbe
+nel linguaggio corrente. L'utente fruitore non può in alcun modo inviare ad un altro utente un messaggio di testo libero, ma è costretto
+a rispondere con un luogo, un giorno ed un orario tra quelli prestabiliti in fase di configurazione.
+
+Un primo messaggio viene inviato dall'utente fruitore che per primo propone lo scambio di un suo articolo con un altro articolo,
+l'utente fruitore di questo secondo articolo riceverà la comunicazione di aver ricevuto una proposta di scambio al suo prossimo accesso all'applicazione.
+
+Se la proposta di scambio relativa al messaggio non è ancora scaduta, l'utente ricevitore del messaggio può decidere di accettare la proposta concludendo lo scambio;
+oppure rispondere al messaggio stesso con un ulteriore messaggio contente una controproposta.
