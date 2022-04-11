@@ -1,0 +1,43 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>DaysDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/DaysDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB}]] {
+-SettingsDB ref
+-String day
++DaysDB(SettingsDB ref,Settings.Day day)
+~DaysDB()
++SettingsDB getRef()
++void setRef(SettingsDB ref)
++Settings.Day getDay()
++void setLocation(Settings.Day day)
+}
+
+
+class "<b><size:14>SettingsDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/SettingsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB -->  "ref" it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB
+
+enum "<b><size:14>Settings.Day</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Settings.Day  [[../../../../../../../../it/matlice/ingsw/model/data/Settings.Day.html{it.matlice.ingsw.model.data.Settings.Day}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Settings.Day fields
+hide it.matlice.ingsw.model.data.Settings.Day methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB ..> it.matlice.ingsw.model.data.Settings.Day
+
+class "<b><size:14>SettingsImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/SettingsImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl -->  "dbDays *" it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB
+
+
+@enduml

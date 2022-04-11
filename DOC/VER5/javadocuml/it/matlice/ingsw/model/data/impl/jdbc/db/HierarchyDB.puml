@@ -1,0 +1,33 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>HierarchyDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/HierarchyDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB}]] {
+-int hierarchy_id
+-CategoryDB root
++HierarchyDB(CategoryDB root)
+~HierarchyDB()
++CategoryDB getRoot()
++int getHierarchyId()
+}
+
+
+class "<b><size:14>CategoryDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/CategoryDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB -->  "root" it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB
+
+class "<b><size:14>HierarchyImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/HierarchyImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB
+
+
+@enduml

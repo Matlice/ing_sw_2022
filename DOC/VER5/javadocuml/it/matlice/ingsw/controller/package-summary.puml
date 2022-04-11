@@ -1,0 +1,30 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.controller [[../../../../it/matlice/ingsw/controller/package-summary.html{it.matlice.ingsw.controller}]] #lightyellow {
+}
+
+class "<b><size:14>Controller</b>" as it.matlice.ingsw.controller.Controller  [[../../../../it/matlice/ingsw/controller/Controller.html{it.matlice.ingsw.controller.Controller}]] {
+}
+
+hide it.matlice.ingsw.controller.Controller fields
+hide it.matlice.ingsw.controller.Controller methods
+
+interface "<b><size:14>ReturnAction</b>" as it.matlice.ingsw.controller.ReturnAction  [[../../../../it/matlice/ingsw/controller/ReturnAction.html{it.matlice.ingsw.controller.ReturnAction}]] {
+}
+
+hide it.matlice.ingsw.controller.ReturnAction fields
+hide it.matlice.ingsw.controller.ReturnAction methods
+
+class "<b><size:14>MenuAction</b>" as it.matlice.ingsw.controller.MenuAction  [[../../../../it/matlice/ingsw/controller/MenuAction.html{it.matlice.ingsw.controller.MenuAction}]] {
+}
+
+hide it.matlice.ingsw.controller.MenuAction fields
+hide it.matlice.ingsw.controller.MenuAction methods
+
+it.matlice.ingsw.controller.Controller -->  "user_actions *" it.matlice.ingsw.controller.MenuActionBoolean
+it.matlice.ingsw.controller.Controller -->  "public_actions *" it.matlice.ingsw.controller.MenuActionBoolean
+it.matlice.ingsw.controller.MenuAction -->  "action" it.matlice.ingsw.controller.ReturnActionObject
+
+@enduml

@@ -1,0 +1,247 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.model [[../../../../it/matlice/ingsw/model/package-summary.html{it.matlice.ingsw.model}]] #lightyellow {
+}
+
+class "<b><size:14>Settings</b>" as it.matlice.ingsw.model.Settings  [[../../../../it/matlice/ingsw/model/Settings.html{it.matlice.ingsw.model.Settings}]] {
+}
+
+hide it.matlice.ingsw.model.Settings fields
+hide it.matlice.ingsw.model.Settings methods
+
+class "<b><size:14>Model</b>" as it.matlice.ingsw.model.Model  [[../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+interface "<b><size:14>Authentication</b>" as it.matlice.ingsw.model.Authentication  [[../../../../it/matlice/ingsw/model/Authentication.html{it.matlice.ingsw.model.Authentication}]] {
+}
+
+hide it.matlice.ingsw.model.Authentication fields
+hide it.matlice.ingsw.model.Authentication methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.Authentication
+package it.matlice.ingsw.model.auth [[../../../../it/matlice/ingsw/model/auth/package-summary.html{it.matlice.ingsw.model.auth}]] {
+}
+
+interface "<b><size:14>Authenticable</b>" as it.matlice.ingsw.model.auth.Authenticable  [[../../../../it/matlice/ingsw/model/auth/Authenticable.html{it.matlice.ingsw.model.auth.Authenticable}]] {
+}
+
+hide it.matlice.ingsw.model.auth.Authenticable fields
+hide it.matlice.ingsw.model.auth.Authenticable methods
+
+interface "<b><size:14>AuthMethod</b>" as it.matlice.ingsw.model.auth.AuthMethod  [[../../../../it/matlice/ingsw/model/auth/AuthMethod.html{it.matlice.ingsw.model.auth.AuthMethod}]] {
+}
+
+hide it.matlice.ingsw.model.auth.AuthMethod fields
+hide it.matlice.ingsw.model.auth.AuthMethod methods
+
+interface "<b><size:14>AuthData</b>" as it.matlice.ingsw.model.auth.AuthData  [[../../../../it/matlice/ingsw/model/auth/AuthData.html{it.matlice.ingsw.model.auth.AuthData}]] {
+}
+
+hide it.matlice.ingsw.model.auth.AuthData fields
+hide it.matlice.ingsw.model.auth.AuthData methods
+
+package it.matlice.ingsw.model.data [[../../../../it/matlice/ingsw/model/data/package-summary.html{it.matlice.ingsw.model.data}]] {
+}
+
+class "<b><size:14>User</b>" as it.matlice.ingsw.model.data.User  [[../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+enum "<b><size:14>User.UserTypes</b>" as it.matlice.ingsw.model.data.User.UserTypes  [[../../../../it/matlice/ingsw/model/data/User.UserTypes.html{it.matlice.ingsw.model.data.User.UserTypes}]] {
+}
+
+hide it.matlice.ingsw.model.data.User.UserTypes fields
+hide it.matlice.ingsw.model.data.User.UserTypes methods
+
+class "<b><size:14>TypeDefinition</b>" as it.matlice.ingsw.model.data.TypeDefinition  [[../../../../it/matlice/ingsw/model/data/TypeDefinition.html{it.matlice.ingsw.model.data.TypeDefinition}]] {
+}
+
+hide it.matlice.ingsw.model.data.TypeDefinition fields
+hide it.matlice.ingsw.model.data.TypeDefinition methods
+
+enum "<b><size:14>TypeDefinition.TypeAssociation</b>" as it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation  [[../../../../it/matlice/ingsw/model/data/TypeDefinition.TypeAssociation.html{it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation}]] {
+}
+
+hide it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation fields
+hide it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation methods
+
+class "<b><size:14>Settings</b>" as it.matlice.ingsw.model.data.Settings  [[../../../../it/matlice/ingsw/model/data/Settings.html{it.matlice.ingsw.model.data.Settings}]] {
+}
+
+hide it.matlice.ingsw.model.data.Settings fields
+hide it.matlice.ingsw.model.data.Settings methods
+
+enum "<b><size:14>Settings.Day</b>" as it.matlice.ingsw.model.data.Settings.Day  [[../../../../it/matlice/ingsw/model/data/Settings.Day.html{it.matlice.ingsw.model.data.Settings.Day}]] {
+}
+
+hide it.matlice.ingsw.model.data.Settings.Day fields
+hide it.matlice.ingsw.model.data.Settings.Day methods
+
+class "<b><size:14>Offer</b>" as it.matlice.ingsw.model.data.Offer  [[../../../../it/matlice/ingsw/model/data/Offer.html{it.matlice.ingsw.model.data.Offer}]] {
+}
+
+hide it.matlice.ingsw.model.data.Offer fields
+hide it.matlice.ingsw.model.data.Offer methods
+
+enum "<b><size:14>Offer.OfferStatus</b>" as it.matlice.ingsw.model.data.Offer.OfferStatus  [[../../../../it/matlice/ingsw/model/data/Offer.OfferStatus.html{it.matlice.ingsw.model.data.Offer.OfferStatus}]] {
+}
+
+hide it.matlice.ingsw.model.data.Offer.OfferStatus fields
+hide it.matlice.ingsw.model.data.Offer.OfferStatus methods
+
+class "<b><size:14>NodeCategory</b>" as it.matlice.ingsw.model.data.NodeCategory  [[../../../../it/matlice/ingsw/model/data/NodeCategory.html{it.matlice.ingsw.model.data.NodeCategory}]] {
+}
+
+hide it.matlice.ingsw.model.data.NodeCategory fields
+hide it.matlice.ingsw.model.data.NodeCategory methods
+
+class "<b><size:14>Message</b>" as it.matlice.ingsw.model.data.Message  [[../../../../it/matlice/ingsw/model/data/Message.html{it.matlice.ingsw.model.data.Message}]] {
+}
+
+hide it.matlice.ingsw.model.data.Message fields
+hide it.matlice.ingsw.model.data.Message methods
+
+class "<b><size:14>LeafCategory</b>" as it.matlice.ingsw.model.data.LeafCategory  [[../../../../it/matlice/ingsw/model/data/LeafCategory.html{it.matlice.ingsw.model.data.LeafCategory}]] {
+}
+
+hide it.matlice.ingsw.model.data.LeafCategory fields
+hide it.matlice.ingsw.model.data.LeafCategory methods
+
+class "<b><size:14>Interval</b>" as it.matlice.ingsw.model.data.Interval  [[../../../../it/matlice/ingsw/model/data/Interval.html{it.matlice.ingsw.model.data.Interval}]] {
+}
+
+hide it.matlice.ingsw.model.data.Interval fields
+hide it.matlice.ingsw.model.data.Interval methods
+
+class "<b><size:14>Interval.Time</b>" as it.matlice.ingsw.model.data.Interval.Time  [[../../../../it/matlice/ingsw/model/data/Interval.Time.html{it.matlice.ingsw.model.data.Interval.Time}]] {
+}
+
+hide it.matlice.ingsw.model.data.Interval.Time fields
+hide it.matlice.ingsw.model.data.Interval.Time methods
+
+class "<b><size:14>Hierarchy</b>" as it.matlice.ingsw.model.data.Hierarchy  [[../../../../it/matlice/ingsw/model/data/Hierarchy.html{it.matlice.ingsw.model.data.Hierarchy}]] {
+}
+
+hide it.matlice.ingsw.model.data.Hierarchy fields
+hide it.matlice.ingsw.model.data.Hierarchy methods
+
+class "<b><size:14>CustomerUser</b>" as it.matlice.ingsw.model.data.CustomerUser  [[../../../../it/matlice/ingsw/model/data/CustomerUser.html{it.matlice.ingsw.model.data.CustomerUser}]] {
+}
+
+hide it.matlice.ingsw.model.data.CustomerUser fields
+hide it.matlice.ingsw.model.data.CustomerUser methods
+
+class "<b><size:14>ConfiguratorUser</b>" as it.matlice.ingsw.model.data.ConfiguratorUser  [[../../../../it/matlice/ingsw/model/data/ConfiguratorUser.html{it.matlice.ingsw.model.data.ConfiguratorUser}]] {
+}
+
+hide it.matlice.ingsw.model.data.ConfiguratorUser fields
+hide it.matlice.ingsw.model.data.ConfiguratorUser methods
+
+class "<b><size:14>Category</b>" as it.matlice.ingsw.model.data.Category  [[../../../../it/matlice/ingsw/model/data/Category.html{it.matlice.ingsw.model.data.Category}]] {
+}
+
+hide it.matlice.ingsw.model.data.Category fields
+hide it.matlice.ingsw.model.data.Category methods
+
+package it.matlice.ingsw.model.exceptions [[../../../../it/matlice/ingsw/model/exceptions/package-summary.html{it.matlice.ingsw.model.exceptions}]] {
+}
+
+class "<b><size:14>RequiredFieldConstrainException</b>" as it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException  [[../../../../it/matlice/ingsw/model/exceptions/RequiredFieldConstrainException.html{it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException fields
+hide it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException methods
+
+class "<b><size:14>LoginInvalidException</b>" as it.matlice.ingsw.model.exceptions.LoginInvalidException  [[../../../../it/matlice/ingsw/model/exceptions/LoginInvalidException.html{it.matlice.ingsw.model.exceptions.LoginInvalidException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.LoginInvalidException fields
+hide it.matlice.ingsw.model.exceptions.LoginInvalidException methods
+
+class "<b><size:14>InvalidUserTypeException</b>" as it.matlice.ingsw.model.exceptions.InvalidUserTypeException  [[../../../../it/matlice/ingsw/model/exceptions/InvalidUserTypeException.html{it.matlice.ingsw.model.exceptions.InvalidUserTypeException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidUserTypeException fields
+hide it.matlice.ingsw.model.exceptions.InvalidUserTypeException methods
+
+class "<b><size:14>InvalidUserException</b>" as it.matlice.ingsw.model.exceptions.InvalidUserException  [[../../../../it/matlice/ingsw/model/exceptions/InvalidUserException.html{it.matlice.ingsw.model.exceptions.InvalidUserException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidUserException fields
+hide it.matlice.ingsw.model.exceptions.InvalidUserException methods
+
+class "<b><size:14>InvalidTradeOfferException</b>" as it.matlice.ingsw.model.exceptions.InvalidTradeOfferException  [[../../../../it/matlice/ingsw/model/exceptions/InvalidTradeOfferException.html{it.matlice.ingsw.model.exceptions.InvalidTradeOfferException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidTradeOfferException fields
+hide it.matlice.ingsw.model.exceptions.InvalidTradeOfferException methods
+
+class "<b><size:14>InvalidTimeException</b>" as it.matlice.ingsw.model.exceptions.InvalidTimeException  [[../../../../it/matlice/ingsw/model/exceptions/InvalidTimeException.html{it.matlice.ingsw.model.exceptions.InvalidTimeException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidTimeException fields
+hide it.matlice.ingsw.model.exceptions.InvalidTimeException methods
+
+class "<b><size:14>InvalidIntervalException</b>" as it.matlice.ingsw.model.exceptions.InvalidIntervalException  [[../../../../it/matlice/ingsw/model/exceptions/InvalidIntervalException.html{it.matlice.ingsw.model.exceptions.InvalidIntervalException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidIntervalException fields
+hide it.matlice.ingsw.model.exceptions.InvalidIntervalException methods
+
+class "<b><size:14>InvalidFieldException</b>" as it.matlice.ingsw.model.exceptions.InvalidFieldException  [[../../../../it/matlice/ingsw/model/exceptions/InvalidFieldException.html{it.matlice.ingsw.model.exceptions.InvalidFieldException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidFieldException fields
+hide it.matlice.ingsw.model.exceptions.InvalidFieldException methods
+
+class "<b><size:14>InvalidCategoryException</b>" as it.matlice.ingsw.model.exceptions.InvalidCategoryException  [[../../../../it/matlice/ingsw/model/exceptions/InvalidCategoryException.html{it.matlice.ingsw.model.exceptions.InvalidCategoryException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidCategoryException fields
+hide it.matlice.ingsw.model.exceptions.InvalidCategoryException methods
+
+class "<b><size:14>DuplicateUserException</b>" as it.matlice.ingsw.model.exceptions.DuplicateUserException  [[../../../../it/matlice/ingsw/model/exceptions/DuplicateUserException.html{it.matlice.ingsw.model.exceptions.DuplicateUserException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.DuplicateUserException fields
+hide it.matlice.ingsw.model.exceptions.DuplicateUserException methods
+
+class "<b><size:14>DuplicateFieldException</b>" as it.matlice.ingsw.model.exceptions.DuplicateFieldException  [[../../../../it/matlice/ingsw/model/exceptions/DuplicateFieldException.html{it.matlice.ingsw.model.exceptions.DuplicateFieldException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.DuplicateFieldException fields
+hide it.matlice.ingsw.model.exceptions.DuplicateFieldException methods
+
+class "<b><size:14>DuplicateCategoryException</b>" as it.matlice.ingsw.model.exceptions.DuplicateCategoryException  [[../../../../it/matlice/ingsw/model/exceptions/DuplicateCategoryException.html{it.matlice.ingsw.model.exceptions.DuplicateCategoryException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.DuplicateCategoryException fields
+hide it.matlice.ingsw.model.exceptions.DuplicateCategoryException methods
+
+class "<b><size:14>CannotParseTimeException</b>" as it.matlice.ingsw.model.exceptions.CannotParseTimeException  [[../../../../it/matlice/ingsw/model/exceptions/CannotParseTimeException.html{it.matlice.ingsw.model.exceptions.CannotParseTimeException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.CannotParseTimeException fields
+hide it.matlice.ingsw.model.exceptions.CannotParseTimeException methods
+
+class "<b><size:14>CannotParseIntervalException</b>" as it.matlice.ingsw.model.exceptions.CannotParseIntervalException  [[../../../../it/matlice/ingsw/model/exceptions/CannotParseIntervalException.html{it.matlice.ingsw.model.exceptions.CannotParseIntervalException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.CannotParseIntervalException fields
+hide it.matlice.ingsw.model.exceptions.CannotParseIntervalException methods
+
+class "<b><size:14>CannotParseDayException</b>" as it.matlice.ingsw.model.exceptions.CannotParseDayException  [[../../../../it/matlice/ingsw/model/exceptions/CannotParseDayException.html{it.matlice.ingsw.model.exceptions.CannotParseDayException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.CannotParseDayException fields
+hide it.matlice.ingsw.model.exceptions.CannotParseDayException methods
+
+
+@enduml

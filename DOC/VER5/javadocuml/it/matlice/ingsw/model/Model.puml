@@ -1,0 +1,222 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>Model</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Model  [[../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] {
+-HierarchyFactory hf
+-CategoryFactory cf
+-UserFactory uf
+-SettingsFactory sf
+-OfferFactory of
+-MessageFactory mf
+-Settings settings
++Model(HierarchyFactory hf,CategoryFactory cf,UserFactory uf,SettingsFactory sf,OfferFactory af,MessageFactory mf)
++void changePassword(Authentication auth,String newPassword)
++List<AuthMethod> authenticationType(String username)
++Authentication authenticate(AuthMethod method,AuthData data)
++void finalizeLogin(Authentication auth)
++String addConfiguratorUser(String username,boolean defaultPassword)
++void registerUser(String username,String password)
++Category createCategory(String name,String description,Category father)
++boolean isValidRootCategoryName(String name)
++void createHierarchy(Category root)
++List<Hierarchy> getHierarchies()
++List<LeafCategory> getLeafCategories()
++boolean hasConfiguredSettings()
++Settings readSettings()
++boolean configureSettings(String city,int daysDue,List<String> locations,List<Day> days,List<Interval> intervals)
++Offer createOffer(User u,String name,LeafCategory e,Map<String, Object> fields)
++List<Offer> getOffersByUser(User user)
++List<Offer> getOffersByCategory(LeafCategory cat)
++List<Offer> getRetractableOffers(User user)
++void retractOffer(Offer offerToRetract)
++List<Offer> getTradableOffers(User owner)
++List<Offer> getTradableOffers(Offer offerToTrade)
++void createTradeOffer(Offer offerToTrade,Offer offerToAccept)
++void timeIteration()
++List<Offer> getSelectedOffers(Authentication auth)
++List<Message> getUserMessages(Authentication auth)
++Calendar acceptTrade(Offer offer,String location,Settings.Day day,Interval.Time time)
++Calendar replyToMessage(Message replyto,String place,Settings.Day day,Interval.Time time)
++void acceptTradeMessage(Message m)
+-String genRandomPassword()
+-User createUser(String username,User.UserTypes type)
+{static} -Calendar convertToDate(Settings.Day day,Interval.Time time)
+{static} -Calendar nextDayOfWeek(int dow)
+}
+
+
+class "<b><size:14>Controller</b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.Controller  [[../../../../it/matlice/ingsw/controller/Controller.html{it.matlice.ingsw.controller.Controller}]] #white {
+}
+
+hide it.matlice.ingsw.controller.Controller fields
+hide it.matlice.ingsw.controller.Controller methods
+
+it.matlice.ingsw.controller.Controller -->  "model" it.matlice.ingsw.model.Model
+
+interface "<b><size:14>HierarchyFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.HierarchyFactory  [[../../../../it/matlice/ingsw/model/data/factories/HierarchyFactory.html{it.matlice.ingsw.model.data.factories.HierarchyFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.HierarchyFactory fields
+hide it.matlice.ingsw.model.data.factories.HierarchyFactory methods
+
+it.matlice.ingsw.model.Model -->  "hf" it.matlice.ingsw.model.data.factories.HierarchyFactory
+
+interface "<b><size:14>CategoryFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.CategoryFactory  [[../../../../it/matlice/ingsw/model/data/factories/CategoryFactory.html{it.matlice.ingsw.model.data.factories.CategoryFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.CategoryFactory fields
+hide it.matlice.ingsw.model.data.factories.CategoryFactory methods
+
+it.matlice.ingsw.model.Model -->  "cf" it.matlice.ingsw.model.data.factories.CategoryFactory
+
+interface "<b><size:14>UserFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.UserFactory  [[../../../../it/matlice/ingsw/model/data/factories/UserFactory.html{it.matlice.ingsw.model.data.factories.UserFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.UserFactory fields
+hide it.matlice.ingsw.model.data.factories.UserFactory methods
+
+it.matlice.ingsw.model.Model -->  "uf" it.matlice.ingsw.model.data.factories.UserFactory
+
+interface "<b><size:14>SettingsFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.SettingsFactory  [[../../../../it/matlice/ingsw/model/data/factories/SettingsFactory.html{it.matlice.ingsw.model.data.factories.SettingsFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.SettingsFactory fields
+hide it.matlice.ingsw.model.data.factories.SettingsFactory methods
+
+it.matlice.ingsw.model.Model -->  "sf" it.matlice.ingsw.model.data.factories.SettingsFactory
+
+interface "<b><size:14>OfferFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.OfferFactory  [[../../../../it/matlice/ingsw/model/data/factories/OfferFactory.html{it.matlice.ingsw.model.data.factories.OfferFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.OfferFactory fields
+hide it.matlice.ingsw.model.data.factories.OfferFactory methods
+
+it.matlice.ingsw.model.Model -->  "of" it.matlice.ingsw.model.data.factories.OfferFactory
+
+interface "<b><size:14>MessageFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.MessageFactory  [[../../../../it/matlice/ingsw/model/data/factories/MessageFactory.html{it.matlice.ingsw.model.data.factories.MessageFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.MessageFactory fields
+hide it.matlice.ingsw.model.data.factories.MessageFactory methods
+
+it.matlice.ingsw.model.Model -->  "mf" it.matlice.ingsw.model.data.factories.MessageFactory
+
+class "<b><size:14>Settings</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Settings  [[../../../../it/matlice/ingsw/model/data/Settings.html{it.matlice.ingsw.model.data.Settings}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Settings fields
+hide it.matlice.ingsw.model.data.Settings methods
+
+it.matlice.ingsw.model.Model -->  "settings" it.matlice.ingsw.model.data.Settings
+
+interface "<b><size:14>Authentication</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Authentication  [[../../../../it/matlice/ingsw/model/Authentication.html{it.matlice.ingsw.model.Authentication}]] {
+}
+
+hide it.matlice.ingsw.model.Authentication fields
+hide it.matlice.ingsw.model.Authentication methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.Authentication
+
+
+interface "<b><size:14>AuthMethod</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.AuthMethod  [[../../../../it/matlice/ingsw/model/auth/AuthMethod.html{it.matlice.ingsw.model.auth.AuthMethod}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.AuthMethod fields
+hide it.matlice.ingsw.model.auth.AuthMethod methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.auth.AuthMethod
+
+interface "<b><size:14>AuthData</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.AuthData  [[../../../../it/matlice/ingsw/model/auth/AuthData.html{it.matlice.ingsw.model.auth.AuthData}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.AuthData fields
+hide it.matlice.ingsw.model.auth.AuthData methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.auth.AuthData
+
+
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>Category</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Category  [[../../../../it/matlice/ingsw/model/data/Category.html{it.matlice.ingsw.model.data.Category}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Category fields
+hide it.matlice.ingsw.model.data.Category methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Category
+
+
+class "<b><size:14>Hierarchy</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Hierarchy  [[../../../../it/matlice/ingsw/model/data/Hierarchy.html{it.matlice.ingsw.model.data.Hierarchy}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Hierarchy fields
+hide it.matlice.ingsw.model.data.Hierarchy methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Hierarchy
+
+
+class "<b><size:14>LeafCategory</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.LeafCategory  [[../../../../it/matlice/ingsw/model/data/LeafCategory.html{it.matlice.ingsw.model.data.LeafCategory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.LeafCategory fields
+hide it.matlice.ingsw.model.data.LeafCategory methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.LeafCategory
+
+
+
+enum "<b><size:14>Settings.Day</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Settings.Day  [[../../../../it/matlice/ingsw/model/data/Settings.Day.html{it.matlice.ingsw.model.data.Settings.Day}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Settings.Day fields
+hide it.matlice.ingsw.model.data.Settings.Day methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Settings.Day
+
+
+class "<b><size:14>Interval</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Interval  [[../../../../it/matlice/ingsw/model/data/Interval.html{it.matlice.ingsw.model.data.Interval}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Interval fields
+hide it.matlice.ingsw.model.data.Interval methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Interval
+
+
+class "<b><size:14>Offer</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Offer  [[../../../../it/matlice/ingsw/model/data/Offer.html{it.matlice.ingsw.model.data.Offer}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Offer fields
+hide it.matlice.ingsw.model.data.Offer methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Offer
+
+
+
+class "<b><size:14>Message</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Message  [[../../../../it/matlice/ingsw/model/data/Message.html{it.matlice.ingsw.model.data.Message}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Message fields
+hide it.matlice.ingsw.model.data.Message methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Message
+
+class "<b><size:14>Interval.Time</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Interval.Time  [[../../../../it/matlice/ingsw/model/data/Interval.Time.html{it.matlice.ingsw.model.data.Interval.Time}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Interval.Time fields
+hide it.matlice.ingsw.model.data.Interval.Time methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Interval.Time
+
+
+
+@enduml

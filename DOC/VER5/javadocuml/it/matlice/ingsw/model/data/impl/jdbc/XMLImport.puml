@@ -1,0 +1,75 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>XMLImport</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport}]] {
+-FileInputStream file
+{static} -XMLConversion DayConverter
+{static} -XMLConversion DaysConverter
+{static} -XMLConversion IntervalConverter
+{static} -XMLConversion IntervalsConverter
+{static} -XMLConversion StringArrayConverter
+{static} -XMLConversion FieldConverter
+{static} -XMLConversion FieldsConverter
+{static} -XMLConversion CategoryConverter
+{static} -XMLConversion ChildrenConverter
+{static} -XMLConversion HierarchyConverter
+{static} -XMLConversion HierarchiesConverter
+{static} -XMLConversion SettingsConverter
+{static} -XMLConversion ConfigurationConverter
++XMLImport(FileInputStream file)
++XMLImport.ConfigurationXML parse()
+}
+
+
+class "<b><size:14>FileInputStream</b>\n<size:10>java.io" as java.io.FileInputStream  #lightgrey {
+}
+
+hide java.io.FileInputStream fields
+hide java.io.FileInputStream methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "file" java.io.FileInputStream
+
+interface "<b><size:14>XMLConversion</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLConversion  [[../../../../../../../it/matlice/ingsw/xml/XMLConversion.html{it.matlice.ingsw.xml.XMLConversion}]] #white {
+}
+
+hide it.matlice.ingsw.xml.XMLConversion fields
+hide it.matlice.ingsw.xml.XMLConversion methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "DayConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "DaysConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "IntervalConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "IntervalsConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "StringArrayConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "FieldConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "FieldsConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "CategoryConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "ChildrenConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "HierarchyConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "HierarchiesConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "SettingsConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "ConfigurationConverter" it.matlice.ingsw.xml.XMLConversion
+
+class "<b><size:14>XMLImport.ConfigurationXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.ConfigurationXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport ..> it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML
+
+
+@enduml

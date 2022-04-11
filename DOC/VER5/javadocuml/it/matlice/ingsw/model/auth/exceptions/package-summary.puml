@@ -1,0 +1,15 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.model.auth.exceptions [[../../../../../../it/matlice/ingsw/model/auth/exceptions/package-summary.html{it.matlice.ingsw.model.auth.exceptions}]] #lightyellow {
+}
+
+class "<b><size:14>InvalidPasswordException</b>" as it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException  [[../../../../../../it/matlice/ingsw/model/auth/exceptions/InvalidPasswordException.html{it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException}]] {
+}
+
+hide it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException fields
+hide it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException methods
+
+
+@enduml

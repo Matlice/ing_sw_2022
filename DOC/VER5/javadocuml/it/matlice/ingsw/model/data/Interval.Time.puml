@@ -1,0 +1,49 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>Interval.Time</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Interval.Time  [[../../../../../it/matlice/ingsw/model/data/Interval.Time.html{it.matlice.ingsw.model.data.Interval.Time}]] {
+-int time
++Time(int time)
++int getTime()
++int getHour()
++int getMinute()
+{static} +Interval.Time fromString(String timeString)
++String toString()
++int compareTo(Interval.Time o)
+{static} -int timeToMinutes(String time)
+}
+
+
+
+class "<b><size:14>Model</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Model  [[../../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] #white {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Interval.Time
+
+class "<b><size:14>Interval</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Interval  [[../../../../../it/matlice/ingsw/model/data/Interval.html{it.matlice.ingsw.model.data.Interval}]] {
+}
+
+hide it.matlice.ingsw.model.data.Interval fields
+hide it.matlice.ingsw.model.data.Interval methods
+
+it.matlice.ingsw.model.data.Interval -->  "start" it.matlice.ingsw.model.data.Interval.Time
+
+it.matlice.ingsw.model.data.Interval -->  "end" it.matlice.ingsw.model.data.Interval.Time
+
+interface "<b><size:14>Comparable<Time></b>\n<size:10>java.lang" as java.lang.ComparableInterval.Time  #lightgrey {
+}
+
+hide java.lang.ComparableInterval.Time fields
+hide java.lang.ComparableInterval.Time methods
+
+it.matlice.ingsw.model.data.Interval.Time ..|> java.lang.ComparableInterval.Time
+
+it.matlice.ingsw.model.data.Interval.Time ..> it.matlice.ingsw.model.data.Interval.Time
+
+
+@enduml

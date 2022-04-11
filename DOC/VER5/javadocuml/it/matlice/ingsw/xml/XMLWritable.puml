@@ -1,0 +1,29 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>XMLWritable</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLWritable  [[../../../../it/matlice/ingsw/xml/XMLWritable.html{it.matlice.ingsw.xml.XMLWritable}]] {
++void toXML(XMLStreamWriter xmlw)
+{abstract} +void toXML(XMLStreamWriter xmlw,Object data)
+}
+
+
+interface "<b><size:14>XMLStreamWriter</b>\n<size:10>javax.xml.stream" as javax.xml.stream.XMLStreamWriter  #lightgrey {
+}
+
+hide javax.xml.stream.XMLStreamWriter fields
+hide javax.xml.stream.XMLStreamWriter methods
+
+it.matlice.ingsw.xml.XMLWritable ..> javax.xml.stream.XMLStreamWriter
+
+class "<b><size:14>Utils</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.Utils  [[../../../../it/matlice/ingsw/xml/Utils.html{it.matlice.ingsw.xml.Utils}]] {
+}
+
+hide it.matlice.ingsw.xml.Utils fields
+hide it.matlice.ingsw.xml.Utils methods
+
+it.matlice.ingsw.xml.Utils ..> it.matlice.ingsw.xml.XMLWritable
+
+
+@enduml

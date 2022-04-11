@@ -1,0 +1,62 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>XMLParser</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLParser  [[../../../../it/matlice/ingsw/xml/XMLParser.html{it.matlice.ingsw.xml.XMLParser}]] {
+-XMLStreamReader reader
+-TreeMap<String, XMLConversion> conversion_map
+-MapNode<Object> root
++XMLParser(String file)
++XMLParser(File file)
++XMLParser(FileInputStream file)
++XMLParser add_conversion(String tag_name,XMLConversion conv_fnc)
++Object parse()
+-XMLNode getNode()
+}
+
+
+interface "<b><size:14>XMLStreamReader</b>\n<size:10>javax.xml.stream" as javax.xml.stream.XMLStreamReader  #lightgrey {
+}
+
+hide javax.xml.stream.XMLStreamReader fields
+hide javax.xml.stream.XMLStreamReader methods
+
+it.matlice.ingsw.xml.XMLParser -->  "reader" javax.xml.stream.XMLStreamReader
+
+
+interface "<b><size:14>XMLConversion</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLConversion  [[../../../../it/matlice/ingsw/xml/XMLConversion.html{it.matlice.ingsw.xml.XMLConversion}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLConversion fields
+hide it.matlice.ingsw.xml.XMLConversion methods
+
+it.matlice.ingsw.xml.XMLParser ..> it.matlice.ingsw.xml.XMLConversion
+
+class "<b><size:14>MapNode<Object></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.MapNodeObject  [[../../../../it/matlice/ingsw/tree/MapNode.html{it.matlice.ingsw.tree.MapNode}]] #lightgrey {
+}
+
+hide it.matlice.ingsw.tree.MapNodeObject fields
+hide it.matlice.ingsw.tree.MapNodeObject methods
+
+it.matlice.ingsw.xml.XMLParser -->  "root" it.matlice.ingsw.tree.MapNodeObject
+
+class "<b><size:14>File</b>\n<size:10>java.io" as java.io.File  #lightgrey {
+}
+
+hide java.io.File fields
+hide java.io.File methods
+
+it.matlice.ingsw.xml.XMLParser ..> java.io.File
+
+class "<b><size:14>FileInputStream</b>\n<size:10>java.io" as java.io.FileInputStream  #lightgrey {
+}
+
+hide java.io.FileInputStream fields
+hide java.io.FileInputStream methods
+
+it.matlice.ingsw.xml.XMLParser ..> java.io.FileInputStream
+
+
+
+@enduml

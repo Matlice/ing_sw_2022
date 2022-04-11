@@ -1,0 +1,99 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.model.exceptions [[../../../../../it/matlice/ingsw/model/exceptions/package-summary.html{it.matlice.ingsw.model.exceptions}]] #lightyellow {
+}
+
+class "<b><size:14>RequiredFieldConstrainException</b>" as it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException  [[../../../../../it/matlice/ingsw/model/exceptions/RequiredFieldConstrainException.html{it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException fields
+hide it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException methods
+
+class "<b><size:14>LoginInvalidException</b>" as it.matlice.ingsw.model.exceptions.LoginInvalidException  [[../../../../../it/matlice/ingsw/model/exceptions/LoginInvalidException.html{it.matlice.ingsw.model.exceptions.LoginInvalidException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.LoginInvalidException fields
+hide it.matlice.ingsw.model.exceptions.LoginInvalidException methods
+
+class "<b><size:14>InvalidUserTypeException</b>" as it.matlice.ingsw.model.exceptions.InvalidUserTypeException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidUserTypeException.html{it.matlice.ingsw.model.exceptions.InvalidUserTypeException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidUserTypeException fields
+hide it.matlice.ingsw.model.exceptions.InvalidUserTypeException methods
+
+class "<b><size:14>InvalidUserException</b>" as it.matlice.ingsw.model.exceptions.InvalidUserException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidUserException.html{it.matlice.ingsw.model.exceptions.InvalidUserException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidUserException fields
+hide it.matlice.ingsw.model.exceptions.InvalidUserException methods
+
+class "<b><size:14>InvalidTradeOfferException</b>" as it.matlice.ingsw.model.exceptions.InvalidTradeOfferException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidTradeOfferException.html{it.matlice.ingsw.model.exceptions.InvalidTradeOfferException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidTradeOfferException fields
+hide it.matlice.ingsw.model.exceptions.InvalidTradeOfferException methods
+
+class "<b><size:14>InvalidTimeException</b>" as it.matlice.ingsw.model.exceptions.InvalidTimeException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidTimeException.html{it.matlice.ingsw.model.exceptions.InvalidTimeException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidTimeException fields
+hide it.matlice.ingsw.model.exceptions.InvalidTimeException methods
+
+class "<b><size:14>InvalidIntervalException</b>" as it.matlice.ingsw.model.exceptions.InvalidIntervalException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidIntervalException.html{it.matlice.ingsw.model.exceptions.InvalidIntervalException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidIntervalException fields
+hide it.matlice.ingsw.model.exceptions.InvalidIntervalException methods
+
+class "<b><size:14>InvalidFieldException</b>" as it.matlice.ingsw.model.exceptions.InvalidFieldException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidFieldException.html{it.matlice.ingsw.model.exceptions.InvalidFieldException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidFieldException fields
+hide it.matlice.ingsw.model.exceptions.InvalidFieldException methods
+
+class "<b><size:14>InvalidCategoryException</b>" as it.matlice.ingsw.model.exceptions.InvalidCategoryException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidCategoryException.html{it.matlice.ingsw.model.exceptions.InvalidCategoryException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.InvalidCategoryException fields
+hide it.matlice.ingsw.model.exceptions.InvalidCategoryException methods
+
+class "<b><size:14>DuplicateUserException</b>" as it.matlice.ingsw.model.exceptions.DuplicateUserException  [[../../../../../it/matlice/ingsw/model/exceptions/DuplicateUserException.html{it.matlice.ingsw.model.exceptions.DuplicateUserException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.DuplicateUserException fields
+hide it.matlice.ingsw.model.exceptions.DuplicateUserException methods
+
+class "<b><size:14>DuplicateFieldException</b>" as it.matlice.ingsw.model.exceptions.DuplicateFieldException  [[../../../../../it/matlice/ingsw/model/exceptions/DuplicateFieldException.html{it.matlice.ingsw.model.exceptions.DuplicateFieldException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.DuplicateFieldException fields
+hide it.matlice.ingsw.model.exceptions.DuplicateFieldException methods
+
+class "<b><size:14>DuplicateCategoryException</b>" as it.matlice.ingsw.model.exceptions.DuplicateCategoryException  [[../../../../../it/matlice/ingsw/model/exceptions/DuplicateCategoryException.html{it.matlice.ingsw.model.exceptions.DuplicateCategoryException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.DuplicateCategoryException fields
+hide it.matlice.ingsw.model.exceptions.DuplicateCategoryException methods
+
+class "<b><size:14>CannotParseTimeException</b>" as it.matlice.ingsw.model.exceptions.CannotParseTimeException  [[../../../../../it/matlice/ingsw/model/exceptions/CannotParseTimeException.html{it.matlice.ingsw.model.exceptions.CannotParseTimeException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.CannotParseTimeException fields
+hide it.matlice.ingsw.model.exceptions.CannotParseTimeException methods
+
+class "<b><size:14>CannotParseIntervalException</b>" as it.matlice.ingsw.model.exceptions.CannotParseIntervalException  [[../../../../../it/matlice/ingsw/model/exceptions/CannotParseIntervalException.html{it.matlice.ingsw.model.exceptions.CannotParseIntervalException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.CannotParseIntervalException fields
+hide it.matlice.ingsw.model.exceptions.CannotParseIntervalException methods
+
+class "<b><size:14>CannotParseDayException</b>" as it.matlice.ingsw.model.exceptions.CannotParseDayException  [[../../../../../it/matlice/ingsw/model/exceptions/CannotParseDayException.html{it.matlice.ingsw.model.exceptions.CannotParseDayException}]] {
+}
+
+hide it.matlice.ingsw.model.exceptions.CannotParseDayException fields
+hide it.matlice.ingsw.model.exceptions.CannotParseDayException methods
+
+
+@enduml

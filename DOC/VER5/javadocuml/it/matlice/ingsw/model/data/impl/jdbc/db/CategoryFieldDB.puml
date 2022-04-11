@@ -1,0 +1,44 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>CategoryFieldDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/CategoryFieldDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB}]] {
+-int fieldId
+-String fieldName
+-CategoryDB category
+-String type
+-boolean required
++CategoryFieldDB(String fieldName,CategoryDB category,String type,boolean required)
+~CategoryFieldDB()
++int getFieldId()
++void setFieldId(int fieldId)
++boolean isRequired()
++void setRequired(boolean required)
++String getFieldName()
++void setFieldName(String fieldName)
++CategoryDB getCategory()
++void setCategory(CategoryDB category)
++String getType()
++void setType(String type)
+}
+
+
+class "<b><size:14>OfferFieldDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/OfferFieldDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB -->  "ref" it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB
+
+class "<b><size:14>CategoryDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/CategoryDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB -->  "category" it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB
+
+
+@enduml

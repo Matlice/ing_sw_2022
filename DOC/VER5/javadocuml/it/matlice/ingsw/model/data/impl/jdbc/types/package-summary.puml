@@ -1,0 +1,73 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.model.data.impl.jdbc.types [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/package-summary.html{it.matlice.ingsw.model.data.impl.jdbc.types}]] #lightyellow {
+}
+
+interface "<b><size:14>UserImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/UserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl methods
+
+class "<b><size:14>SettingsImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/SettingsImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl methods
+
+class "<b><size:14>OfferImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/OfferImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl methods
+
+class "<b><size:14>NodeCategoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/NodeCategoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl methods
+
+class "<b><size:14>MessageImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/MessageImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl methods
+
+class "<b><size:14>LeafCategoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/LeafCategoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl methods
+
+class "<b><size:14>HierarchyImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/HierarchyImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl methods
+
+class "<b><size:14>CustomerUserImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/CustomerUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl methods
+
+class "<b><size:14>ConfiguratorUserImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/ConfiguratorUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl methods
+
+interface "<b><size:14>CategoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/CategoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl ..|> it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl
+it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl ..|> it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl
+it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl ..|> it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl ..|> it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl
+
+@enduml

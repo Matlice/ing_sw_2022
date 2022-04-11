@@ -1,0 +1,58 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>MenuEntry</b>\n<size:10>it.matlice.ingsw.view.menu" as it.matlice.ingsw.view.menu.MenuEntry  [[../../../../../it/matlice/ingsw/view/menu/MenuEntry.html{it.matlice.ingsw.view.menu.MenuEntry}]] {
+-String name
+-int pos_index
+-int call_index
+-MenuAction action
+-boolean disabled
+-Object payload
++MenuEntry(String name,int pos_index,int call_index,MenuAction action,Object payload,boolean disabled)
++boolean isDisabled()
++void setDisabled(boolean disabled)
++Object getPayload()
++void setPayload(Object payload)
++int compareTo(MenuEntry o)
++String getName()
++int getPos_index()
++int getCall_index()
++MenuAction getAction()
++String toString()
+}
+
+
+interface "<b><size:14>MenuAction</b>\n<size:10>it.matlice.ingsw.view.menu" as it.matlice.ingsw.view.menu.MenuAction  [[../../../../../it/matlice/ingsw/view/menu/MenuAction.html{it.matlice.ingsw.view.menu.MenuAction}]] {
+}
+
+hide it.matlice.ingsw.view.menu.MenuAction fields
+hide it.matlice.ingsw.view.menu.MenuAction methods
+
+it.matlice.ingsw.view.menu.MenuEntry -->  "action" it.matlice.ingsw.view.menu.MenuAction
+
+interface "<b><size:14>Comparable<MenuEntry></b>\n<size:10>java.lang" as java.lang.ComparableMenuEntry  #lightgrey {
+}
+
+hide java.lang.ComparableMenuEntry fields
+hide java.lang.ComparableMenuEntry methods
+
+it.matlice.ingsw.view.menu.MenuEntry ..|> java.lang.ComparableMenuEntry
+
+it.matlice.ingsw.view.menu.MenuEntry ..> it.matlice.ingsw.view.menu.MenuEntry
+
+it.matlice.ingsw.view.menu.MenuAction ..> it.matlice.ingsw.view.menu.MenuEntry
+
+class "<b><size:14>Menu</b>\n<size:10>it.matlice.ingsw.view.menu" as it.matlice.ingsw.view.menu.Menu  [[../../../../../it/matlice/ingsw/view/menu/Menu.html{it.matlice.ingsw.view.menu.Menu}]] {
+}
+
+hide it.matlice.ingsw.view.menu.Menu fields
+hide it.matlice.ingsw.view.menu.Menu methods
+
+it.matlice.ingsw.view.menu.Menu ..> it.matlice.ingsw.view.menu.MenuEntry
+
+it.matlice.ingsw.view.menu.Menu -->  "last_entry" it.matlice.ingsw.view.menu.MenuEntry
+
+
+@enduml

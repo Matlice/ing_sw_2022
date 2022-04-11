@@ -1,0 +1,44 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>XMLImport.SettingsXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.SettingsXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML}]] {
++String city
++List<String> locations
++List<Day> days
++List<Interval> intervals
++int expiration
++SettingsXML(String city,List<String> locations,List<Day> days,List<Interval> intervals,int expiration)
+}
+
+
+class "<b><size:14>XMLImport.ConfigurationXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.ConfigurationXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML -->  "settings" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML
+
+
+
+enum "<b><size:14>Settings.Day</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Settings.Day  [[../../../../../../../it/matlice/ingsw/model/data/Settings.Day.html{it.matlice.ingsw.model.data.Settings.Day}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Settings.Day fields
+hide it.matlice.ingsw.model.data.Settings.Day methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML -->  "days *" it.matlice.ingsw.model.data.Settings.Day
+
+
+class "<b><size:14>Interval</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Interval  [[../../../../../../../it/matlice/ingsw/model/data/Interval.html{it.matlice.ingsw.model.data.Interval}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Interval fields
+hide it.matlice.ingsw.model.data.Interval methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML -->  "intervals *" it.matlice.ingsw.model.data.Interval
+
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.view.stream [[../../../../../it/matlice/ingsw/view/stream/package-summary.html{it.matlice.ingsw.view.stream}]] #lightyellow {
+}
+
+class "<b><size:14>StreamView</b>" as it.matlice.ingsw.view.stream.StreamView  [[../../../../../it/matlice/ingsw/view/stream/StreamView.html{it.matlice.ingsw.view.stream.StreamView}]] {
+}
+
+hide it.matlice.ingsw.view.stream.StreamView fields
+hide it.matlice.ingsw.view.stream.StreamView methods
+
+
+@enduml

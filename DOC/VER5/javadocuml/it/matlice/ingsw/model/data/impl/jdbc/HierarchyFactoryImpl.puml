@@ -1,0 +1,42 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>HierarchyFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/HierarchyFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl}]] {
+-ConnectionSource connectionSource
+-<any> hierarchyDAO
++HierarchyFactoryImpl()
++List<Hierarchy> getHierarchies()
++Hierarchy createHierarchy(Category rootCategory)
++void deleteHierarchy(Hierarchy h)
+}
+
+
+interface "<b><size:14>HierarchyFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.HierarchyFactory  [[../../../../../../../it/matlice/ingsw/model/data/factories/HierarchyFactory.html{it.matlice.ingsw.model.data.factories.HierarchyFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.HierarchyFactory fields
+hide it.matlice.ingsw.model.data.factories.HierarchyFactory methods
+
+it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl ..|> it.matlice.ingsw.model.data.factories.HierarchyFactory
+
+
+class "<b><size:14>Hierarchy</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Hierarchy  [[../../../../../../../it/matlice/ingsw/model/data/Hierarchy.html{it.matlice.ingsw.model.data.Hierarchy}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Hierarchy fields
+hide it.matlice.ingsw.model.data.Hierarchy methods
+
+it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl ..> it.matlice.ingsw.model.data.Hierarchy
+
+class "<b><size:14>Category</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Category  [[../../../../../../../it/matlice/ingsw/model/data/Category.html{it.matlice.ingsw.model.data.Category}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Category fields
+hide it.matlice.ingsw.model.data.Category methods
+
+it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl ..> it.matlice.ingsw.model.data.Category
+
+
+@enduml

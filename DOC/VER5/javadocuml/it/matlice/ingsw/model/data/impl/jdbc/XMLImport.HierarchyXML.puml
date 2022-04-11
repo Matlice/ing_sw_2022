@@ -1,0 +1,30 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>XMLImport.HierarchyXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.HierarchyXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML}]] {
++XMLImport.CategoryXML root
++HierarchyXML(XMLImport.CategoryXML root)
+}
+
+
+
+class "<b><size:14>XMLImport.ConfigurationXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.ConfigurationXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML -->  "hierarchies *" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML
+
+class "<b><size:14>XMLImport.CategoryXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.CategoryXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML -->  "root" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML
+
+
+@enduml

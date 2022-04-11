@@ -1,0 +1,15 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw [[it/matlice/ingsw/package-summary.html{it.matlice.ingsw}]] {
+}
+
+class "<b><size:14>EntryPoint</b>" as it.matlice.ingsw.EntryPoint  [[it/matlice/ingsw/EntryPoint.html{it.matlice.ingsw.EntryPoint}]] {
+}
+
+hide it.matlice.ingsw.EntryPoint fields
+hide it.matlice.ingsw.EntryPoint methods
+
+
+@enduml

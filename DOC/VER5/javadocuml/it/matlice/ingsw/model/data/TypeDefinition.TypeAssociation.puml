@@ -1,0 +1,38 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+enum "<b><size:14>TypeDefinition.TypeAssociation</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation  [[../../../../../it/matlice/ingsw/model/data/TypeDefinition.TypeAssociation.html{it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation}]] {
+-Class<?> type
+-Function<Object, String> ser
+-Function<String, Object> deser
+-TypeAssociation(Class<?> type,Function<Object, String> ser,Function<String, Object> deser)
+{static} +TypeDefinition.TypeAssociation values()
+{static} +TypeDefinition.TypeAssociation valueOf(String name)
++Class<?> getType()
++String serialize(Object o)
++Object deserialize(String o)
+}
+
+
+class "<b><size:14>TypeDefinition</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.TypeDefinition  [[../../../../../it/matlice/ingsw/model/data/TypeDefinition.html{it.matlice.ingsw.model.data.TypeDefinition}]] {
+}
+
+hide it.matlice.ingsw.model.data.TypeDefinition fields
+hide it.matlice.ingsw.model.data.TypeDefinition methods
+
+it.matlice.ingsw.model.data.TypeDefinition -->  "type" it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation
+
+
+
+class "<b><size:14>XMLImport.FieldXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.FieldXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML -->  "type" it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation
+
+
+@enduml

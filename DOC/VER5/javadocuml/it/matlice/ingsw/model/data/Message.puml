@@ -1,0 +1,74 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>Message</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Message  [[../../../../../it/matlice/ingsw/model/data/Message.html{it.matlice.ingsw.model.data.Message}]] {
++Message()
+{abstract} +Offer getReferencedOffer()
+{abstract} +String getLocation()
+{abstract} +Long getTime()
+{abstract} +Calendar getDate()
++String toString()
+}
+
+
+class "<b><size:14>Model</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Model  [[../../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] #white {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.Message
+
+class "<b><size:14>Offer</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Offer  [[../../../../../it/matlice/ingsw/model/data/Offer.html{it.matlice.ingsw.model.data.Offer}]] {
+}
+
+hide it.matlice.ingsw.model.data.Offer fields
+hide it.matlice.ingsw.model.data.Offer methods
+
+it.matlice.ingsw.model.data.Message ..> it.matlice.ingsw.model.data.Offer
+
+
+interface "<b><size:14>OfferFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.OfferFactory  [[../../../../../it/matlice/ingsw/model/data/factories/OfferFactory.html{it.matlice.ingsw.model.data.factories.OfferFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.OfferFactory fields
+hide it.matlice.ingsw.model.data.factories.OfferFactory methods
+
+it.matlice.ingsw.model.data.factories.OfferFactory ..> it.matlice.ingsw.model.data.Message
+
+interface "<b><size:14>MessageFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.MessageFactory  [[../../../../../it/matlice/ingsw/model/data/factories/MessageFactory.html{it.matlice.ingsw.model.data.factories.MessageFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.MessageFactory fields
+hide it.matlice.ingsw.model.data.factories.MessageFactory methods
+
+it.matlice.ingsw.model.data.factories.MessageFactory ..> it.matlice.ingsw.model.data.Message
+
+class "<b><size:14>OfferFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/OfferFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl ..> it.matlice.ingsw.model.data.Message
+
+class "<b><size:14>MessageFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/MessageFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl ..> it.matlice.ingsw.model.data.Message
+
+class "<b><size:14>MessageImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/MessageImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl --|> it.matlice.ingsw.model.data.Message
+
+
+@enduml

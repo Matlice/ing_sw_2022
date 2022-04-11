@@ -1,0 +1,132 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw [[../../../it/matlice/ingsw/package-summary.html{it.matlice.ingsw}]] #lightyellow {
+}
+
+class "<b><size:14>EntryPoint</b>" as it.matlice.ingsw.EntryPoint  [[../../../it/matlice/ingsw/EntryPoint.html{it.matlice.ingsw.EntryPoint}]] {
+}
+
+hide it.matlice.ingsw.EntryPoint fields
+hide it.matlice.ingsw.EntryPoint methods
+
+package it.matlice.ingsw.controller [[../../../it/matlice/ingsw/controller/package-summary.html{it.matlice.ingsw.controller}]] {
+}
+
+class "<b><size:14>Controller</b>" as it.matlice.ingsw.controller.Controller  [[../../../it/matlice/ingsw/controller/Controller.html{it.matlice.ingsw.controller.Controller}]] {
+}
+
+hide it.matlice.ingsw.controller.Controller fields
+hide it.matlice.ingsw.controller.Controller methods
+
+interface "<b><size:14>ReturnAction</b>" as it.matlice.ingsw.controller.ReturnAction  [[../../../it/matlice/ingsw/controller/ReturnAction.html{it.matlice.ingsw.controller.ReturnAction}]] {
+}
+
+hide it.matlice.ingsw.controller.ReturnAction fields
+hide it.matlice.ingsw.controller.ReturnAction methods
+
+class "<b><size:14>MenuAction</b>" as it.matlice.ingsw.controller.MenuAction  [[../../../it/matlice/ingsw/controller/MenuAction.html{it.matlice.ingsw.controller.MenuAction}]] {
+}
+
+hide it.matlice.ingsw.controller.MenuAction fields
+hide it.matlice.ingsw.controller.MenuAction methods
+
+package it.matlice.ingsw.model [[../../../it/matlice/ingsw/model/package-summary.html{it.matlice.ingsw.model}]] {
+}
+
+class "<b><size:14>Settings</b>" as it.matlice.ingsw.model.Settings  [[../../../it/matlice/ingsw/model/Settings.html{it.matlice.ingsw.model.Settings}]] {
+}
+
+hide it.matlice.ingsw.model.Settings fields
+hide it.matlice.ingsw.model.Settings methods
+
+class "<b><size:14>Model</b>" as it.matlice.ingsw.model.Model  [[../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+interface "<b><size:14>Authentication</b>" as it.matlice.ingsw.model.Authentication  [[../../../it/matlice/ingsw/model/Authentication.html{it.matlice.ingsw.model.Authentication}]] {
+}
+
+hide it.matlice.ingsw.model.Authentication fields
+hide it.matlice.ingsw.model.Authentication methods
+
+package it.matlice.ingsw.tree [[../../../it/matlice/ingsw/tree/package-summary.html{it.matlice.ingsw.tree}]] {
+}
+
+class "<b><size:14>TreeNode</b>" as it.matlice.ingsw.tree.TreeNode  [[../../../it/matlice/ingsw/tree/TreeNode.html{it.matlice.ingsw.tree.TreeNode}]] {
+}
+
+hide it.matlice.ingsw.tree.TreeNode fields
+hide it.matlice.ingsw.tree.TreeNode methods
+
+interface "<b><size:14>TreeAction</b>" as it.matlice.ingsw.tree.TreeAction  [[../../../it/matlice/ingsw/tree/TreeAction.html{it.matlice.ingsw.tree.TreeAction}]] {
+}
+
+hide it.matlice.ingsw.tree.TreeAction fields
+hide it.matlice.ingsw.tree.TreeAction methods
+
+interface "<b><size:14>Node</b>" as it.matlice.ingsw.tree.Node  [[../../../it/matlice/ingsw/tree/Node.html{it.matlice.ingsw.tree.Node}]] {
+}
+
+hide it.matlice.ingsw.tree.Node fields
+hide it.matlice.ingsw.tree.Node methods
+
+class "<b><size:14>MapNode</b>" as it.matlice.ingsw.tree.MapNode  [[../../../it/matlice/ingsw/tree/MapNode.html{it.matlice.ingsw.tree.MapNode}]] {
+}
+
+hide it.matlice.ingsw.tree.MapNode fields
+hide it.matlice.ingsw.tree.MapNode methods
+
+package it.matlice.ingsw.view [[../../../it/matlice/ingsw/view/package-summary.html{it.matlice.ingsw.view}]] {
+}
+
+interface "<b><size:14>View</b>" as it.matlice.ingsw.view.View  [[../../../it/matlice/ingsw/view/View.html{it.matlice.ingsw.view.View}]] {
+}
+
+hide it.matlice.ingsw.view.View fields
+hide it.matlice.ingsw.view.View methods
+
+package it.matlice.ingsw.xml [[../../../it/matlice/ingsw/xml/package-summary.html{it.matlice.ingsw.xml}]] {
+}
+
+interface "<b><size:14>XMLWritable</b>" as it.matlice.ingsw.xml.XMLWritable  [[../../../it/matlice/ingsw/xml/XMLWritable.html{it.matlice.ingsw.xml.XMLWritable}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLWritable fields
+hide it.matlice.ingsw.xml.XMLWritable methods
+
+class "<b><size:14>XMLParser</b>" as it.matlice.ingsw.xml.XMLParser  [[../../../it/matlice/ingsw/xml/XMLParser.html{it.matlice.ingsw.xml.XMLParser}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLParser fields
+hide it.matlice.ingsw.xml.XMLParser methods
+
+class "<b><size:14>XMLNode</b>" as it.matlice.ingsw.xml.XMLNode  [[../../../it/matlice/ingsw/xml/XMLNode.html{it.matlice.ingsw.xml.XMLNode}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLNode fields
+hide it.matlice.ingsw.xml.XMLNode methods
+
+interface "<b><size:14>XMLConversion</b>" as it.matlice.ingsw.xml.XMLConversion  [[../../../it/matlice/ingsw/xml/XMLConversion.html{it.matlice.ingsw.xml.XMLConversion}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLConversion fields
+hide it.matlice.ingsw.xml.XMLConversion methods
+
+class "<b><size:14>Utils</b>" as it.matlice.ingsw.xml.Utils  [[../../../it/matlice/ingsw/xml/Utils.html{it.matlice.ingsw.xml.Utils}]] {
+}
+
+hide it.matlice.ingsw.xml.Utils fields
+hide it.matlice.ingsw.xml.Utils methods
+
+class "<b><size:14>PrettyXMLStreamWriter</b>" as it.matlice.ingsw.xml.PrettyXMLStreamWriter  [[../../../it/matlice/ingsw/xml/PrettyXMLStreamWriter.html{it.matlice.ingsw.xml.PrettyXMLStreamWriter}]] {
+}
+
+hide it.matlice.ingsw.xml.PrettyXMLStreamWriter fields
+hide it.matlice.ingsw.xml.PrettyXMLStreamWriter methods
+
+
+@enduml

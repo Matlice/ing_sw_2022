@@ -1,0 +1,21 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>JdbcConnection</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/JdbcConnection.html{it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection}]] {
+{static} -JdbcConnection instance
+-ConnectionSource cs
+-JdbcConnection()
+-JdbcConnection(String url)
+{static} +JdbcConnection getInstance()
+{static} +JdbcConnection startInstance(String url)
++void close()
++ConnectionSource getConnectionSource()
+}
+
+
+it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection -->  "instance" it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection
+
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>TypeDefinition</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.TypeDefinition  [[../../../../../it/matlice/ingsw/model/data/TypeDefinition.html{it.matlice.ingsw.model.data.TypeDefinition}]] {
+-TypeDefinition.TypeAssociation type
+-boolean required
++TypeDefinition(boolean required)
++TypeDefinition(TypeDefinition.TypeAssociation type,boolean required)
++TypeDefinition.TypeAssociation type()
++boolean required()
++boolean equals(Object obj)
++int hashCode()
++String toString()
+}
+
+
+class "<b><size:14>Controller</b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.Controller  [[../../../../../it/matlice/ingsw/controller/Controller.html{it.matlice.ingsw.controller.Controller}]] #white {
+}
+
+hide it.matlice.ingsw.controller.Controller fields
+hide it.matlice.ingsw.controller.Controller methods
+
+it.matlice.ingsw.controller.Controller ..> it.matlice.ingsw.model.data.TypeDefinition
+
+enum "<b><size:14>TypeDefinition.TypeAssociation</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation  [[../../../../../it/matlice/ingsw/model/data/TypeDefinition.TypeAssociation.html{it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation}]] {
+}
+
+hide it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation fields
+hide it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation methods
+
+it.matlice.ingsw.model.data.TypeDefinition -->  "type" it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation
+
+class "<b><size:14>Category</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Category  [[../../../../../it/matlice/ingsw/model/data/Category.html{it.matlice.ingsw.model.data.Category}]] {
+}
+
+hide it.matlice.ingsw.model.data.Category fields
+hide it.matlice.ingsw.model.data.Category methods
+
+it.matlice.ingsw.model.data.Category ..> it.matlice.ingsw.model.data.TypeDefinition
+
+
+@enduml

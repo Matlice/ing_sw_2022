@@ -1,0 +1,137 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] {
++User()
+{abstract} +String getUsername()
+{abstract} +Long getLastLoginTime()
+{abstract} +void setLastLoginTime(long time)
+{abstract} +List<AuthMethod> getAuthMethods()
+}
+
+
+class "<b><size:14>MenuAction</b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.MenuAction  [[../../../../../it/matlice/ingsw/controller/MenuAction.html{it.matlice.ingsw.controller.MenuAction}]] #white {
+}
+
+hide it.matlice.ingsw.controller.MenuAction fields
+hide it.matlice.ingsw.controller.MenuAction methods
+
+it.matlice.ingsw.controller.MenuAction ..> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>Model</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Model  [[../../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] #white {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.data.User
+
+interface "<b><size:14>Authentication</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Authentication  [[../../../../../it/matlice/ingsw/model/Authentication.html{it.matlice.ingsw.model.Authentication}]] #white {
+}
+
+hide it.matlice.ingsw.model.Authentication fields
+hide it.matlice.ingsw.model.Authentication methods
+
+it.matlice.ingsw.model.Authentication ..> it.matlice.ingsw.model.data.User
+
+interface "<b><size:14>Authenticable</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.Authenticable  [[../../../../../it/matlice/ingsw/model/auth/Authenticable.html{it.matlice.ingsw.model.auth.Authenticable}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.Authenticable fields
+hide it.matlice.ingsw.model.auth.Authenticable methods
+
+it.matlice.ingsw.model.data.User ..|> it.matlice.ingsw.model.auth.Authenticable
+
+
+interface "<b><size:14>AuthMethod</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.AuthMethod  [[../../../../../it/matlice/ingsw/model/auth/AuthMethod.html{it.matlice.ingsw.model.auth.AuthMethod}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.AuthMethod fields
+hide it.matlice.ingsw.model.auth.AuthMethod methods
+
+it.matlice.ingsw.model.data.User ..> it.matlice.ingsw.model.auth.AuthMethod
+
+class "<b><size:14>Offer</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Offer  [[../../../../../it/matlice/ingsw/model/data/Offer.html{it.matlice.ingsw.model.data.Offer}]] {
+}
+
+hide it.matlice.ingsw.model.data.Offer fields
+hide it.matlice.ingsw.model.data.Offer methods
+
+it.matlice.ingsw.model.data.Offer ..> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>CustomerUser</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.CustomerUser  [[../../../../../it/matlice/ingsw/model/data/CustomerUser.html{it.matlice.ingsw.model.data.CustomerUser}]] {
+}
+
+hide it.matlice.ingsw.model.data.CustomerUser fields
+hide it.matlice.ingsw.model.data.CustomerUser methods
+
+it.matlice.ingsw.model.data.CustomerUser --|> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>ConfiguratorUser</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.ConfiguratorUser  [[../../../../../it/matlice/ingsw/model/data/ConfiguratorUser.html{it.matlice.ingsw.model.data.ConfiguratorUser}]] {
+}
+
+hide it.matlice.ingsw.model.data.ConfiguratorUser fields
+hide it.matlice.ingsw.model.data.ConfiguratorUser methods
+
+it.matlice.ingsw.model.data.ConfiguratorUser --|> it.matlice.ingsw.model.data.User
+
+interface "<b><size:14>UserFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.UserFactory  [[../../../../../it/matlice/ingsw/model/data/factories/UserFactory.html{it.matlice.ingsw.model.data.factories.UserFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.UserFactory fields
+hide it.matlice.ingsw.model.data.factories.UserFactory methods
+
+it.matlice.ingsw.model.data.factories.UserFactory ..> it.matlice.ingsw.model.data.User
+
+interface "<b><size:14>OfferFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.OfferFactory  [[../../../../../it/matlice/ingsw/model/data/factories/OfferFactory.html{it.matlice.ingsw.model.data.factories.OfferFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.OfferFactory fields
+hide it.matlice.ingsw.model.data.factories.OfferFactory methods
+
+it.matlice.ingsw.model.data.factories.OfferFactory ..> it.matlice.ingsw.model.data.User
+
+interface "<b><size:14>MessageFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.MessageFactory  [[../../../../../it/matlice/ingsw/model/data/factories/MessageFactory.html{it.matlice.ingsw.model.data.factories.MessageFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.MessageFactory fields
+hide it.matlice.ingsw.model.data.factories.MessageFactory methods
+
+it.matlice.ingsw.model.data.factories.MessageFactory ..> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>UserFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/UserFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl ..> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>OfferFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/OfferFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl ..> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>MessageFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/MessageFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl ..> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>OfferImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/OfferImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl -->  "owner" it.matlice.ingsw.model.data.User
+
+
+@enduml

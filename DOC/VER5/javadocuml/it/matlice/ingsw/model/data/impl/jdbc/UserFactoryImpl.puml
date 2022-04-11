@@ -1,0 +1,45 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>UserFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/UserFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl}]] {
+-<any> userDAO
++UserFactoryImpl()
++User getUser(String username)
++boolean doesUserExist(String username)
++User createUser(String username,User.UserTypes userType)
++User saveUser(User u)
++List<User> getUsers()
+-User makeUser(UserDB udb)
+}
+
+
+interface "<b><size:14>UserFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.UserFactory  [[../../../../../../../it/matlice/ingsw/model/data/factories/UserFactory.html{it.matlice.ingsw.model.data.factories.UserFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.UserFactory fields
+hide it.matlice.ingsw.model.data.factories.UserFactory methods
+
+it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl ..|> it.matlice.ingsw.model.data.factories.UserFactory
+
+
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl ..> it.matlice.ingsw.model.data.User
+
+enum "<b><size:14>User.UserTypes</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User.UserTypes  [[../../../../../../../it/matlice/ingsw/model/data/User.UserTypes.html{it.matlice.ingsw.model.data.User.UserTypes}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User.UserTypes fields
+hide it.matlice.ingsw.model.data.User.UserTypes methods
+
+it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl ..> it.matlice.ingsw.model.data.User.UserTypes
+
+
+
+@enduml

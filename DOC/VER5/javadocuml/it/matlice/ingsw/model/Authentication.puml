@@ -1,0 +1,40 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>Authentication</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Authentication  [[../../../../it/matlice/ingsw/model/Authentication.html{it.matlice.ingsw.model.Authentication}]] {
+{abstract} +User getUser()
+{abstract} +long getLoginTime()
+{abstract} +long getExpirationTime()
+{abstract} +boolean isValid()
+{abstract} +String loginProblem()
+}
+
+
+class "<b><size:14>Controller</b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.Controller  [[../../../../it/matlice/ingsw/controller/Controller.html{it.matlice.ingsw.controller.Controller}]] #white {
+}
+
+hide it.matlice.ingsw.controller.Controller fields
+hide it.matlice.ingsw.controller.Controller methods
+
+it.matlice.ingsw.controller.Controller -->  "currentUser" it.matlice.ingsw.model.Authentication
+
+class "<b><size:14>Model</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Model  [[../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.Authentication
+
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+it.matlice.ingsw.model.Authentication ..> it.matlice.ingsw.model.data.User
+
+
+@enduml

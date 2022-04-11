@@ -1,0 +1,47 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>Node</b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.Node  [[../../../../it/matlice/ingsw/tree/Node.html{it.matlice.ingsw.tree.Node}]] {
+{abstract} +Node<T> addChild(Object child)
+{abstract} +Object getData()
+{abstract} +Node<T> setData(Object data)
+{abstract} +Node<T> getParent()
+{abstract} +Node<T> getChildren()
+{abstract} +Object getChildrenData()
+{abstract} +void traverse_linear(TreeAction<T> action)
+{abstract} +void traverse(TreeAction<T> action)
+{abstract} +void traverse_reverse_linear(TreeAction<T> action)
+{abstract} +void BFT(TreeAction<T> action)
+{abstract} +void reverse_BFT(TreeAction<T> action)
+{abstract} +void DFT(TreeAction<T> action)
+}
+
+
+class "<b><size:14>Object</b>\n<size:10>java.lang" as java.lang.Object  #lightgrey {
+}
+
+hide java.lang.Object fields
+hide java.lang.Object methods
+
+it.matlice.ingsw.tree.Node ..> java.lang.Object
+
+interface "<b><size:14>Node<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.NodeObject  [[../../../../it/matlice/ingsw/tree/Node.html{it.matlice.ingsw.tree.Node}]] {
+}
+
+hide it.matlice.ingsw.tree.NodeObject fields
+hide it.matlice.ingsw.tree.NodeObject methods
+
+it.matlice.ingsw.tree.Node ..> it.matlice.ingsw.tree.NodeObject
+
+interface "<b><size:14>TreeAction<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.TreeActionObject  [[../../../../it/matlice/ingsw/tree/TreeAction.html{it.matlice.ingsw.tree.TreeAction}]] {
+}
+
+hide it.matlice.ingsw.tree.TreeActionObject fields
+hide it.matlice.ingsw.tree.TreeActionObject methods
+
+it.matlice.ingsw.tree.Node ..> it.matlice.ingsw.tree.TreeActionObject
+
+
+@enduml

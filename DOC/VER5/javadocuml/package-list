@@ -1,0 +1,17 @@
+it.matlice.ingsw
+it.matlice.ingsw.controller
+it.matlice.ingsw.model
+it.matlice.ingsw.model.auth
+it.matlice.ingsw.model.auth.exceptions
+it.matlice.ingsw.model.auth.password
+it.matlice.ingsw.model.data
+it.matlice.ingsw.model.data.factories
+it.matlice.ingsw.model.data.impl.jdbc
+it.matlice.ingsw.model.data.impl.jdbc.db
+it.matlice.ingsw.model.data.impl.jdbc.types
+it.matlice.ingsw.model.exceptions
+it.matlice.ingsw.tree
+it.matlice.ingsw.view
+it.matlice.ingsw.view.menu
+it.matlice.ingsw.view.stream
+it.matlice.ingsw.xml

@@ -1,0 +1,45 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.view [[../../../../it/matlice/ingsw/view/package-summary.html{it.matlice.ingsw.view}]] #lightyellow {
+}
+
+interface "<b><size:14>View</b>" as it.matlice.ingsw.view.View  [[../../../../it/matlice/ingsw/view/View.html{it.matlice.ingsw.view.View}]] {
+}
+
+hide it.matlice.ingsw.view.View fields
+hide it.matlice.ingsw.view.View methods
+
+package it.matlice.ingsw.view.menu [[../../../../it/matlice/ingsw/view/menu/package-summary.html{it.matlice.ingsw.view.menu}]] {
+}
+
+class "<b><size:14>MenuEntry</b>" as it.matlice.ingsw.view.menu.MenuEntry  [[../../../../it/matlice/ingsw/view/menu/MenuEntry.html{it.matlice.ingsw.view.menu.MenuEntry}]] {
+}
+
+hide it.matlice.ingsw.view.menu.MenuEntry fields
+hide it.matlice.ingsw.view.menu.MenuEntry methods
+
+interface "<b><size:14>MenuAction</b>" as it.matlice.ingsw.view.menu.MenuAction  [[../../../../it/matlice/ingsw/view/menu/MenuAction.html{it.matlice.ingsw.view.menu.MenuAction}]] {
+}
+
+hide it.matlice.ingsw.view.menu.MenuAction fields
+hide it.matlice.ingsw.view.menu.MenuAction methods
+
+class "<b><size:14>Menu</b>" as it.matlice.ingsw.view.menu.Menu  [[../../../../it/matlice/ingsw/view/menu/Menu.html{it.matlice.ingsw.view.menu.Menu}]] {
+}
+
+hide it.matlice.ingsw.view.menu.Menu fields
+hide it.matlice.ingsw.view.menu.Menu methods
+
+package it.matlice.ingsw.view.stream [[../../../../it/matlice/ingsw/view/stream/package-summary.html{it.matlice.ingsw.view.stream}]] {
+}
+
+class "<b><size:14>StreamView</b>" as it.matlice.ingsw.view.stream.StreamView  [[../../../../it/matlice/ingsw/view/stream/StreamView.html{it.matlice.ingsw.view.stream.StreamView}]] {
+}
+
+hide it.matlice.ingsw.view.stream.StreamView fields
+hide it.matlice.ingsw.view.stream.StreamView methods
+
+
+@enduml

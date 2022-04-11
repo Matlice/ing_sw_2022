@@ -1,0 +1,31 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>XMLNode</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLNode  [[../../../../it/matlice/ingsw/xml/XMLNode.html{it.matlice.ingsw.xml.XMLNode}]] {
+-String name
+-HashMap<String, String> attributes
+-String value
++XMLNode(String name)
++void add_attribute(String name,String value)
++String get_attribute(String name)
++String getName()
++String getValue()
++void setValue(String value)
++String toString()
+}
+
+
+
+
+interface "<b><size:14>XMLConversion</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLConversion  [[../../../../it/matlice/ingsw/xml/XMLConversion.html{it.matlice.ingsw.xml.XMLConversion}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLConversion fields
+hide it.matlice.ingsw.xml.XMLConversion methods
+
+it.matlice.ingsw.xml.XMLConversion ..> it.matlice.ingsw.xml.XMLNode
+
+
+@enduml

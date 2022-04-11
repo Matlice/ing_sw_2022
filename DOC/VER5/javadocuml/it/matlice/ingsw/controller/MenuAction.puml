@@ -1,0 +1,51 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>MenuAction</b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.MenuAction  [[../../../../it/matlice/ingsw/controller/MenuAction.html{it.matlice.ingsw.controller.MenuAction}]] {
+-String name
+-Class<?> requestedUserType
+-ReturnAction<T> action
+-boolean disabled
+-Integer index
+-Integer position
++MenuAction(String name,Class<?> requestedUserType,ReturnAction<T> action)
++MenuAction(String name,Class<?> requestedUserType,ReturnAction<T> action,boolean disabled)
++MenuAction(String name,Class<?> requestedUserType,ReturnAction<T> action,boolean disabled,Integer index,Integer position)
++boolean isDisabled()
++Integer getIndex()
++int getPosition()
++String getName()
++Class<?> getRequestedUserType()
++ReturnAction<T> getAction()
++boolean isPermitted(User u)
+}
+
+
+interface "<b><size:14>ReturnAction<T></b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.ReturnActionObject  [[../../../../it/matlice/ingsw/controller/ReturnAction.html{it.matlice.ingsw.controller.ReturnAction}]] {
+}
+
+hide it.matlice.ingsw.controller.ReturnActionObject fields
+hide it.matlice.ingsw.controller.ReturnActionObject methods
+
+it.matlice.ingsw.controller.MenuAction -->  "action" it.matlice.ingsw.controller.ReturnActionObject
+
+class "<b><size:14>Object</b>\n<size:10>java.lang" as java.lang.Object  #lightgrey {
+}
+
+hide java.lang.Object fields
+hide java.lang.Object methods
+
+it.matlice.ingsw.controller.MenuAction ..> java.lang.Object
+
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+it.matlice.ingsw.controller.MenuAction ..> it.matlice.ingsw.model.data.User
+
+
+@enduml

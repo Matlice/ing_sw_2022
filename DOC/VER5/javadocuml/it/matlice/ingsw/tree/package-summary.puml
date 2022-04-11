@@ -1,0 +1,44 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.tree [[../../../../it/matlice/ingsw/tree/package-summary.html{it.matlice.ingsw.tree}]] #lightyellow {
+}
+
+class "<b><size:14>TreeNode</b>" as it.matlice.ingsw.tree.TreeNode  [[../../../../it/matlice/ingsw/tree/TreeNode.html{it.matlice.ingsw.tree.TreeNode}]] {
+}
+
+hide it.matlice.ingsw.tree.TreeNode fields
+hide it.matlice.ingsw.tree.TreeNode methods
+
+interface "<b><size:14>TreeAction</b>" as it.matlice.ingsw.tree.TreeAction  [[../../../../it/matlice/ingsw/tree/TreeAction.html{it.matlice.ingsw.tree.TreeAction}]] {
+}
+
+hide it.matlice.ingsw.tree.TreeAction fields
+hide it.matlice.ingsw.tree.TreeAction methods
+
+interface "<b><size:14>Node</b>" as it.matlice.ingsw.tree.Node  [[../../../../it/matlice/ingsw/tree/Node.html{it.matlice.ingsw.tree.Node}]] {
+}
+
+hide it.matlice.ingsw.tree.Node fields
+hide it.matlice.ingsw.tree.Node methods
+
+class "<b><size:14>MapNode</b>" as it.matlice.ingsw.tree.MapNode  [[../../../../it/matlice/ingsw/tree/MapNode.html{it.matlice.ingsw.tree.MapNode}]] {
+}
+
+hide it.matlice.ingsw.tree.MapNode fields
+hide it.matlice.ingsw.tree.MapNode methods
+
+it.matlice.ingsw.tree.TreeNode ..> it.matlice.ingsw.tree.TreeNodeObject
+it.matlice.ingsw.tree.TreeNode -->  "parent" it.matlice.ingsw.tree.TreeNodeObject
+it.matlice.ingsw.tree.TreeNode ..|> it.matlice.ingsw.tree.NodeObject
+it.matlice.ingsw.tree.TreeNode ..> it.matlice.ingsw.tree.TreeActionObject
+it.matlice.ingsw.tree.TreeAction ..> it.matlice.ingsw.tree.NodeObject
+it.matlice.ingsw.tree.Node ..> it.matlice.ingsw.tree.NodeObject
+it.matlice.ingsw.tree.Node ..> it.matlice.ingsw.tree.TreeActionObject
+it.matlice.ingsw.tree.MapNode ..> it.matlice.ingsw.tree.MapNodeObject
+it.matlice.ingsw.tree.MapNode -->  "parent" it.matlice.ingsw.tree.MapNodeObject
+it.matlice.ingsw.tree.MapNode ..|> it.matlice.ingsw.tree.NodeObject
+it.matlice.ingsw.tree.MapNode ..> it.matlice.ingsw.tree.TreeActionObject
+
+@enduml

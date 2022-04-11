@@ -1,0 +1,33 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+enum "<b><size:14>User.UserTypes</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User.UserTypes  [[../../../../../it/matlice/ingsw/model/data/User.UserTypes.html{it.matlice.ingsw.model.data.User.UserTypes}]] {
+-String typeRepresentation
+-UserTypes(String typeRepresentation)
+{static} +User.UserTypes values()
+{static} +User.UserTypes valueOf(String name)
++String getTypeRepresentation()
+}
+
+
+
+interface "<b><size:14>UserFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.UserFactory  [[../../../../../it/matlice/ingsw/model/data/factories/UserFactory.html{it.matlice.ingsw.model.data.factories.UserFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.UserFactory fields
+hide it.matlice.ingsw.model.data.factories.UserFactory methods
+
+it.matlice.ingsw.model.data.factories.UserFactory ..> it.matlice.ingsw.model.data.User.UserTypes
+
+class "<b><size:14>UserFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/UserFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl ..> it.matlice.ingsw.model.data.User.UserTypes
+
+
+@enduml

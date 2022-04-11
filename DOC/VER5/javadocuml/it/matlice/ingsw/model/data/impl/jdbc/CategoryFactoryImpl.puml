@@ -1,0 +1,36 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>CategoryFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/CategoryFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl}]] {
+-ConnectionSource connectionSource
+-<any> categoryDAO
+-<any> fieldDAO
++CategoryFactoryImpl()
++<any> getCategoryDAO()
++Category getCategory(int id)
++Category createCategory(String nome,String description,Category father,boolean isLeaf)
++Category saveCategory(Category category)
+-Category populateCategory(Category cat)
+}
+
+
+interface "<b><size:14>CategoryFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.CategoryFactory  [[../../../../../../../it/matlice/ingsw/model/data/factories/CategoryFactory.html{it.matlice.ingsw.model.data.factories.CategoryFactory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.factories.CategoryFactory fields
+hide it.matlice.ingsw.model.data.factories.CategoryFactory methods
+
+it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl ..|> it.matlice.ingsw.model.data.factories.CategoryFactory
+
+class "<b><size:14>Category</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Category  [[../../../../../../../it/matlice/ingsw/model/data/Category.html{it.matlice.ingsw.model.data.Category}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Category fields
+hide it.matlice.ingsw.model.data.Category methods
+
+it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl ..> it.matlice.ingsw.model.data.Category
+
+
+@enduml

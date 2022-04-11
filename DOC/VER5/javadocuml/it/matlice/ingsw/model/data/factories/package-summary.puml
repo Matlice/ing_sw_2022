@@ -1,0 +1,46 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.model.data.factories [[../../../../../../it/matlice/ingsw/model/data/factories/package-summary.html{it.matlice.ingsw.model.data.factories}]] #lightyellow {
+}
+
+interface "<b><size:14>UserFactory</b>" as it.matlice.ingsw.model.data.factories.UserFactory  [[../../../../../../it/matlice/ingsw/model/data/factories/UserFactory.html{it.matlice.ingsw.model.data.factories.UserFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.UserFactory fields
+hide it.matlice.ingsw.model.data.factories.UserFactory methods
+
+interface "<b><size:14>SettingsFactory</b>" as it.matlice.ingsw.model.data.factories.SettingsFactory  [[../../../../../../it/matlice/ingsw/model/data/factories/SettingsFactory.html{it.matlice.ingsw.model.data.factories.SettingsFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.SettingsFactory fields
+hide it.matlice.ingsw.model.data.factories.SettingsFactory methods
+
+interface "<b><size:14>OfferFactory</b>" as it.matlice.ingsw.model.data.factories.OfferFactory  [[../../../../../../it/matlice/ingsw/model/data/factories/OfferFactory.html{it.matlice.ingsw.model.data.factories.OfferFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.OfferFactory fields
+hide it.matlice.ingsw.model.data.factories.OfferFactory methods
+
+interface "<b><size:14>MessageFactory</b>" as it.matlice.ingsw.model.data.factories.MessageFactory  [[../../../../../../it/matlice/ingsw/model/data/factories/MessageFactory.html{it.matlice.ingsw.model.data.factories.MessageFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.MessageFactory fields
+hide it.matlice.ingsw.model.data.factories.MessageFactory methods
+
+interface "<b><size:14>HierarchyFactory</b>" as it.matlice.ingsw.model.data.factories.HierarchyFactory  [[../../../../../../it/matlice/ingsw/model/data/factories/HierarchyFactory.html{it.matlice.ingsw.model.data.factories.HierarchyFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.HierarchyFactory fields
+hide it.matlice.ingsw.model.data.factories.HierarchyFactory methods
+
+interface "<b><size:14>CategoryFactory</b>" as it.matlice.ingsw.model.data.factories.CategoryFactory  [[../../../../../../it/matlice/ingsw/model/data/factories/CategoryFactory.html{it.matlice.ingsw.model.data.factories.CategoryFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.CategoryFactory fields
+hide it.matlice.ingsw.model.data.factories.CategoryFactory methods
+
+it.matlice.ingsw.model.data.factories.OfferFactory ..> it.matlice.ingsw.model.data.factories.MessageFactory
+
+@enduml

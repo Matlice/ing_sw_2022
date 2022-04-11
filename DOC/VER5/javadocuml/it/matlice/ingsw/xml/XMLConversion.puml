@@ -1,0 +1,93 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>XMLConversion</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLConversion  [[../../../../it/matlice/ingsw/xml/XMLConversion.html{it.matlice.ingsw.xml.XMLConversion}]] {
+{abstract} +Object convert(XMLNode node,TreeMap<String, Object> children,XMLNode parent,MapNode dinasty)
+}
+
+
+class "<b><size:14>XMLImport</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport  [[../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "DayConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "DaysConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "IntervalConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "IntervalsConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "StringArrayConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "FieldConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "FieldsConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "CategoryConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "ChildrenConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "HierarchyConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "HierarchiesConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "SettingsConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport -->  "ConfigurationConverter" it.matlice.ingsw.xml.XMLConversion
+
+class "<b><size:14>XMLParser</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLParser  [[../../../../it/matlice/ingsw/xml/XMLParser.html{it.matlice.ingsw.xml.XMLParser}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLParser fields
+hide it.matlice.ingsw.xml.XMLParser methods
+
+it.matlice.ingsw.xml.XMLParser ..> it.matlice.ingsw.xml.XMLConversion
+
+class "<b><size:14>XMLNode</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLNode  [[../../../../it/matlice/ingsw/xml/XMLNode.html{it.matlice.ingsw.xml.XMLNode}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLNode fields
+hide it.matlice.ingsw.xml.XMLNode methods
+
+it.matlice.ingsw.xml.XMLConversion ..> it.matlice.ingsw.xml.XMLNode
+
+
+class "<b><size:14>MapNode</b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.MapNode  [[../../../../it/matlice/ingsw/tree/MapNode.html{it.matlice.ingsw.tree.MapNode}]] #white {
+}
+
+hide it.matlice.ingsw.tree.MapNode fields
+hide it.matlice.ingsw.tree.MapNode methods
+
+it.matlice.ingsw.xml.XMLConversion ..> it.matlice.ingsw.tree.MapNode
+
+class "<b><size:14>Utils</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.Utils  [[../../../../it/matlice/ingsw/xml/Utils.html{it.matlice.ingsw.xml.Utils}]] {
+}
+
+hide it.matlice.ingsw.xml.Utils fields
+hide it.matlice.ingsw.xml.Utils methods
+
+it.matlice.ingsw.xml.Utils -->  "StringConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "ArrayListConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "LinkedListConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "MapConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "NullConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "IntegerConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "ShortConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "DoubleConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "BooleanConverter" it.matlice.ingsw.xml.XMLConversion
+
+
+@enduml

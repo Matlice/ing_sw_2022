@@ -1,0 +1,63 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>NodeCategoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/NodeCategoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl}]] {
+-CategoryDB dbData
++NodeCategoryImpl(CategoryDB from)
++CategoryDB getDbData()
++String getName()
++String getDescription()
++List<LeafCategory> getChildLeafs()
++boolean isValidChildCategoryName(String name)
++Category addChild(Category child)
++Category removeChild(Category child)
++boolean equals(Object obj)
++Object clone()
+}
+
+
+class "<b><size:14>CategoryDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/CategoryDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB
+
+class "<b><size:14>NodeCategory</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.NodeCategory  [[../../../../../../../../it/matlice/ingsw/model/data/NodeCategory.html{it.matlice.ingsw.model.data.NodeCategory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.NodeCategory fields
+hide it.matlice.ingsw.model.data.NodeCategory methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl --|> it.matlice.ingsw.model.data.NodeCategory
+
+interface "<b><size:14>CategoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/CategoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl ..|> it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl
+
+
+class "<b><size:14>LeafCategory</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.LeafCategory  [[../../../../../../../../it/matlice/ingsw/model/data/LeafCategory.html{it.matlice.ingsw.model.data.LeafCategory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.LeafCategory fields
+hide it.matlice.ingsw.model.data.LeafCategory methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl ..> it.matlice.ingsw.model.data.LeafCategory
+
+class "<b><size:14>Category</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Category  [[../../../../../../../../it/matlice/ingsw/model/data/Category.html{it.matlice.ingsw.model.data.Category}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Category fields
+hide it.matlice.ingsw.model.data.Category methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl ..> it.matlice.ingsw.model.data.Category
+
+
+@enduml

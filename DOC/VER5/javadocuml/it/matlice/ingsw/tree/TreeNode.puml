@@ -1,0 +1,62 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>TreeNode</b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.TreeNode  [[../../../../it/matlice/ingsw/tree/TreeNode.html{it.matlice.ingsw.tree.TreeNode}]] {
+-LinkedList<TreeNode> children
+-Object data
+-TreeNode<T> parent
++TreeNode(Object data)
++TreeNode<T> addChild(Object child)
++Object getData()
++Node<T> setData(Object data)
++TreeNode<T> getParent()
++TreeNode<T> getChildren()
++Object getChildrenData()
++void traverse_linear(TreeAction<T> action)
++void traverse(TreeAction<T> action)
++void traverse_reverse_linear(TreeAction<T> action)
++void BFT(TreeAction<T> action)
++void reverse_BFT(TreeAction<T> action)
++void DFT(TreeAction<T> action)
+}
+
+
+
+class "<b><size:14>TreeNode<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.TreeNodeObject  [[../../../../it/matlice/ingsw/tree/TreeNode.html{it.matlice.ingsw.tree.TreeNode}]] {
+}
+
+hide it.matlice.ingsw.tree.TreeNodeObject fields
+hide it.matlice.ingsw.tree.TreeNodeObject methods
+
+it.matlice.ingsw.tree.TreeNode ..> it.matlice.ingsw.tree.TreeNodeObject
+
+class "<b><size:14>Object</b>\n<size:10>java.lang" as java.lang.Object  #lightgrey {
+}
+
+hide java.lang.Object fields
+hide java.lang.Object methods
+
+it.matlice.ingsw.tree.TreeNode -->  "data" java.lang.Object
+
+it.matlice.ingsw.tree.TreeNode -->  "parent" it.matlice.ingsw.tree.TreeNodeObject
+
+interface "<b><size:14>Node<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.NodeObject  [[../../../../it/matlice/ingsw/tree/Node.html{it.matlice.ingsw.tree.Node}]] {
+}
+
+hide it.matlice.ingsw.tree.NodeObject fields
+hide it.matlice.ingsw.tree.NodeObject methods
+
+it.matlice.ingsw.tree.TreeNode ..|> it.matlice.ingsw.tree.NodeObject
+
+interface "<b><size:14>TreeAction<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.TreeActionObject  [[../../../../it/matlice/ingsw/tree/TreeAction.html{it.matlice.ingsw.tree.TreeAction}]] {
+}
+
+hide it.matlice.ingsw.tree.TreeActionObject fields
+hide it.matlice.ingsw.tree.TreeActionObject methods
+
+it.matlice.ingsw.tree.TreeNode ..> it.matlice.ingsw.tree.TreeActionObject
+
+
+@enduml

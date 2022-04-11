@@ -1,0 +1,80 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>View</b>\n<size:10>it.matlice.ingsw.view" as it.matlice.ingsw.view.View  [[../../../../it/matlice/ingsw/view/View.html{it.matlice.ingsw.view.View}]] {
+{abstract} +void info(String text,boolean separated)
+{abstract} +void info(String text)
+{abstract} +void warn(String text,boolean separated)
+{abstract} +void warn(String text)
+{abstract} +void error(String text)
+{abstract} +void showList(String message,List<T> list)
+{abstract} +String getPassword()
+{abstract} +String getPassword(String prompt)
+{abstract} +String get(String prompt)
+{abstract} +String getLine(String prompt)
+{abstract} +String getLine(String prompt,Function<String, Boolean> available)
+{abstract} +Object getLineWithConversion(String prompt,Function<String, V> conversionMap,String nonValidErrorMessage)
+{abstract} +String getTrimmedLine(String prompt,boolean canBeEmpty)
+{abstract} +int getInt(String prompt,Function<Integer, Boolean> available,String nonValidErrorMessage)
+{abstract} +int getInt(String prompt,Function<Integer, Boolean> available)
+{abstract} +int getInt(String prompt)
+{abstract} +List<V> getGenericList(String prompt,boolean unique,Function<String, V> conversionMap,String duplicateErrorMessage,String nonValidErrorMessage)
+{abstract} +List<V> getGenericList(String prompt,boolean unique,Function<String, V> conversionMap)
+{abstract} +List<String> getStringList(String prompt,boolean unique,String duplicateErrorMessage,String nonValidErrorMessage)
+{abstract} +List<String> getStringList(String prompt,boolean unique)
+{abstract} +MenuAction<T> chooseOption(List<MenuAction> choices,String prompt)
++MenuAction<T> chooseOption(List<MenuAction> choices)
+}
+
+
+class "<b><size:14>Controller</b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.Controller  [[../../../../it/matlice/ingsw/controller/Controller.html{it.matlice.ingsw.controller.Controller}]] #white {
+}
+
+hide it.matlice.ingsw.controller.Controller fields
+hide it.matlice.ingsw.controller.Controller methods
+
+it.matlice.ingsw.controller.Controller -->  "view" it.matlice.ingsw.view.View
+
+
+class "<b><size:14>Object</b>\n<size:10>java.lang" as java.lang.Object  #lightgrey {
+}
+
+hide java.lang.Object fields
+hide java.lang.Object methods
+
+it.matlice.ingsw.view.View ..> java.lang.Object
+
+
+
+
+
+
+
+class "<b><size:14>MenuAction<Boolean></b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.MenuActionBoolean  [[../../../../it/matlice/ingsw/controller/MenuAction.html{it.matlice.ingsw.controller.MenuAction}]] #lightgrey {
+}
+
+hide it.matlice.ingsw.controller.MenuActionBoolean fields
+hide it.matlice.ingsw.controller.MenuActionBoolean methods
+
+it.matlice.ingsw.view.View ..> it.matlice.ingsw.controller.MenuActionBoolean
+
+class "<b><size:14>MenuAction<T></b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.MenuActionObject  [[../../../../it/matlice/ingsw/controller/MenuAction.html{it.matlice.ingsw.controller.MenuAction}]] #lightgrey {
+}
+
+hide it.matlice.ingsw.controller.MenuActionObject fields
+hide it.matlice.ingsw.controller.MenuActionObject methods
+
+it.matlice.ingsw.view.View ..> it.matlice.ingsw.controller.MenuActionObject
+
+class "<b><size:14>StreamView</b>\n<size:10>it.matlice.ingsw.view.stream" as it.matlice.ingsw.view.stream.StreamView  [[../../../../it/matlice/ingsw/view/stream/StreamView.html{it.matlice.ingsw.view.stream.StreamView}]] #white {
+}
+
+hide it.matlice.ingsw.view.stream.StreamView fields
+hide it.matlice.ingsw.view.stream.StreamView methods
+
+it.matlice.ingsw.view.stream.StreamView ..|> it.matlice.ingsw.view.View
+
+
+@enduml

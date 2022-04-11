@@ -1,0 +1,42 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>MessageDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/MessageDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB}]] {
+-Integer id
+-Long proposedDate
+-String proposedLocation
+-MessageDB answer
+-OfferDB relative_offer
++MessageDB(Long proposedDate,String proposedLocation,OfferDB relative_offer)
+~MessageDB()
++void setAnswer(MessageDB answer)
++Integer getId()
++Long getProposedDate()
++String getProposedLocation()
++MessageDB getAnswer()
++OfferDB getRelative_offer()
+}
+
+
+it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB -->  "answer" it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB
+
+class "<b><size:14>OfferDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/OfferDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB -->  "relative_offer" it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB
+
+class "<b><size:14>MessageImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/MessageImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB
+
+
+@enduml

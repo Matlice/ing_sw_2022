@@ -1,0 +1,226 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.model.data.impl.jdbc [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/package-summary.html{it.matlice.ingsw.model.data.impl.jdbc}]] #lightyellow {
+}
+
+class "<b><size:14>UserFactoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/UserFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl methods
+
+class "<b><size:14>XMLImport</b>" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport methods
+
+class "<b><size:14>XMLImport.ConfigurationXML</b>" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.ConfigurationXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML methods
+
+class "<b><size:14>XMLImport.SettingsXML</b>" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.SettingsXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML methods
+
+class "<b><size:14>XMLImport.CategoryXML</b>" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.CategoryXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML methods
+
+class "<b><size:14>XMLImport.FieldXML</b>" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.FieldXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML methods
+
+class "<b><size:14>XMLImport.HierarchyXML</b>" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.HierarchyXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML methods
+
+class "<b><size:14>SettingsFactoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.SettingsFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/SettingsFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.SettingsFactoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.SettingsFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.SettingsFactoryImpl methods
+
+class "<b><size:14>OfferFactoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/OfferFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.OfferFactoryImpl methods
+
+class "<b><size:14>MessageFactoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/MessageFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl methods
+
+class "<b><size:14>JdbcConnection</b>" as it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/JdbcConnection.html{it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection fields
+hide it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection methods
+
+class "<b><size:14>HierarchyFactoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/HierarchyFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.HierarchyFactoryImpl methods
+
+class "<b><size:14>CategoryFactoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/CategoryFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.CategoryFactoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport ..> it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML -->  "settings" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML -->  "hierarchies *" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML -->  "fields *" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.FieldXML
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML -->  "categories *" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML -->  "root" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.CategoryXML
+it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection -->  "instance" it.matlice.ingsw.model.data.impl.jdbc.JdbcConnection
+package it.matlice.ingsw.model.data.impl.jdbc.db [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/package-summary.html{it.matlice.ingsw.model.data.impl.jdbc.db}]] {
+}
+
+class "<b><size:14>UserDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.UserDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/UserDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.UserDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.UserDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.UserDB methods
+
+class "<b><size:14>SettingsDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/SettingsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB methods
+
+class "<b><size:14>OfferFieldDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/OfferFieldDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB methods
+
+class "<b><size:14>OfferDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/OfferDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB methods
+
+class "<b><size:14>MessageDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/MessageDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB methods
+
+class "<b><size:14>LocationsDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/LocationsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB methods
+
+class "<b><size:14>IntervalsDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/IntervalsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB methods
+
+class "<b><size:14>HierarchyDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/HierarchyDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB methods
+
+class "<b><size:14>DaysDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/DaysDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB methods
+
+class "<b><size:14>CategoryFieldDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/CategoryFieldDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB methods
+
+class "<b><size:14>CategoryDB</b>" as it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB <<DatabaseTable>> [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/CategoryDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB methods
+
+package it.matlice.ingsw.model.data.impl.jdbc.types [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/package-summary.html{it.matlice.ingsw.model.data.impl.jdbc.types}]] {
+}
+
+interface "<b><size:14>UserImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/UserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl methods
+
+class "<b><size:14>SettingsImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/SettingsImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl methods
+
+class "<b><size:14>OfferImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/OfferImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl methods
+
+class "<b><size:14>NodeCategoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/NodeCategoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl methods
+
+class "<b><size:14>MessageImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/MessageImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl methods
+
+class "<b><size:14>LeafCategoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/LeafCategoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl methods
+
+class "<b><size:14>HierarchyImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/HierarchyImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl methods
+
+class "<b><size:14>CustomerUserImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/CustomerUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl methods
+
+class "<b><size:14>ConfiguratorUserImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/ConfiguratorUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl methods
+
+interface "<b><size:14>CategoryImpl</b>" as it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/CategoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl methods
+
+
+@enduml

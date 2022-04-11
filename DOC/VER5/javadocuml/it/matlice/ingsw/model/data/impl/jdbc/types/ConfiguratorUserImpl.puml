@@ -1,0 +1,65 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>ConfiguratorUserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/ConfiguratorUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl}]] {
+-UserDB dbData
++ConfiguratorUserImpl(UserDB from)
++ConfiguratorUserImpl(String username)
++UserDB getDbData()
++String getUsername()
++Long getLastLoginTime()
++void setLastLoginTime(long time)
++List<AuthMethod> getAuthMethods()
++byte getPasswordHash()
++byte getPasswordSalt()
++void setPassword(byte password)
++void setSalt(byte salt)
++boolean equals(Object obj)
+}
+
+
+class "<b><size:14>UserDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.UserDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/UserDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.UserDB}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.UserDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.UserDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.UserDB
+
+class "<b><size:14>ConfiguratorUser</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.ConfiguratorUser  [[../../../../../../../../it/matlice/ingsw/model/data/ConfiguratorUser.html{it.matlice.ingsw.model.data.ConfiguratorUser}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.ConfiguratorUser fields
+hide it.matlice.ingsw.model.data.ConfiguratorUser methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl --|> it.matlice.ingsw.model.data.ConfiguratorUser
+
+interface "<b><size:14>PasswordAuthenticable</b>\n<size:10>it.matlice.ingsw.model.auth.password" as it.matlice.ingsw.model.auth.password.PasswordAuthenticable  [[../../../../../../../../it/matlice/ingsw/model/auth/password/PasswordAuthenticable.html{it.matlice.ingsw.model.auth.password.PasswordAuthenticable}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.password.PasswordAuthenticable fields
+hide it.matlice.ingsw.model.auth.password.PasswordAuthenticable methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl ..|> it.matlice.ingsw.model.auth.password.PasswordAuthenticable
+
+interface "<b><size:14>UserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/UserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl ..|> it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl
+
+
+interface "<b><size:14>AuthMethod</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.AuthMethod  [[../../../../../../../../it/matlice/ingsw/model/auth/AuthMethod.html{it.matlice.ingsw.model.auth.AuthMethod}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.AuthMethod fields
+hide it.matlice.ingsw.model.auth.AuthMethod methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl ..> it.matlice.ingsw.model.auth.AuthMethod
+
+
+@enduml

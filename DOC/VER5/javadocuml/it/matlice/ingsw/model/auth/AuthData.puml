@@ -1,0 +1,44 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>AuthData</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.AuthData  [[../../../../../it/matlice/ingsw/model/auth/AuthData.html{it.matlice.ingsw.model.auth.AuthData}]] {
+}
+
+
+
+class "<b><size:14>Model</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Model  [[../../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] #white {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+it.matlice.ingsw.model.Model ..> it.matlice.ingsw.model.auth.AuthData
+
+interface "<b><size:14>AuthMethod</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.AuthMethod  [[../../../../../it/matlice/ingsw/model/auth/AuthMethod.html{it.matlice.ingsw.model.auth.AuthMethod}]] {
+}
+
+hide it.matlice.ingsw.model.auth.AuthMethod fields
+hide it.matlice.ingsw.model.auth.AuthMethod methods
+
+it.matlice.ingsw.model.auth.AuthMethod ..> it.matlice.ingsw.model.auth.AuthData
+
+class "<b><size:14>PasswordAuthData</b>\n<size:10>it.matlice.ingsw.model.auth.password" as it.matlice.ingsw.model.auth.password.PasswordAuthData  [[../../../../../it/matlice/ingsw/model/auth/password/PasswordAuthData.html{it.matlice.ingsw.model.auth.password.PasswordAuthData}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.password.PasswordAuthData fields
+hide it.matlice.ingsw.model.auth.password.PasswordAuthData methods
+
+it.matlice.ingsw.model.auth.password.PasswordAuthData ..|> it.matlice.ingsw.model.auth.AuthData
+
+class "<b><size:14>PasswordAuthMethod</b>\n<size:10>it.matlice.ingsw.model.auth.password" as it.matlice.ingsw.model.auth.password.PasswordAuthMethod  [[../../../../../it/matlice/ingsw/model/auth/password/PasswordAuthMethod.html{it.matlice.ingsw.model.auth.password.PasswordAuthMethod}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.password.PasswordAuthMethod fields
+hide it.matlice.ingsw.model.auth.password.PasswordAuthMethod methods
+
+it.matlice.ingsw.model.auth.password.PasswordAuthMethod ..> it.matlice.ingsw.model.auth.AuthData
+
+
+@enduml

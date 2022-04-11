@@ -1,0 +1,59 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>Menu</b>\n<size:10>it.matlice.ingsw.view.menu" as it.matlice.ingsw.view.menu.Menu  [[../../../../../it/matlice/ingsw/view/menu/Menu.html{it.matlice.ingsw.view.menu.Menu}]] {
+-SortedSet<MenuEntry> entries
+-HashMap<Integer, MenuEntry> call_ref
+-String prompt
+-MenuEntry last_entry
++Menu()
++Menu setPrompt(String prompt)
++Menu addEntry(String action_str,MenuAction action)
++Menu addEntry(String action_str,MenuAction action,int position)
++Menu addEntry(int call_index,String action_str,MenuAction action)
++Menu addEntry(int call_index,String action_str,MenuAction action,int position)
++Menu addEntry(MenuEntry entry)
++Menu payload(Object payload)
++Menu disable(boolean disable)
++MenuEntry getEntry(int call_reference)
++MenuEntry getEntryByPosition(int position_reference)
++Object displayOnce(Scanner in,PrintStream out)
++Object display(Scanner in,PrintStream out)
++void onlyDisplay(PrintStream out)
++Object selectAfterDisplay(Scanner in,PrintStream out)
+}
+
+
+
+class "<b><size:14>MenuEntry</b>\n<size:10>it.matlice.ingsw.view.menu" as it.matlice.ingsw.view.menu.MenuEntry  [[../../../../../it/matlice/ingsw/view/menu/MenuEntry.html{it.matlice.ingsw.view.menu.MenuEntry}]] {
+}
+
+hide it.matlice.ingsw.view.menu.MenuEntry fields
+hide it.matlice.ingsw.view.menu.MenuEntry methods
+
+it.matlice.ingsw.view.menu.Menu ..> it.matlice.ingsw.view.menu.MenuEntry
+
+
+it.matlice.ingsw.view.menu.Menu -->  "last_entry" it.matlice.ingsw.view.menu.MenuEntry
+
+interface "<b><size:14>MenuAction</b>\n<size:10>it.matlice.ingsw.view.menu" as it.matlice.ingsw.view.menu.MenuAction  [[../../../../../it/matlice/ingsw/view/menu/MenuAction.html{it.matlice.ingsw.view.menu.MenuAction}]] {
+}
+
+hide it.matlice.ingsw.view.menu.MenuAction fields
+hide it.matlice.ingsw.view.menu.MenuAction methods
+
+it.matlice.ingsw.view.menu.Menu ..> it.matlice.ingsw.view.menu.MenuAction
+
+
+class "<b><size:14>PrintStream</b>\n<size:10>java.io" as java.io.PrintStream  #lightgrey {
+}
+
+hide java.io.PrintStream fields
+hide java.io.PrintStream methods
+
+it.matlice.ingsw.view.menu.Menu ..> java.io.PrintStream
+
+
+@enduml

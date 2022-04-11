@@ -1,0 +1,47 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>Authenticable</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.Authenticable  [[../../../../../it/matlice/ingsw/model/auth/Authenticable.html{it.matlice.ingsw.model.auth.Authenticable}]] {
+{abstract} +List<AuthMethod> getAuthMethods()
+}
+
+
+
+interface "<b><size:14>AuthMethod</b>\n<size:10>it.matlice.ingsw.model.auth" as it.matlice.ingsw.model.auth.AuthMethod  [[../../../../../it/matlice/ingsw/model/auth/AuthMethod.html{it.matlice.ingsw.model.auth.AuthMethod}]] {
+}
+
+hide it.matlice.ingsw.model.auth.AuthMethod fields
+hide it.matlice.ingsw.model.auth.AuthMethod methods
+
+it.matlice.ingsw.model.auth.Authenticable ..> it.matlice.ingsw.model.auth.AuthMethod
+
+it.matlice.ingsw.model.auth.AuthMethod ..> it.matlice.ingsw.model.auth.Authenticable
+
+interface "<b><size:14>PasswordAuthenticable</b>\n<size:10>it.matlice.ingsw.model.auth.password" as it.matlice.ingsw.model.auth.password.PasswordAuthenticable  [[../../../../../it/matlice/ingsw/model/auth/password/PasswordAuthenticable.html{it.matlice.ingsw.model.auth.password.PasswordAuthenticable}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.password.PasswordAuthenticable fields
+hide it.matlice.ingsw.model.auth.password.PasswordAuthenticable methods
+
+it.matlice.ingsw.model.auth.password.PasswordAuthenticable --|> it.matlice.ingsw.model.auth.Authenticable
+
+class "<b><size:14>PasswordAuthMethod</b>\n<size:10>it.matlice.ingsw.model.auth.password" as it.matlice.ingsw.model.auth.password.PasswordAuthMethod  [[../../../../../it/matlice/ingsw/model/auth/password/PasswordAuthMethod.html{it.matlice.ingsw.model.auth.password.PasswordAuthMethod}]] #white {
+}
+
+hide it.matlice.ingsw.model.auth.password.PasswordAuthMethod fields
+hide it.matlice.ingsw.model.auth.password.PasswordAuthMethod methods
+
+it.matlice.ingsw.model.auth.password.PasswordAuthMethod ..> it.matlice.ingsw.model.auth.Authenticable
+
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+it.matlice.ingsw.model.data.User ..|> it.matlice.ingsw.model.auth.Authenticable
+
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>XMLImport.ConfigurationXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.ConfigurationXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML}]] {
++XMLImport.SettingsXML settings
++List<HierarchyXML> hierarchies
++ConfigurationXML(XMLImport.SettingsXML settings,List<HierarchyXML> hierarchies)
+}
+
+
+class "<b><size:14>XMLImport</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport ..> it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML
+
+class "<b><size:14>XMLImport.SettingsXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.SettingsXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML -->  "settings" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.SettingsXML
+
+
+class "<b><size:14>XMLImport.HierarchyXML</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML  [[../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/XMLImport.HierarchyXML.html{it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML fields
+hide it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML methods
+
+it.matlice.ingsw.model.data.impl.jdbc.XMLImport.ConfigurationXML -->  "hierarchies *" it.matlice.ingsw.model.data.impl.jdbc.XMLImport.HierarchyXML
+
+
+@enduml

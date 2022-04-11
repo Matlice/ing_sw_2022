@@ -1,0 +1,28 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>TreeAction</b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.TreeAction  [[../../../../it/matlice/ingsw/tree/TreeAction.html{it.matlice.ingsw.tree.TreeAction}]] {
+{abstract} +void nodeAction(Node<T> ref)
+}
+
+
+interface "<b><size:14>Node<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.NodeObject  [[../../../../it/matlice/ingsw/tree/Node.html{it.matlice.ingsw.tree.Node}]] {
+}
+
+hide it.matlice.ingsw.tree.NodeObject fields
+hide it.matlice.ingsw.tree.NodeObject methods
+
+it.matlice.ingsw.tree.TreeAction ..> it.matlice.ingsw.tree.NodeObject
+
+class "<b><size:14>Object</b>\n<size:10>java.lang" as java.lang.Object  #lightgrey {
+}
+
+hide java.lang.Object fields
+hide java.lang.Object methods
+
+it.matlice.ingsw.tree.TreeAction ..> java.lang.Object
+
+
+@enduml

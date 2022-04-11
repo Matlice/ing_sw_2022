@@ -1,0 +1,67 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>Utils</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.Utils  [[../../../../it/matlice/ingsw/xml/Utils.html{it.matlice.ingsw.xml.Utils}]] {
+{static} +XMLConversion StringConverter
+{static} +XMLConversion ArrayListConverter
+{static} +XMLConversion LinkedListConverter
+{static} +XMLConversion MapConverter
+{static} +XMLConversion NullConverter
+{static} +XMLConversion IntegerConverter
+{static} +XMLConversion ShortConverter
+{static} +XMLConversion DoubleConverter
+{static} +XMLConversion BooleanConverter
++Utils()
+{static} +XMLConversion AdvBooleanConverter(List<String> trueValues)
+{static} +void XMLWriteString(XMLStreamWriter w,String text,String name,Map<String, String> attributes)
+{static} +void XMLWriteList(XMLStreamWriter w,List<?> array,String name,Map<String, String> attributes)
+}
+
+
+interface "<b><size:14>XMLConversion</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLConversion  [[../../../../it/matlice/ingsw/xml/XMLConversion.html{it.matlice.ingsw.xml.XMLConversion}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLConversion fields
+hide it.matlice.ingsw.xml.XMLConversion methods
+
+it.matlice.ingsw.xml.Utils -->  "StringConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "ArrayListConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "LinkedListConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "MapConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "NullConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "IntegerConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "ShortConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "DoubleConverter" it.matlice.ingsw.xml.XMLConversion
+
+it.matlice.ingsw.xml.Utils -->  "BooleanConverter" it.matlice.ingsw.xml.XMLConversion
+
+
+interface "<b><size:14>XMLStreamWriter</b>\n<size:10>javax.xml.stream" as javax.xml.stream.XMLStreamWriter  #lightgrey {
+}
+
+hide javax.xml.stream.XMLStreamWriter fields
+hide javax.xml.stream.XMLStreamWriter methods
+
+it.matlice.ingsw.xml.Utils ..> javax.xml.stream.XMLStreamWriter
+
+
+
+interface "<b><size:14>XMLWritable</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLWritable  [[../../../../it/matlice/ingsw/xml/XMLWritable.html{it.matlice.ingsw.xml.XMLWritable}]] {
+}
+
+hide it.matlice.ingsw.xml.XMLWritable fields
+hide it.matlice.ingsw.xml.XMLWritable methods
+
+it.matlice.ingsw.xml.Utils ..> it.matlice.ingsw.xml.XMLWritable
+
+
+@enduml

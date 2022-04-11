@@ -1,0 +1,79 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>MapNode</b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.MapNode  [[../../../../it/matlice/ingsw/tree/MapNode.html{it.matlice.ingsw.tree.MapNode}]] {
+-TreeMap<String, MapNode> children
+-HashMap<String, Integer> duplicates
+-Object data
+-MapNode<T> parent
++MapNode(Object data)
++MapNode<T> addChild(String key,Object child)
++Node<T> addChild(Object child)
++Object getData()
++Node<T> setData(Object data)
++MapNode<T> getParent()
++MapNode<T> getChildren()
++TreeMap<String, T> getChildrenMap()
++Object getChildrenData()
++void traverse_linear(TreeAction<T> action)
++void traverse(TreeAction<T> action)
++void traverse_reverse_linear(TreeAction<T> action)
++void BFT(TreeAction<T> action)
++void reverse_BFT(TreeAction<T> action)
++void DFT(TreeAction<T> action)
++MapNode<T> getChildren(String key)
++Set<String> childrenSet()
++String toString()
+}
+
+
+
+class "<b><size:14>MapNode<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.MapNodeObject  [[../../../../it/matlice/ingsw/tree/MapNode.html{it.matlice.ingsw.tree.MapNode}]] {
+}
+
+hide it.matlice.ingsw.tree.MapNodeObject fields
+hide it.matlice.ingsw.tree.MapNodeObject methods
+
+it.matlice.ingsw.tree.MapNode ..> it.matlice.ingsw.tree.MapNodeObject
+
+
+class "<b><size:14>Object</b>\n<size:10>java.lang" as java.lang.Object  #lightgrey {
+}
+
+hide java.lang.Object fields
+hide java.lang.Object methods
+
+it.matlice.ingsw.tree.MapNode -->  "data" java.lang.Object
+
+it.matlice.ingsw.tree.MapNode -->  "parent" it.matlice.ingsw.tree.MapNodeObject
+
+interface "<b><size:14>Node<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.NodeObject  [[../../../../it/matlice/ingsw/tree/Node.html{it.matlice.ingsw.tree.Node}]] {
+}
+
+hide it.matlice.ingsw.tree.NodeObject fields
+hide it.matlice.ingsw.tree.NodeObject methods
+
+it.matlice.ingsw.tree.MapNode ..|> it.matlice.ingsw.tree.NodeObject
+
+
+interface "<b><size:14>TreeAction<T></b>\n<size:10>it.matlice.ingsw.tree" as it.matlice.ingsw.tree.TreeActionObject  [[../../../../it/matlice/ingsw/tree/TreeAction.html{it.matlice.ingsw.tree.TreeAction}]] {
+}
+
+hide it.matlice.ingsw.tree.TreeActionObject fields
+hide it.matlice.ingsw.tree.TreeActionObject methods
+
+it.matlice.ingsw.tree.MapNode ..> it.matlice.ingsw.tree.TreeActionObject
+
+
+interface "<b><size:14>XMLConversion</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.XMLConversion  [[../../../../it/matlice/ingsw/xml/XMLConversion.html{it.matlice.ingsw.xml.XMLConversion}]] #white {
+}
+
+hide it.matlice.ingsw.xml.XMLConversion fields
+hide it.matlice.ingsw.xml.XMLConversion methods
+
+it.matlice.ingsw.xml.XMLConversion ..> it.matlice.ingsw.tree.MapNode
+
+
+@enduml

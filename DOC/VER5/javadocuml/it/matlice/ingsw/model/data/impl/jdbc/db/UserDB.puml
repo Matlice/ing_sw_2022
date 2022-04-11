@@ -1,0 +1,61 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>UserDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.UserDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/UserDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.UserDB}]] {
+-String username
+-String password_hash
+-String password_salt
+-String type
+-Long lastAccess
++UserDB()
++Long getLastAccess()
++void setLastAccess(Long lastAccess)
++String getUsername()
++void setUsername(String username)
++String getPasswordHash()
++void setPasswordHash(String password_hash)
++String getPasswordSalt()
++void setPasswordSalt(String password_salt)
++String getType()
++void setType(String type)
++boolean equals(Object obj)
+}
+
+
+
+class "<b><size:14>OfferDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/OfferDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB -->  "owner" it.matlice.ingsw.model.data.impl.jdbc.db.UserDB
+
+interface "<b><size:14>UserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/UserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl ..> it.matlice.ingsw.model.data.impl.jdbc.db.UserDB
+
+class "<b><size:14>CustomerUserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/CustomerUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.UserDB
+
+class "<b><size:14>ConfiguratorUserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/ConfiguratorUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.UserDB
+
+
+@enduml

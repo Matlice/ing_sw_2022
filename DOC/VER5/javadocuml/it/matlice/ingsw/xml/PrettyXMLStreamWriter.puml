@@ -1,0 +1,81 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>PrettyXMLStreamWriter</b>\n<size:10>it.matlice.ingsw.xml" as it.matlice.ingsw.xml.PrettyXMLStreamWriter  [[../../../../it/matlice/ingsw/xml/PrettyXMLStreamWriter.html{it.matlice.ingsw.xml.PrettyXMLStreamWriter}]] {
+{static} +String ENCODING_UTF_8
+{static} +String ENCODING_UTF_16
+{static} +String XML_VERSION_1_0
+-XMLStreamWriter writer
+-Stack<String> tagStack
+-List<String> noNewLine
+-int level
++PrettyXMLStreamWriter(String filename,String noNewLine,String encoding,String version)
++PrettyXMLStreamWriter(String filename,String noNewLine)
++PrettyXMLStreamWriter(String filename)
++void writeStartElement(String localName)
++void writeStartElement(String namespaceURI,String localName)
++void writeStartElement(String prefix,String localName,String namespaceURI)
++void writeEmptyElement(String namespaceURI,String localName)
++void writeEmptyElement(String prefix,String localName,String namespaceURI)
++void writeEmptyElement(String localName)
++void writeEndElement()
++void writeEndDocument()
++void close()
++void flush()
++void writeAttribute(String localName,String value)
++void writeAttribute(String prefix,String namespaceURI,String localName,String value)
++void writeAttribute(String namespaceURI,String localName,String value)
++void writeNamespace(String prefix,String namespaceURI)
++void writeDefaultNamespace(String namespaceURI)
++void writeComment(String data)
++void writeProcessingInstruction(String target)
++void writeProcessingInstruction(String target,String data)
++void writeCData(String data)
++void writeDTD(String dtd)
++void writeEntityRef(String name)
++void writeStartDocument()
++void writeStartDocument(String version)
++void writeStartDocument(String encoding,String version)
++void writeCharacters(String text)
++void writeCharacters(char text,int start,int len)
++String getPrefix(String uri)
++void setPrefix(String prefix,String uri)
++void setDefaultNamespace(String uri)
++NamespaceContext getNamespaceContext()
++void setNamespaceContext(NamespaceContext context)
++Object getProperty(String name)
+}
+
+
+interface "<b><size:14>XMLStreamWriter</b>\n<size:10>javax.xml.stream" as javax.xml.stream.XMLStreamWriter  #lightgrey {
+}
+
+hide javax.xml.stream.XMLStreamWriter fields
+hide javax.xml.stream.XMLStreamWriter methods
+
+it.matlice.ingsw.xml.PrettyXMLStreamWriter -->  "writer" javax.xml.stream.XMLStreamWriter
+
+
+
+it.matlice.ingsw.xml.PrettyXMLStreamWriter ..|> javax.xml.stream.XMLStreamWriter
+
+interface "<b><size:14>AutoCloseable</b>\n<size:10>java.lang" as java.lang.AutoCloseable  #lightgrey {
+}
+
+hide java.lang.AutoCloseable fields
+hide java.lang.AutoCloseable methods
+
+it.matlice.ingsw.xml.PrettyXMLStreamWriter ..|> java.lang.AutoCloseable
+
+interface "<b><size:14>NamespaceContext</b>\n<size:10>javax.xml.namespace" as javax.xml.namespace.NamespaceContext  #lightgrey {
+}
+
+hide javax.xml.namespace.NamespaceContext fields
+hide javax.xml.namespace.NamespaceContext methods
+
+it.matlice.ingsw.xml.PrettyXMLStreamWriter ..> javax.xml.namespace.NamespaceContext
+
+
+@enduml

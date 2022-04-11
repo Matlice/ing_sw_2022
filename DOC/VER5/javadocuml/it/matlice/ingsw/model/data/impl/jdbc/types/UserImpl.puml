@@ -1,0 +1,36 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>UserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/UserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl}]] {
+{abstract} +UserDB getDbData()
+}
+
+
+class "<b><size:14>UserDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.UserDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/UserDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.UserDB}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.UserDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.UserDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl ..> it.matlice.ingsw.model.data.impl.jdbc.db.UserDB
+
+class "<b><size:14>CustomerUserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/CustomerUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl ..|> it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl
+
+class "<b><size:14>ConfiguratorUserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/ConfiguratorUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl ..|> it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl
+
+
+@enduml

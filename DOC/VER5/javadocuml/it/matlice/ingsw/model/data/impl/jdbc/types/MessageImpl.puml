@@ -1,0 +1,45 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>MessageImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/MessageImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl}]] {
+-MessageDB dbData
+-Offer referenced_offer
++MessageImpl(MessageDB dbData,Offer referenced_offer)
++MessageDB getDbData()
++Offer getReferencedOffer()
++String getLocation()
++Long getTime()
++Calendar getDate()
+}
+
+
+
+class "<b><size:14>MessageDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/MessageDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB
+
+class "<b><size:14>Offer</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Offer  [[../../../../../../../../it/matlice/ingsw/model/data/Offer.html{it.matlice.ingsw.model.data.Offer}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Offer fields
+hide it.matlice.ingsw.model.data.Offer methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl -->  "referenced_offer" it.matlice.ingsw.model.data.Offer
+
+class "<b><size:14>Message</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Message  [[../../../../../../../../it/matlice/ingsw/model/data/Message.html{it.matlice.ingsw.model.data.Message}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Message fields
+hide it.matlice.ingsw.model.data.Message methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl --|> it.matlice.ingsw.model.data.Message
+
+
+
+@enduml

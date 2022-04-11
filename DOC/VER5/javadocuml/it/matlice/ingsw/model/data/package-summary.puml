@@ -1,0 +1,172 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.model.data [[../../../../../it/matlice/ingsw/model/data/package-summary.html{it.matlice.ingsw.model.data}]] #lightyellow {
+}
+
+class "<b><size:14>User</b>" as it.matlice.ingsw.model.data.User  [[../../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+enum "<b><size:14>User.UserTypes</b>" as it.matlice.ingsw.model.data.User.UserTypes  [[../../../../../it/matlice/ingsw/model/data/User.UserTypes.html{it.matlice.ingsw.model.data.User.UserTypes}]] {
+}
+
+hide it.matlice.ingsw.model.data.User.UserTypes fields
+hide it.matlice.ingsw.model.data.User.UserTypes methods
+
+class "<b><size:14>TypeDefinition</b>" as it.matlice.ingsw.model.data.TypeDefinition  [[../../../../../it/matlice/ingsw/model/data/TypeDefinition.html{it.matlice.ingsw.model.data.TypeDefinition}]] {
+}
+
+hide it.matlice.ingsw.model.data.TypeDefinition fields
+hide it.matlice.ingsw.model.data.TypeDefinition methods
+
+enum "<b><size:14>TypeDefinition.TypeAssociation</b>" as it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation  [[../../../../../it/matlice/ingsw/model/data/TypeDefinition.TypeAssociation.html{it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation}]] {
+}
+
+hide it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation fields
+hide it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation methods
+
+class "<b><size:14>Settings</b>" as it.matlice.ingsw.model.data.Settings  [[../../../../../it/matlice/ingsw/model/data/Settings.html{it.matlice.ingsw.model.data.Settings}]] {
+}
+
+hide it.matlice.ingsw.model.data.Settings fields
+hide it.matlice.ingsw.model.data.Settings methods
+
+enum "<b><size:14>Settings.Day</b>" as it.matlice.ingsw.model.data.Settings.Day  [[../../../../../it/matlice/ingsw/model/data/Settings.Day.html{it.matlice.ingsw.model.data.Settings.Day}]] {
+}
+
+hide it.matlice.ingsw.model.data.Settings.Day fields
+hide it.matlice.ingsw.model.data.Settings.Day methods
+
+class "<b><size:14>Offer</b>" as it.matlice.ingsw.model.data.Offer  [[../../../../../it/matlice/ingsw/model/data/Offer.html{it.matlice.ingsw.model.data.Offer}]] {
+}
+
+hide it.matlice.ingsw.model.data.Offer fields
+hide it.matlice.ingsw.model.data.Offer methods
+
+enum "<b><size:14>Offer.OfferStatus</b>" as it.matlice.ingsw.model.data.Offer.OfferStatus  [[../../../../../it/matlice/ingsw/model/data/Offer.OfferStatus.html{it.matlice.ingsw.model.data.Offer.OfferStatus}]] {
+}
+
+hide it.matlice.ingsw.model.data.Offer.OfferStatus fields
+hide it.matlice.ingsw.model.data.Offer.OfferStatus methods
+
+class "<b><size:14>NodeCategory</b>" as it.matlice.ingsw.model.data.NodeCategory  [[../../../../../it/matlice/ingsw/model/data/NodeCategory.html{it.matlice.ingsw.model.data.NodeCategory}]] {
+}
+
+hide it.matlice.ingsw.model.data.NodeCategory fields
+hide it.matlice.ingsw.model.data.NodeCategory methods
+
+class "<b><size:14>Message</b>" as it.matlice.ingsw.model.data.Message  [[../../../../../it/matlice/ingsw/model/data/Message.html{it.matlice.ingsw.model.data.Message}]] {
+}
+
+hide it.matlice.ingsw.model.data.Message fields
+hide it.matlice.ingsw.model.data.Message methods
+
+class "<b><size:14>LeafCategory</b>" as it.matlice.ingsw.model.data.LeafCategory  [[../../../../../it/matlice/ingsw/model/data/LeafCategory.html{it.matlice.ingsw.model.data.LeafCategory}]] {
+}
+
+hide it.matlice.ingsw.model.data.LeafCategory fields
+hide it.matlice.ingsw.model.data.LeafCategory methods
+
+class "<b><size:14>Interval</b>" as it.matlice.ingsw.model.data.Interval  [[../../../../../it/matlice/ingsw/model/data/Interval.html{it.matlice.ingsw.model.data.Interval}]] {
+}
+
+hide it.matlice.ingsw.model.data.Interval fields
+hide it.matlice.ingsw.model.data.Interval methods
+
+class "<b><size:14>Interval.Time</b>" as it.matlice.ingsw.model.data.Interval.Time  [[../../../../../it/matlice/ingsw/model/data/Interval.Time.html{it.matlice.ingsw.model.data.Interval.Time}]] {
+}
+
+hide it.matlice.ingsw.model.data.Interval.Time fields
+hide it.matlice.ingsw.model.data.Interval.Time methods
+
+class "<b><size:14>Hierarchy</b>" as it.matlice.ingsw.model.data.Hierarchy  [[../../../../../it/matlice/ingsw/model/data/Hierarchy.html{it.matlice.ingsw.model.data.Hierarchy}]] {
+}
+
+hide it.matlice.ingsw.model.data.Hierarchy fields
+hide it.matlice.ingsw.model.data.Hierarchy methods
+
+class "<b><size:14>CustomerUser</b>" as it.matlice.ingsw.model.data.CustomerUser  [[../../../../../it/matlice/ingsw/model/data/CustomerUser.html{it.matlice.ingsw.model.data.CustomerUser}]] {
+}
+
+hide it.matlice.ingsw.model.data.CustomerUser fields
+hide it.matlice.ingsw.model.data.CustomerUser methods
+
+class "<b><size:14>ConfiguratorUser</b>" as it.matlice.ingsw.model.data.ConfiguratorUser  [[../../../../../it/matlice/ingsw/model/data/ConfiguratorUser.html{it.matlice.ingsw.model.data.ConfiguratorUser}]] {
+}
+
+hide it.matlice.ingsw.model.data.ConfiguratorUser fields
+hide it.matlice.ingsw.model.data.ConfiguratorUser methods
+
+class "<b><size:14>Category</b>" as it.matlice.ingsw.model.data.Category  [[../../../../../it/matlice/ingsw/model/data/Category.html{it.matlice.ingsw.model.data.Category}]] {
+}
+
+hide it.matlice.ingsw.model.data.Category fields
+hide it.matlice.ingsw.model.data.Category methods
+
+it.matlice.ingsw.model.data.TypeDefinition -->  "type" it.matlice.ingsw.model.data.TypeDefinition.TypeAssociation
+it.matlice.ingsw.model.data.Settings ..> it.matlice.ingsw.model.data.Interval
+it.matlice.ingsw.model.data.Settings ..> it.matlice.ingsw.model.data.Settings.Day
+it.matlice.ingsw.model.data.Settings.Day -->  "dayMap *" it.matlice.ingsw.model.data.Settings.Day
+it.matlice.ingsw.model.data.Offer ..> it.matlice.ingsw.model.data.User
+it.matlice.ingsw.model.data.Offer ..> it.matlice.ingsw.model.data.Offer.OfferStatus
+it.matlice.ingsw.model.data.Offer ..> it.matlice.ingsw.model.data.LeafCategory
+it.matlice.ingsw.model.data.NodeCategory -->  "children *" it.matlice.ingsw.model.data.Category
+it.matlice.ingsw.model.data.NodeCategory --|> it.matlice.ingsw.model.data.Category
+it.matlice.ingsw.model.data.Message ..> it.matlice.ingsw.model.data.Offer
+it.matlice.ingsw.model.data.LeafCategory --|> it.matlice.ingsw.model.data.Category
+it.matlice.ingsw.model.data.LeafCategory ..> it.matlice.ingsw.model.data.NodeCategory
+it.matlice.ingsw.model.data.Interval -->  "start" it.matlice.ingsw.model.data.Interval.Time
+it.matlice.ingsw.model.data.Interval -->  "end" it.matlice.ingsw.model.data.Interval.Time
+it.matlice.ingsw.model.data.Interval ..> it.matlice.ingsw.model.data.Interval
+it.matlice.ingsw.model.data.Interval.Time ..> it.matlice.ingsw.model.data.Interval.Time
+it.matlice.ingsw.model.data.Hierarchy -->  "rootCategory" it.matlice.ingsw.model.data.Category
+it.matlice.ingsw.model.data.CustomerUser --|> it.matlice.ingsw.model.data.User
+it.matlice.ingsw.model.data.ConfiguratorUser --|> it.matlice.ingsw.model.data.User
+it.matlice.ingsw.model.data.Category -->  "father" it.matlice.ingsw.model.data.NodeCategory
+it.matlice.ingsw.model.data.Category ..> it.matlice.ingsw.model.data.TypeDefinition
+it.matlice.ingsw.model.data.Category ..> it.matlice.ingsw.model.data.LeafCategory
+package it.matlice.ingsw.model.data.factories [[../../../../../it/matlice/ingsw/model/data/factories/package-summary.html{it.matlice.ingsw.model.data.factories}]] {
+}
+
+interface "<b><size:14>UserFactory</b>" as it.matlice.ingsw.model.data.factories.UserFactory  [[../../../../../it/matlice/ingsw/model/data/factories/UserFactory.html{it.matlice.ingsw.model.data.factories.UserFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.UserFactory fields
+hide it.matlice.ingsw.model.data.factories.UserFactory methods
+
+interface "<b><size:14>SettingsFactory</b>" as it.matlice.ingsw.model.data.factories.SettingsFactory  [[../../../../../it/matlice/ingsw/model/data/factories/SettingsFactory.html{it.matlice.ingsw.model.data.factories.SettingsFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.SettingsFactory fields
+hide it.matlice.ingsw.model.data.factories.SettingsFactory methods
+
+interface "<b><size:14>OfferFactory</b>" as it.matlice.ingsw.model.data.factories.OfferFactory  [[../../../../../it/matlice/ingsw/model/data/factories/OfferFactory.html{it.matlice.ingsw.model.data.factories.OfferFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.OfferFactory fields
+hide it.matlice.ingsw.model.data.factories.OfferFactory methods
+
+interface "<b><size:14>MessageFactory</b>" as it.matlice.ingsw.model.data.factories.MessageFactory  [[../../../../../it/matlice/ingsw/model/data/factories/MessageFactory.html{it.matlice.ingsw.model.data.factories.MessageFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.MessageFactory fields
+hide it.matlice.ingsw.model.data.factories.MessageFactory methods
+
+interface "<b><size:14>HierarchyFactory</b>" as it.matlice.ingsw.model.data.factories.HierarchyFactory  [[../../../../../it/matlice/ingsw/model/data/factories/HierarchyFactory.html{it.matlice.ingsw.model.data.factories.HierarchyFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.HierarchyFactory fields
+hide it.matlice.ingsw.model.data.factories.HierarchyFactory methods
+
+interface "<b><size:14>CategoryFactory</b>" as it.matlice.ingsw.model.data.factories.CategoryFactory  [[../../../../../it/matlice/ingsw/model/data/factories/CategoryFactory.html{it.matlice.ingsw.model.data.factories.CategoryFactory}]] {
+}
+
+hide it.matlice.ingsw.model.data.factories.CategoryFactory fields
+hide it.matlice.ingsw.model.data.factories.CategoryFactory methods
+
+
+@enduml

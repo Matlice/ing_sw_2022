@@ -1,0 +1,44 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>IntervalsDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/IntervalsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB}]] {
+-SettingsDB ref
+-Integer interval_start
+-Integer interval_end
++IntervalsDB(SettingsDB ref,Interval interval)
+~IntervalsDB()
++SettingsDB getRef()
++void setRef(SettingsDB ref)
++Interval getInterval()
++void setInterval(Interval interval)
+}
+
+
+class "<b><size:14>SettingsDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/SettingsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB -->  "ref" it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB
+
+class "<b><size:14>Interval</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Interval  [[../../../../../../../../it/matlice/ingsw/model/data/Interval.html{it.matlice.ingsw.model.data.Interval}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Interval fields
+hide it.matlice.ingsw.model.data.Interval methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB ..> it.matlice.ingsw.model.data.Interval
+
+class "<b><size:14>SettingsImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/SettingsImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl -->  "dbIntervals *" it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB
+
+
+@enduml

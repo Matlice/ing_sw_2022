@@ -1,0 +1,13 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>Settings</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Settings  [[../../../../it/matlice/ingsw/model/Settings.html{it.matlice.ingsw.model.Settings}]] {
+{static} +long LOGIN_EXPIRATION_TIME
++Settings()
+}
+
+
+
+@enduml

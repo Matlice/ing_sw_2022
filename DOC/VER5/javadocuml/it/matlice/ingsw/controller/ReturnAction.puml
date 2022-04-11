@@ -1,0 +1,20 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>ReturnAction</b>\n<size:10>it.matlice.ingsw.controller" as it.matlice.ingsw.controller.ReturnAction  [[../../../../it/matlice/ingsw/controller/ReturnAction.html{it.matlice.ingsw.controller.ReturnAction}]] {
+{abstract} +Object run()
+}
+
+
+class "<b><size:14>Object</b>\n<size:10>java.lang" as java.lang.Object  #lightgrey {
+}
+
+hide java.lang.Object fields
+hide java.lang.Object methods
+
+it.matlice.ingsw.controller.ReturnAction ..> java.lang.Object
+
+
+@enduml

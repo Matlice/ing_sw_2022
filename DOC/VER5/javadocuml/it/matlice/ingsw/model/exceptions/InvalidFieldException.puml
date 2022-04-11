@@ -1,0 +1,20 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>InvalidFieldException</b>\n<size:10>it.matlice.ingsw.model.exceptions" as it.matlice.ingsw.model.exceptions.InvalidFieldException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidFieldException.html{it.matlice.ingsw.model.exceptions.InvalidFieldException}]] {
++InvalidFieldException()
+}
+
+
+class "<b><size:14>Exception</b>\n<size:10>java.lang" as java.lang.Exception  #lightgrey {
+}
+
+hide java.lang.Exception fields
+hide java.lang.Exception methods
+
+it.matlice.ingsw.model.exceptions.InvalidFieldException --|> java.lang.Exception
+
+
+@enduml

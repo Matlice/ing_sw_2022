@@ -1,0 +1,67 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>OfferImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/OfferImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl}]] {
+-OfferDB dbData
+-LeafCategory category
+-User owner
+-Offer linked_offer
++OfferImpl(OfferDB dbData,LeafCategory category,User owner,Offer linked_offer)
++OfferDB getDbData()
++String getName()
++User getOwner()
++Offer.OfferStatus getStatus()
++LeafCategory getCategory()
++Offer getLinkedOffer()
++Long getProposedTime()
++void setLinkedOffer(OfferImpl linked)
+}
+
+
+
+class "<b><size:14>OfferDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/OfferDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB
+
+class "<b><size:14>LeafCategory</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.LeafCategory  [[../../../../../../../../it/matlice/ingsw/model/data/LeafCategory.html{it.matlice.ingsw.model.data.LeafCategory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.LeafCategory fields
+hide it.matlice.ingsw.model.data.LeafCategory methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl -->  "category" it.matlice.ingsw.model.data.LeafCategory
+
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl -->  "owner" it.matlice.ingsw.model.data.User
+
+class "<b><size:14>Offer</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Offer  [[../../../../../../../../it/matlice/ingsw/model/data/Offer.html{it.matlice.ingsw.model.data.Offer}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Offer fields
+hide it.matlice.ingsw.model.data.Offer methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl -->  "linked_offer" it.matlice.ingsw.model.data.Offer
+
+it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl --|> it.matlice.ingsw.model.data.Offer
+
+enum "<b><size:14>Offer.OfferStatus</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.Offer.OfferStatus  [[../../../../../../../../it/matlice/ingsw/model/data/Offer.OfferStatus.html{it.matlice.ingsw.model.data.Offer.OfferStatus}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.Offer.OfferStatus fields
+hide it.matlice.ingsw.model.data.Offer.OfferStatus methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.OfferImpl ..> it.matlice.ingsw.model.data.Offer.OfferStatus
+
+
+@enduml

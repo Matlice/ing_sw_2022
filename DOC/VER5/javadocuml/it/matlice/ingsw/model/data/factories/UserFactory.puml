@@ -1,0 +1,49 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+interface "<b><size:14>UserFactory</b>\n<size:10>it.matlice.ingsw.model.data.factories" as it.matlice.ingsw.model.data.factories.UserFactory  [[../../../../../../it/matlice/ingsw/model/data/factories/UserFactory.html{it.matlice.ingsw.model.data.factories.UserFactory}]] {
+{abstract} +User getUser(String username)
+{abstract} +boolean doesUserExist(String username)
+{abstract} +User createUser(String username,User.UserTypes userType)
+{abstract} +User saveUser(User u)
+{abstract} +List<User> getUsers()
+}
+
+
+class "<b><size:14>Model</b>\n<size:10>it.matlice.ingsw.model" as it.matlice.ingsw.model.Model  [[../../../../../../it/matlice/ingsw/model/Model.html{it.matlice.ingsw.model.Model}]] #white {
+}
+
+hide it.matlice.ingsw.model.Model fields
+hide it.matlice.ingsw.model.Model methods
+
+it.matlice.ingsw.model.Model -->  "uf" it.matlice.ingsw.model.data.factories.UserFactory
+
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+it.matlice.ingsw.model.data.factories.UserFactory ..> it.matlice.ingsw.model.data.User
+
+enum "<b><size:14>User.UserTypes</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User.UserTypes  [[../../../../../../it/matlice/ingsw/model/data/User.UserTypes.html{it.matlice.ingsw.model.data.User.UserTypes}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.User.UserTypes fields
+hide it.matlice.ingsw.model.data.User.UserTypes methods
+
+it.matlice.ingsw.model.data.factories.UserFactory ..> it.matlice.ingsw.model.data.User.UserTypes
+
+
+class "<b><size:14>UserFactoryImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc" as it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl  [[../../../../../../it/matlice/ingsw/model/data/impl/jdbc/UserFactoryImpl.html{it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.UserFactoryImpl ..|> it.matlice.ingsw.model.data.factories.UserFactory
+
+
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>RequiredFieldConstrainException</b>\n<size:10>it.matlice.ingsw.model.exceptions" as it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException  [[../../../../../it/matlice/ingsw/model/exceptions/RequiredFieldConstrainException.html{it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException}]] {
+-String field
+-LeafCategory category
++RequiredFieldConstrainException(String field,LeafCategory category)
++String getField()
++LeafCategory getCategory()
+}
+
+
+class "<b><size:14>LeafCategory</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.LeafCategory  [[../../../../../it/matlice/ingsw/model/data/LeafCategory.html{it.matlice.ingsw.model.data.LeafCategory}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.LeafCategory fields
+hide it.matlice.ingsw.model.data.LeafCategory methods
+
+it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException -->  "category" it.matlice.ingsw.model.data.LeafCategory
+
+class "<b><size:14>Exception</b>\n<size:10>java.lang" as java.lang.Exception  #lightgrey {
+}
+
+hide java.lang.Exception fields
+hide java.lang.Exception methods
+
+it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException --|> java.lang.Exception
+
+
+@enduml

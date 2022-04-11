@@ -1,0 +1,20 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>InvalidTradeOfferException</b>\n<size:10>it.matlice.ingsw.model.exceptions" as it.matlice.ingsw.model.exceptions.InvalidTradeOfferException  [[../../../../../it/matlice/ingsw/model/exceptions/InvalidTradeOfferException.html{it.matlice.ingsw.model.exceptions.InvalidTradeOfferException}]] {
++InvalidTradeOfferException()
+}
+
+
+class "<b><size:14>Exception</b>\n<size:10>java.lang" as java.lang.Exception  #lightgrey {
+}
+
+hide java.lang.Exception fields
+hide java.lang.Exception methods
+
+it.matlice.ingsw.model.exceptions.InvalidTradeOfferException --|> java.lang.Exception
+
+
+@enduml

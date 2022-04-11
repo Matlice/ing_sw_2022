@@ -1,0 +1,36 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>OfferFieldDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/OfferFieldDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB}]] {
+-Integer id
+-CategoryFieldDB ref
+-OfferDB offer_ref
+-String value
++OfferFieldDB(CategoryFieldDB ref,OfferDB aref,String value)
+~OfferFieldDB()
++String getValue()
++Integer getId()
++CategoryFieldDB getRef()
+}
+
+
+class "<b><size:14>CategoryFieldDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/CategoryFieldDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB -->  "ref" it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB
+
+class "<b><size:14>OfferDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/OfferDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB -->  "offer_ref" it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB
+
+
+@enduml

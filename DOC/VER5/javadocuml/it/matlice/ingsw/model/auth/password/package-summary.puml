@@ -1,0 +1,28 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+package it.matlice.ingsw.model.auth.password [[../../../../../../it/matlice/ingsw/model/auth/password/package-summary.html{it.matlice.ingsw.model.auth.password}]] #lightyellow {
+}
+
+class "<b><size:14>PasswordAuthData</b>" as it.matlice.ingsw.model.auth.password.PasswordAuthData  [[../../../../../../it/matlice/ingsw/model/auth/password/PasswordAuthData.html{it.matlice.ingsw.model.auth.password.PasswordAuthData}]] {
+}
+
+hide it.matlice.ingsw.model.auth.password.PasswordAuthData fields
+hide it.matlice.ingsw.model.auth.password.PasswordAuthData methods
+
+interface "<b><size:14>PasswordAuthenticable</b>" as it.matlice.ingsw.model.auth.password.PasswordAuthenticable  [[../../../../../../it/matlice/ingsw/model/auth/password/PasswordAuthenticable.html{it.matlice.ingsw.model.auth.password.PasswordAuthenticable}]] {
+}
+
+hide it.matlice.ingsw.model.auth.password.PasswordAuthenticable fields
+hide it.matlice.ingsw.model.auth.password.PasswordAuthenticable methods
+
+class "<b><size:14>PasswordAuthMethod</b>" as it.matlice.ingsw.model.auth.password.PasswordAuthMethod  [[../../../../../../it/matlice/ingsw/model/auth/password/PasswordAuthMethod.html{it.matlice.ingsw.model.auth.password.PasswordAuthMethod}]] {
+}
+
+hide it.matlice.ingsw.model.auth.password.PasswordAuthMethod fields
+hide it.matlice.ingsw.model.auth.password.PasswordAuthMethod methods
+
+it.matlice.ingsw.model.auth.password.PasswordAuthMethod -->  "user" it.matlice.ingsw.model.auth.password.PasswordAuthenticable
+
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>ConfiguratorUser</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.ConfiguratorUser  [[../../../../../it/matlice/ingsw/model/data/ConfiguratorUser.html{it.matlice.ingsw.model.data.ConfiguratorUser}]] {
++ConfiguratorUser()
+}
+
+
+class "<b><size:14>User</b>\n<size:10>it.matlice.ingsw.model.data" as it.matlice.ingsw.model.data.User  [[../../../../../it/matlice/ingsw/model/data/User.html{it.matlice.ingsw.model.data.User}]] {
+}
+
+hide it.matlice.ingsw.model.data.User fields
+hide it.matlice.ingsw.model.data.User methods
+
+it.matlice.ingsw.model.data.ConfiguratorUser --|> it.matlice.ingsw.model.data.User
+
+class "<b><size:14>ConfiguratorUserImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl  [[../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/ConfiguratorUserImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl --|> it.matlice.ingsw.model.data.ConfiguratorUser
+
+
+@enduml

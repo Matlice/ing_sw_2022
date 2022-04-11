@@ -1,0 +1,53 @@
+@startuml
+
+skinparam svgLinkTarget _parent
+skinparam linetype ortho
+set namespaceSeparator none
+class "<b><size:14>SettingsDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/SettingsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB}]] {
+-Integer id
+-String city
+-Integer due
++SettingsDB(String city,Integer due)
+~SettingsDB()
++String getCity()
++Integer getDue()
++void setDue(Integer due)
++Integer getId()
+}
+
+
+
+class "<b><size:14>LocationsDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/LocationsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.LocationsDB -->  "ref" it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB
+
+class "<b><size:14>IntervalsDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/IntervalsDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.IntervalsDB -->  "ref" it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB
+
+class "<b><size:14>DaysDB</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.db" as it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB <<DatabaseTable>> [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/db/DaysDB.html{it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB}]] {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB fields
+hide it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB methods
+
+it.matlice.ingsw.model.data.impl.jdbc.db.DaysDB -->  "ref" it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB
+
+class "<b><size:14>SettingsImpl</b>\n<size:10>it.matlice.ingsw.model.data.impl.jdbc.types" as it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl  [[../../../../../../../../it/matlice/ingsw/model/data/impl/jdbc/types/SettingsImpl.html{it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl}]] #white {
+}
+
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl fields
+hide it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl methods
+
+it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl -->  "dbData" it.matlice.ingsw.model.data.impl.jdbc.db.SettingsDB
+
+
+@enduml
