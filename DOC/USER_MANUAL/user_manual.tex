@@ -36,7 +36,35 @@ Finché questa condizione non sarà rispettata, non sarà possibile al configura
 Sarà possibile inoltre, selezionando la voce ``Importa informazioni da file testuale'', utilizzare il file di importazione per inserire più facilmente nuove categorie, senza cancellare le precedenti.
 
 \section{Utilizzo da parte dell'Utente Fruitore}
-<<<<<<< HEAD
+
+La persona che vorrà utilizzare il programma non dovrà per forza aspettare l'intervento di un configuratore per muovere i primi passi. L'utente può in autonomia registrarsi al portale, caricare le informazioni
+relative ai propri prodotti e aprire conversazioni con altri utenti.
+
+\subsection{Registrazione e Accesso}
+Se l'utente non è ancora registrato, selezionare all'avvio la voce ``Registrati''. Successivamente, inserire l'username che si intende utilizzare e la password per proteggere il proprio account.
+Per ragioni di sicurezza la password da inserire deve essere lunga almeno 8 caratteri e deve contenere almeno una lettera minuscola, una lettera maiuscola, un numero e un simbolo.
+
+Una volta inserita la password, reinserirla per poter confermare. Se il nome utente non è già selezionato da qualcun altro, l'user verrà creato e si potrà procedere a effettuare l' accesso.
+Selezionare la voce ``Login'', inserire le proprie credenziali e premere Invio. Se le informazioni sono corrette, l'utente potrà entrare nel proprio portale personale.
+
+\subsection{Inserimento/Rimozione di un articolo}
+Per interagire con gli altri Friutori sulla piattaforma, l'utente dovrà avere almeno un articolo sul proprio account pronto per essere barattato.
+Per inserire un nuovo articolo, selezionare la voce ``Aggiungi nuovo articolo'' scrivendo sulla console il numero relativo all'opzione e premendo il tasto Invio.
+
+Sarà a questo punto mostrata all'utente una lista di categorie a cui poter associare il proprio articolo. Se non trova la categoria adatta, si prega l'utente di contattare un configuratore facendo richiesta di inserire una nuova categoria nel programmma.
+Una volta scelta la categoria opportuna, confermare la scelta e iniziare la procedura di inserimento dei dati. Alcuni campi di compilazione potrebbero essere obbligatori, in tal caso non sarà
+possibile registrare l'articolo fino all'inserimento di tutti i campi che necessitano di essere completati.
+
+Una volta inserito l'oggetto da barattare, sarà possibile visualizzarlo selezionando dal menù principale la voce ``Mostra le mie offerte'' oppure la voce ``Mostra offerte per categoria''.
+
+Se l'utente dovesse decidere di ritirare una propria offerta, gli sarebbe possibile tramite la voce del menu ``Ritira un'offerta aperta''. Una volta scelta questa voce,
+il fruitore potrà inserire l'indice relativo alla offerta che decide di rimuovere dalla lista degli oggetti scambiabili. Così facendo, gli altri utenti che dovessero cercare uno scambio nella categoria di quella offerta,
+non la troverebbero più nell'elenco dei possibili affari.
+L'utente possessore dell'articolo potrà comunque visualizzarlo cercando fra le proprie offerte, verificando lo stato acquisito di Offerta Chiusa.
+
+\subsection{Proposta di scambio, Accettazione e Messaggi fra utenti}
+
+TODO
 
 \section{Definizione del file di impostazioni}\label{sec:settings-file-format}
 
@@ -184,31 +212,3 @@ Il tag \verb|<fields/>| definisce la lista dei campi compilabili appartenenti a 
 Ogni elemento della lista deve essere un tag di tipo \verb|<field/>|, il quale a sua volta definisce il nome del campo in formato testuale, mentre l'attributo required ne definisce l'obbligatorietà.
 
 Se la categoria è una categoria intermedia, allora sarà necessario definire anche un tag \verb|<children/>| che definisce la lista di tag \verb|<category/>| che compongono i figli, mentre non è necessario definire il tag.
-=======
-La persona che vorrà utilizzare il programma non dovrà per forza aspettare l'intervento di un configuratore per muovere i primi passi. L'utente può in autonomia registrarsi al portale, caricare le informazioni
-relative ai propri prodotti e aprire conversazioni con altri utenti.
-
-\subsection{Registrazione e Accesso}
-Se l'utente non è ancora registrato, selezionare all'avvio la voce ``Registrati''. Successivamente, inserire l'username che si intende utilizzare e la password per proteggere il proprio account.
-Per ragioni di sicurezza la password da inserire deve essere lunga almeno 8 caratteri e deve contenere almeno una lettera minuscola, una lettera maiuscola, un numero e un simbolo.
-
-Una volta inserita la password, reinserirla per poter confermare. Se il nome utente non è già selezionato da qualcun altro, l'user verrà creato e si potrà procedere a effettuare l' accesso.
-Selezionare la voce ``Login'', inserire le proprie credenziali e premere Invio. Se le informazioni sono corrette, l'utente potrà entrare nel proprio portale personale.
-
-\subsection{Inserimento/Rimozione di un articolo}
-Per interagire con gli altri Friutori sulla piattaforma, l'utente dovrà avere almeno un articolo sul proprio account pronto per essere barattato.
-Per inserire un nuovo articolo, selezionare la voce ``Aggiungi nuovo articolo'' scrivendo sulla console il numero relativo all'opzione e premendo il tasto Invio.
-
-Sarà a questo punto mostrata all'utente una lista di categorie a cui poter associare il proprio articolo. Se non trova la categoria adatta, si prega l'utente di contattare un configuratore facendo richiesta di inserire una nuova categoria nel programmma.
-Una volta scelta la categoria opportuna, confermare la scelta e iniziare la procedura di inserimento dei dati. Alcuni campi di compilazione potrebbero essere obbligatori, in tal caso non sarà
-possibile registrare l'articolo fino all'inserimento di tutti i campi che necessitano di essere completati.
-
-Una volta inserito l'oggetto da barattare, sarà possibile visualizzarlo selezionando dal menù principale la voce ``Mostra le mie offerte'' oppure la voce ``Mostra offerte per categoria''.
-
-Se l'utente dovesse decidere di ritirare una propria offerta, gli sarebbe possibile tramite la voce del menu ``Ritira un'offerta aperta''. Una volta scelta questa voce,
-il fruitore potrà inserire l'indice relativo alla offerta che decide di rimuovere dalla lista degli oggetti scambiabili. Così facendo, gli altri utenti che dovessero cercare uno scambio nella categoria di quella offerta,
-non la troverebbero più nell'elenco dei possibili affari.
-L'utente possessore dell'articolo potrà comunque visualizzarlo cercando fra le proprie offerte, verificando lo stato acquisito di Offerta Chiusa.
-
-\subsection{Proposta di scambio, Accettazione e Messaggi fra utenti}
->>>>>>> ee2fd8c27989b777e017a84eba558504d320c521
