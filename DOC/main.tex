@@ -37,6 +37,36 @@
  top=30mm,
  }
 
+\usepackage{color}
+\usepackage{ifthen}
+\usepackage{makeidx}
+\usepackage{ifpdf}
+\usepackage{listings}
+\lstset{language=Java,breaklines=true}
+\newcommand{\entityintro}[3]{%
+\hbox to \hsize{%
+    \vbox{%
+    \hbox to .2in{}%
+    }%
+    {\bf  #1}%
+    \dotfill\pageref{#2}%
+}
+\makebox[\hsize]{%
+    \parbox{.4in}{}%
+    \parbox[l]{5in}{%
+    \vspace{1mm}%
+    #3%
+    \vspace{1mm}%
+    }%
+}%
+}
+\newcommand{\refdefined}[1]{
+\expandafter\ifx\csname r@#1\endcsname\relax
+\relax\else{$($in \ref{#1}, page \pageref{#1}$)$}\fi}
+\date{\today}
+\chardef\textbackslash=`\\
+\makeindex
+
 \begin{document}
 
 \pagenumbering{gobble}
@@ -70,6 +100,29 @@
 \pagebreak
 \section{Versione 5}
 \input{VER5/ver5.tex}
+
+\pagebreak
+\chapter{Manuale di Installazione}
+\input{InstallManual/installation.tex}
+
+\pagebreak
+\chapter{Manuale d'Uso}
+\input{USER_MANUAL/user_manual.tex}
+
+\chapter{Javadoc}
+\let\ochapter\chapter
+\let\osection\section
+\let\osubsection\subsection
+\let\osubsubsection\subsubsection
+\let\chapter\section
+\let\section\subsection
+\let\subsection\subsubsection
+\let\subsubsection\subsubsubsection
+\input{VER5/javadoc.tex}
+\let\subsubsection\osubsubsection
+\let\subsection\osubsection
+\let\section\osection
+\let\chapter\ochapter
 
 \cleardoublepage
 \addcontentsline{toc}{chapter}{Elenco delle figure}

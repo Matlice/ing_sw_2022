@@ -1,0 +1,33 @@
+
+\section{Configurazione del Sistema}
+Una volta avviato la prima volta, il programma fornirà le credenziali di accesso per il primo configuratore, perché possa configurare il sistema.
+Finché il sistema non sarà correttamente configurato, sarà impossibile per l'utente accedere alla sua sezione personale.
+Il configuratore che effettua il primo accesso potrà decidere se importare una configurazione da un file con estensione .xml oppure inserire manualmente i valori dei campi.
+Si ricorda che tutti i campi saranno riconfigurabili, meno che il campo Piazza, univoco e immutabile.
+
+\subsection{Importazione da file}
+Il file selezionato per l'importazione dovrà seguire una apposita struttura: se il configuratore dovesse sbagliare a scrivere il documento, il programma non permetterà l'importazione dei dati.
+Di seguito un esempio del file testuale, da cui poter trarre spunto:
+...
+Porre particolare attenzione a limitazioni logiche non strattamente legate ala formattazione del documento XML.
+Non sarà infatti possibile inserire internamente ai campi valori che non possono essere riconosciuti dal programma, come giorni della settimana inesistenti o orari in formato erroneo (per indicazioni, consultare la sezione successiva della documentazione).
+Prestare importanza anche all'inserimento di categorie innestate, in quanto il programma non prevede che una categoria possa avere una unica categoria figlia. Se si decide volerne dividere una, assicurarsi di inserire almeno due categorie figlie.
+
+\subsection{Inserimento manuale}
+Inserire da tastiera i valori dei campi visualizzati a schermo, facendo particolare attenzione a non commettere errori per evitare di dover riscrivere da capo.
+I giorni al momento possono essere inseriti unicamente in lingua italiana.
+Gli istanti di tempo inseribili sono unicamente quelli all'inizio di un'ora o a metà di essa: saranno solo accettati quindi input del tipo xx:00 o xx:30.
+Gli intervalli orari in particolare, devono essere in formato "hh:mm\-hh:mm", utilizzando come inizio fine le precisazioni precedentemente indicate.
+Una volta deciso di smettere di inserire un elenco di campi, inviare a capo due volte per passare alla voce successiva, fino alla fine della procedura di configurazione.
+
+\section{Inserimento di gerarchie/categorie}
+Una volta inseriti i parametri relativi alle impostazioni, il sistema sarà utilizzabile anche dai normali utenti, che però non potranno ancora utilizzarlo al massimo delle funzionalità.
+Bisognerà infatti ancora inserire le gerarchie e categorie su cui appoggiare gli oggetti che gli utenti vorranno scambiare (a meno di un'importazione da file).
+Per completare al 100\% la configurazione, selezionare la voce "Aggiungi nuova gerarchia" scrivendo sulla console il numero relativo all'opzione e premendo il tasto Invio.
+Procedere quindi all'inserimento dei campi che vengono richiesti.
+Ricordarsi inoltre che il programma non prevede che una categoria possa avere una unica categoria figlia. Se si decide volerne dividere una, assicurarsi di inserire almeno due categorie figlie.
+Finché questa condizione non sarà rispettata, non sarà possibile al configuratore salvare lo stato del sistema, poichè la voce per il salvataggio sarà disabilitata.
+
+Sarà possibile inoltre, selezionando la voce "Importa informazioni da file testuale", utilizzare il file di importazione per inserire più facilmente nuove categorie, senza cancellare le precedenti.
+
+\section{Utilizzo da parte dell'Utente Fruitore}
