@@ -6,7 +6,7 @@ Il configuratore che effettua il primo accesso potrà decidere se importare una 
 Si ricorda che tutti i campi saranno riconfigurabili, meno che il campo Piazza, univoco e immutabile.
 
 \subsection{Importazione da file}
-Il file selezionato per l'importazione dovrà seguire una apposita struttura: se il configuratore dovesse sbagliare a scrivere il documento, il programma non permetterà l'importazione dei dati.
+Il file selezionato per l'importazione dovrà seguire una apposita struttura (Vedi~\ref{sec:settings-file-format}): se il configuratore dovesse sbagliare a scrivere il documento, il programma non permetterà l'importazione dei dati.
 Di seguito un esempio del file testuale, da cui poter trarre spunto:
 ...
 Porre particolare attenzione a limitazioni logiche non strattamente legate ala formattazione del documento XML.
@@ -31,3 +31,150 @@ Finché questa condizione non sarà rispettata, non sarà possibile al configura
 Sarà possibile inoltre, selezionando la voce "Importa informazioni da file testuale", utilizzare il file di importazione per inserire più facilmente nuove categorie, senza cancellare le precedenti.
 
 \section{Utilizzo da parte dell'Utente Fruitore}
+
+\section{Definizione del file di impostazioni}\label{sec:settings-file-format}
+
+Il file di configurazione dovrà essere un documento \texttt{xml} valido, definito con la seguente struttura:
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <settings>
+        <!-- vedi sezione a seguire -->
+    </settings>
+    <hierarchies>
+        <!-- vedi sezione a seguire -->
+    </hierarchies>
+</configuration>
+\end{lstlisting}
+
+\pagebreak
+\subsection{Elemento settings}
+L'elemento \verb|<settings/>| definisce le impostazioni dell'applicativo.
+Esso permette di definire le variabili di scambio presenti nel programma.
+
+La sua struttura é la seguente:
+\begin{lstlisting}[language=XML]
+<settings>
+    <city> <!-- piazza di Scambio --> </city>
+    <places>
+        <place> <!-- posto #1 --> </place>
+        <place> <!-- posto #2 --> </place>
+        ...
+        <place> <!-- posto #N --> </place>
+    </places>
+    <days>
+        <day> <!-- giorno #1 --> </day>
+        <day> <!-- giorno #2 --> </day>
+        ...
+        <day> <!-- giorno #N --> </day>
+    </days>
+    <intervals>
+        <interval> <!-- intervallo #1 --> </interval>
+        <interval> <!-- intervallo #2 --> </interval>
+        ...
+        <interval> <!-- intervallo #N --> </interval>
+    </intervals>
+    <expiration> <!-- expiration time (day) --> </expiration>
+</settings>
+\end{lstlisting}
+
+All'interno del tag \verb|<city/>| viene definita la piazza di scambio come valore testuale.
+\textit{Si noti che, date le specifiche dell'applicativo, non è in alcun modo possibile modificare la piazza di scambio una volta che essa è stata definita.}
+\textit{Questo vincolo viene mantenuto anche curante l'importazione delle configurazioni: Se l'applicativo è già stato configurato, il nuovo valore della piazza di scambio sarà ignorato}
+\\\\
+A seguire troviamo il tag \verb|<places/>|: Questo é una lista di tag \verb|<place/>|, dove ogni elemento rappresenta la denominazione testuale di un luogo di scambio.
+L'importazione di questi valori sovrascrive completamente i valori precedentemente configurati.
+\\\\
+Successivamente, troviamo il tag \verb|<days/>|: Anch'esso è una lista di tag \verb|<day/>| dove il contenuto sarà la rappresentazione testuale del giorno in italiano.
+
+I valori ammessi sono:
+\begin{itemize}
+    \item Lunedi
+    \item Martedi
+    \item Mercoledi
+    \item Giovedi
+    \item Venerdi
+    \item Sabato
+    \item Domenica
+\end{itemize}
+Il campo non é case sensitive
+\\\\
+A questo punto troviamo il tag \verb|<intervals/>|: Esso é una lista di intervalli entro i quali gli scambi possono avvenire. Per la definizione di un intervallo viene utilizzato il tag \verb|<interval/>|, il cui contenuto sarà la rappresentazione testuale dell'intervallo nel formato sopra definito.
+
+\textit{Gli intervalli inseriti vengono normalizati una volta importati: conseguentemente gli intervalli} \[\verb|<interval>14:00-16:00</interval>|\] \textit{e} \[\verb|<interval>15:30-17:00</interval>|\] \textit{verranno normalizzati in un solo intervallo dal valore} \[\verb|<interval>14:00-17:00</interval>|\]
+\\\\
+Infine il tag \verb|<expiration/>|: Esso indica il numero di giorni dopo i quali l'offerta viene ripristinata allo stato \texttt{Aperta}
+
+\pagebreak
+
+\subsection{Elemento hierarchies}
+Questo elemento é una lista di elementi di tipo \verb|<hierarchy/>|
+
+Ogni gerarchia cosí definita deve essere espressa con la seguente struttura:
+
+\begin{lstlisting}[language=XML]
+<hierarchy>
+    <name> <!-- Root category name --> </name>
+    <fields>
+        <field required = "true|false"> <!-- field name --> </field>
+        <field required = "true|false"> <!-- field name --> </field>
+        ...
+        <field required = "true|false"> <!-- field name --> </field>
+    </fields>
+    <children>
+        <category>
+            <!-- Node category definition or Leaf category definition -->
+        </category>
+        <category>
+            <!-- Node category definition or Leaf category definition -->
+        </category>
+        ...
+        <category>
+            <!-- Node category definition or Leaf category definition -->
+        </category>
+    </children>
+</hierarchy>
+\end{lstlisting}
+
+Il tag \verb|<name/>| definisce il nome della categoria radice in formato testuale.
+\\\\
+Il tag \verb|<fields/>| definisce la lista dei campi compilabili appartenenti a qualunque offerta all'interno della gerarchia.
+Ogni elemento della lista deve essere un tag di tipo \verb|<field/>|, il quale a sua volta definisce il nome del campo in formato testuale, mentre l'attributo required ne definisce l'obbligatorietà.
+
+\textit{Tutti i campi sono di tipo String. Se l'attributo ``required'' non viene specificato, esso è interpretato come ``false''}
+\\\\
+Il tag \verb|<children/>| rappresenta le categorie figlie della categoria radice come lista di tag di tipo \verb|<category/>| così definita:
+
+\begin{lstlisting}[language=XML]
+<category>
+    <name> <!-- Root category name --> </name>
+    <fields>
+        <field required = "true|false"> <!-- field name --> </field>
+        <field required = "true|false"> <!-- field name --> </field>
+        ...
+        <field required = "true|false"> <!-- field name --> </field>
+    </fields>
+
+    <!-- if category is not a leaf -->
+    <children>
+        <category>
+            <!-- Node category definition or Leaf category definition -->
+        </category>
+        <category>
+            <!-- Node category definition or Leaf category definition -->
+        </category>
+        ...
+        <category>
+            <!-- Node category definition or Leaf category definition -->
+        </category>
+    </children>
+</category>
+\end{lstlisting}
+    
+
+Il tag \verb|<name/>| definisce il nome della categoria radice in formato testuale.
+\\\\
+Il tag \verb|<fields/>| definisce la lista dei campi compilabili appartenenti a qualunque offerta all'interno della gerarchia.
+Ogni elemento della lista deve essere un tag di tipo \verb|<field/>|, il quale a sua volta definisce il nome del campo in formato testuale, mentre l'attributo required ne definisce l'obbligatorietà.
+
+Se la categoria è una categoria intermedia, allora sarà necessario definire anche un tag \verb|<children/>| che definisce la lista di tag \verb|<category/>| che compongono i figli, mentre non è necessario definire il tag.
