@@ -1,0 +1,23 @@
+\subsubsection{Diagramma delle classi \texttt{xml}}
+\vspace{0.5cm}
+\begin{figure}[H]
+    \centering
+    \includeplantuml{VER5/diagrams/class/class_diagram_xml.puml}
+    \caption{Versione 5: Diagramma UML delle classi, package \texttt{xml}}
+    \label{fig:class_xml_v_5}
+\end{figure}
+
+Il package \texttt{xml} contiene tutte le classi delegate al parsing di file XML, queste espongono metodi più ad alto livello di astrazione rispetto a quelli forniti dalle librerie standard di Java.
+
+Il parsing si basa sul principio che ogni tag del file XML possa essere ricondotto al nodo di un albero,
+la classe \textit{XMLParser} si occupa quindi di ricostruire l'albero a partire dal contenuto del file XML.
+Tutti i gli attributi letti dal file XML rimangono nella struttura ad albero come stringhe.
+
+È quindi necessario poter definire un modo per convertire l'albero di stringhe in oggetti con significato all'interno dell'applicazione.
+Per questo scopo è definita l'interfaccia \textit{XMLConversion}, le cui implementazioni,
+a partire dai riferimenti del tag stesso e dei suoi tag contenuti, ritornano un generico \textit{Object}, che potrà essere riutilizzato dall'implementazione di \textit{XMLConversion} del tag padre.
+
+Le conversioni (implementazioni di \textit{XMLConversion}) utilizzate in fase di parsing devono essere aggiunte all'\textit{XMLParser} tramite il metodo \texttt{addConversion}.
+Il metodo \texttt{parse()} ritorna un oggetto, istanza della classe istanziata dalla conversione del nodo root del file XML.
+
+La classe \textit{Utils} contiene diverse conversioni per i tipi più generici, come ad esempio \textit{Integer} o \textit{ArrayList<T>}.
