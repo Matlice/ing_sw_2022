@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface MessageFactory {
-    Message send(Offer offer, String location, Calendar date, long timestamp) throws SQLException;
+    Message send(Offer offer, String location, Calendar date) throws SQLException;
     Message answer(Message msg, Offer offer, String location, Calendar date) throws SQLException;
     List<Message> getUserMessages(User u) throws SQLException;
 }

@@ -43,4 +43,9 @@ public class MessageImpl extends Message {
         cal.setTimeInMillis(this.dbData.getProposedDate() * 1000);
         return cal;
     }
+
+    @Override
+    public boolean hasReply() {
+        return this.getDbData().getAnswer() != null;
+    }
 }

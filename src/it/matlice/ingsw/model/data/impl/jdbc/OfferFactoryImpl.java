@@ -270,15 +270,15 @@ public class OfferFactoryImpl implements OfferFactory {
         this.setOfferProposedTime(offer, time);
         this.setOfferProposedTime(offer.getLinkedOffer(), time);
 
-        mf.send(offer.getLinkedOffer(), location, date, time);
+        mf.send(offer.getLinkedOffer(), location, date);
     }
 
     @Override
-    public void updateDate(Offer offer, Calendar date) throws SQLException {
+    public void updateTime(Offer offer) throws SQLException {
         assert offer.getLinkedOffer() != null;
         assert offer.getLinkedOffer().getLinkedOffer().equals(offer);
 
-        var time = date.getTimeInMillis() / 1000L;
+        var time = System.currentTimeMillis() / 1000L;
         this.setOfferProposedTime(offer, time);
         this.setOfferProposedTime(offer.getLinkedOffer(), time);
     }
