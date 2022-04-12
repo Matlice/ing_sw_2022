@@ -8,7 +8,7 @@ un sistema software di supporto al baratto di articoli
 (non vuoto) di categorie.
 
 L’applicazione può essere adottata da varie organizzazioni, che sovrintendono
-al baratto di categorie diverse di articoli e/o operano supiazze diverse.
+al baratto di categorie diverse di articoli e/o operano su piazze diverse.
 
 L’applicazione prevede due tipologie di utente, il **configuratore** e il **fruitore**.
 Il primo è un esponente dell’organizzazione che, attraverso l’applicazione
@@ -26,7 +26,7 @@ barattare.
 
 Dopo avere descritto almeno un articolo, il fruitore può
 (ma non deve necessariamente) avanzare la proposta di barattare un suo articolo
-conquello di un altro fruitore così come rispondere alla proposta di baratto
+con quello di un altro fruitore così come rispondere alla proposta di baratto
 avanzata da un altro fruitore.
 
 Si assume che le due parti coinvolte in un baratto si incontrino poi di persona
@@ -44,15 +44,15 @@ Ogni singola categoria è dotata di un `nome` e di una `descrizione`, entrambe s
 
 > Per esempio, il nome di una categoria può essere `Libro` e la sua descrizione `Opera cartacea stampata`.
 
-Una categoria può articolarsi in **due o più** (sotto)categorie, a loro volta suddividibili **ricorsivamente**, e così via, secondo una gerarchia ad albero.
+Una categoria può articolarsi in **due o più** (sotto)categorie, a loro volta suddivisibili **ricorsivamente**, e così via, secondo una gerarchia ad albero.
 
 > Ad esempio, la radice di una gerarchia può essere la categoria `Libro` ed essa può articolarsi nelle (sotto)categorie `Romanzo`, `Saggio`, `Opera a fumetti`, `Numero di un fumetto periodico` e `Testo scolastico`. A sua volta la categoria `Romanzo` può articolarsi nelle (sotto)categorie `Romanzo di letteratura italiana` e `Romanzo di letteratura straniera`, ecc.
 
 Il nome di ciascuna categoria è **unico all’interno della gerarchia di appartenenza**.
 
-*N.B. Non si deve erroneamente pensare che una gerarchia definisca ontologicamente un concetto (quello relativo alla radice), declinandolo in tutte le  sfumature possibili.*
+*N.B. Non si deve erroneamente pensare che una gerarchia definisca ontologicamente un concetto (quello relativo alla radice), declinandolo in tutte le sfumature possibili.*
 
-La gerarchia comprende invece **solo le categorie che sono di interesse ai fini delle operazioni di baratto** che l’organizzazione che si è dotata dell’applicazione intende sostenere.
+La gerarchia comprende invece **solo le categorie che sono d'interesse ai fini delle operazioni di baratto** che l’organizzazione che si è dotata dell’applicazione intende sostenere.
 
 La medesima applicazione può considerare **più gerarchie**. Vige il vincolo **di unicità del nome di ciascuna categoria radice** entro la totalità delle categorie radice di tali gerarchie.
 
@@ -183,7 +183,7 @@ prestabilito (*pari al valore del parametro di configurazione “Scadenza”*), 
 
 Il fruitore che invece risponde (**necessariamente affermativamente**) alla proposta del fruitore autore dell’`Offerta accoppiata` corrispondente entro il numero di giorni prestabilito, nella risposta deve indicare gli estremi (luogo, data e ora) di un possibile appuntamento (in occasione del quale effettuare lo scambio dei due oggetti).
 
-Nel momento in cui tale risposta è inviata, entrambe le offerte coinvolte passano allo  stato di `Offerta in scambio`, mantenendo sempre traccia l’una dell’altra.
+Nel momento in cui tale risposta è inviata, entrambe le offerte coinvolte passano allo stato di `Offerta in scambio`, mantenendo sempre traccia l’una dell’altra.
 
 Il fruitore autore della (ex) `Offerta accoppiata` deve ora rispondere, entro il numero
 massimo di giorni (*il solito valore del parametro di configurazione “Scadenza”*),
@@ -293,7 +293,7 @@ I requisiti (funzionali e non) delle cinque versioni dell’applicazione da real
 
 ## Richieste
 
-Agli studenti è richiesto di realizzare evolutivamente cinque versioni software che soddisfino irequisiti sopra esposti.
+Agli studenti è richiesto di realizzare evolutivamente cinque versioni software che soddisfino i requisiti sopra esposti.
 
 Ogni gruppo (costituito al più da tre persone),  dovrà:
 
