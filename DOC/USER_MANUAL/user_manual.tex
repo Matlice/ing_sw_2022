@@ -90,7 +90,6 @@ Il file di configurazione dovrà essere un documento \texttt{xml} valido, defini
 </configuration>
 \end{lstlisting}
 
-\pagebreak
 \subsection{Elemento settings}
 L'elemento \verb|<settings/>| definisce le impostazioni dell'applicativo.
 Esso permette di definire le variabili di scambio presenti nel programma.
@@ -147,8 +146,6 @@ A questo punto troviamo il tag \verb|<intervals/>|: Esso é una lista di interva
 \textit{Gli intervalli inseriti vengono normalizati una volta importati: conseguentemente gli intervalli} \[\verb|<interval>14:00-16:00</interval>|\] \textit{e} \[\verb|<interval>15:30-17:00</interval>|\] \textit{verranno normalizzati in un solo intervallo dal valore} \[\verb|<interval>14:00-17:00</interval>|\]
 \\\\
 Infine il tag \verb|<expiration/>|: Esso indica il numero di giorni dopo i quali l'offerta viene ripristinata allo stato \texttt{Aperta}
-
-\pagebreak
 
 \subsection{Elemento hierarchies}
 Questo elemento é una lista di elementi di tipo \verb|<hierarchy/>|
@@ -230,6 +227,7 @@ Non sarà infatti possibile inserire internamente ai campi valori che non posson
 
 Prestare importanza anche all'inserimento di categorie innestate, in quanto il programma non prevede che una categoria possa avere una unica categoria figlia. Se si decide volerne dividere una, assicurarsi di inserire almeno due categorie figlie.
 
+\pagebreak
 
 \section{Utilizzo da parte dell'Utente Fruitore}
 
