@@ -73,6 +73,8 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{white}{rgb}{1,1,1}
+\definecolor{black}{rgb}{0,0,0}
 
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},   
@@ -93,7 +95,25 @@
     tabsize=2
 }
 
-\lstset{style=mystyle}
+\lstdefinestyle{stdin}{
+    backgroundcolor=\color{white},   
+    commentstyle=\color{black},
+    keywordstyle=\color{black},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{black},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=stdin}
 
 \begin{document}
 
