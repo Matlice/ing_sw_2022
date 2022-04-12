@@ -1,72 +1,570 @@
 
 \section{Configurazione del Sistema}
 Una volta avviato la prima volta, il programma fornirà le credenziali di accesso per il primo configuratore, perché possa configurare il sistema.
+
 Finché il sistema non sarà correttamente configurato, sarà impossibile per l'utente accedere alla sua sezione personale.
 
-Il configuratore che effettua il primo accesso potrà decidere se importare una configurazione da un file con estensione .xml oppure inserire manualmente i valori dei campi.
+Il configuratore che effettua il primo accesso potrà decidere se importare una configurazione da un file con estensione \verb|.xml| oppure inserire manualmente i valori dei campi.
+
 Si ricorda che tutti i campi saranno riconfigurabili, meno che il campo Piazza, univoco e immutabile.
 
-\subsection{Importazione da file}
-Il file selezionato per l'importazione dovrà seguire una apposita struttura (Vedi~\ref{sec:settings-file-format}): se il configuratore dovesse sbagliare a scrivere il documento, il programma non permetterà l'importazione dei dati.
-Di seguito un esempio del file testuale, da cui poter trarre spunto:
+Di seguito l'output del programma per l'importazione automatica.
+\begin{lstlisting}
+        Per il primo accesso le credenziali sono admin:Config!1
 
-todo
-
-Porre particolare attenzione a limitazioni logiche non strattamente legate ala formattazione del documento XML.
-Non sarà infatti possibile inserire internamente ai campi valori che non possono essere riconosciuti dal programma, come giorni della settimana inesistenti o orari in formato erroneo (per indicazioni, consultare la sezione successiva della documentazione).
-Prestare importanza anche all'inserimento di categorie innestate, in quanto il programma non prevede che una categoria possa avere una unica categoria figlia. Se si decide volerne dividere una, assicurarsi di inserire almeno due categorie figlie.
+        Scegliere un'opzione
+        1) Login
+        2) Registrati
+        0) Esci
+(in)    1
+(in)    Utente> admin
+(in)    Password> ********
+        AVVISO: Cambia le credenziali di accesso
+(in)    Nuova password> *******
+(in)    Ripeti la password> *******
+        
+        Si vuole importare la configurazione da file?
+        1) Sì, importa le configurazioni automaticamente
+        0) No, aggiungi la configurazione manualmente
+(in)    1
+        AVVISO: Importando la configurazione...
+        AVVISO: Importando le gerarchie...
+        Gerarchia Vestiti importata correttamente!
+        
+        Benvenuto admin. Scegli un'opzione
+        1) Mostra offerte per categoria
+        2) Aggiungi nuova gerarchia
+        3) Mostra gerarchie
+        4) Mostra parametri di configurazione
+        5) Modifica parametri di configurazione
+        6) Importa informazioni da file testuale
+        7) Aggiungi nuovo configuratore
+        8) Cambia password
+        0) Logout
+\end{lstlisting}
 
 \subsection{Inserimento manuale}
+
 Inserire da tastiera i valori dei campi visualizzati a schermo, facendo particolare attenzione a non commettere errori per evitare di dover riscrivere da capo.
+
 I giorni al momento possono essere inseriti unicamente in lingua italiana.
+
 Gli istanti di tempo inseribili sono unicamente quelli all'inizio di un'ora o a metà di essa: saranno solo accettati quindi input del tipo xx:00 o xx:30.
 
 Gli intervalli orari in particolare, devono essere in formato ``hh:mm\-hh:mm'', utilizzando come inizio fine le precisazioni precedentemente indicate.
+
 Una volta deciso di smettere di inserire un elenco di campi, inviare a capo due volte per passare alla voce successiva, fino alla fine della procedura di configurazione.
 
 \subsection{Inserimento di gerarchie/categorie}
+
 Una volta inseriti i parametri relativi alle impostazioni, il sistema sarà utilizzabile anche dai normali utenti, che però non potranno ancora utilizzarlo al massimo delle funzionalità.
+
 Bisognerà infatti ancora inserire le gerarchie e categorie su cui appoggiare gli oggetti che gli utenti vorranno scambiare (a meno di un'importazione da file).
 
 Per completare al 100\% la configurazione, selezionare la voce ``Aggiungi nuova gerarchia'' scrivendo sulla console il numero relativo all'opzione e premendo il tasto Invio.
-Procedere quindi all'inserimento dei campi che vengono richiesti.
+
+Procedere quindi all'inserimento dei campi che vengono richiesti 
+
 Ricordarsi inoltre che il programma non prevede che una categoria possa avere una unica categoria figlia. Se si decide volerne dividere una, assicurarsi di inserire almeno due categorie figlie.
+
 Finché questa condizione non sarà rispettata, non sarà possibile al configuratore salvare lo stato del sistema, poichè la voce per il salvataggio sarà disabilitata.
 
 Sarà possibile inoltre, selezionando la voce ``Importa informazioni da file testuale'', utilizzare il file di importazione per inserire più facilmente nuove categorie, senza cancellare le precedenti.
 
 \section{Utilizzo da parte dell'Utente Fruitore}
 
-La persona che vorrà utilizzare il programma non dovrà per forza aspettare l'intervento di un configuratore per muovere i primi passi. L'utente può in autonomia registrarsi al portale, caricare le informazioni
-relative ai propri prodotti e aprire conversazioni con altri utenti.
+La persona che vorrà utilizzare il programma non dovrà per forza aspettare l'intervento di un configuratore per muovere i primi passi. L'utente può in autonomia registrarsi al portale, caricare le informazioni relative ai propri prodotti e aprire conversazioni con altri utenti.
 
 \subsection{Registrazione e Accesso}
+
 Se l'utente non è ancora registrato, selezionare all'avvio la voce ``Registrati''. Successivamente, inserire l'username che si intende utilizzare e la password per proteggere il proprio account.
+
 Per ragioni di sicurezza la password da inserire deve essere lunga almeno 8 caratteri e deve contenere almeno una lettera minuscola, una lettera maiuscola, un numero e un simbolo.
 
 Una volta inserita la password, reinserirla per poter confermare. Se il nome utente non è già selezionato da qualcun altro, l'user verrà creato e si potrà procedere a effettuare l' accesso.
+
 Selezionare la voce ``Login'', inserire le proprie credenziali e premere Invio. Se le informazioni sono corrette, l'utente potrà entrare nel proprio portale personale.
 
+\begin{lstlisting}
+        Scegliere un'opzione
+        1) Login
+        2) Registrati
+        0) Esci
+(in)    2
+(in)    Utente> pippo
+(in)    Nuova password> ********
+(in)    Ripeti la password> ********
+        AVVISO: Utente registrato con successo.
+
+        Scegliere un'opzione
+        1) Login
+        2) Registrati
+        0) Esci
+        1
+(in)    Utente> pippo
+(in)    Password> ********
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+\end{lstlisting}
+
 \subsection{Inserimento/Rimozione di un articolo}
+
 Per interagire con gli altri Friutori sulla piattaforma, l'utente dovrà avere almeno un articolo sul proprio account pronto per essere barattato.
+
 Per inserire un nuovo articolo, selezionare la voce ``Aggiungi nuovo articolo'' scrivendo sulla console il numero relativo all'opzione e premendo il tasto Invio.
 
 Sarà a questo punto mostrata all'utente una lista di categorie a cui poter associare il proprio articolo. Se non trova la categoria adatta, si prega l'utente di contattare un configuratore facendo richiesta di inserire una nuova categoria nel programmma.
-Una volta scelta la categoria opportuna, confermare la scelta e iniziare la procedura di inserimento dei dati. Alcuni campi di compilazione potrebbero essere obbligatori, in tal caso non sarà
-possibile registrare l'articolo fino all'inserimento di tutti i campi che necessitano di essere completati.
+
+Una volta scelta la categoria opportuna, confermare la scelta e iniziare la procedura di inserimento dei dati. Alcuni campi di compilazione potrebbero essere obbligatori, in tal caso non sarà possibile registrare l'articolo fino all'inserimento di tutti i campi che necessitano di essere completati.
 
 Una volta inserito l'oggetto da barattare, sarà possibile visualizzarlo selezionando dal menù principale la voce ``Mostra le mie offerte'' oppure la voce ``Mostra offerte per categoria''.
 
-Se l'utente dovesse decidere di ritirare una propria offerta, gli sarebbe possibile tramite la voce del menu ``Ritira un'offerta aperta''. Una volta scelta questa voce,
-il fruitore potrà inserire l'indice relativo alla offerta che decide di rimuovere dalla lista degli oggetti scambiabili. Così facendo, gli altri utenti che dovessero cercare uno scambio nella categoria di quella offerta,
-non la troverebbero più nell'elenco dei possibili affari.
+\begin{lstlisting}
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    4
+
+        A quale categoria appartiene l'articolo da creare?
+        0) Vestiti > Pantaloni > Jeans
+        1) Vestiti > Pantaloni > Pantaloncini
+        2) Vestiti > Felpe > Felpe con Cappuccio
+        3) Vestiti > Felpe > Felpe senza Cappuccio
+(in)    1
+(in)    Inserire il nome del nuovo articolo> shorts
+
+        Scegliere quale campo si vuole compilare (oppure salva)
+        1) Giro vita
+        2) Colore
+        3) Stato di conservazione [R]
+        4) Taglia [R]
+        5) Descrizione libera
+        X) Salva articolo [DISABILITATO]
+(in)    1
+        Inserire il valore per il campo 'Giro vita'> 126
+
+        Scegliere quale campo si vuole compilare (oppure salva)
+        1) Colore
+        2) Stato di conservazione [R]
+        3) Taglia [R]
+        4) Descrizione libera
+        X) Salva articolo [DISABILITATO]
+(in)    2
+(in)    Inserire il valore per il campo 'Stato di conservazione'> Ottimo
+
+        Scegliere quale campo si vuole compilare (oppure salva)
+        1) Colore
+        2) Taglia [R]
+        3) Descrizione libera
+        X) Salva articolo [DISABILITATO]
+(in)    2
+(in)    Inserire il valore per il campo 'Taglia'> S  
+
+        Scegliere quale campo si vuole compilare (oppure salva)
+        1) Colore
+        2) Descrizione libera
+        0) Salva articolo
+(in)    0
+        AVVISO: L'articolo è stato salvato con successo, è ora disponibile allo scambio
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    6
+
+        Le tue offerte sono le seguenti: 
+                shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta aperta di pippo]
+                        Stato di conservazione = Ottimo
+                        Giro vita = 126
+                        Taglia = S
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    7
+
+        Di quale categoria si vogliono visualizzare le offerte aperte?
+        0) Vestiti > Pantaloni > Jeans
+        1) Vestiti > Pantaloni > Pantaloncini
+        2) Vestiti > Felpe > Felpe con Cappuccio
+        3) Vestiti > Felpe > Felpe senza Cappuccio
+(in)    1
+
+        Le offerte aperte della categoria sono le seguenti: 
+                shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta aperta di pippo]
+                        Stato di conservazione = Ottimo
+                        Giro vita = 126
+                        Taglia = S
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+\end{lstlisting}
+
+Se l'utente dovesse decidere di ritirare una propria offerta, gli sarebbe possibile tramite la voce del menu ``Ritira un'offerta aperta''. Una volta scelta questa voce, il fruitore potrà inserire l'indice relativo alla offerta che decide di rimuovere dalla lista degli oggetti scambiabili. Così facendo, gli altri utenti che dovessero cercare uno scambio nella categoria di quella offerta, non la troverebbero più nell'elenco dei possibili affari.
+
 L'utente possessore dell'articolo potrà comunque visualizzarlo cercando fra le proprie offerte, verificando lo stato acquisito di Offerta Chiusa.
+
+\begin{lstlisting}
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    5
+
+        Quale offerta si vuole ritirare?
+        1) shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta aperta di pippo]
+                        Stato di conservazione = Ottimo
+                        Giro vita = 126
+                        Taglia = S
+        2) felpa rossa (Vestiti > Felpe > Felpe con Cappuccio) [Offerta aperta di pippo]
+                        Stato di conservazione = Ottimo
+                        Taglia = XL
+        0) Esci
+(in)    2
+        Offerta ritirata con successo
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    6
+
+        Le tue offerte sono le seguenti: 
+                shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta aperta di pippo]
+                        Stato di conservazione = Ottimo
+                        Giro vita = 126
+                        Taglia = S
+                felpa rossa (Vestiti > Felpe > Felpe con Cappuccio) [Offerta ritirata di pippo]
+                        Stato di conservazione = Ottimo
+                        Taglia = XL
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    7
+
+        Di quale categoria si vogliono visualizzare le offerte aperte?
+        0) Vestiti > Pantaloni > Jeans
+        1) Vestiti > Pantaloni > Pantaloncini
+        2) Vestiti > Felpe > Felpe con Cappuccio
+        3) Vestiti > Felpe > Felpe senza Cappuccio
+(in)    2
+        AVVISO: Non sono state trovate offerte
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+\end{lstlisting}
 
 \subsection{Proposta di scambio, Accettazione e Messaggi fra utenti}
 
-TODO
+Una volta che il sistema è stato completamente configurato da un utente configuratore, dopo l'accesso da parte di un utente fruitore, sarà possibile effettuare degli scambi tra più utenti.
 
-\section{Definizione del file di impostazioni}\label{sec:settings-file-format}
+A tal fine sono necessari almeno due utenti fruitori e almeno un articolo associato ad essi, entrambi appartenenti alla stessa categoria foglia.
+
+Per proporre uno scambio, l'utente iniziatore dovrà servirsi del sottomenu ``Proponi uno scambio'' presente nelle scelte del menu principale. Dopo aver scelto il proprio articolo da cedere, l'utente potrà decidere quale altro prodotto richiedere in cambio, selezionandolo tra le offerte aperte della stessa categoria di appartenenza del proprio prodotto. 
+
+Un messaggio di conferma viene quindi visualizzato per l'invio del messaggio.
+
+\begin{lstlisting}
+        Benvenuto mario. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    1
+
+        Quale offerta si vuole proporre in scambio?
+        1) leggins (Vestiti > Pantaloni > Pantaloncini) [Offerta aperta di mario]
+                        Stato di conservazione = Medio
+                        Taglia = M
+        0) Esci
+(in)    1
+
+        Quale offerta si vuole accettare in scambio?
+        1) shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta aperta di pippo]
+                        Stato di conservazione = Ottimo
+                        Giro vita = 126
+                        Taglia = S
+        0) Esci
+(in)    1
+        AVVISO: Proposta di scambio confermata
+
+        Benvenuto mario. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+\end{lstlisting}
+
+Una volta che l'utente al quale è stata inviata la proposta, effettuerà il login, egli verrà notificato della proposta in arrivo. A questo punto l'utente potrà degidere di accettare la proposta o di attendere la scadenza senza effettuare alcuna azione.
+
+In caso di risposta positiva, sarà possibile quindi proporre un luogo e un orario di scambio tramite il menu ``Accetta uno scambio'', il quale permetterà di scegliere l'offerta in questione. Dopo aver compilato i parametri dell;a richiesta il messaggio verrà inviato al mittente che potrà accettarlo o ribattere.
+
+\begin{lstlisting}
+        Scegliere un'opzione
+        1) Login
+        2) Registrati
+        0) Esci
+(in)    1
+(in)    Utente> pippo
+(in)    Password> ********
+
+        Sei stato selezionato per degli scambi!
+                shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta selezionata di pippo]
+                        Stato di conservazione = Ottimo
+                        Giro vita = 126
+                        Taglia = S
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    2
+
+        Scegliere una proposta di scambio da accettare?
+        1) shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta selezionata di pippo]
+                        Stato di conservazione = Ottimo
+                        Giro vita = 126
+                        Taglia = S
+                per
+                leggins (Vestiti > Pantaloni > Pantaloncini) [Offerta accoppiata di mario]
+                        Stato di conservazione = Medio
+                        Taglia = M
+        0) Esci
+(in)    1
+
+        Luogo di scambio
+        0) Piazza Arnaldo
+        1) Castello
+        2) Piazza Vittoria
+        3) Stazione FS
+        4) McDonalds
+(in)    1
+
+        I giorni disponibili per lo scambio sono: lunedì, martedì, venerdì, sabato
+        Giorno di scambio> martedi
+
+        Gli intervalli orari disponibili per lo scambio sono: 10:00-12:00, 15:00-18:00
+(in)    Ora di scambio> 11:30
+
+        Proposto lo scambio per il giorno Martedì 19/04 alle ore 11:30
+
+        Benvenuto pippo. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+\end{lstlisting}
+
+Al momento del login dell'utente al quale il messaggio è stato inviato, egli verrà notificato e potrà decidere se controbattere (mediante lo stesso procedimento) oppure accettare l'offerta.
+
+\begin{lstlisting}
+        Scegliere un'opzione
+        1) Login
+        2) Registrati
+        0) Esci
+(in)    1
+(in)    Utente> mario
+(in)    Password> ********
+
+        Hai un nuovo messaggio!
+                Da pippo: Proposta di scambio di
+                        leggins (Vestiti > Pantaloni > Pantaloncini) [Offerta in scambio di mario]
+                                Stato di conservazione = Medio
+                                Taglia = M
+                        per
+                        shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta in scambio di pippo]
+                                Stato di conservazione = Ottimo
+                                Giro vita = 126
+                                Taglia = S il 12/04 alle ore 13:34 in Castello
+
+        Benvenuto mario. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    3
+
+        A quale messaggio si vuol rispondere?
+        1) Da pippo: Proposta di scambio di
+                        leggins (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta in scambio di mario]
+                                Stato di conservazione = Medio
+                                Taglia = M
+                        per
+                        shorts (Vestiti > Pantaloni > Pantaloncini) [Offerta in scambio di pippo]
+                                Stato di conservazione = Ottimo
+                                Giro vita = 126
+                                Taglia = S il 12/04 alle ore 13:34 in Castello
+        0) Annulla
+(in)    1
+
+        Cosa si vuol fare?
+        1) Accetta lo scambio
+        2) Fai una controproposta
+        0) Annulla
+(in)    1
+        AVVISO: Scambio accettato con successo
+
+        Benvenuto mario. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+\end{lstlisting}
+
+A questo punto sarà possibile ritrovare le offerte scambiate nella voce ``Mostra le mie offerte'' in stato ``Offerta Chiusa''
+
+\begin{lstlisting}
+        Benvenuto mario. Scegli un'opzione
+        1) Proponi uno scambio
+        2) Accetta uno scambio
+        3) Rispondi a un messaggio
+        4) Aggiungi nuovo articolo
+        5) Ritira un'offerta aperta
+        6) Mostra le mie offerte
+        7) Mostra offerte per categoria
+        8) Mostra gerarchie
+        9) Mostra parametri di configurazione
+        10) Cambia password
+        0) Logout
+(in)    6
+
+        Le tue offerte sono le seguenti: 
+                leggins (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta chiusa di mario]
+                        Stato di conservazione = Medio
+                        Taglia = M
+\end{lstlisting}
+
+\subsection{Importazione da file}
+\lstset{style=mystyle}
+
+Il file selezionato per l'importazione dovrà seguire una apposita struttura: se il configuratore dovesse sbagliare a scrivere il documento, il programma non permetterà l'importazione dei dati e tornerà allo stato precedente.
 
 Il file di configurazione dovrà essere un documento \texttt{xml} valido, definito con la seguente struttura:
 \begin{lstlisting}[language=XML]
@@ -123,11 +621,11 @@ Successivamente, troviamo il tag \verb|<days/>|: Anch'esso è una lista di tag \
 
 I valori ammessi sono:
 \begin{itemize}
-    \item Lunedi
-    \item Martedi
-    \item Mercoledi
-    \item Giovedi
-    \item Venerdi
+    \item Lunedì
+    \item Martedì
+    \item Mercoledì
+    \item Giovedì
+    \item Venerdì
     \item Sabato
     \item Domenica
 \end{itemize}
@@ -212,3 +710,11 @@ Il tag \verb|<fields/>| definisce la lista dei campi compilabili appartenenti a 
 Ogni elemento della lista deve essere un tag di tipo \verb|<field/>|, il quale a sua volta definisce il nome del campo in formato testuale, mentre l'attributo required ne definisce l'obbligatorietà.
 
 Se la categoria è una categoria intermedia, allora sarà necessario definire anche un tag \verb|<children/>| che definisce la lista di tag \verb|<category/>| che compongono i figli, mentre non è necessario definire il tag.
+
+\subsection{Note}
+
+Porre particolare attenzione a limitazioni logiche non strattamente legate ala formattazione del documento XML.
+
+Non sarà infatti possibile inserire internamente ai campi valori che non possono essere riconosciuti dal programma, come giorni della settimana inesistenti o orari in formato erroneo (per indicazioni, consultare la sezione successiva della documentazione).
+
+Prestare importanza anche all'inserimento di categorie innestate, in quanto il programma non prevede che una categoria possa avere una unica categoria figlia. Se si decide volerne dividere una, assicurarsi di inserire almeno due categorie figlie.
