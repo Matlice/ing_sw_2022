@@ -10,6 +10,7 @@ public abstract class Message {
     public abstract String getLocation();
     public abstract Long getTime();
     public abstract Calendar getDate();
+    public abstract boolean hasReply();
 
     @Override
     public String toString() {

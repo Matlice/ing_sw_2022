@@ -24,7 +24,7 @@ public interface MessageFactory {
      * @return messaggio inviato
      * @throws SQLException errore di database durante la creazione del messaggio
      */
-    Message send(Offer offer, String location, Calendar date, long timestamp) throws SQLException;
+    Message send(Offer offer, String location, Calendar date) throws SQLException;
 
     /**
      * Permette di aggiungere un nuovo messaggio in risposta ad una proposta di uno scambio

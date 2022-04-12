@@ -1,12 +1,10 @@
 package it.matlice.ingsw.model;
 
-import it.matlice.ingsw.controller.MenuAction;
 import it.matlice.ingsw.model.auth.AuthData;
 import it.matlice.ingsw.model.auth.AuthMethod;
 import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
 import it.matlice.ingsw.model.data.factories.*;
-import it.matlice.ingsw.model.data.impl.jdbc.MessageFactoryImpl;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.model.data.*;
 import org.jetbrains.annotations.Contract;
@@ -506,7 +504,7 @@ public class Model {
             return this.mf.getUserMessages(auth.getUser())
                     .stream()
                     .filter((e) -> e.getReferencedOffer().getStatus() == Offer.OfferStatus.EXCHANGE)
-                    .filter((e) -> Objects.equals(e.getReferencedOffer().getProposedTime(), e.getTime()))
+                    .filter((e) -> !e.hasReply())
                     .toList();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -549,7 +547,7 @@ public class Model {
     public Calendar replyToMessage(Message replyto, String place, it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
         try {
             var date = convertToDate(day, time);
-            this.of.updateDate(replyto.getReferencedOffer(), date);
+            this.of.updateTime(replyto.getReferencedOffer());
             this.mf.answer(replyto, replyto.getReferencedOffer().getLinkedOffer(), place, date);
             return date;
         } catch (SQLException e) {

@@ -35,8 +35,8 @@ public class MessageFactoryImpl implements MessageFactory {
     }
 
     @Override
-    public Message send(Offer offer, String location, Calendar date, long time) throws SQLException {
-        return this.createMessage(offer, location, time, null);
+    public Message send(Offer offer, String location, Calendar date) throws SQLException {
+        return this.createMessage(offer, location, date.getTimeInMillis() / 1000L, null);
     }
     @Override
     public Message answer(Message msg, Offer offer, String location, Calendar date) throws SQLException {
