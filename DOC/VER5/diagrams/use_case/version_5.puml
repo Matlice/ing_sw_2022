@@ -56,13 +56,13 @@ conf --> (Visualizzazione offerte \nchiuse e in scambio)
 
 'VERSIONE 5 ==========================================
 
-(Importazione configurazione \nin mddalità batch) #pink;line:red;text:red
+(Importazione configurazione \nin modalità batch) #pink;line:red;text:red
 
-conf --> (Importazione configurazione \nin mddalità batch) #red;text:red
+conf --> (Importazione configurazione \nin modalità batch) #red;text:red
 
 (Visualizzazione offerte \ndell'utente) -[hidden]- (Accettazione appuntamento)
 (Creazione nuovo \naccount configuratore) -[hidden]- (Configurazione parametri)
-'(Creazione nuovo \naccount configuratore) -[hidden]- (Importazione configurazione \nin mddalità batch)
+'(Creazione nuovo \naccount configuratore) -[hidden]- (Importazione configurazione \nin modalità batch)
 
 
 @enduml
