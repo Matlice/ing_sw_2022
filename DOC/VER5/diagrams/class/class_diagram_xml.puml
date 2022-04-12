@@ -1,0 +1,50 @@
+@startuml
+
+skinparam ClassAttributeIconSize 0
+'skinparam groupInheritance 2
+skinparam linetype ortho
+hide empty members
+
+package xml #FFFFFF {
+
+    class XMLParser {
+        -XMLStreamReader reader
+        -TreeMap<String, XMLConversion> conversion_map
+        -MapNode<Object> root
+        +XMLParser(FileInputStream file)
+        +XMLParser add_conversion(String tag_name,XMLConversion conv_fnc)
+        +Object parse()
+        +getters()
+    }
+
+    class XMLNode {
+        -String name
+        -String value
+        -HashMap<String, String> attributes
+        +XMLNode(String name)
+        +void add_attribute(String name,String value)
+        +getters()
+    }
+
+    interface XMLConversion {
+        {abstract} +Object convert(XMLNode node,TreeMap<String, Object> children,XMLNode parent,MapNode dinasty)
+    }
+
+    class Utils {
+        {static} +XMLConversion StringConverter
+        {static} +XMLConversion ArrayListConverter
+        {static} +XMLConversion LinkedListConverter
+        {static} +XMLConversion MapConverter
+        {static} +XMLConversion IntegerConverter
+        {static} +XMLConversion ShortConverter
+        {static} +XMLConversion DoubleConverter
+        {static} +XMLConversion BooleanConverter
+    }
+
+}
+
+XMLParser ..> XMLConversion
+XMLConversion ..> XMLNode
+Utils -->  XMLConversion
+
+@enduml
