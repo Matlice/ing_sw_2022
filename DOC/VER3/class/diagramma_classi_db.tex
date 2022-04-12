@@ -7,9 +7,10 @@
     \label{fig:class_db_v_3}
 \end{figure}
 
-Al package che si occupa della gestione del database sono state aggiunte diverse classi, tra cui \textit{SettingsDB}, \textit{LocationDB}, \textit{DayDB} e \textit{IntervalDB}
-rappresentano le tabelle a database. La responsabilità di leggere i dati dalle tabelle in database è delegata alla classe \textit{SettingsFactoryImpl} che implementa i metodi dall'interfaccia \textit{SettingsFactory}.
+L'implementazione delle offerte a livello di database è effettuato tramite due tabelle, rappresentate da due classi: \textit{OfferDB} e \textit{OfferFieldDB}.
+La prima contiene nelle colonne il nome dell'articolo, lo stato, una referenza all'utente proprietario ed una alla categoria di appartenenza; ogni riga della seconda tabella invece,
+rappresenta un singolo campo compilato di un'offerta, per questo ha un riferimento al campo a cui si riferisce (\textit{CategoryFieldDB}) e il valore che questo assume per la specifica offerta
+(referenziata da \texttt{offer\_ref}).
 
-\textit{SettingsImpl} è una classe concreta che eredità dalla classe astratta \textit{Settings}.
-
-In questo modo, la gestione del database è completamente trasparente al model dell'applicazione; questo dovrà interfacciarsi solamente tramite \textit{SettingsFactory} e \textit{Settings} ignorando i dettagli di implementazione a livello di database.
+La lettura e scrittura da database è mediata da \textit{OfferFactoryImpl}, un'implementazione dell'interfaccia
+\textit{OfferFactory}. La classe istanziata è \textit{OfferImpl} che estende la classe astratta \textit{Offer}.

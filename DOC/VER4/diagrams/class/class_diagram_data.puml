@@ -71,8 +71,8 @@ OfferFactory .down.> Offer: creates >
 MessageFactory .down.> Message: creates >
 
 Offer +-- OfferStatus
-Offer -- OfferStatus
-Offer -- LeafCategory
+Offer -- OfferStatus: is
+Offer -- LeafCategory: belongs to
 
 Message -- Offer
 

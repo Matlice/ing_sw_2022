@@ -1,13 +1,13 @@
-\subsubsection{Diagramma delle classi \texttt{controller}}
+\subsubsection{Diagramma delle classi \texttt{model}}
 \vspace{0.5cm}
 \begin{figure}[H]
     \centering
     \includeplantuml{VER5/diagrams/class/class_diagram_controller.puml}
-    \caption{Versione 5: Diagramma UML delle classi, package \texttt{controller}}
-    \label{fig:class_controller_v_5}
+    \caption{Versione 5: Diagramma UML delle classi, package \texttt{model}}
+    \label{fig:class_model_v_5}
 \end{figure}
 
-Alla classe \textit{Controller} è aggiunto un metodo che permette di importare la configurazione (iniziale e non) a partire da un file XML.
+Alla classe \textit{Model} è aggiunto un metodo che permette di importare la configurazione (iniziale e non) a partire da un file XML.
 
 Il file XML permette di importare i parametri di configurazione (luoghi, giorni, intervalli di scambio, ecc...) e/o delle gerarchie (completo di albero delle categorie e campi compilabili).
 Si noti che la piazza di scambio non verrà sovrascritta se è già stata configurata, analogamente a quanto avviene per la configurazione manuale.

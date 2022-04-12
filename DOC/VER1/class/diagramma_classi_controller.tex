@@ -1,20 +1,20 @@
-\subsubsection{Diagramma delle classi \texttt{controller}}
+\subsubsection{Diagramma delle classi \texttt{model}}
 \vspace{0.5cm}
 \begin{figure}[H]
     \centering
     \includeplantuml{VER1/diagrams/class/class_diagram_controller.puml}
-    \caption{Versione 1: Diagramma UML delle classi, package \texttt{controller}}
-    \label{fig:class_controller_v_1}
+    \caption{Versione 1: Diagramma UML delle classi, package \texttt{model}}
+    \label{fig:class_model_v_1}
 \end{figure}
 
-Il package \texttt{controller} è il responsabile della gestione dei dati e dell'attuazione dei comandi.
+Il package \texttt{model} è il responsabile della gestione dei dati e dell'attuazione dei comandi.
 I dati delle impostazioni sono ottenuti dalla classe \textit{Settings}, la quale - nelle versioni successive -
 acquisirà i metodi di serializzazione su file in formato modificabile. 
 
 La gestione dell'autenticazione avviene mediante la classe \textit{AuthImpl}, classe innestata con costruttore privato
-che può solamente essere istanziata da \textit{Controller}.
-Così facendo la classe \textit{Controller} sarà l'unica a poter ``rilasciare'' un'istanza di \textit{AuthImpl} 
+che può solamente essere istanziata da \textit{Model}.
+Così facendo la classe \textit{Model} sarà l'unica a poter ``rilasciare'' un'istanza di \textit{AuthImpl} 
 solamente dopo aver verificato le credenziali ed aver autenticato l'utente.
 
 La classe \textit{AuthImpl} svolge la funzione di ``Token di autenticazione'' all'interno dell'applicativo, 
-di conseguenza verrà utilizzata come parametro per tutte le funzioni di \textit{Controller} che richiedano autenticazione.
+di conseguenza verrà utilizzata come parametro per tutte le funzioni di \textit{Model} che richiedano autenticazione.

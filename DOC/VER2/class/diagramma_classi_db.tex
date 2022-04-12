@@ -10,6 +10,6 @@
 Al package che si occupa della gestione del database sono state aggiunte diverse classi, tra cui \textit{SettingsDB}, \textit{LocationDB}, \textit{DayDB} e \textit{IntervalDB}
 rappresentano le tabelle a database. La responsabilità di leggere i dati dalle tabelle in database è delegata alla classe \textit{SettingsFactoryImpl} che implementa i metodi dall'interfaccia \textit{SettingsFactory}.
 
-\textit{SettingsImpl} è una classe che eredità dalla classe astratta \textit{Settings}.
+\textit{SettingsImpl} è una classe che eredita dalla classe astratta \textit{Settings}, ed è quella che viene effettivamente istanziata dalla factory.
 
 In questo modo, la gestione del database è completamente trasparente al model dell'applicazione; questo dovrà interfacciarsi solamente tramite \textit{SettingsFactory} e \textit{Settings} ignorando i dettagli di implementazione a livello di database.

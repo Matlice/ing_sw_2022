@@ -41,19 +41,19 @@ component it.matlice.ingsw.data #FFFFFF{
     }
 }
 
-component it.matlice.ingsw.controller #FFFFFF{
+component it.matlice.ingsw.model #FFFFFF{
 
     interface Authentication
 
-    [Controller.AuthImpl] -- Authentication
-    [Controller] -left( Authentication
+    [Model.AuthImpl] -- Authentication
+    [Model] -left( Authentication
 
-    [Controller] -up-( CategoryFactory
-    [Controller] -up-( HierarchyFactory
-    [Controller] -up-( UserFactory
+    [Model] -up-( CategoryFactory
+    [Model] -up-( HierarchyFactory
+    [Model] -up-( UserFactory
 }
 
-[Controller] +--> [Controller.AuthImpl]
+[Model] +--> [Model.AuthImpl]
 
 [UserFactoryImpl] .up.> [ConfiguratorUserImpl]: creates
 [CategoryFactoryImpl] .up.> [CategoryImpl]: creates

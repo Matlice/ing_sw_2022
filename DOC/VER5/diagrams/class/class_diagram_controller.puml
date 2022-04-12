@@ -5,9 +5,9 @@ skinparam ClassAttributeIconSize 0
 skinparam linetype ortho
 hide empty members
 
-package controller #FFFFFF {
+package model #FFFFFF {
 
-    class Controller <<singleton>> {
+    class Model <<singleton>> {
         + createConfigurator(auth: Authentication, username: String)
         + createHierarchy(auth: Authentication, root: Category)
         + showHierarchies()
@@ -44,14 +44,14 @@ interface SettingsFactory
 interface OfferFactory
 
 AuthImpl --> "1" User
-Controller +-down-> AuthImpl
+Model +-down-> AuthImpl
 
-Controller ..> Settings
+Model ..> Settings
 
-Controller .up.> UserFactory
-Controller .up.> CategoryFactory
-Controller .up.> HierarchyFactory
-Controller .up.> SettingsFactory
-Controller .up.> OfferFactory
+Model .up.> UserFactory
+Model .up.> CategoryFactory
+Model .up.> HierarchyFactory
+Model .up.> SettingsFactory
+Model .up.> OfferFactory
 
 @enduml

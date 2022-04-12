@@ -17,7 +17,7 @@ Tutti i gli attributi letti dal file XML rimangono nella struttura ad albero com
 Per questo scopo è definita l'interfaccia \textit{XMLConversion}, le cui implementazioni,
 a partire dai riferimenti del tag stesso e dei suoi tag contenuti, ritornano un generico \textit{Object}, che potrà essere riutilizzato dall'implementazione di \textit{XMLConversion} del tag padre.
 
-Le conversioni (implementazioni di \textit{XMLConversion}) utilizzate in fase di parsing devono essere aggiunte all'\textit{XMLParser} tramite il metodo \texttt{addConversion}.
+Le conversioni (implementazioni di \textit{XMLConversion}) utilizzate in fase di parsing devono essere aggiunte all'\textit{XMLParser} tramite il metodo \texttt{addConversion(tag: String, func: XMLConversion)}.
 Il metodo \texttt{parse()} ritorna un oggetto, istanza della classe istanziata dalla conversione del nodo root del file XML.
 
 La classe \textit{Utils} contiene diverse conversioni per i tipi più generici, come ad esempio \textit{Integer} o \textit{ArrayList<T>}.

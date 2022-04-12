@@ -117,13 +117,6 @@ nativi, indicando l’eventuale obbligatorietà di ciascuno
 - salvare in modo persistente tutte le informazioni di cui ai punti precedenti
 - visualizzare ciascuna gerarchia presente e tutte le informazioni a corredo della stessa.
 
-#### Progresso
-
-- [ ] Creazione infrastruttura di base e database
-- [ ] Creazione account configuratore (tool esterno)
-- [ ] Modifica password utente
-- [ ] Creazione nuova gerarchia
-
 ### Versione 2
 
 La seconda versione dell’applicazione consente l’accesso anche al fruitore.
@@ -153,11 +146,6 @@ proposta di scambio avanzata da un altro fruitore.
 
 Infine, la seconda versione dell’applicazione visualizza, a beneficio del fruitore, il nome e la descrizione delle categorie radice di tutte le gerarchie, nonché la piazza, i luoghi, i giorni e gli intervalli orari in cui sono possibili gli scambi.
 
-#### Progresso
-
-- [ ] Registrazione fruitore
-- [ ] Visualizzazione frontend
-
 ### Versione 3
 
 La terza versione consente al **fruitore** di pubblicare le informazioni circa un articolo che egli intende barattare.
@@ -177,13 +165,6 @@ L’applicazione deve mantenere traccia dei passaggi di stato subiti da un’off
 In ogni momento, il **configuratore** e così pure il **fruitore** può indicare una categoria (foglia) di una qualsiasi gerarchia e visualizzare tutte le attuali Offerte aperte relative a tale categoria.
 
 Inoltre, il **fruitore** può visualizzare tutte le `Offerte aperte` e le `Offerte ritirate` di cui è autore, indipendentemente dalla categoria di appartenenza
-
-#### Progresso
-
-- [ ] Creazione di offerte
-- [ ] Modifica degli stati dell'offerta
-- [ ] Visualizzazione offerte in gerarchia e ricerca
-- [ ] Visualizzazione offerte utente
 
 ### Versione 4
 
@@ -230,20 +211,9 @@ Quindi, la comunicazione non avviene mai attraverso messaggi (ad esempio, di pos
 
 Il **configuratore** può indicare una categoria foglia di una gerarchia e visualizzare le attuali `Offerte in scambio` nonché le `Offerte chiuse` relative ad articoli di tale categoria.
 
-#### Progresso
-
-- [ ] Sistema di proposte da visualizzazione Offerte aperte
-- [ ] Stati `Offerta accoppiata`, `Offerta selezionata`, `Offerta in scambio`
-- [ ] Interfacce di messaggistica tra utenti
-- [ ] Gestione eventi temporizzati
-
 ### Versione 5
 
 La quinta versione consente al configuratore di importare gli ingressi del back-end dell’applicazione, ovvero gerarchie delle categorie e valori dei parametri di configurazione, in modalità batch (cioè attraverso uno o più file di input) anziché in modalità interattiva.
-
-#### Progresso
-
-- [ ] File di configurazione
 
 ## Requisiti non Funzionali
 
