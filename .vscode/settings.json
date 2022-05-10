@@ -1,0 +1,6 @@
+{
+    "nrf-connect.topdir": "${nrf-connect.sdk:1.9.1}",
+    "nrf-connect.applications": [
+        "/home/enrico/Projects/Zigbee/LightBulbZigbee/light_bulb_example"
+    ]
+}

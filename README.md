@@ -339,3 +339,50 @@ Ogni gruppo (costituito al più da tre persone),  dovrà:
 2) per l’ultima versione, redigere un unico manuale di installazione e uso (il cui contenuto potrebbe eventualmente divenire parte dell’help in linea dell’applicazione); **si sottolinea la necessità di documentare accuratamente il da farsi al fine di  importare nell’applicazione le gerarchie di categorie e i dati di configurazione**
 3) consegnare in formato elettronico quanto richiesto ai punti precedenti;
 4) per ogni versione, consegnare codice sorgente + codice interpretabile + (preferibilmente) codice eseguibile.
+
+# Parte B
+
+## Richieste
+
+## Appunti
+
+### MVC
+
+MVC
+- stringhe in view
+- toString() da spostare
+- fix vari
+
+### Pattern GRASP (2)
+
+- Pure Fabrication
+- Controller (separato dal controller MVC)
+- Low Coupling / High Cohesion (bassa dipendenza tra classi, responsabilità di un dato elemento sono fortemente correlate)
+
+### Pattern SOLID (2)
+
+- Single Responsibility (una classe deve avere una sola responsabilità)
+- Dependency inversion principle (classe dovrebbe dipendere dalle astrazioni, non da classi concrete) [es. View-StreamView, database (?)]
+
+### Gang of Four (2)
+
+- Convert Exception (ora tutto dipende da SQLExcpetion, da generalizzare)
+- Factory
+- Repository (per accesso a DB con cache)
+
+### Testing
+
+- scegliere una classe da testare, e mostrare come si è testata [white box o black box]
+
+### Refactor
+
+- mostrare un singolo caso di refactor (Extract Method!)
+
+### Note a caso
+
+togliere i singleton
+togliere eccezioni SQL e generalizzarle
+uscire con System.exit è bruttino (?)
+toString() va messa in view, non nelle classi di business
+togliere gli instanceof, usare interfaccia comune generalizzata
+generalizzare list a collection o iterable
