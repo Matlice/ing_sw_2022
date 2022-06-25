@@ -340,6 +340,9 @@ Ogni gruppo (costituito al più da tre persone),  dovrà:
 3) consegnare in formato elettronico quanto richiesto ai punti precedenti;
 4) per ogni versione, consegnare codice sorgente + codice interpretabile + (preferibilmente) codice eseguibile.
 
+
+
+
 # Parte B
 
 ## Richieste
@@ -355,9 +358,8 @@ MVC
 
 ### Pattern GRASP (2)
 
-- Pure Fabrication
-- Controller (separato dal controller MVC)
-- Low Coupling / High Cohesion (bassa dipendenza tra classi, responsabilità di un dato elemento sono fortemente correlate)
+- Pure Fabrication (separazione oggetti concettuali-rappresentazione DB)
+- Polymorphism (qualsiasi)
 
 ### Pattern SOLID (2)
 
@@ -367,8 +369,7 @@ MVC
 ### Gang of Four (2)
 
 - Convert Exception (ora tutto dipende da SQLExcpetion, da generalizzare)
-- Factory
-- Repository (per accesso a DB con cache)
+- Composite (per le categorie)
 
 ### Testing
 
