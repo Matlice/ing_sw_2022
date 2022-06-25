@@ -30,35 +30,35 @@ public class Controller {
 
     private final View view;
     private final Model model;
-    private Authentication currentUser;
+    private Authentication currentUser = new NullAuthentication();
 
     // azioni disponibili del menu principale dell'applicazione
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
-            new MenuAction<>("Logout", User.class, this::logout, false, 0, -1),
-            new MenuAction<>("Proponi uno scambio", CustomerUser.class, this::offerTrade),
-            new MenuAction<>("Accetta uno scambio", CustomerUser.class, this::acceptTrade),
-            new MenuAction<>("Rispondi a un messaggio", CustomerUser.class, this::answerMessage),
-            new MenuAction<>("Aggiungi nuovo articolo", CustomerUser.class, this::createArticle),
-            new MenuAction<>("Ritira un'offerta aperta", CustomerUser.class, this::retractOffer),
-            new MenuAction<>("Mostra le mie offerte", CustomerUser.class, this::showOffersByUser),
-            new MenuAction<>("Mostra offerte per categoria", User.class, this::showOpenOffersByCategory),
-            new MenuAction<>("Aggiungi nuova gerarchia", ConfiguratorUser.class, this::createHierarchy),
-            new MenuAction<>("Mostra gerarchie", User.class, this::showHierarchies),
-            new MenuAction<>("Mostra parametri di configurazione", User.class, this::showConfParameters),
-            new MenuAction<>("Modifica parametri di configurazione", ConfiguratorUser.class, this::editConfParameters),
-            new MenuAction<>("Importa informazioni da file testuale", ConfiguratorUser.class, () -> importConfiguration(false)),
-            new MenuAction<>("Aggiungi nuovo configuratore", ConfiguratorUser.class, this::createConfigurator),
+            new MenuAction<>("Logout", this::logout, false, 0, -1),
+            new PrivilegedMenuAction<>("Proponi uno scambio", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::offerTrade),
+            new PrivilegedMenuAction<>("Accetta uno scambio", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::acceptTrade),
+            new PrivilegedMenuAction<>("Rispondi a un messaggio", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::answerMessage),
+            new PrivilegedMenuAction<>("Aggiungi nuovo articolo", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::createArticle),
+            new PrivilegedMenuAction<>("Ritira un'offerta aperta", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::retractOffer),
+            new PrivilegedMenuAction<>("Mostra le mie offerte", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::showOffersByUser),
+            new MenuAction<>("Mostra offerte per categoria", this::showOpenOffersByCategory),
+            new PrivilegedMenuAction<>("Aggiungi nuova gerarchia", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::createHierarchy),
+            new MenuAction<>("Mostra gerarchie", this::showHierarchies),
+            new MenuAction<>("Mostra parametri di configurazione", this::showConfParameters),
+            new PrivilegedMenuAction<>("Modifica parametri di configurazione", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::editConfParameters),
+            new PrivilegedMenuAction<>("Importa informazioni da file testuale", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> this.importConfiguration(false)),
+            new PrivilegedMenuAction<>("Aggiungi nuovo configuratore", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::createConfigurator),
 
-            new MenuAction<>("Cambia password", User.class, this::changePassword)
+            new MenuAction<>("Cambia password", this::changePassword)
     );
 
     // azioni disponibili inizialmente ad un utente non loggato
     private final List<MenuAction<Boolean>> public_actions = Arrays.asList(
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
-            new MenuAction<>("Esci", null, () -> false, false, 0, -1),
-            new MenuAction<>("Login", null, this::performLogin),
-            new MenuAction<>("Registrati", null, this::registerUser)
+            new MenuAction<>("Esci", () -> false, false, 0, -1),
+            new MenuAction<>("Login", this::performLogin),
+            new MenuAction<>("Registrati", this::registerUser)
     );
 
     /**
@@ -79,14 +79,14 @@ public class Controller {
      */
     public boolean mainloop() {
 
-        if(this.model.hasConfiguredSettings())
+        if (this.model.hasConfiguredSettings())
             this.model.timeIteration();
 
-        if (this.currentUser == null)
+        if (!this.currentUser.isValid())
             return this.chooseAndRun(this.public_actions, "Scegliere un'opzione");
 
         return this.chooseAndRun(
-                this.user_actions.stream().filter(e -> e.isPermitted(this.currentUser.getUser())).toList(),
+                this.user_actions,
                 String.format("Benvenuto %s. Scegli un'opzione", this.currentUser.getUser().getUsername())
         );
     }
@@ -99,7 +99,7 @@ public class Controller {
      * @return true
      */
     private boolean logout() {
-        this.currentUser = null;
+        this.currentUser = new NullAuthentication();
         return true;
     }
 
@@ -118,12 +118,12 @@ public class Controller {
                 this.finalizeLogin();
 
                 if (this.currentUser.getUser() instanceof ConfiguratorUser)
-                    while (!this.model.hasConfiguredSettings()){
+                    while (!this.model.hasConfiguredSettings()) {
                         this.configureSettings(true);
                     }
 
                 else {
-                    if(!this.model.hasConfiguredSettings()){
+                    if (!this.model.hasConfiguredSettings()) {
                         this.view.error("Il sistema non è ancora utilizzabile. Contattare un configuratore.");
                         this.logout();
                     }
@@ -282,9 +282,10 @@ public class Controller {
 
     /**
      * Permette all'utente di accettare la proposta di scambio
+     *
      * @return true
      */
-    private boolean acceptTrade(){
+    private boolean acceptTrade() {
         var selected_offers = this.model.getSelectedOffers(this.currentUser);
 
         if (selected_offers.size() == 0) {
@@ -294,9 +295,9 @@ public class Controller {
 
         var actions = selected_offers
                 .stream()
-                .map((p) -> new MenuAction<>(p.toString() + "\nper\n" + p.getLinkedOffer().toString(), User.class, () -> p))
+                .map((p) -> new MenuAction<>(p.toString() + "\nper\n" + p.getLinkedOffer().toString(), () -> p))
                 .collect(Collectors.toCollection(ArrayList::new));
-        actions.add(0, new MenuAction<>("Esci", User.class, () -> null, false, 0, -1));
+        actions.add(0, new MenuAction<>("Esci", () -> null, false, 0, -1));
 
         var offer = this.chooseAndRun(actions, "Scegliere una proposta di scambio da accettare?");
         if (offer == null) {
@@ -312,8 +313,8 @@ public class Controller {
         // info summary
         this.view.info("Proposto lo scambio per il giorno " + day.getName() + " "
                 + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
-                + String.format("%02d", date.get(Calendar.MONTH)+1) + " alle ore " + time, true);
-        
+                + String.format("%02d", date.get(Calendar.MONTH) + 1) + " alle ore " + time, true);
+
         return true;
     }
 
@@ -322,7 +323,7 @@ public class Controller {
         var places = this.model.readSettings().getLocations();
         return this.view.chooseOption(
                 places.stream()
-                        .map((e) -> new MenuAction<>(e, User.class, () -> e))
+                        .map((e) -> new MenuAction<>(e, () -> e))
                         .collect(Collectors.toList()),
                 "Luogo di scambio"
         ).getAction().run();
@@ -380,9 +381,9 @@ public class Controller {
         }
 
         var actions = new ArrayList<MenuAction<Boolean>>();
-        actions.add(0, new MenuAction<>("Annulla", null, () -> null, false, 0, -1));
-        actions.add(new MenuAction<>("Accetta lo scambio", null, () -> true));
-        actions.add(new MenuAction<>("Fai una controproposta", null, () -> false));
+        actions.add(0, new MenuAction<>("Annulla", () -> null, false, 0, -1));
+        actions.add(new MenuAction<>("Accetta lo scambio", () -> true));
+        actions.add(new MenuAction<>("Fai una controproposta", () -> false));
 
         var accept = this.chooseAndRun(actions, "Cosa si vuol fare?");
         if (accept == null) {
@@ -404,7 +405,7 @@ public class Controller {
             // info summary
             this.view.info("Controproposta per il giorno " + day.getName() + " "
                     + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
-                    + String.format("%02d", date.get(Calendar.MONTH)+1) + " alle ore " + time, true);
+                    + String.format("%02d", date.get(Calendar.MONTH) + 1) + " alle ore " + time, true);
         }
 
         return true;
@@ -418,7 +419,7 @@ public class Controller {
      */
     private boolean createArticle() {
         // scelta della categoria in cui inserire l'articolo
-        if(this.model.getLeafCategories().size() == 0){
+        if (this.model.getLeafCategories().size() == 0) {
             this.view.warn("Non ci sono ancora categorie a cui associare un articolo. Contattare un configuratore");
             return true;
         }
@@ -429,6 +430,7 @@ public class Controller {
 
     /**
      * Permette all'utente di ritirare una propria offerta aperta
+     *
      * @return true
      */
     private boolean retractOffer() {
@@ -468,7 +470,7 @@ public class Controller {
      * @return true
      */
     private boolean showOpenOffersByCategory() {
-        if(this.model.getLeafCategories().size() == 0){
+        if (this.model.getLeafCategories().size() == 0) {
             this.view.warn("Non sono presenti categorie di cui mostrare le offerte");
             return true;
         }
@@ -505,8 +507,8 @@ public class Controller {
 
         // creazione delle categorie figlie
         while (this.chooseAndRun(Arrays.asList(
-                new MenuAction<>("Salva ed esci", ConfiguratorUser.class, () -> false, !root.isCategoryValid(), 0, -1),
-                new MenuAction<>("Aggiungi nuova categoria", ConfiguratorUser.class, () -> true)
+                new PrivilegedMenuAction<>("Salva ed esci", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, !root.isCategoryValid(), 0, -1),
+                new PrivilegedMenuAction<>("Aggiungi nuova categoria", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
         ), "Si vuole aggiungere una nuova categoria?\n(nota: una categoria non può avere una sola sottocategoria)")) {
             Category father = this.chooseAndRun(this.getCategorySelectionMenu(root), "Selezionare la categoria padre");
             if (father == null) continue;
@@ -549,7 +551,7 @@ public class Controller {
         // scelta della gerarchia da visualizzare
         this.view.chooseOption(
                 hierarchies.stream()
-                        .map((e) -> new MenuAction<>(e.getRootCategory().getName(), User.class, () -> {
+                        .map((e) -> new MenuAction<>(e.getRootCategory().getName(), () -> {
                             this.view.info(e.getRootCategory().toString());
                             return true;
                         }))
@@ -588,7 +590,7 @@ public class Controller {
         return true;
     }
 
-    private boolean importConfiguration(boolean firstConfiguration){
+    private boolean importConfiguration(boolean firstConfiguration) {
         try {
             var file = new FileInputStream("import.xml");
             var im = new XMLImport(file);
@@ -597,7 +599,7 @@ public class Controller {
 
             try {
                 config = im.parse();
-            } catch (RuntimeException e){
+            } catch (RuntimeException e) {
                 this.view.error("Impossibile decifrare il file di importazione. Controllare la presenza di eventuali errori.");
                 return true;
             }
@@ -609,18 +611,19 @@ public class Controller {
 
                 boolean err = false;
                 int i;
-                if(settings.city == null && firstConfiguration) err = true;
-                if(settings.expiration <= 0) err = true;
-                if(settings.locations == null || settings.locations.isEmpty()) err = true;
-                if(settings.days == null || settings.days.isEmpty()) err = true;
-                if(settings.intervals == null || settings.intervals.isEmpty()) err = true;
+                if (settings.city == null && firstConfiguration) err = true;
+                if (settings.expiration <= 0) err = true;
+                if (settings.locations == null || settings.locations.isEmpty()) err = true;
+                if (settings.days == null || settings.days.isEmpty()) err = true;
+                if (settings.intervals == null || settings.intervals.isEmpty()) err = true;
 
-                if(err){
+                if (err) {
                     this.view.error("Il file di importazione contiene informazioni non valide. Controllare la presenza di eventuali errori.");
                     return true;
                 }
                 var cityOverride = this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
-                if(cityOverride) this.view.warn("La città di scambio non può essere sovrascritta, le altre configurazioni sono state correttamente importate");
+                if (cityOverride)
+                    this.view.warn("La città di scambio non può essere sovrascritta, le altre configurazioni sono state correttamente importate");
 
             }
 
@@ -662,7 +665,7 @@ public class Controller {
         // creazione della categoria root
         Category root = this.createCategoryFromXML(null, hierarchyXML.root);
         if (hierarchyXML.root.fields != null)
-            for (var e: hierarchyXML.root.fields) {
+            for (var e : hierarchyXML.root.fields) {
                 this.addFieldFromXML(root, e);
             }
 
@@ -675,7 +678,7 @@ public class Controller {
 
         if (hierarchyXML.root.categories != null) {
             if (hierarchyXML.root.categories.size() == 1) throw new InvalidCategoryException();
-            for (var e: hierarchyXML.root.categories) {
+            for (var e : hierarchyXML.root.categories) {
                 categoryStack.add(new AbstractMap.SimpleEntry<>(e, root));
             }
         }
@@ -691,7 +694,7 @@ public class Controller {
                 r = this.appendCategory(father, newChild);
 
                 if (toInsert.getKey().fields != null)
-                    for (var f: toInsert.getKey().fields) {
+                    for (var f : toInsert.getKey().fields) {
                         this.addFieldFromXML(newChild, f);
                     }
 
@@ -704,7 +707,7 @@ public class Controller {
             }
             // aggiorna i padri nello stack, serve perchè l'istanza potrebbe essere cambiata
             var newCategoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
-            for(var e: categoryStack) {
+            for (var e : categoryStack) {
                 if (e.getValue() == father) {
                     var newElem = new AbstractMap.SimpleEntry<>(e.getKey(), (Category) r);
                     newCategoryStack.add(newElem);
@@ -723,7 +726,7 @@ public class Controller {
     /**
      * Data una gerarchia importata da XML la salva
      *
-     * @param root categoria root della gerarchia
+     * @param root        categoria root della gerarchia
      * @param categoryXML la definizione della categoria da creare
      */
     private @NotNull Category createCategoryFromXML(Category root, XMLImport.CategoryXML categoryXML) throws DuplicateCategoryException, InvalidCategoryException {
@@ -745,7 +748,7 @@ public class Controller {
     /**
      * Data una categoria e dei campi caricati da XML, li aggiunge alla categoria data
      *
-     * @param c categoria a cui aggiungere un campo
+     * @param c        categoria a cui aggiungere un campo
      * @param fieldXML il parametro da aggiungere
      */
     private void addFieldFromXML(Category c, XMLImport.FieldXML fieldXML) throws InvalidFieldException, DuplicateFieldException {
@@ -761,6 +764,7 @@ public class Controller {
     }
 
     //INTERNAL ACTIONS==============================================================
+
     /**
      * Permette di richiedere all'utente un'azione tramite un menu ed eseguire l'azione associata
      *
@@ -770,7 +774,11 @@ public class Controller {
      */
     private <T> T chooseAndRun(List<MenuAction<T>> actions, String prompt) {
         while (true) {
-            var action = this.view.chooseOption(actions, prompt);
+            var action = this.view.chooseOption(
+                    actions.stream()
+                            .filter(e -> e.isPermitted(this.currentUser.getUser()))
+                            .collect(Collectors.toList()),
+                    prompt);
             if (action != null)
                 return action.getAction().run();
             else {
@@ -778,6 +786,7 @@ public class Controller {
             }
         }
     }
+
     /**
      * Permette all'utente di effettuare il login
      *
@@ -848,8 +857,8 @@ public class Controller {
      */
     private void makeFields(Category c) {
         while (this.chooseAndRun(Arrays.asList(
-                new MenuAction<>("No, torna all'inserimento categorie", ConfiguratorUser.class, () -> false, false, 0, -1),
-                new MenuAction<>("Sì, aggiungi campo nativo", ConfiguratorUser.class, () -> this.addField(c))
+                new PrivilegedMenuAction<>("No, torna all'inserimento categorie", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
+                new PrivilegedMenuAction<>("Sì, aggiungi campo nativo", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> this.addField(c))
         ), "Si vuole aggiungere un campo nativo?")) ;
     }
 
@@ -881,7 +890,7 @@ public class Controller {
         if (TypeDefinition.TypeAssociation.values().length >= 2) {
             type = this.view.chooseOption(
                     Arrays.stream(TypeDefinition.TypeAssociation.values())
-                            .map(e -> new MenuAction<>(e.toString(), ConfiguratorUser.class, () -> e))
+                            .map(e -> (MenuAction<TypeDefinition.TypeAssociation>) new PrivilegedMenuAction<>(e.toString(), new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> e))
                             .toList(), "Seleziona un tipo").getAction().run();
         }
 
@@ -954,7 +963,7 @@ public class Controller {
      * @return la lista completa delle categorie figlie
      */
     private List<MenuAction<Category>> getCategorySelectionMenu(@NotNull Category root, @NotNull List<MenuAction<Category>> acc, String prefix) {
-        acc.add(new MenuAction<>(prefix + root.getName(), null, () -> root));
+        acc.add(new MenuAction<>(prefix + root.getName(), () -> root));
         if (root instanceof NodeCategory)
             for (var child : ((NodeCategory) root).getChildren())
                 this.getCategorySelectionMenu(child, acc, prefix + root.getName() + " > ");
@@ -964,6 +973,7 @@ public class Controller {
     /**
      * Richiede l'inserimento all'utente dei parametri di configurazione,
      * se è la prima configurazione permette di modificare anche la piazza
+     *
      * @param firstConfiguration true se prima configurazione
      */
     private void configureSettings(boolean firstConfiguration) {
@@ -971,11 +981,11 @@ public class Controller {
         String city;
         if (firstConfiguration) {
             boolean toImport = this.chooseAndRun(Arrays.asList(
-                    new MenuAction<>("No, aggiungi la configurazione manualmente", ConfiguratorUser.class, () -> false, false, 0, -1),
-            new MenuAction<>("Sì, importa le configurazioni automaticamente", ConfiguratorUser.class, () -> true)
+                    new PrivilegedMenuAction<>("No, aggiungi la configurazione manualmente", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
+                    new PrivilegedMenuAction<>("Sì, importa le configurazioni automaticamente", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
             ), "Si vuole importare la configurazione da file?");
 
-            if(toImport){
+            if (toImport) {
                 importConfiguration(true);
                 return;
             }
@@ -988,25 +998,25 @@ public class Controller {
         List<String> places = this.view.getStringList("Inserire un luogo", true);
 
         List<Settings.Day> days = this.view.getGenericList("Inserire un giorno", true,
-                (v) -> {
-                    try {
-                        return Settings.Day.fromString(v);
-                    } catch (CannotParseDayException e) {
-                        return null;
-                    }
-                }).stream() // sort the days, so it does not depend on input order
+                        (v) -> {
+                            try {
+                                return Settings.Day.fromString(v);
+                            } catch (CannotParseDayException e) {
+                                return null;
+                            }
+                        }).stream() // sort the days, so it does not depend on input order
                 .sorted(it.matlice.ingsw.model.data.Settings.Day::compareTo)
                 .toList();
 
         List<Interval> intervals = Interval.mergeIntervals(
-                this.view.getGenericList("Inserire un intervallo orario [es. 15:30-17:00]", true,
-                    (v) -> {
-                        try {
-                            return Interval.fromString(v);
-                        } catch (CannotParseIntervalException | InvalidIntervalException e) {
-                            return null;
-                        }
-                })).stream() // sort the intervals after they have been merged together
+                        this.view.getGenericList("Inserire un intervallo orario [es. 15:30-17:00]", true,
+                                (v) -> {
+                                    try {
+                                        return Interval.fromString(v);
+                                    } catch (CannotParseIntervalException | InvalidIntervalException e) {
+                                        return null;
+                                    }
+                                })).stream() // sort the intervals after they have been merged together
                 .sorted(Interval::compareTo)
                 .toList();
 
@@ -1022,13 +1032,14 @@ public class Controller {
 
     /**
      * Premette all'utente di scegliere una categoria foglia
+     *
      * @param message messaggio
      * @return la categoria foglia scelta
      */
     private LeafCategory chooseLeafCategory(String message) {
         return this.view.chooseOption(
                 this.model.getLeafCategories().stream()
-                        .map((e) -> new MenuAction<>(e.fullToString(), User.class, () -> e))
+                        .map((e) -> new MenuAction<>(e.fullToString(), () -> e))
                         .collect(Collectors.toList()),
                 message
         ).getAction().run();
@@ -1036,6 +1047,7 @@ public class Controller {
 
     /**
      * Permette di creare un nuovo articolo appartenente alla categoria data
+     *
      * @param e categoria foglia a cui appartiene il nuovo articolo
      */
     private void addArticle(LeafCategory e) {
@@ -1057,7 +1069,7 @@ public class Controller {
             var actions = e.fullEntrySet()
                     .stream()
                     .filter((f) -> !fields.containsKey(f.getKey()))
-                    .map((k) -> new MenuAction<>(k.getKey() + (k.getValue().required() ? " [R]" : ""), User.class, () -> {
+                    .map((k) -> new MenuAction<>(k.getKey() + (k.getValue().required() ? " [R]" : ""), () -> {
                         fields.put(k.getKey(), this.getFieldValue(k));
                         return false;
                     })).collect(Collectors.toCollection(ArrayList::new));
@@ -1068,7 +1080,7 @@ public class Controller {
 
             // aggiunge alla lista delle azioni l'azione che permette di salvare
             // è attiva solo se non ci sono campi obbligatori da compilare
-            actions.add(0, new MenuAction<>("Salva articolo", User.class, () -> true, needRequiredField, 0, -1));
+            actions.add(0, new MenuAction<>("Salva articolo", () -> true, needRequiredField, 0, -1));
 
             // scelta del campo da compilare
             saveArticle = this.view.chooseOption(
@@ -1087,6 +1099,7 @@ public class Controller {
 
     /**
      * Permette di compilare il campo k per l'articolo a
+     *
      * @param k campo da compilare
      */
     private Object getFieldValue(Map.Entry<String, TypeDefinition> k) {
@@ -1101,6 +1114,7 @@ public class Controller {
 
     /**
      * Show a list of offers
+     *
      * @param prompt message
      * @param offers list of offers
      */
@@ -1120,15 +1134,15 @@ public class Controller {
      *
      * @param prompt messaggio per l'utente
      * @param cancel messaggio per annullare
-     * @param items oggetti tra cui scegliere
+     * @param items  oggetti tra cui scegliere
      * @return oggetto selezionato
      */
     private <V> V selectItem(String prompt, String cancel, List<@NotNull V> items) {
         var actions = items
                 .stream()
-                .map((p) -> new MenuAction<>(p.toString(), User.class, () -> p))
+                .map((p) -> new MenuAction<>(p.toString(), () -> p))
                 .collect(Collectors.toCollection(ArrayList::new));
-        actions.add(0, new MenuAction<>(cancel, User.class, () -> null, false, 0, -1));
+        actions.add(0, new MenuAction<>(cancel, () -> null, false, 0, -1));
         return this.chooseAndRun(actions, prompt);
     }
 

@@ -18,6 +18,7 @@ public abstract class User implements Authenticable {
     @Override
     public abstract List<AuthMethod> getAuthMethods();
 
+    public abstract List<UserTypes> getAuthTypes();
 
     public enum UserTypes {
         CONFIGURATOR("configurator"),

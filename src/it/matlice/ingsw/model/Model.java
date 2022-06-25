@@ -100,7 +100,7 @@ public class Model {
             return new AuthImpl((User) method.getUser());
         }
 
-        return null;
+        return new NullAuthentication();
     }
 
     /**
