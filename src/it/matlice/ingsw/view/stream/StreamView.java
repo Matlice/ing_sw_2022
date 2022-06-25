@@ -1,6 +1,8 @@
 package it.matlice.ingsw.view.stream;
 
+import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
+import it.matlice.ingsw.controller.WarningType;
 import it.matlice.ingsw.view.View;
 import it.matlice.ingsw.view.menu.Menu;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.function.Function;
+
+import static it.matlice.ingsw.controller.ErrorType.*;
 
 /**
  * Classe che implementa l'interfaccia View dell'applicazione
@@ -53,33 +57,33 @@ public class StreamView implements View {
     /**
      * Comunica un avvertimento all'utente
      *
-     * @param text il testo del messaggio
+     * @param warning messaggio di avviso
      * @param separated true se si separa dal contesto del precedente messaggio
      */
     @Override
-    public void warn(String text, boolean separated) {
+    public void warn(WarningType warning, boolean separated) {
         if (separated) this.out.println();
-        this.out.println("AVVISO: " + text);
+        this.out.println("AVVISO: " + warning.toString());
     }
 
     /**
      * Comunica un avvertimento all'utente
      *
-     * @param text il testo del messaggio
+     * @param warning messaggio di avviso
      */
     @Override
-    public void warn(String text) {
-        this.warn(text, false);
+    public void warn(WarningType warning) {
+        this.warn(warning, false);
     }
 
     /**
      * Comunica un errore all'utente
      *
-     * @param text il testo dell'errore
+     * @param error tipo di errore
      */
     @Override
-    public void error(String text) {
-        this.out.println("ERRORE: " + text);
+    public void error(ErrorType error) {
+        this.out.println("ERRORE: " + error.toString()); // todo
     }
 
     /**
@@ -157,7 +161,7 @@ public class StreamView implements View {
     public String getLine(String prompt, Function<String, Boolean> available) {
         String in;
         while(!available.apply( in = this.getLine(prompt) ))
-            this.error("Valore non valido");
+            this.error(INVALID_VALUE);
         return in;
     }
 
@@ -167,11 +171,11 @@ public class StreamView implements View {
      *
      * @param prompt               messaggio di richiesta all'utente
      * @param conversionMap        funzione di conversione
-     * @param nonValidErrorMessage errore durante il parsing
+     * @param error                errore durante il parsing
      * @return oggetto creato da stringa
      */
     @Override
-    public <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, String nonValidErrorMessage) {
+    public <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, ErrorType error) {
         String input;
         while (true) {
             input = this.getLine(prompt).trim();
@@ -179,7 +183,7 @@ public class StreamView implements View {
             if (r != null) {
                 return r;
             } else {
-                this.error(nonValidErrorMessage);
+                this.error(error);
             }
         }
     }
@@ -197,7 +201,7 @@ public class StreamView implements View {
         String r = this.getLine(prompt).trim();
 
         while (!canBeEmpty && r.length() == 0) {
-            this.error("La stringa inserita non deve essere vuota");
+            this.error(STRING_MUST_NOT_BE_EMPTY);
             r = this.getLine(prompt).trim();
         }
 
@@ -209,11 +213,11 @@ public class StreamView implements View {
      *
      * @param prompt messaggio di richiesta all'utente
      * @param available returns true se l'intero inserito è valido, false per richiederlo
-     * @param nonValidErrorMessage messaggio di errore per valori non validi
+     * @param error messaggio di errore per valori non validi
      * @return l'intero inserito
      */
     @Override
-    public int getInt(String prompt, Function<Integer, Boolean> available, String nonValidErrorMessage) {
+    public int getInt(String prompt, Function<Integer, Boolean> available, ErrorType error) {
         this.out.println();
         while (true) {
             try {
@@ -223,10 +227,10 @@ public class StreamView implements View {
                 if (available.apply(v))
                     return v;
 
-                this.error(nonValidErrorMessage);
+                this.error(error);
 
             } catch (NumberFormatException e) {
-                this.error(nonValidErrorMessage);
+                this.error(error);
             }
         }
     }
@@ -240,7 +244,7 @@ public class StreamView implements View {
      */
     @Override
     public int getInt(String prompt, Function<Integer, Boolean> available) {
-        return this.getInt(prompt, available, "Valore inserito non valido");
+        return this.getInt(prompt, available, INVALID_VALUE);
     }
 
     /**
@@ -266,7 +270,7 @@ public class StreamView implements View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return lista di oggetti inseriti dall'utente
      */
-    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap, String duplicateErrorMessage, String nonValidErrorMessage) {
+    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage) {
         this.out.println();
         String lastInput = "";
         List<V> list = new ArrayList<>();
@@ -298,8 +302,8 @@ public class StreamView implements View {
      *                      deve ritornare null per valori di stringhe non validi
      * @return lista di oggetti inseriti dall'utente
      */
-    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap) {
-        return this.getGenericList(prompt, unique, conversionMap, "Valore già inserito", "Valore non valido");
+    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap) { // todo move to view the conversion map
+        return this.getGenericList(prompt, unique, conversionMap, DUPLICATE_VALUE, INVALID_VALUE);
     }
 
     /**
@@ -310,7 +314,7 @@ public class StreamView implements View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return lista di stringhe inserite dall'utente
      */
-    public List<String> getStringList(String prompt, boolean unique, String duplicateErrorMessage, String nonValidErrorMessage) {
+    public List<String> getStringList(String prompt, boolean unique, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage) {
         return this.getGenericList(prompt, unique, (e) -> e, duplicateErrorMessage, nonValidErrorMessage);
     }
 
@@ -344,7 +348,7 @@ public class StreamView implements View {
         menu.setPrompt(prompt);
         Object answ = menu.displayOnce(this.in, this.out);
         while (answ == null) {
-            this.error("Azione non permessa");
+            this.error(ACTION_NOT_ALLOWED);
             answ = menu.displayOnce(this.in, this.out);
         }
 

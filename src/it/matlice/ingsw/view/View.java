@@ -1,10 +1,10 @@
 package it.matlice.ingsw.view;
 
+import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
+import it.matlice.ingsw.controller.WarningType;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -30,19 +30,20 @@ public interface View {
      * @param text il testo del messaggio
      * @param separated true se si separa dal contesto del precedente messaggio
      */
-    void warn(String text, boolean separated);
+    void warn(WarningType warning, boolean separated);
 
     /**
      * Comunica un avvertimento all'utente
      * @param text il testo del messaggio
      */
-    void warn(String text);
+    void warn(WarningType warning);
 
     /**
      * Comunica un errore all'utente
-     * @param text il testo dell'errore
+     * @param error tipo di errore
      */
-    void error(String text);
+    void error(ErrorType error);
+
 
     /**
      * Show a list of objects as strings
@@ -93,11 +94,11 @@ public interface View {
      * tramite una funzione di conversione
      * @param prompt messaggio di richiesta all'utente
      * @param conversionMap funzione di conversione
-     * @param nonValidErrorMessage errore durante il parsing
+     * @param error errore durante il parsing
      * @param <V> tipo di ritorno
      * @return oggetto creato da stringa
      */
-    <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, String nonValidErrorMessage);
+    <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, ErrorType error);
 
     /**
      * Richiede all'utente l'inserimento di una stringa (a cui sono rimossi i blank iniziali e finali)
@@ -116,7 +117,7 @@ public interface View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return l'intero inserito
      */
-    int getInt(String prompt, Function<Integer, Boolean> available, String nonValidErrorMessage);
+    int getInt(String prompt, Function<Integer, Boolean> available, ErrorType error);
 
     /**
      * Richiede all'utente l'inserimento di un valore intero
@@ -145,7 +146,7 @@ public interface View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return lista di oggetti inseriti dall'utente
      */
-    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap, String duplicateErrorMessage, String nonValidErrorMessage);
+    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage);
 
     /**
      * Ritorna una lista di oggetti, inseriti dall'utente come stringa dall'utente
@@ -167,7 +168,7 @@ public interface View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return lista di stringhe inserite dall'utente
      */
-    public List<String> getStringList(String prompt, boolean unique, String duplicateErrorMessage, String nonValidErrorMessage);
+    public List<String> getStringList(String prompt, boolean unique, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage);
 
     /**
      * Ritorna una lista di stringhe non vuote inserite dall'utente

@@ -15,16 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.xml.stream.XMLStreamException;
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static it.matlice.ingsw.controller.ErrorType.*;
+import static it.matlice.ingsw.controller.WarningType.*;
 
 public class Controller {
 
@@ -111,7 +109,7 @@ public class Controller {
     private boolean performLogin() {
         if (this.login()) {
             if (this.currentUser.getUser().getLastLoginTime() == null) {
-                this.view.warn("Cambia le credenziali di accesso");
+                this.view.warn(NEED_CHANGE_PASSWORD);
                 this.changePassword();
             }
             try {
@@ -124,7 +122,7 @@ public class Controller {
 
                 else {
                     if (!this.model.hasConfiguredSettings()) {
-                        this.view.error("Il sistema non è ancora utilizzabile. Contattare un configuratore.");
+                        this.view.error(SYSTEM_NOT_CONFIGURED);
                         this.logout();
                     }
                 }
@@ -172,11 +170,11 @@ public class Controller {
 
         try {
             this.model.registerUser(username, psw);
-            this.view.warn("Utente registrato con successo.");
+            this.view.warn(SUCCESSFUL_REGISTRATION);
         } catch (InvalidPasswordException e) {
-            this.view.error("La password inserita non rispetta i requisiti di sicurezza");
+            this.view.error(PASSWORD_NOT_VALID);
         } catch (DuplicateUserException e) {
-            this.view.error("L'utente inserito è già esistente.");
+            this.view.error(USER_DUPLICATE);
         } catch (InvalidUserTypeException | SQLException e) {
             e.printStackTrace();
         }
@@ -196,11 +194,13 @@ public class Controller {
                 this.model.changePassword(this.currentUser, this.getNewPassword());
                 passwordChanged = true;
             } catch (InvalidPasswordException e) {
-                this.view.error("La password non rispetta i requisiti di sicurezza");
+                this.view.error(PASSWORD_NOT_VALID);
             } catch (LoginInvalidException e) {
-                this.view.error("Il login non è più valido.");
+                this.view.error(USER_LOGIN_INVALID);
             } catch (SQLException e) {
-                this.view.error(e.getMessage());
+                e.printStackTrace();
+                System.exit(1);
+                return false;
             }
         }
         return true;
@@ -217,7 +217,7 @@ public class Controller {
             e.printStackTrace();
             System.exit(1);
         } catch (InvalidUserTypeException | DuplicateUserException | InvalidPasswordException e) {
-            this.view.error("Errore nella creazione dell'utente di default");
+            this.view.error(ERR_DEFAULT_USER_CREATION);
         }
     }
 
@@ -232,9 +232,9 @@ public class Controller {
             String password = this.model.addConfiguratorUser(username, false);
             this.view.info("Usa " + username + ":" + password + " per il primo login");
         } catch (DuplicateUserException e) {
-            this.view.error("Utente già esistente");
+            this.view.error(USER_DUPLICATE);
         } catch (InvalidUserTypeException | InvalidPasswordException | SQLException e) {
-            this.view.error("Impossibile creare un nuovo configuratore");
+            this.view.error(ERR_CONFIG_USER_CREATION);
         }
         return true;
     }
@@ -251,7 +251,7 @@ public class Controller {
         List<Offer> userOffers = this.model.getTradableOffers(this.currentUser.getUser());
 
         if (userOffers.size() == 0) {
-            this.view.warn("Non hai offerte disponibili allo scambio");
+            this.view.warn(NO_OFFERS_IN_EXCHANGE);
             return true;
         }
         var offerToTrade = this.selectItem("Quale offerta si vuole proporre in scambio?", "Esci", userOffers);
@@ -262,7 +262,7 @@ public class Controller {
         // scelta dell'articolo che si vuole accettare in scambio
         List<Offer> offers = this.model.getTradableOffers(offerToTrade);
         if (offers.size() == 0) {
-            this.view.warn("Non ci sono offerte disponibili allo scambio");
+            this.view.warn(NO_OFFERS_IN_EXCHANGE);
             return true;
         }
         var offerToAccept = this.selectItem("Quale offerta si vuole accettare in scambio?", "Esci", offers);
@@ -272,9 +272,9 @@ public class Controller {
 
         try {
             this.model.createTradeOffer(offerToTrade, offerToAccept);
-            this.view.warn("Proposta di scambio confermata");
+            this.view.warn(SUCCESSFUL_OFFER_PROPOSAL);
         } catch (Exception e) {
-            this.view.error("Impossibile proporre lo scambio");
+            this.view.error(ERR_OFFER_PROPOSAL);
         }
 
         return true;
@@ -289,7 +289,7 @@ public class Controller {
         var selected_offers = this.model.getSelectedOffers(this.currentUser);
 
         if (selected_offers.size() == 0) {
-            this.view.warn("Non ci sono proposte di scambio accettabili al momento");
+            this.view.warn(NO_ACCEPTABLE_OFFERS);
             return true;
         }
 
@@ -345,7 +345,7 @@ public class Controller {
             } catch (CannotParseDayException ex) {
                 return null;
             }
-        }, "Giorno non valido");
+        }, DAY_NOT_VALID);
     }
 
     private Interval.Time chooseExchangeTime() {
@@ -364,14 +364,14 @@ public class Controller {
             } catch (CannotParseTimeException | InvalidTimeException ex) {
                 return null;
             }
-        }, "Ora non valida");
+        }, HOUR_NOT_VALID);
     }
 
     private boolean answerMessage() {
         var messages = this.model.getUserMessages(this.currentUser);
 
         if (messages.size() == 0) {
-            this.view.warn("Non hai messaggi a cui rispondere");
+            this.view.warn(NO_MESSAGES_TO_REPLY);
             return true;
         }
 
@@ -393,7 +393,7 @@ public class Controller {
         if (accept) {
             // proposta accettata
             this.model.acceptTradeMessage(replyto);
-            this.view.warn("Scambio accettato con successo");
+            this.view.warn(SUCCESSFUL_ACCEPT_OFFER);
         } else {
             // proposta rifiutata, fai controproposta
             String place = this.chooseExchangePlace();
@@ -420,7 +420,7 @@ public class Controller {
     private boolean createArticle() {
         // scelta della categoria in cui inserire l'articolo
         if (this.model.getLeafCategories().size() == 0) {
-            this.view.warn("Non ci sono ancora categorie a cui associare un articolo. Contattare un configuratore");
+            this.view.error(NO_LEAF_CATEGORY);
             return true;
         }
         LeafCategory cat = this.chooseLeafCategory("A quale categoria appartiene l'articolo da creare?");
@@ -437,7 +437,7 @@ public class Controller {
         List<Offer> offers = this.model.getRetractableOffers(this.currentUser.getUser());
 
         if (offers.size() == 0) {
-            this.view.warn("Non ci sono offerte ritirabili");
+            this.view.warn(NO_RETRACTABLE_OFFER);
             return true;
         }
 
@@ -471,7 +471,7 @@ public class Controller {
      */
     private boolean showOpenOffersByCategory() {
         if (this.model.getLeafCategories().size() == 0) {
-            this.view.warn("Non sono presenti categorie di cui mostrare le offerte");
+            this.view.warn(NO_LEAF_CATEGORIES_TO_SHOW);
             return true;
         }
         LeafCategory cat = this.chooseLeafCategory("Di quale categoria si vogliono visualizzare le offerte aperte?");
@@ -497,7 +497,7 @@ public class Controller {
             root = this.createCategory(null);
             this.makeFields(root);
         } catch (DuplicateCategoryException e) {
-            this.view.error("Categoria radice con lo stesso nome già presente");
+            this.view.error(CATEGORY_SAME_NAME_ROOT);
             return true;
         }
 
@@ -520,7 +520,7 @@ public class Controller {
                     r = this.appendCategory(father, newChild);
                     this.makeFields(newChild);
                 } catch (DuplicateCategoryException e) {
-                    this.view.error("Categoria già esistente nell'albero della gerarchia");
+                    this.view.error(CATEGORY_SAME_NAME);
                 }
             }
             if (father == root) root = r;
@@ -544,7 +544,7 @@ public class Controller {
         // mostra la lista di gerarchie disponibili
         List<Hierarchy> hierarchies = this.model.getHierarchies();
         if (hierarchies.size() == 0) {
-            this.view.warn("Nessuna gerarchia trovata");
+            this.view.warn(NO_HIERARCHIES);
             return true;
         }
 
@@ -600,14 +600,14 @@ public class Controller {
             try {
                 config = im.parse();
             } catch (RuntimeException e) {
-                this.view.error("Impossibile decifrare il file di importazione. Controllare la presenza di eventuali errori.");
+                this.view.error(COULD_NOT_PARSE_IMPORT_FILE);
                 return true;
             }
 
             // importa le impostazioni (città, luoghi, giorni...)
             XMLImport.SettingsXML settings = config.settings;
             if (settings != null) {
-                this.view.warn("Importando la configurazione...");
+                this.view.warn(LOADING_CONFIG);
 
                 boolean err = false;
                 int i;
@@ -618,40 +618,40 @@ public class Controller {
                 if (settings.intervals == null || settings.intervals.isEmpty()) err = true;
 
                 if (err) {
-                    this.view.error("Il file di importazione contiene informazioni non valide. Controllare la presenza di eventuali errori.");
+                    this.view.error(IMPORT_FILE_NOT_VALID);
                     return true;
                 }
                 var cityOverride = this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
                 if (cityOverride)
-                    this.view.warn("La città di scambio non può essere sovrascritta, le altre configurazioni sono state correttamente importate");
+                    this.view.warn(CITY_NOT_OVERWRITABLE);
 
             }
 
             if (config.hierarchies != null) {
-                this.view.warn("Importando le gerarchie...");
+                this.view.warn(IMPORTING_HIERARCHIES);
                 // importa gerarchie
                 config.hierarchies.forEach((e) -> {
                     try {
                         this.createHierarchyFromXML(e);
                         this.view.info(String.format("Gerarchia %s importata correttamente!", e.root.name));
                     } catch (DuplicateCategoryException ex) {
-                        this.view.error(String.format("Impossibile importare la gerarchia %s: categoria duplicata", e.root.name));
+                        this.view.error(DUPLICATE_CATEGORY);
                     } catch (InvalidCategoryException ex) {
-                        this.view.error(String.format("Impossibile importare la gerarchia %s: categoria invalida", e.root.name));
+                        this.view.error(INVALID_CATEGORY);
                     } catch (DuplicateFieldException ex) {
-                        this.view.error(String.format("Impossibile importare la gerarchia %s: campo duplicato", e.root.name));
+                        this.view.error(DUPLICATE_FIELD);
                     } catch (InvalidFieldException ex) {
-                        this.view.error(String.format("Impossibile importare la gerarchia %s: campo invalido", e.root.name));
+                        this.view.error(INVALID_FIELD);
                     } catch (SQLException ex) {
-                        this.view.error(String.format("Impossibile importare la gerarchia %s: assicurarsi che non si stiano importando elementi duplicati", e.root.name));
+                        this.view.error(ERR_IMPORTING_HIERARCHY);
                         ex.printStackTrace();
                     }
                 });
             }
         } catch (FileNotFoundException e) {
-            this.view.error("Impossibile importare la configurazione, file non trovato!");
+            this.view.error(IMPORT_FILE_NOT_FOUND);
         } catch (XMLStreamException e) {
-            this.view.error("Impossibile importare la configurazione!");
+            this.view.error(ERR_IMPORTING_CONFIG);
         }
         return true;
     }
@@ -782,7 +782,7 @@ public class Controller {
             if (action != null)
                 return action.getAction().run();
             else {
-                this.view.error("Azione non permessa");
+                this.view.error(ACTION_NOT_ALLOWED);
             }
         }
     }
@@ -804,12 +804,12 @@ public class Controller {
                 if (this.currentUser != null) {
                     return true;
                 } else {
-                    this.view.warn("Credenziali errate");
+                    this.view.error(USER_LOGIN_FAILED);
                     return false;
                 }
             }
         } catch (InvalidUserException e) {
-            this.view.error("Utente non esistente");
+            this.view.error(USER_NOT_EXISTING);
         }
 
         return false;
@@ -827,7 +827,7 @@ public class Controller {
             psw = this.view.getPassword("Nuova password");
 
             if (!psw.equals(this.view.getPassword("Ripeti la password"))) {
-                this.view.error("Le password non corrispondono");
+                this.view.error(PASSWORD_NOT_SAME);
                 continue;
             }
 
@@ -845,7 +845,7 @@ public class Controller {
         if (method.equals(PasswordAuthMethod.class.getName()))
             return PasswordAuthMethod.getAuthData(this.view.getPassword());
         else {
-            this.view.error("Nessun metodo di login disponibile per " + method);
+            this.view.error(USER_NO_AUTH_METHOD);
             return null;
         }
     }
@@ -874,11 +874,11 @@ public class Controller {
         while (name == null) {
             name = this.view.getLine("Nome campo").trim();
             while (name.length() == 0) {
-                this.view.warn("Inserire un nome non vuoto");
+                this.view.warn(NO_EMPTY_NAME);
                 name = this.view.getLine("Nome campo").trim();
             }
             if (c.containsKey(name)) {
-                this.view.error("Campo già esistente nella categoria");
+                this.view.error(DUPLICATE_FIELD_IN_CATEGORY);
                 name = null;
             }
         }
@@ -911,7 +911,7 @@ public class Controller {
 
         String name = this.view.getLine("Nome").trim();
         while (name.length() == 0) {
-            this.view.warn("Inserire un nome non vuoto");
+            this.view.warn(NO_EMPTY_NAME);
             name = this.view.getLine("Nome").trim();
         }
         if (root == null && !this.model.isValidRootCategoryName(name))
@@ -986,12 +986,12 @@ public class Controller {
             ), "Si vuole importare la configurazione da file?");
 
             if (toImport) {
-                importConfiguration(true);
+                this.importConfiguration(true);
                 return;
             }
             city = this.view.get("Inserire la piazza di scambio");
         } else {
-            this.view.warn("Non è possibile modificare la piazza di scambio");
+            this.view.warn(CITY_NOT_OVERWRITABLE);
             city = this.model.readSettings().getCity();
         }
 
@@ -1091,9 +1091,9 @@ public class Controller {
 
         try {
             this.model.createOffer(this.currentUser.getUser(), name, e, fields);
-            this.view.warn("L'articolo è stato salvato con successo, è ora disponibile allo scambio");
+            this.view.warn(OFFER_CREATED);
         } catch (RequiredFieldConstrainException ex) {
-            this.view.error("Impossibile creare l'articolo, campo obbligatorio mancante");
+            this.view.error(MISSING_FIELD);
         }
     }
 
@@ -1121,7 +1121,7 @@ public class Controller {
     private void showOffers(String prompt, List<Offer> offers) {
 
         if (offers.size() == 0) {
-            this.view.warn("Non sono state trovate offerte");
+            this.view.warn(NO_OFFER_FOUND);
             return;
         }
 
