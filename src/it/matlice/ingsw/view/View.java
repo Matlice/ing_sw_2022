@@ -14,8 +14,6 @@ public interface View {
 
     InfoFactory getInfoFactory();
 
-    void info(IMessage message);
-
     /**
      * Comunica un avvertimento all'utente
      * @param warning tipo di warning

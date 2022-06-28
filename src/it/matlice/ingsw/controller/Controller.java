@@ -212,7 +212,7 @@ public class Controller {
     public void addDefaultConfigurator() {
         try {
             String psw = this.model.addConfiguratorUser("admin", true);
-            this.view.info(String.format("Per il primo accesso le credenziali sono admin:%s", psw));
+            this.view.getInfoFactory().getFirstAccessCredentialsMessage("admin", psw).show();
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
@@ -230,7 +230,7 @@ public class Controller {
         var username = this.view.get("Nome utente");
         try {
             String password = this.model.addConfiguratorUser(username, false);
-            this.view.info("Usa " + username + ":" + password + " per il primo login");
+            this.view.getInfoFactory().getFirstAccessCredentialsMessage(username, password).show();
         } catch (DuplicateUserException e) {
             this.view.error(USER_DUPLICATE);
         } catch (InvalidUserTypeException | InvalidPasswordException | SQLException e) {
@@ -311,7 +311,7 @@ public class Controller {
         var date = this.model.acceptTrade(offer, place, day, time);
 
         // info summary
-        this.view.info(this.view.getInfoFactory().getProposedExchange(date, day, time));
+        this.view.getInfoFactory().getProposedExchangeMessage(date, day, time).show();
 
         return true;
     }
@@ -329,9 +329,7 @@ public class Controller {
 
     private Settings.Day chooseExchangeDay() {
         // exchange day
-        StringJoiner sj_day = new StringJoiner(", ");
-        this.model.readSettings().getDays().forEach((e) -> sj_day.add(e.getName().toLowerCase()));
-        this.view.info("I giorni disponibili per lo scambio sono: " + sj_day.toString(), true);
+        this.view.getInfoFactory().getAvailableDaysMessage(this.model.readSettings().getDays()).show();
         return this.view.getLineWithConversion("Giorno di scambio", (e) -> {
             try {
                 var d = Settings.Day.fromString(e);
@@ -348,9 +346,7 @@ public class Controller {
 
     private Interval.Time chooseExchangeTime() {
         // exchange time
-        StringJoiner sj_time = new StringJoiner(", ");
-        this.model.readSettings().getIntervals().forEach((e) -> sj_time.add(e.toString()));
-        this.view.info("Gli intervalli orari disponibili per lo scambio sono: " + sj_time.toString(), true);
+        this.view.getInfoFactory().getAvailableIntervalsMessage(this.model.readSettings().getIntervals()).show();
         return this.view.getLineWithConversion("Ora di scambio", (e) -> {
             try {
                 var t = Interval.Time.fromString(e);
@@ -401,9 +397,7 @@ public class Controller {
             var date = this.model.replyToMessage(replyto, place, day, time);
 
             // info summary
-            this.view.info("Controproposta per il giorno " + day.getName() + " "
-                    + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
-                    + String.format("%02d", date.get(Calendar.MONTH) + 1) + " alle ore " + time, true);
+            this.view.getInfoFactory().getProposedExchangeReplyMessage(date, day, time).show();
         }
 
         return true;
@@ -444,7 +438,7 @@ public class Controller {
         if (offerToRetract == null) return true;
 
         this.model.retractOffer(offerToRetract);
-        this.view.info("Offerta ritirata con successo");
+        this.view.getInfoFactory().getRetractedExchangeMessage().show();
 
         return true;
     }
@@ -550,7 +544,7 @@ public class Controller {
         this.view.chooseOption(
                 hierarchies.stream()
                         .map((e) -> new MenuAction<>(e.getRootCategory().getName(), () -> {
-                            this.view.info(e.getRootCategory().toString());
+                            this.view.getInfoFactory().getShowHierarchyMessage(e);
                             return true;
                         }))
                         .collect(Collectors.toList()),

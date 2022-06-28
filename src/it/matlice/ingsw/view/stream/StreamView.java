@@ -3,7 +3,6 @@ package it.matlice.ingsw.view.stream;
 import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
 import it.matlice.ingsw.controller.WarningType;
-import it.matlice.ingsw.view.IMessage;
 import it.matlice.ingsw.view.InfoFactory;
 import it.matlice.ingsw.view.View;
 import it.matlice.ingsw.view.menu.Menu;
@@ -35,21 +34,15 @@ public class StreamView implements View {
         this.out = out;
         this.in = in;
         this.conversionMap = new ConversionMap();
-        this.infoFactory = new StreamInfoFactory();
+        this.infoFactory = new StreamInfoFactory(this);
     }
 
     public InfoFactory getInfoFactory() {
         return this.infoFactory;
     }
 
-    @Override
-    public void info(IMessage message) {
-        if (!(message instanceof IStreamMessage)) return;
-        this._info((IStreamMessage) message);
-    }
-
-    private void _info(IStreamMessage message) {
-        this.out.println(message.getMessage());
+    protected void println(String message) {
+        this.out.println(message);
     }
 
     /**
@@ -98,7 +91,7 @@ public class StreamView implements View {
             sj.add(e.toString().replaceAll("\n", "\n\t"));
         });
         this.out.println();
-        this.info(sj.toString());
+        this.out.println(sj);
     }
 
     /**
