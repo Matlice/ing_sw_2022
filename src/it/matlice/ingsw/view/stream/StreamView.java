@@ -21,6 +21,7 @@ public class StreamView implements View {
 
     private final PrintStream out;
     private final Scanner in;
+    private final ConversionMap conversionMap;
 
     /**
      * Costruttore per StreamView
@@ -30,6 +31,7 @@ public class StreamView implements View {
     public StreamView(PrintStream out, Scanner in) {
         this.out = out;
         this.in = in;
+        this.conversionMap = new ConversionMap();
     }
 
     /**
@@ -63,7 +65,7 @@ public class StreamView implements View {
     @Override
     public void warn(WarningType warning, boolean separated) {
         if (separated) this.out.println();
-        this.out.println("AVVISO: " + warning.toString());
+        this.out.println("AVVISO: " + this.conversionMap.convertWarningToString(warning));
     }
 
     /**
@@ -83,7 +85,7 @@ public class StreamView implements View {
      */
     @Override
     public void error(ErrorType error) {
-        this.out.println("ERRORE: " + error.toString()); // todo
+        this.out.println("ERRORE: " + this.conversionMap.convertErrorToString(error));
     }
 
     /**

@@ -623,7 +623,7 @@ public class Controller {
                 }
                 var cityOverride = this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
                 if (cityOverride)
-                    this.view.warn(CITY_NOT_OVERWRITABLE);
+                    this.view.warn(CITY_NOT_OVERWRITABLE_SUCCESS);
 
             }
 
