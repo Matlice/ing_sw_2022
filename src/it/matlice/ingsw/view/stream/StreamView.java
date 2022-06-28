@@ -3,6 +3,8 @@ package it.matlice.ingsw.view.stream;
 import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
 import it.matlice.ingsw.controller.WarningType;
+import it.matlice.ingsw.view.IMessage;
+import it.matlice.ingsw.view.InfoFactory;
 import it.matlice.ingsw.view.View;
 import it.matlice.ingsw.view.menu.Menu;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +24,7 @@ public class StreamView implements View {
     private final PrintStream out;
     private final Scanner in;
     private final ConversionMap conversionMap;
+    private final InfoFactory infoFactory;
 
     /**
      * Costruttore per StreamView
@@ -32,28 +35,21 @@ public class StreamView implements View {
         this.out = out;
         this.in = in;
         this.conversionMap = new ConversionMap();
+        this.infoFactory = new StreamInfoFactory();
     }
 
-    /**
-     * Comunica un messaggio all'utente
-     *
-     * @param text il testo del messaggio
-     * @param separated true se si separa dal contesto del precedente messaggio
-     */
-    @Override
-    public void info(String text, boolean separated) {
-        if (separated) this.out.println();
-        this.out.println(text);
+    public InfoFactory getInfoFactory() {
+        return this.infoFactory;
     }
 
-    /**
-     * Comunica un messaggio all'utente
-     *
-     * @param text il testo del messaggio
-     */
     @Override
-    public void info(String text) {
-        this.info(text, false);
+    public void info(IMessage message) {
+        if (!(message instanceof IStreamMessage)) return;
+        this._info((IStreamMessage) message);
+    }
+
+    private void _info(IStreamMessage message) {
+        this.out.println(message.getMessage());
     }
 
     /**

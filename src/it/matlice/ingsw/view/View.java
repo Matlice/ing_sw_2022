@@ -12,18 +12,9 @@ import java.util.function.Function;
  */
 public interface View {
 
-    /**
-     * Comunica un messaggio all'utente
-     * @param text il testo del messaggio
-     * @param separated true se si separa dal contesto del precedente messaggio
-     */
-    void info(String text, boolean separated);
+    InfoFactory getInfoFactory();
 
-    /**
-     * Comunica un messaggio all'utente
-     * @param text il testo del messaggio
-     */
-    void info(String text);
+    void info(IMessage message);
 
     /**
      * Comunica un avvertimento all'utente

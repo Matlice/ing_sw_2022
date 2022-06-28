@@ -311,9 +311,7 @@ public class Controller {
         var date = this.model.acceptTrade(offer, place, day, time);
 
         // info summary
-        this.view.info("Proposto lo scambio per il giorno " + day.getName() + " "
-                + String.format("%02d", date.get(Calendar.DAY_OF_MONTH)) + "/"
-                + String.format("%02d", date.get(Calendar.MONTH) + 1) + " alle ore " + time, true);
+        this.view.info(this.view.getInfoFactory().getProposedExchange(date, day, time));
 
         return true;
     }
