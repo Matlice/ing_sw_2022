@@ -798,10 +798,11 @@ public class Controller {
         List<AuthMethod> authType;
         try {
             authType = this.model.authenticationType(username);
+            if (authType.size() < 1) return false;
             for (var t : authType) {
                 var authData = this.getLoginData(t.getClass().getName());
                 this.currentUser = this.model.authenticate(t, authData);
-                if (this.currentUser != null) {
+                if (this.currentUser.isValid()) {
                     return true;
                 } else {
                     this.view.error(USER_LOGIN_FAILED);
@@ -872,10 +873,10 @@ public class Controller {
         // scelta del nome del campo, non deve essere già esistente tra i padri della categoria
         String name = null;
         while (name == null) {
-            name = this.view.getLine("Nome campo").trim();
+            name = this.view.getText("Nome campo").trim();
             while (name.length() == 0) {
                 this.view.warn(NO_EMPTY_NAME);
-                name = this.view.getLine("Nome campo").trim();
+                name = this.view.getText("Nome campo").trim();
             }
             if (c.containsKey(name)) {
                 this.view.error(DUPLICATE_FIELD_IN_CATEGORY);
@@ -909,17 +910,17 @@ public class Controller {
      */
     private @NotNull Category createCategory(Category root) throws DuplicateCategoryException {
 
-        String name = this.view.getLine("Nome").trim();
+        String name = this.view.getText("Nome").trim();
         while (name.length() == 0) {
             this.view.warn(NO_EMPTY_NAME);
-            name = this.view.getLine("Nome").trim();
+            name = this.view.getText("Nome").trim();
         }
         if (root == null && !this.model.isValidRootCategoryName(name))
             throw new DuplicateCategoryException();
         else if (root != null && !root.isValidChildCategoryName(name))
             throw new DuplicateCategoryException();
 
-        String description = this.view.getLine("Descrizione").trim();
+        String description = this.view.getText("Descrizione").trim();
 
         return this.model.createCategory(name, description, null);
     }
@@ -1107,7 +1108,7 @@ public class Controller {
         // in base al tipo di campo da compilare lo richiede all'utente
         // per ora sono supportate solo le stringhe
         return switch (k.getValue().type()) {
-            case STRING -> this.view.getLine(String.format("Inserire il valore per il campo '%s'", k.getKey()));
+            case STRING -> this.view.getText(String.format("Inserire il valore per il campo '%s'", k.getKey()));
             default -> throw new RuntimeException();
         };
     }

@@ -27,14 +27,14 @@ public interface View {
 
     /**
      * Comunica un avvertimento all'utente
-     * @param text il testo del messaggio
+     * @param warning tipo di warning
      * @param separated true se si separa dal contesto del precedente messaggio
      */
     void warn(WarningType warning, boolean separated);
 
     /**
      * Comunica un avvertimento all'utente
-     * @param text il testo del messaggio
+     * @param warning tipo di warning
      */
     void warn(WarningType warning);
 
@@ -78,7 +78,7 @@ public interface View {
      * @param prompt messaggio di richiesta all'utente
      * @return la stringa inserita
      */
-    String getLine(String prompt);
+    String getText(String prompt);
 
     /**
      * Richiede all'utente l'inserimento di una stringa (compresa di blanks),
@@ -87,7 +87,7 @@ public interface View {
      * @param available funzione che ritorna true se la stringa in input è valida
      * @return la stringa inserita
      */
-    String getLine(String prompt, Function<String, Boolean> available);
+    String getText(String prompt, Function<String, Boolean> available);
 
     /**
      * Richiede all'utente l'inserimento di una stringa, che verrà convertita in un oggetto
@@ -114,10 +114,10 @@ public interface View {
      * Richiede all'utente l'inserimento di un valore intero
      * @param prompt messaggio di richiesta all'utente
      * @param available returns true se l'intero inserito è valido, false per richiederlo
-     * @param nonValidErrorMessage messaggio di errore per valori non validi
+     * @param nonValidError errore per valori non validi
      * @return l'intero inserito
      */
-    int getInt(String prompt, Function<Integer, Boolean> available, ErrorType error);
+    int getInt(String prompt, Function<Integer, Boolean> available, ErrorType nonValidError);
 
     /**
      * Richiede all'utente l'inserimento di un valore intero

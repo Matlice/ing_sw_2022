@@ -127,7 +127,7 @@ public class StreamView implements View {
     public String getPassword(String prompt) {
         String password;
         do {
-            password = this.getLine(prompt);
+            password = this.getText(prompt);
         } while (password.isEmpty());
         return password;
     }
@@ -154,15 +154,15 @@ public class StreamView implements View {
      * @return la stringa inserita
      */
     @Override
-    public String getLine(String prompt) {
+    public String getText(String prompt) {
         this.out.print(prompt + "> ");
         return this.in.nextLine();
     }
 
     @Override
-    public String getLine(String prompt, Function<String, Boolean> available) {
+    public String getText(String prompt, Function<String, Boolean> available) {
         String in;
-        while(!available.apply( in = this.getLine(prompt) ))
+        while(!available.apply( in = this.getText(prompt) ))
             this.error(INVALID_VALUE);
         return in;
     }
@@ -180,7 +180,7 @@ public class StreamView implements View {
     public <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, ErrorType error) {
         String input;
         while (true) {
-            input = this.getLine(prompt).trim();
+            input = this.getText(prompt).trim();
             V r = conversionMap.apply(input);
             if (r != null) {
                 return r;
@@ -200,11 +200,11 @@ public class StreamView implements View {
      */
     @Override
     public String getTrimmedLine(String prompt, boolean canBeEmpty) {
-        String r = this.getLine(prompt).trim();
+        String r = this.getText(prompt).trim();
 
         while (!canBeEmpty && r.length() == 0) {
             this.error(STRING_MUST_NOT_BE_EMPTY);
-            r = this.getLine(prompt).trim();
+            r = this.getText(prompt).trim();
         }
 
         return r;
@@ -223,7 +223,7 @@ public class StreamView implements View {
         this.out.println();
         while (true) {
             try {
-                String input = this.getLine(prompt);
+                String input = this.getText(prompt);
                 int v = Integer.parseInt(input);
 
                 if (available.apply(v))
@@ -277,7 +277,7 @@ public class StreamView implements View {
         String lastInput = "";
         List<V> list = new ArrayList<>();
         while (list.size() < 1 || lastInput.length() != 0) {
-            lastInput = this.getLine(prompt + " (oppure nulla per terminare l'inserimento)").trim();
+            lastInput = this.getText(prompt + " (oppure nulla per terminare l'inserimento)").trim();
             if (lastInput.length() >= 1) {
                 V toAdd = conversionMap.apply(lastInput);
                 if (!unique || !list.contains(toAdd)) {
