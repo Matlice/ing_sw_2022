@@ -112,7 +112,7 @@ public class StreamView implements View {
         StringJoiner sj = new StringJoiner("\n\t");
         sj.add(message);
         list.forEach((e) -> {
-            sj.add(e.toString().replaceAll("\n", "\n\t"));
+            sj.add(this.converter.getViewType(e).getStreamRepresentation().replaceAll("\n", "\n\t"));
         });
         this.out.println();
         this.out.println(sj);
