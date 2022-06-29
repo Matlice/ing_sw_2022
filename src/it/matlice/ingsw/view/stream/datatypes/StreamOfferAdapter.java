@@ -12,14 +12,18 @@ public class StreamOfferAdapter implements StreamDataType {
         this.offer = o;
     }
 
-    @Override
-    public String getStreamRepresentation() {
+    private String getOfferMessage(Offer o){
         StringBuilder sb = new StringBuilder();
-        sb.append(this.offer.getName()).append(" (").append(this.offer.getCategory().fullToString()).append(") [").append(this.offer.getStatus().getName()).append(" di ").append(this.offer.getOwner().getUsername()).append("]\n");
-        for(var k: this.offer.entrySet()) {
+        sb.append(o.getName()).append(" (").append(o.getCategory().fullToString()).append(") [").append(o.getStatus().getName()).append(" di ").append(o.getOwner().getUsername()).append("]\n");
+        for(var k: o.entrySet()) {
             sb.append("\t").append(k.getKey()).append(" = ").append(k.getValue().toString()).append("\n");
         }
         sb.setLength(sb.length()-1);
-        return sb.toString();
+        return sb.toString(); //todo print offerta di do
+    }
+
+    @Override
+    public String getStreamRepresentation() {
+        return this.getOfferMessage(this.offer) + "\nper\n" + this.getOfferMessage(this.offer.getLinkedOffer());
     }
 }
