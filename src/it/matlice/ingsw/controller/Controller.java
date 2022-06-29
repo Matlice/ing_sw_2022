@@ -293,13 +293,7 @@ public class Controller {
             return true;
         }
 
-        var actions = selected_offers
-                .stream()
-                .map((p) -> new MenuAction<>(p.toString() + "\nper\n" + p.getLinkedOffer().toString(), () -> p))
-                .collect(Collectors.toCollection(ArrayList::new));
-        actions.add(0, new MenuAction<>("Esci", () -> null, false, 0, -1));
-
-        var offer = this.chooseAndRun(actions, "Scegliere una proposta di scambio da accettare?");
+        var offer = this.view.selectItem("Scegliere una proposta di scambio da accettare?", "Annulla", selected_offers);
         if (offer == null) {
             return true;
         }
