@@ -3,10 +3,14 @@ package it.matlice.ingsw.view.stream;
 import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
 import it.matlice.ingsw.controller.WarningType;
+import it.matlice.ingsw.model.data.Category;
+import it.matlice.ingsw.model.data.Hierarchy;
+import it.matlice.ingsw.model.data.Message;
+import it.matlice.ingsw.model.data.Offer;
 import it.matlice.ingsw.view.InfoFactory;
-import it.matlice.ingsw.view.Representable;
 import it.matlice.ingsw.view.View;
 import it.matlice.ingsw.view.menu.Menu;
+import it.matlice.ingsw.view.stream.datatypes.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintStream;
@@ -26,15 +30,33 @@ public class StreamView implements View {
     private final Scanner in;
     private final ConversionMap conversionMap;
     private final InfoFactory infoFactory;
+    private final DataTypeConverter converter;
 
     /**
      * Costruttore per StreamView
-     * @param out stream di output verso l'utente
-     * @param in stream di input dall'utente
+     *
+     * @param out       stream di output verso l'utente
+     * @param in        stream di input dall'utente
+     * @param converter
      */
-    public StreamView(PrintStream out, Scanner in) {
+    public StreamView(PrintStream out, Scanner in, DataTypeConverter converter) {
         this.out = out;
         this.in = in;
+        this.converter = converter;
+        this.conversionMap = new ConversionMap();
+        this.infoFactory = new StreamInfoFactory(this);
+    }
+
+    public StreamView(PrintStream out, Scanner in) {
+        var c = new DataTypeConverter();
+        c.registerConverter(Category.class, o -> new StreamCategoryAdapter((Category) o));
+        c.registerConverter(Hierarchy.class, o -> new StreamHierarchyAdapter((Hierarchy) o));
+        c.registerConverter(Message.class, o -> new StreamMessageAdapter((Message) o));
+        c.registerConverter(Offer.class, o -> new StreamOfferAdapter((Offer) o));
+
+        this.out = out;
+        this.in = in;
+        this.converter = c;
         this.conversionMap = new ConversionMap();
         this.infoFactory = new StreamInfoFactory(this);
     }
@@ -349,16 +371,17 @@ public class StreamView implements View {
     }
 
     @Override
-    public <V extends Representable> V selectItem(String prompt, String cancel, List<@NotNull V> items) {
+    public <V> V selectItem(String prompt, String cancel, List<@NotNull V> items) {
         var actions = items
                 .stream()
-                .map((p) -> {
-                    assert p instanceof StreamRepresentable;
-                    return new MenuAction<V>(((StreamRepresentable) p).getStreamRepresentation(), () -> p);
-                })
+                .map((p) -> new MenuAction<V>(this.converter.getViewType(p).getStreamRepresentation(), () -> p))
                 .collect(Collectors.toCollection(ArrayList::new));
         if(cancel != null)
             actions.add(0, new MenuAction<>(cancel, () -> null, false, 0, -1));
         return this.chooseOption(actions, prompt).getAction().run();
+    }
+
+    public DataTypeConverter getConverter() {
+        return this.converter;
     }
 }

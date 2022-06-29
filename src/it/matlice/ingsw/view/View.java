@@ -1,15 +1,12 @@
 package it.matlice.ingsw.view;
 
-import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
 import it.matlice.ingsw.controller.WarningType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Interfaccia per la view dell'applicazione
@@ -199,5 +196,5 @@ public interface View {
      * @param items      oggetti tra cui scegliere
      * @return oggetto selezionato
      */
-    public <V extends Representable> V selectItem(String prompt, String cancel, List<@NotNull V> items);
+    public <V> V selectItem(String prompt, String cancel, List<@NotNull V> items);
 }

@@ -1,6 +1,7 @@
 package it.matlice.ingsw.view.stream;
 
 import it.matlice.ingsw.model.data.Hierarchy;
+import it.matlice.ingsw.view.stream.datatypes.DataTypeConverter;
 
 public class StreamMessageShowHierarchy extends AStreamMessage {
 
@@ -13,6 +14,6 @@ public class StreamMessageShowHierarchy extends AStreamMessage {
 
     @Override
     public String getMessage() {
-         return this.hierarchy.getRootCategory().getStreamRepresentation();
+         return this.getView().getConverter().getViewType(this.hierarchy.getRootCategory()).getStreamRepresentation();
     }
 }
