@@ -3,6 +3,7 @@ package it.matlice.ingsw.view;
 import it.matlice.ingsw.model.data.Hierarchy;
 import it.matlice.ingsw.model.data.Interval;
 import it.matlice.ingsw.model.data.Settings;
+import it.matlice.ingsw.model.data.impl.jdbc.XMLImport;
 
 import java.util.Calendar;
 
@@ -14,6 +15,8 @@ public interface InfoFactory {
     IMessage getRetractedExchangeMessage();
     IMessage getAvailableDaysMessage(Iterable<Settings.Day> days);
     IMessage getAvailableIntervalsMessage(Iterable<Interval> intervals);
-    IMessage getShowHierarchyMessage(Hierarchy hierarchy);
+    IMessage getConfigurationMessage(Settings settings);
+    IMessage getHierarchyInformationMessage(Hierarchy hierarchy);
+    IMessage getMessageHierarchyImportFullfilled(XMLImport.HierarchyXML hierarchy);
 
 }

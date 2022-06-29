@@ -1,10 +1,12 @@
 package it.matlice.ingsw.model.data;
 
+import it.matlice.ingsw.view.stream.StreamRepresentable;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public abstract class Message {
+public abstract class Message implements StreamRepresentable {
 
     public abstract Offer getReferencedOffer();
     public abstract String getLocation();
@@ -13,7 +15,7 @@ public abstract class Message {
     public abstract boolean hasReply();
 
     @Override
-    public String toString() {
+    public String getStreamRepresentation() {
         return String.format(
                 "Da %s: Proposta di scambio di\n\t%s\n\tper\n\t%s il %s alle ore %s in %s",
                 this.getReferencedOffer().getLinkedOffer().getOwner().getUsername(),

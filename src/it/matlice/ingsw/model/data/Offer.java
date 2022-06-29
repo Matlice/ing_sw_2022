@@ -1,10 +1,12 @@
 package it.matlice.ingsw.model.data;
 
+import it.matlice.ingsw.view.stream.StreamRepresentable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class Offer extends HashMap<String, Object> {
+public abstract class Offer extends HashMap<String, Object> implements StreamRepresentable {
 
     public abstract String getName();
     public abstract User getOwner();
@@ -14,7 +16,7 @@ public abstract class Offer extends HashMap<String, Object> {
     public abstract Long getProposedTime();
 
     @Override
-    public String toString() {
+    public String getStreamRepresentation() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getName()).append(" (").append(this.getCategory().fullToString()).append(") [").append(this.getStatus().getName()).append(" di ").append(this.getOwner().getUsername()).append("]\n");
         for(var k: this.entrySet()) {

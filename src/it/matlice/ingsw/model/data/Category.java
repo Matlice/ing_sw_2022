@@ -1,5 +1,6 @@
 package it.matlice.ingsw.model.data;
 
+import it.matlice.ingsw.view.stream.StreamRepresentable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -16,7 +17,7 @@ import java.util.*;
  * - get() ritorna il membro dal nodo, e se questo non è presente prova a recuperarlo da un antenato
  * - funzionamento analogo per remove() e containsKey() e clear()
  */
-public abstract class Category extends HashMap<String, TypeDefinition> {
+public abstract class Category extends HashMap<String, TypeDefinition> implements StreamRepresentable {
 
     private NodeCategory father = null;
 
@@ -161,16 +162,6 @@ public abstract class Category extends HashMap<String, TypeDefinition> {
     }
 
     /**
-     * Formatta la categoria in una stringa secondo una struttura ad albero
-     * @return stringa rappresentante la categoria
-     */
-    public String toString(){
-        var sb = new StringBuilder();
-        this.categoryToString(sb, 0, "");
-        return sb.toString();
-    }
-
-    /**
      * Passo ricorsivo della formattazione della categoria a stringa,
      * genera la riga per il livello corrente e richiama se stesso sul livello inferiore
      * @param sb StringBuilder su cui scrivere la stringa
@@ -204,4 +195,10 @@ public abstract class Category extends HashMap<String, TypeDefinition> {
     }
 
     public abstract boolean isValidChildCategoryName(String name);
+
+    public String getStreamRepresentation(){
+        var sb = new StringBuilder();
+        this.categoryToString(sb, 0, "");
+        return sb.toString();
+    }
 }

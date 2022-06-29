@@ -227,7 +227,7 @@ public class Controller {
      * @return true
      */
     private boolean createConfigurator() {
-        var username = this.view.get("Nome utente");
+        var username = this.view.get("Nome utente");//todo?
         try {
             String password = this.model.addConfiguratorUser(username, false);
             this.view.getInfoFactory().getFirstAccessCredentialsMessage(username, password).show();
@@ -254,7 +254,7 @@ public class Controller {
             this.view.warn(NO_OFFERS_IN_EXCHANGE);
             return true;
         }
-        var offerToTrade = this.selectItem("Quale offerta si vuole proporre in scambio?", "Esci", userOffers);
+        var offerToTrade = this.view.selectItem("Quale offerta si vuole proporre in scambio?", "Esci", userOffers);
         if (offerToTrade == null) {
             return true;
         }
@@ -265,7 +265,7 @@ public class Controller {
             this.view.warn(NO_OFFERS_IN_EXCHANGE);
             return true;
         }
-        var offerToAccept = this.selectItem("Quale offerta si vuole accettare in scambio?", "Esci", offers);
+        var offerToAccept = this.view.selectItem("Quale offerta si vuole accettare in scambio?", "Esci", offers);
         if (offerToAccept == null) {
             return true;
         }
@@ -369,7 +369,7 @@ public class Controller {
             return true;
         }
 
-        var replyto = this.selectItem("A quale messaggio si vuol rispondere?", "Annulla", messages);
+        var replyto = this.view.selectItem("A quale messaggio si vuol rispondere?", "Annulla", messages);
         if (replyto == null) {
             return true;
         }
@@ -434,7 +434,7 @@ public class Controller {
         }
 
         // permette all'utente di scegliere quale offerta ritirare
-        var offerToRetract = this.selectItem("Quale offerta si vuole ritirare?", "Esci", offers);
+        var offerToRetract = this.view.selectItem("Quale offerta si vuole ritirare?", "Esci", offers);
         if (offerToRetract == null) return true;
 
         this.model.retractOffer(offerToRetract);
@@ -540,16 +540,8 @@ public class Controller {
             return true;
         }
 
-        // scelta della gerarchia da visualizzare
-        this.view.chooseOption(
-                hierarchies.stream()
-                        .map((e) -> new MenuAction<>(e.getRootCategory().getName(), () -> {
-                            this.view.getInfoFactory().getShowHierarchyMessage(e);
-                            return true;
-                        }))
-                        .collect(Collectors.toList()),
-                "Quale gerarchia si vuole visualizzare?"
-        ).getAction().run();
+        var hierarchy = this.view.selectItem("Quale gerarchia si vuole visualizzare?", null, hierarchies);
+        this.view.getInfoFactory().getHierarchyInformationMessage(hierarchy).show();
 
         return true;
     }
@@ -560,14 +552,7 @@ public class Controller {
      * @return true
      */
     private boolean showConfParameters() {
-        Settings s = this.model.readSettings();
-
-        this.view.info("La piazza di scambio è " + s.getCity());
-        this.view.showList("I luoghi disponibili per lo scambio sono i seguenti:", s.getLocations());
-        this.view.showList("I giorni disponibili per lo scambio sono i seguenti:", s.getDays().stream().map(Settings.Day::getName).toList());
-        this.view.showList("Gli intervalli disponibili per lo scambio sono i seguenti:", s.getIntervals().stream().map(Interval::toString).toList());
-        this.view.info("La scadenza è impostata a " + s.getDue() + " giorni", true);
-
+        this.view.getInfoFactory().getConfigurationMessage(this.model.readSettings()).show();
         return true;
     }
 
@@ -625,7 +610,7 @@ public class Controller {
                 config.hierarchies.forEach((e) -> {
                     try {
                         this.createHierarchyFromXML(e);
-                        this.view.info(String.format("Gerarchia %s importata correttamente!", e.root.name));
+                        this.view.getInfoFactory().getMessageHierarchyImportFullfilled(e);
                     } catch (DuplicateCategoryException ex) {
                         this.view.error(DUPLICATE_CATEGORY);
                     } catch (InvalidCategoryException ex) {
@@ -1112,31 +1097,11 @@ public class Controller {
      * @param offers list of offers
      */
     private void showOffers(String prompt, List<Offer> offers) {
-
         if (offers.size() == 0) {
             this.view.warn(NO_OFFER_FOUND);
             return;
         }
-
         this.view.showList(prompt, offers);
-    }
-
-    /**
-     * Permette all'utente di scegliere un'oggetto da una lista di oggetti
-     * Ritorna null se l'utente vuole annullare l'operazione
-     *
-     * @param prompt messaggio per l'utente
-     * @param cancel messaggio per annullare
-     * @param items  oggetti tra cui scegliere
-     * @return oggetto selezionato
-     */
-    private <V> V selectItem(String prompt, String cancel, List<@NotNull V> items) {
-        var actions = items
-                .stream()
-                .map((p) -> new MenuAction<>(p.toString(), () -> p))
-                .collect(Collectors.toCollection(ArrayList::new));
-        actions.add(0, new MenuAction<>(cancel, () -> null, false, 0, -1));
-        return this.chooseAndRun(actions, prompt);
     }
 
 }

@@ -1,15 +1,11 @@
 package it.matlice.ingsw.view.stream;
 
-import it.matlice.ingsw.model.data.Settings;
-
-import java.util.StringJoiner;
-
-public class MessageFirstAccessCredentials extends AStreamMessage {
+public class StreamMessageFirstAccessCredentials extends AStreamMessage {
 
     private final String user;
     private final String password;
 
-    public MessageFirstAccessCredentials(StreamView view, String user, String password) {
+    public StreamMessageFirstAccessCredentials(StreamView view, String user, String password) {
         super(view);
         this.user = user;
         this.password = password;

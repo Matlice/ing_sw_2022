@@ -4,6 +4,7 @@ import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
 import it.matlice.ingsw.controller.WarningType;
 import it.matlice.ingsw.view.InfoFactory;
+import it.matlice.ingsw.view.Representable;
 import it.matlice.ingsw.view.View;
 import it.matlice.ingsw.view.menu.Menu;
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static it.matlice.ingsw.controller.ErrorType.*;
 
@@ -346,4 +348,17 @@ public class StreamView implements View {
         return (MenuAction<T>) answ;
     }
 
+    @Override
+    public <V extends Representable> V selectItem(String prompt, String cancel, List<@NotNull V> items) {
+        var actions = items
+                .stream()
+                .map((p) -> {
+                    assert p instanceof StreamRepresentable;
+                    return new MenuAction<V>(((StreamRepresentable) p).getStreamRepresentation(), () -> p);
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
+        if(cancel != null)
+            actions.add(0, new MenuAction<>(cancel, () -> null, false, 0, -1));
+        return this.chooseOption(actions, prompt).getAction().run();
+    }
 }

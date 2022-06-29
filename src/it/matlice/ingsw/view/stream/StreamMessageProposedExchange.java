@@ -5,13 +5,13 @@ import it.matlice.ingsw.model.data.Settings;
 
 import java.util.Calendar;
 
-public class MessageStreamProposedExchangeReply extends AStreamMessage {
+public class StreamMessageProposedExchange extends AStreamMessage {
 
     private final Calendar date;
     private final Settings.Day day;
     private final Interval.Time time;
 
-    public MessageStreamProposedExchangeReply(StreamView view, Calendar date, Settings.Day day, Interval.Time time) {
+    public StreamMessageProposedExchange(StreamView view, Calendar date, Settings.Day day, Interval.Time time) {
         super(view);
         this.date = date;
         this.day = day;
@@ -20,7 +20,7 @@ public class MessageStreamProposedExchangeReply extends AStreamMessage {
 
     @Override
     public String getMessage() {
-        return String.format("Controproposta per il giorno %s %02d/%02d alle ore %s\n",
+        return String.format("Proposto lo scambio per il giorno %s %02d/%02d alle ore %s\n",
                 this.day.getName(),
                 this.date.get(Calendar.DAY_OF_MONTH),
                 this.date.get(Calendar.MONTH) + 1,

@@ -4,11 +4,11 @@ import it.matlice.ingsw.model.data.Settings;
 
 import java.util.StringJoiner;
 
-public class MessageAvailableDays extends AStreamMessage {
+public class StreamMessageAvailableDays extends AStreamMessage {
 
     private final Iterable<Settings.Day> days;
 
-    public MessageAvailableDays(StreamView view, Iterable<Settings.Day> days) {
+    public StreamMessageAvailableDays(StreamView view, Iterable<Settings.Day> days) {
         super(view);
         this.days = days;
     }

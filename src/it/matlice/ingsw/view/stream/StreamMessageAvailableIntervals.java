@@ -1,15 +1,14 @@
 package it.matlice.ingsw.view.stream;
 
 import it.matlice.ingsw.model.data.Interval;
-import it.matlice.ingsw.model.data.Settings;
 
 import java.util.StringJoiner;
 
-public class MessageAvailableIntervals extends AStreamMessage {
+public class StreamMessageAvailableIntervals extends AStreamMessage {
 
     private final Iterable<Interval> intervals;
 
-    public MessageAvailableIntervals(StreamView view, Iterable<Interval> intervals) {
+    public StreamMessageAvailableIntervals(StreamView view, Iterable<Interval> intervals) {
         super(view);
         this.intervals = intervals;
     }
