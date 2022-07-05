@@ -409,7 +409,7 @@ public class StreamView implements View {
                 .stream()
                 .map((p) -> new MenuEntryWrapper(this.converter.getViewType(p).getStreamRepresentation(), (in, out, ref) -> new MenuAction<V>(null, () -> p))) //TODO
                 .collect(Collectors.toCollection(ArrayList::new));
-        if(exit != null) actions.add(0, new MenuEntryWrapper(this.conversionMap.convertMenuToString(exit), (in, out, ref) -> null, false, 0, -1));
+        if(exit != null) actions.add(0, new MenuEntryWrapper(this.conversionMap.convertMenuToString(exit), (in, out, ref) -> new MenuAction<V>(null, () -> null), false, 0, -1));
         return ((MenuAction<V>) this.choose(actions, prompt)).getAction().run();
     }
 

@@ -495,6 +495,7 @@ public class Controller {
                 new PrivilegedMenuAction<>(ADD_CATEGORY_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
         ), ADD_HIERARCHY_PROMPT)) {
             List<Category> path = this.view.selectItem(SELECT_FATHER_HIERARCHY_PROMPT, this.getCategorySelectionMenu(root));
+            if (path == null) continue;
             Category father = path.get(path.size() - 1);
             if (father == null) continue;
 
@@ -860,7 +861,7 @@ public class Controller {
         var type = TypeDefinition.TypeAssociation.values()[0];
 
         if (TypeDefinition.TypeAssociation.values().length >= 2) {
-            type = this.view.selectItem(SELECT_TYPE_PROMPT, Arrays.stream(TypeDefinition.TypeAssociation.values()).toList());
+            type = this.view.selectItem(SELECT_TYPE_PROMPT, Arrays.stream(TypeDefinition.TypeAssociation.values()).toList(), null);
         }
 
         // chiede se la compilazione del campo è obbligatoria
@@ -1009,7 +1010,7 @@ public class Controller {
      * @return la categoria foglia scelta
      */
     private LeafCategory chooseLeafCategory(PromptType prompt) {
-        return this.view.selectItem(prompt, this.model.getLeafCategories());
+        return this.view.selectItem(prompt, this.model.getLeafCategories(), null);
         /*return this.view.chooseOption(
                 this.model.getLeafCategories().stream()
                         .map((e) -> new MenuAction<>(e.fullToString(), () -> e))

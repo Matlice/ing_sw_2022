@@ -38,12 +38,13 @@ public class StreamCategoryAdapter implements StreamDataType {
             sb.append(sj);
             sb.append(">");
         }
-        sb.append("\n");
 
-        if(c instanceof NodeCategory)
+        if(c instanceof NodeCategory) {
             for (Category child : ((NodeCategory) c).getChildren()) {
+                sb.append("\n");
                 this.categoryToString(child, sb, level + 1, "");
             }
+        }
     }
 
     @Override
