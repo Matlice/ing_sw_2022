@@ -15,6 +15,6 @@ public class StreamCategoryChainAdapter implements StreamDataType{
 
     @Override
     public String getStreamRepresentation() {
-        return this.categories.stream().map(Category::getName).reduce((a, b) -> a + " -> " + b).orElse("");
+        return this.categories.stream().map(Category::getName).reduce((a, b) -> a + " > " + b).orElse("");
     }
 }
