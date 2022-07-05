@@ -2,6 +2,7 @@ package it.matlice.ingsw.view.stream;
 
 import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
+import it.matlice.ingsw.controller.PromptType;
 import it.matlice.ingsw.controller.WarningType;
 import it.matlice.ingsw.model.data.Category;
 import it.matlice.ingsw.model.data.Hierarchy;
@@ -53,6 +54,8 @@ public class StreamView implements View {
         c.registerConverter(Hierarchy.class, o -> new StreamHierarchyAdapter((Hierarchy) o));
         c.registerConverter(Message.class, o -> new StreamMessageAdapter((Message) o));
         c.registerConverter(Offer.class, o -> new StreamOfferAdapter((Offer) o));
+        c.registerConverter(String.class, o -> new StreamStringAdapter((String) o));
+
 
         this.out = out;
         this.in = in;
@@ -351,7 +354,7 @@ public class StreamView implements View {
      * @return l'azione scelta dall'utente
      */
     @Override
-    public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, String prompt) {
+    public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, PromptType prompt) {
         Menu menu = new Menu();
         for (var act : choices) {
             if (act.getIndex() == null) {
@@ -360,7 +363,7 @@ public class StreamView implements View {
                 menu.addEntry(act.getIndex(), act.getName(), (in, out, ref) -> act, act.getPosition()).disable(act.isDisabled());
             }
         }
-        menu.setPrompt(prompt);
+        menu.setPrompt(this.conversionMap.convertPromptToString(prompt));
         Object answ = menu.displayOnce(this.in, this.out);
         while (answ == null) {
             this.error(ACTION_NOT_ALLOWED);
@@ -371,13 +374,12 @@ public class StreamView implements View {
     }
 
     @Override
-    public <V> V selectItem(String prompt, String cancel, List<@NotNull V> items) {
+    public <V> V selectItem(PromptType prompt, List<@NotNull V> items) {
         var actions = items
                 .stream()
                 .map((p) -> new MenuAction<V>(this.converter.getViewType(p).getStreamRepresentation(), () -> p))
                 .collect(Collectors.toCollection(ArrayList::new));
-        if(cancel != null)
-            actions.add(0, new MenuAction<>(cancel, () -> null, false, 0, -1));
+        actions.add(0, new MenuAction<>("Esci", () -> null, false, 0, -1));
         return this.chooseOption(actions, prompt).getAction().run();
     }
 

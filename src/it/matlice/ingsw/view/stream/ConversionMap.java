@@ -1,17 +1,20 @@
 package it.matlice.ingsw.view.stream;
 
 import it.matlice.ingsw.controller.ErrorType;
+import it.matlice.ingsw.controller.PromptType;
 import it.matlice.ingsw.controller.WarningType;
 
 import java.util.HashMap;
 
 import static it.matlice.ingsw.controller.ErrorType.*;
 import static it.matlice.ingsw.controller.WarningType.*;
+import static it.matlice.ingsw.controller.PromptType.*;
 
 public class ConversionMap {
 
     private final HashMap<WarningType, String> warnMap = new HashMap<>();
     private final HashMap<ErrorType, String> errorMap = new HashMap<>();
+    private final HashMap<PromptType, String> promptMap = new HashMap<>();
 
     public ConversionMap() {
         this.warnMap.put(NEED_CHANGE_PASSWORD, "Cambia le credenziali di accesso");
@@ -63,6 +66,24 @@ public class ConversionMap {
         this.errorMap.put(INVALID_VALUE, "Valore non valido");
         this.errorMap.put(DUPLICATE_VALUE, "Valore già inserito");
         this.errorMap.put(NO_LEAF_CATEGORY, "Non ci sono ancora categorie a cui associare un articolo. Contattare un configuratore");
+
+        this.promptMap.put(SELECT_OPTION_PROMPT, "Scegliere un'opzione");
+        this.promptMap.put(SELECT_OPTION_AFTER_LOGIN_PROMPT, "Benvenuto! Scegli un'opzione");
+        this.promptMap.put(SELECT_FATHER_HIERARCHY_PROMPT, "Selezionare la categoria padre");
+        this.promptMap.put(ADD_HIERARCHY_PROMPT, "Si vuole aggiungere una nuova categoria?\n(nota: una categoria non può avere una sola sottocategoria)");
+        this.promptMap.put(ADD_NATIVE_FIELD_PROMPT, "Si vuole aggiungere un campo nativo?");
+        this.promptMap.put(IMPORT_CONFIGURATION_PROMPT, "Si vuole importare la configurazione da file?");
+        this.promptMap.put(SELECT_PLACE_PROMPT, "Luogo di scambio");
+        this.promptMap.put(SELECT_TYPE_PROMPT, "Seleziona un tipo");
+        this.promptMap.put(SELECT_FIELD_OR_SAVE_PROMPT, "Scegliere quale campo si vuole compilare (oppure salva)");
+        this.promptMap.put(SELECT_CATEGORY_PROMPT, "A quale categoria appartiene l'articolo da creare?");
+        this.promptMap.put(SELECT_CATEGORY_FOR_OFFERS_PROMPT, "Di quale categoria si vogliono visualizzare le offerte aperte?");
+        this.promptMap.put(SELECT_OFFER_TO_PROPOSE_PROMPT, "Quale offerta si vuole proporre in scambio?");
+        this.promptMap.put(SELECT_OFFER_TO_ACCEPT_PROMPT, "Quale offerta si vuole accettare in scambio?");
+        this.promptMap.put(SELECT_MESSAGE_PROMPT, "A quale messaggio si vuol rispondere?");
+        this.promptMap.put(SELECT_OFFER_TO_RETRIEVE_PROMPT, "Quale offerta si vuole ritirare?");
+        this.promptMap.put(SELECT_HIERARCHY_PROMPT, "Quale gerarchia si vuole visualizzare?");
+        this.promptMap.put(EMPTY_PROMPT, "");
     }
 
     public String convertWarningToString(WarningType warn) {
@@ -73,6 +94,12 @@ public class ConversionMap {
 
     public String convertErrorToString(ErrorType err) {
         String r = this.errorMap.get(err);
+        assert r != null;
+        return r;
+    }
+
+    public String convertPromptToString(PromptType prompt) {
+        String r = this.promptMap.get(prompt);
         assert r != null;
         return r;
     }

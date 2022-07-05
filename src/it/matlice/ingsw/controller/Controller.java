@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static it.matlice.ingsw.controller.ErrorType.*;
+import static it.matlice.ingsw.controller.PromptType.*;
 import static it.matlice.ingsw.controller.WarningType.*;
 
 public class Controller {
@@ -81,11 +82,11 @@ public class Controller {
             this.model.timeIteration();
 
         if (!this.currentUser.isValid())
-            return this.chooseAndRun(this.public_actions, "Scegliere un'opzione");
+            return this.chooseAndRun(this.public_actions, SELECT_OPTION_PROMPT);
 
         return this.chooseAndRun(
                 this.user_actions,
-                String.format("Benvenuto %s. Scegli un'opzione", this.currentUser.getUser().getUsername())
+                SELECT_OPTION_AFTER_LOGIN_PROMPT
         );
     }
 
@@ -254,7 +255,7 @@ public class Controller {
             this.view.warn(NO_OFFERS_IN_EXCHANGE);
             return true;
         }
-        var offerToTrade = this.view.selectItem("Quale offerta si vuole proporre in scambio?", "Esci", userOffers);
+        var offerToTrade = this.view.selectItem(SELECT_OFFER_TO_PROPOSE_PROMPT, userOffers);
         if (offerToTrade == null) {
             return true;
         }
@@ -265,7 +266,7 @@ public class Controller {
             this.view.warn(NO_OFFERS_IN_EXCHANGE);
             return true;
         }
-        var offerToAccept = this.view.selectItem("Quale offerta si vuole accettare in scambio?", "Esci", offers);
+        var offerToAccept = this.view.selectItem(SELECT_OFFER_TO_ACCEPT_PROMPT, offers);
         if (offerToAccept == null) {
             return true;
         }
@@ -293,7 +294,7 @@ public class Controller {
             return true;
         }
 
-        var offer = this.view.selectItem("Scegliere una proposta di scambio da accettare?", "Annulla", selected_offers);
+        var offer = this.view.selectItem(SELECT_OFFER_TO_ACCEPT_PROMPT, selected_offers);
         if (offer == null) {
             return true;
         }
@@ -317,7 +318,7 @@ public class Controller {
                 places.stream()
                         .map((e) -> new MenuAction<>(e, () -> e))
                         .collect(Collectors.toList()),
-                "Luogo di scambio"
+                SELECT_PLACE_PROMPT
         ).getAction().run();
     }
 
@@ -363,7 +364,7 @@ public class Controller {
             return true;
         }
 
-        var replyto = this.view.selectItem("A quale messaggio si vuol rispondere?", "Annulla", messages);
+        var replyto = this.view.selectItem(SELECT_MESSAGE_PROMPT, messages);
         if (replyto == null) {
             return true;
         }
@@ -373,7 +374,7 @@ public class Controller {
         actions.add(new MenuAction<>("Accetta lo scambio", () -> true));
         actions.add(new MenuAction<>("Fai una controproposta", () -> false));
 
-        var accept = this.chooseAndRun(actions, "Cosa si vuol fare?");
+        var accept = this.chooseAndRun(actions, SELECT_OPTION_PROMPT);
         if (accept == null) {
             return true;
         }
@@ -409,7 +410,7 @@ public class Controller {
             this.view.error(NO_LEAF_CATEGORY);
             return true;
         }
-        LeafCategory cat = this.chooseLeafCategory("A quale categoria appartiene l'articolo da creare?");
+        LeafCategory cat = this.chooseLeafCategory(SELECT_CATEGORY_PROMPT);
         this.addArticle(cat);
         return true;
     }
@@ -428,7 +429,7 @@ public class Controller {
         }
 
         // permette all'utente di scegliere quale offerta ritirare
-        var offerToRetract = this.view.selectItem("Quale offerta si vuole ritirare?", "Esci", offers);
+        var offerToRetract = this.view.selectItem(SELECT_OFFER_TO_RETRIEVE_PROMPT, offers);
         if (offerToRetract == null) return true;
 
         this.model.retractOffer(offerToRetract);
@@ -460,7 +461,7 @@ public class Controller {
             this.view.warn(NO_LEAF_CATEGORIES_TO_SHOW);
             return true;
         }
-        LeafCategory cat = this.chooseLeafCategory("Di quale categoria si vogliono visualizzare le offerte aperte?");
+        LeafCategory cat = this.chooseLeafCategory(SELECT_CATEGORY_FOR_OFFERS_PROMPT);
         List<Offer> offers = this.model.getOffersByCategory(cat)
                 .stream()
                 .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED)
@@ -495,8 +496,8 @@ public class Controller {
         while (this.chooseAndRun(Arrays.asList(
                 new PrivilegedMenuAction<>("Salva ed esci", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, !root.isCategoryValid(), 0, -1),
                 new PrivilegedMenuAction<>("Aggiungi nuova categoria", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
-        ), "Si vuole aggiungere una nuova categoria?\n(nota: una categoria non può avere una sola sottocategoria)")) {
-            Category father = this.chooseAndRun(this.getCategorySelectionMenu(root), "Selezionare la categoria padre");
+        ), ADD_HIERARCHY_PROMPT)) {
+            Category father = this.chooseAndRun(this.getCategorySelectionMenu(root), SELECT_FATHER_HIERARCHY_PROMPT);
             if (father == null) continue;
 
             NodeCategory r = null;
@@ -534,7 +535,8 @@ public class Controller {
             return true;
         }
 
-        var hierarchy = this.view.selectItem("Quale gerarchia si vuole visualizzare?", null, hierarchies);
+        var hierarchy = this.view.selectItem(SELECT_HIERARCHY_PROMPT, hierarchies);
+        if (hierarchy == null) return true;
         this.view.getInfoFactory().getHierarchyInformationMessage(hierarchy).show();
 
         return true;
@@ -740,10 +742,10 @@ public class Controller {
      * Permette di richiedere all'utente un'azione tramite un menu ed eseguire l'azione associata
      *
      * @param actions lista di azioni disponibili
-     * @param prompt  messaggio da comunicare all'utente
+     * @param prompt  tipo di messaggio da comunicare all'utente
      * @return booleano di ritorno dall'azione eseguita
      */
-    private <T> T chooseAndRun(List<MenuAction<T>> actions, String prompt) {
+    private <T> T chooseAndRun(List<MenuAction<T>> actions, PromptType prompt) {
         while (true) {
             var action = this.view.chooseOption(
                     actions.stream()
@@ -831,7 +833,7 @@ public class Controller {
         while (this.chooseAndRun(Arrays.asList(
                 new PrivilegedMenuAction<>("No, torna all'inserimento categorie", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
                 new PrivilegedMenuAction<>("Sì, aggiungi campo nativo", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> this.addField(c))
-        ), "Si vuole aggiungere un campo nativo?")) ;
+        ), ADD_NATIVE_FIELD_PROMPT)) ;
     }
 
     /**
@@ -863,7 +865,7 @@ public class Controller {
             type = this.view.chooseOption(
                     Arrays.stream(TypeDefinition.TypeAssociation.values())
                             .map(e -> (MenuAction<TypeDefinition.TypeAssociation>) new PrivilegedMenuAction<>(e.toString(), new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> e))
-                            .toList(), "Seleziona un tipo").getAction().run();
+                            .toList(), SELECT_TYPE_PROMPT).getAction().run();
         }
 
         // chiede se la compilazione del campo è obbligatoria
@@ -955,7 +957,7 @@ public class Controller {
             boolean toImport = this.chooseAndRun(Arrays.asList(
                     new PrivilegedMenuAction<>("No, aggiungi la configurazione manualmente", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
                     new PrivilegedMenuAction<>("Sì, importa le configurazioni automaticamente", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
-            ), "Si vuole importare la configurazione da file?");
+            ), IMPORT_CONFIGURATION_PROMPT);
 
             if (toImport) {
                 this.importConfiguration(true);
@@ -1005,15 +1007,15 @@ public class Controller {
     /**
      * Premette all'utente di scegliere una categoria foglia
      *
-     * @param message messaggio
+     * @param prompt tipo di messaggio
      * @return la categoria foglia scelta
      */
-    private LeafCategory chooseLeafCategory(String message) {
+    private LeafCategory chooseLeafCategory(PromptType prompt) {
         return this.view.chooseOption(
                 this.model.getLeafCategories().stream()
                         .map((e) -> new MenuAction<>(e.fullToString(), () -> e))
                         .collect(Collectors.toList()),
-                message
+                prompt
         ).getAction().run();
     }
 
@@ -1057,7 +1059,7 @@ public class Controller {
             // scelta del campo da compilare
             saveArticle = this.view.chooseOption(
                     actions,
-                    "Scegliere quale campo si vuole compilare (oppure salva)"
+                    SELECT_FIELD_OR_SAVE_PROMPT
             ).getAction().run();
         } while (needRequiredField || !saveArticle);
 

@@ -2,11 +2,14 @@ package it.matlice.ingsw.view;
 
 import it.matlice.ingsw.controller.ErrorType;
 import it.matlice.ingsw.controller.MenuAction;
+import it.matlice.ingsw.controller.PromptType;
 import it.matlice.ingsw.controller.WarningType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Function;
+
+import static it.matlice.ingsw.controller.PromptType.EMPTY_PROMPT;
 
 /**
  * Interfaccia per la view dell'applicazione
@@ -175,7 +178,7 @@ public interface View {
      * @param <T> tipo generico di ritorno delle azioni possibili
      * @return l'azione scelta dall'utente
      */
-    <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, String prompt);
+    <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices, PromptType prompt);
 
     /**
      * Richiede all'utente la scelta di un'opzione
@@ -184,7 +187,7 @@ public interface View {
      * @return l'azione scelta dall'utente
      */
     default <T> MenuAction<T> chooseOption(List<MenuAction<T>> choices) {
-        return this.chooseOption(choices, "");
+        return this.chooseOption(choices, EMPTY_PROMPT);
     }
 
     /**
@@ -192,9 +195,8 @@ public interface View {
      * Ritorna null se l'utente vuole annullare l'operazione
      *
      * @param prompt     messaggio per l'utente
-     * @param cancel     messaggio per annullare
      * @param items      oggetti tra cui scegliere
      * @return oggetto selezionato
      */
-    public <V> V selectItem(String prompt, String cancel, List<@NotNull V> items);
+    public <V> V selectItem(PromptType prompt, List<@NotNull V> items);
 }
