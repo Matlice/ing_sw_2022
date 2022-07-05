@@ -1,9 +1,6 @@
 package it.matlice.ingsw.view.stream;
 
-import it.matlice.ingsw.controller.ErrorType;
-import it.matlice.ingsw.controller.MenuAction;
-import it.matlice.ingsw.controller.PromptType;
-import it.matlice.ingsw.controller.WarningType;
+import it.matlice.ingsw.controller.*;
 import it.matlice.ingsw.model.data.Category;
 import it.matlice.ingsw.model.data.Hierarchy;
 import it.matlice.ingsw.model.data.Message;
@@ -11,6 +8,7 @@ import it.matlice.ingsw.model.data.Offer;
 import it.matlice.ingsw.view.InfoFactory;
 import it.matlice.ingsw.view.View;
 import it.matlice.ingsw.view.menu.Menu;
+import it.matlice.ingsw.view.menu.MenuEntryWrapper;
 import it.matlice.ingsw.view.stream.datatypes.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +18,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static it.matlice.ingsw.controller.ErrorType.*;
+import static it.matlice.ingsw.controller.PromptType.*;
+import static it.matlice.ingsw.controller.MenuType.*;
 
 /**
  * Classe che implementa l'interfaccia View dell'applicazione
@@ -55,6 +55,11 @@ public class StreamView implements View {
         c.registerConverter(Message.class, o -> new StreamMessageAdapter((Message) o));
         c.registerConverter(Offer.class, o -> new StreamOfferAdapter((Offer) o));
         c.registerConverter(String.class, o -> new StreamStringAdapter((String) o));
+        c.registerConverter(List.class, o -> {
+            List l = (List)o;
+            if (!l.isEmpty()  && l.get(0).getClass().equals(Category.class)) return new StreamCategoryChainAdapter(l);
+            return null;
+        });
 
 
         this.out = out;
@@ -107,13 +112,13 @@ public class StreamView implements View {
     /**
      * Show a list of objects as strings
      *
-     * @param message message to show before the list
+     * @param message to show before the list
      * @param list    list of string to show
      */
     @Override
-    public <T> void showList(String message, List<T> list) {
+    public <T> void showList(InfoType message, List<T> list) {
         StringJoiner sj = new StringJoiner("\n\t");
-        sj.add(message);
+        sj.add(this.conversionMap.convertInfoToString(message));
         list.forEach((e) -> {
             sj.add(this.converter.getViewType(e).getStreamRepresentation().replaceAll("\n", "\n\t"));
         });
@@ -129,7 +134,7 @@ public class StreamView implements View {
      */
     @Override
     public String getPassword() {
-        return this.getPassword("Password");
+        return this.getPassword(INSERT_PASSWORD);
     }
 
     /**
@@ -140,7 +145,7 @@ public class StreamView implements View {
      * @return la password inserita
      */
     @Override
-    public String getPassword(String prompt) {
+    public String getPassword(PromptType prompt) {
         String password;
         do {
             password = this.getText(prompt);
@@ -155,11 +160,17 @@ public class StreamView implements View {
      * @return la stringa inserita
      */
     @Override
-    public String get(String prompt) {
-        this.out.print(prompt + "> ");
+    public String get(PromptType prompt) {
+        this.out.print(this.conversionMap.convertPromptToString(prompt) + "> ");
         String r = this.in.next();
         this.in.nextLine();
         return r;
+    }
+
+
+    private String getText(String prompt) {
+        this.out.print(prompt + "> ");
+        return this.in.nextLine();
     }
 
     /**
@@ -170,13 +181,13 @@ public class StreamView implements View {
      * @return la stringa inserita
      */
     @Override
-    public String getText(String prompt) {
-        this.out.print(prompt + "> ");
+    public String getText(PromptType prompt) {
+        this.out.print(this.conversionMap.convertPromptToString(prompt) + "> ");
         return this.in.nextLine();
     }
 
     @Override
-    public String getText(String prompt, Function<String, Boolean> available) {
+    public String getText(PromptType prompt, Function<String, Boolean> available) {
         String in;
         while(!available.apply( in = this.getText(prompt) ))
             this.error(INVALID_VALUE);
@@ -193,7 +204,7 @@ public class StreamView implements View {
      * @return oggetto creato da stringa
      */
     @Override
-    public <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, ErrorType error) {
+    public <V> V getLineWithConversion(PromptType prompt, Function<String, V> conversionMap, ErrorType error) {
         String input;
         while (true) {
             input = this.getText(prompt).trim();
@@ -207,26 +218,6 @@ public class StreamView implements View {
     }
 
     /**
-     * Richiede all'utente l'inserimento di una stringa (a cui sono rimossi i blank iniziali e finali)
-     * Permette di specificare se la stringa immessa deve essere non vuota
-     *
-     * @param prompt messaggio di richiesta all'utente
-     * @param canBeEmpty false if the input string must not be empty
-     * @return la stringa inserita
-     */
-    @Override
-    public String getTrimmedLine(String prompt, boolean canBeEmpty) {
-        String r = this.getText(prompt).trim();
-
-        while (!canBeEmpty && r.length() == 0) {
-            this.error(STRING_MUST_NOT_BE_EMPTY);
-            r = this.getText(prompt).trim();
-        }
-
-        return r;
-    }
-
-    /**
      * Richiede all'utente l'inserimento di un valore intero
      *
      * @param prompt messaggio di richiesta all'utente
@@ -235,7 +226,7 @@ public class StreamView implements View {
      * @return l'intero inserito
      */
     @Override
-    public int getInt(String prompt, Function<Integer, Boolean> available, ErrorType error) {
+    public int getInt(PromptType prompt, Function<Integer, Boolean> available, ErrorType error) {
         this.out.println();
         while (true) {
             try {
@@ -261,7 +252,7 @@ public class StreamView implements View {
      * @return l'intero inserito
      */
     @Override
-    public int getInt(String prompt, Function<Integer, Boolean> available) {
+    public int getInt(PromptType prompt, Function<Integer, Boolean> available) {
         return this.getInt(prompt, available, INVALID_VALUE);
     }
 
@@ -272,7 +263,7 @@ public class StreamView implements View {
      * @return l'intero inserito
      */
     @Override
-    public int getInt(String prompt) {
+    public int getInt(PromptType prompt) {
         return this.getInt(prompt, (e) -> true);
     }
 
@@ -288,12 +279,12 @@ public class StreamView implements View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return lista di oggetti inseriti dall'utente
      */
-    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage) {
+    public <V> List<V> getGenericList(PromptType prompt, boolean unique, Function<String, V> conversionMap, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage) {
         this.out.println();
         String lastInput = "";
         List<V> list = new ArrayList<>();
         while (list.size() < 1 || lastInput.length() != 0) {
-            lastInput = this.getText(prompt + " (oppure nulla per terminare l'inserimento)").trim();
+            lastInput = this.getText(this.conversionMap.convertPromptToString(prompt) + " (oppure nulla per terminare l'inserimento)").trim();
             if (lastInput.length() >= 1) {
                 V toAdd = conversionMap.apply(lastInput);
                 if (!unique || !list.contains(toAdd)) {
@@ -320,7 +311,7 @@ public class StreamView implements View {
      *                      deve ritornare null per valori di stringhe non validi
      * @return lista di oggetti inseriti dall'utente
      */
-    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap) { // todo move to view the conversion map
+    public <V> List<V> getGenericList(PromptType prompt, boolean unique, Function<String, V> conversionMap) { // todo move to view the conversion map
         return this.getGenericList(prompt, unique, conversionMap, DUPLICATE_VALUE, INVALID_VALUE);
     }
 
@@ -332,7 +323,7 @@ public class StreamView implements View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return lista di stringhe inserite dall'utente
      */
-    public List<String> getStringList(String prompt, boolean unique, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage) {
+    public List<String> getStringList(PromptType prompt, boolean unique, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage) {
         return this.getGenericList(prompt, unique, (e) -> e, duplicateErrorMessage, nonValidErrorMessage);
     }
 
@@ -342,8 +333,35 @@ public class StreamView implements View {
      * @param unique true se non ci possono essere ripetizioni
      * @return lista di stringhe inserite dall'utente
      */
-    public List<String> getStringList(String prompt, boolean unique) {
+    public List<String> getStringList(PromptType prompt, boolean unique) {
         return this.getGenericList(prompt, unique, (e) -> e);
+    }
+
+
+    /**
+     * Richiede all'utente la scelta di un'opzione
+     *
+     * @param choices lista di opzioni disponibili tra cui scegliere
+     * @param prompt  prompt della richiesta di scelta
+     * @return l'azione scelta dall'utente
+     */
+    private Object choose(@NotNull List<MenuEntryWrapper> choices, PromptType prompt) {
+        Menu menu = new Menu();
+        for (var act : choices) {
+            if (act.getIndex() == null) {
+                menu.addEntry(act).disable(act.isDisabled());
+            } else {
+                menu.addEntry(act.getIndex(), act , act.getPosition()).disable(act.isDisabled());
+            }
+        }
+        menu.setPrompt(this.conversionMap.convertPromptToString(prompt));
+        Object answ = menu.displayOnce(this.in, this.out);
+        while (answ == null) {
+            this.error(ACTION_NOT_ALLOWED);
+            answ = menu.displayOnce(this.in, this.out);
+        }
+
+        return answ;
     }
 
     /**
@@ -355,12 +373,12 @@ public class StreamView implements View {
      */
     @Override
     public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, PromptType prompt) {
-        Menu menu = new Menu();
+        /*Menu menu = new Menu();
         for (var act : choices) {
             if (act.getIndex() == null) {
-                menu.addEntry(act.getName(), (in, out, ref) -> act).disable(act.isDisabled());
+                menu.addEntry(new MenuEntryWrapper(this.conversionMap.convertMenuToString(act.getType()), (in, out, ref) -> act)).disable(act.isDisabled());
             } else {
-                menu.addEntry(act.getIndex(), act.getName(), (in, out, ref) -> act, act.getPosition()).disable(act.isDisabled());
+                menu.addEntry(act.getIndex(), new MenuEntryWrapper(this.conversionMap.convertMenuToString(act.getType()), (in, out, ref) -> act), act.getPosition()).disable(act.isDisabled());
             }
         }
         menu.setPrompt(this.conversionMap.convertPromptToString(prompt));
@@ -370,17 +388,29 @@ public class StreamView implements View {
             answ = menu.displayOnce(this.in, this.out);
         }
 
-        return (MenuAction<T>) answ;
+        return (MenuAction<T>) answ;*/
+        return (MenuAction<T>) this.choose(choices
+                .stream()
+                .map((e) -> (
+                new MenuEntryWrapper(this.conversionMap.convertMenuToString(e.getType()), (in, out, ref) -> e, e.isDisabled(), e.getIndex(), e.getPosition())
+                ))
+                .toList(), prompt);
     }
 
     @Override
     public <V> V selectItem(PromptType prompt, List<@NotNull V> items) {
+        return this.selectItem(prompt, items, EXIT_ENTRY);
+    }
+
+    //TODO
+    @Override
+    public <V> V selectItem(PromptType prompt, List<@NotNull V> items, MenuType exit) {
         var actions = items
                 .stream()
-                .map((p) -> new MenuAction<V>(this.converter.getViewType(p).getStreamRepresentation(), () -> p))
+                .map((p) -> new MenuEntryWrapper(this.converter.getViewType(p).getStreamRepresentation(), (in, out, ref) -> new MenuAction<V>(null, () -> p))) //TODO
                 .collect(Collectors.toCollection(ArrayList::new));
-        actions.add(0, new MenuAction<>("Esci", () -> null, false, 0, -1));
-        return this.chooseOption(actions, prompt).getAction().run();
+        if(exit != null) actions.add(0, new MenuEntryWrapper(this.conversionMap.convertMenuToString(exit), (in, out, ref) -> null, false, 0, -1));
+        return ((MenuAction<V>) this.choose(actions, prompt)).getAction().run();
     }
 
     public DataTypeConverter getConverter() {

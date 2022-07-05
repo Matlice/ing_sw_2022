@@ -5,6 +5,8 @@ import it.matlice.ingsw.model.data.Settings;
 
 import java.util.StringJoiner;
 
+import static it.matlice.ingsw.controller.InfoType.*;
+
 public class StreamMessageConfiguration extends AStreamMessage {
 
     private Settings settings;
@@ -17,9 +19,9 @@ public class StreamMessageConfiguration extends AStreamMessage {
     @Override
     public void show() {
         this.getView().println("La piazza di scambio è " + this.settings.getCity());
-        this.getView().showList("I luoghi disponibili per lo scambio sono i seguenti:", this.settings.getLocations());
-        this.getView().showList("I giorni disponibili per lo scambio sono i seguenti:", this.settings.getDays().stream().map(Settings.Day::getName).toList());
-        this.getView().showList("Gli intervalli disponibili per lo scambio sono i seguenti:", this.settings.getIntervals().stream().map(Interval::toString).toList());
+        this.getView().showList(PLACES_INFO, this.settings.getLocations());
+        this.getView().showList(DATES_INFO, this.settings.getDays().stream().map(Settings.Day::getName).toList());
+        this.getView().showList(HOURS_INFO, this.settings.getIntervals().stream().map(Interval::toString).toList());
         this.getView().println("");
         this.getView().println("La scadenza è impostata a " + this.settings.getDue() + " giorni");
     }

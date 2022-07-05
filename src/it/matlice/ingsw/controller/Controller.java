@@ -22,8 +22,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static it.matlice.ingsw.controller.ErrorType.*;
+import static it.matlice.ingsw.controller.InfoType.*;
 import static it.matlice.ingsw.controller.PromptType.*;
 import static it.matlice.ingsw.controller.WarningType.*;
+import static it.matlice.ingsw.controller.MenuType.*;
 
 public class Controller {
 
@@ -34,30 +36,30 @@ public class Controller {
     // azioni disponibili del menu principale dell'applicazione
     private final List<MenuAction<Boolean>> user_actions = Arrays.asList(
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
-            new MenuAction<>("Logout", this::logout, false, 0, -1),
-            new PrivilegedMenuAction<>("Proponi uno scambio", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::offerTrade),
-            new PrivilegedMenuAction<>("Accetta uno scambio", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::acceptTrade),
-            new PrivilegedMenuAction<>("Rispondi a un messaggio", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::answerMessage),
-            new PrivilegedMenuAction<>("Aggiungi nuovo articolo", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::createArticle),
-            new PrivilegedMenuAction<>("Ritira un'offerta aperta", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::retractOffer),
-            new PrivilegedMenuAction<>("Mostra le mie offerte", new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::showOffersByUser),
-            new MenuAction<>("Mostra offerte per categoria", this::showOpenOffersByCategory),
-            new PrivilegedMenuAction<>("Aggiungi nuova gerarchia", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::createHierarchy),
-            new MenuAction<>("Mostra gerarchie", this::showHierarchies),
-            new MenuAction<>("Mostra parametri di configurazione", this::showConfParameters),
-            new PrivilegedMenuAction<>("Modifica parametri di configurazione", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::editConfParameters),
-            new PrivilegedMenuAction<>("Importa informazioni da file testuale", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> this.importConfiguration(false)),
-            new PrivilegedMenuAction<>("Aggiungi nuovo configuratore", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::createConfigurator),
+            new MenuAction<>(LOGOUT_ENTRY, this::logout, false, 0, -1),
+            new PrivilegedMenuAction<>(PROPOSE_CHANGE_ENTRY, new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::offerTrade),
+            new PrivilegedMenuAction<>(ACCEPT_CHANGE_ENTRY, new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::acceptTrade),
+            new PrivilegedMenuAction<>(REPLY_MESSAGE_ENTRY, new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::answerMessage),
+            new PrivilegedMenuAction<>(ADD_NEW_ARTICLE_ENTRY, new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::createArticle),
+            new PrivilegedMenuAction<>(RETRIEVE_OPENED_OFFER_ENTRY, new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::retractOffer),
+            new PrivilegedMenuAction<>(SHOW_OFFERS_ENTRY, new User.UserTypes[]{User.UserTypes.CUSTOMER}, this::showOffersByUser),
+            new MenuAction<>(SHOW_OFFERS_BY_CATEGORY_ENTRY, this::showOpenOffersByCategory),
+            new PrivilegedMenuAction<>(ADD_HIERARCHY_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::createHierarchy),
+            new MenuAction<>(SHOW_HIERARCHIES_ENTRY, this::showHierarchies),
+            new MenuAction<>(SHOW_PARAMETERS_ENTRY, this::showConfParameters),
+            new PrivilegedMenuAction<>(EDIT_PARAMETERS_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::editConfParameters),
+            new PrivilegedMenuAction<>(IMPORT_CONFIGURATION_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> this.importConfiguration(false)),
+            new PrivilegedMenuAction<>(ADD_CONFIGURATOR_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, this::createConfigurator),
 
-            new MenuAction<>("Cambia password", this::changePassword)
+            new MenuAction<>(CHANGE_PASSWORD_ENTRY, this::changePassword)
     );
 
     // azioni disponibili inizialmente ad un utente non loggato
     private final List<MenuAction<Boolean>> public_actions = Arrays.asList(
             // "Esci" è ultimo nell'elenco ma con numero di azione zero
-            new MenuAction<>("Esci", () -> false, false, 0, -1),
-            new MenuAction<>("Login", this::performLogin),
-            new MenuAction<>("Registrati", this::registerUser)
+            new MenuAction<>(MenuType.EXIT_ENTRY, () -> false, false, 0, -1),
+            new MenuAction<>(LOGIN_ENTRY, this::performLogin),
+            new MenuAction<>(REGISTER_ENTRY, this::registerUser)
     );
 
     /**
@@ -146,17 +148,11 @@ public class Controller {
 
             var selected = this.model.getSelectedOffers(this.currentUser);
             if (selected.size() > 0) {
-                this.view.showList("Sei stato selezionato per degli scambi!", selected);
+                this.view.showList(BEEN_SELECTED_INFO, selected);
             }
 
             var messages = this.model.getUserMessages(this.currentUser);
-            if (messages.size() > 0) {
-                if (messages.size() == 1) {
-                    this.view.showList("Hai un nuovo messaggio!", messages);
-                } else {
-                    this.view.showList("Hai " + messages.size() + " nuovi messaggi!", messages);
-                }
-            }
+            if (messages.size() > 0) this.view.showList(NEW_MESSAGES_INFO, messages);
         }
     }
 
@@ -166,7 +162,7 @@ public class Controller {
      * @return true
      */
     public boolean registerUser() {
-        var username = this.view.get("Utente");
+        var username = this.view.get(INSERT_USERNAME);
         var psw = this.getNewPassword();
 
         try {
@@ -228,7 +224,7 @@ public class Controller {
      * @return true
      */
     private boolean createConfigurator() {
-        var username = this.view.get("Nome utente");//todo?
+        var username = this.view.get(INSERT_USERNAME);
         try {
             String password = this.model.addConfiguratorUser(username, false);
             this.view.getInfoFactory().getFirstAccessCredentialsMessage(username, password).show();
@@ -314,18 +310,19 @@ public class Controller {
     private String chooseExchangePlace() {
         // exchange place
         var places = this.model.readSettings().getLocations();
-        return this.view.chooseOption(
+        /*return this.view.chooseOption(
                 places.stream()
                         .map((e) -> new MenuAction<>(e, () -> e))
                         .collect(Collectors.toList()),
                 SELECT_PLACE_PROMPT
-        ).getAction().run();
+        ).getAction().run();*/
+        return this.view.selectItem(SELECT_PLACE_PROMPT, places, null);
     }
 
     private Settings.Day chooseExchangeDay() {
         // exchange day
         this.view.getInfoFactory().getAvailableDaysMessage(this.model.readSettings().getDays()).show();
-        return this.view.getLineWithConversion("Giorno di scambio", (e) -> {
+        return this.view.getLineWithConversion(INSERT_DAY_FOR_AFFAIR, (e) -> {
             try {
                 var d = Settings.Day.fromString(e);
                 if (this.model.readSettings().getDays().contains(d)) {
@@ -342,7 +339,7 @@ public class Controller {
     private Interval.Time chooseExchangeTime() {
         // exchange time
         this.view.getInfoFactory().getAvailableIntervalsMessage(this.model.readSettings().getIntervals()).show();
-        return this.view.getLineWithConversion("Ora di scambio", (e) -> {
+        return this.view.getLineWithConversion(INSERT_HOUR_FOR_AFFAIR, (e) -> {
             try {
                 var t = Interval.Time.fromString(e);
                 if (this.model.readSettings().getIntervals().stream().anyMatch((i) -> i.includes(t))) {
@@ -370,9 +367,9 @@ public class Controller {
         }
 
         var actions = new ArrayList<MenuAction<Boolean>>();
-        actions.add(0, new MenuAction<>("Annulla", () -> null, false, 0, -1));
-        actions.add(new MenuAction<>("Accetta lo scambio", () -> true));
-        actions.add(new MenuAction<>("Fai una controproposta", () -> false));
+        actions.add(0, new MenuAction<>(RESTORE_ENTRY, () -> null, false, 0, -1));
+        actions.add(new MenuAction<>(ACCEPT_CHANGE_ENTRY, () -> true));
+        actions.add(new MenuAction<>(SEND_NEW_PROPOSE_ENTRY, () -> false));
 
         var accept = this.chooseAndRun(actions, SELECT_OPTION_PROMPT);
         if (accept == null) {
@@ -446,7 +443,7 @@ public class Controller {
      */
     private boolean showOffersByUser() {
         List<Offer> offers = this.model.getOffersByUser(this.currentUser.getUser());
-        this.showOffers("Le tue offerte sono le seguenti: ", offers);
+        this.showOffers(YOUR_OFFERS_INFO, offers);
         return true;
     }
 
@@ -466,7 +463,7 @@ public class Controller {
                 .stream()
                 .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED)
                 .toList();
-        this.showOffers("Le offerte aperte della categoria sono le seguenti: ", offers);
+        this.showOffers(YOUR_OFFERS_FROM_CATEGORY_INFO, offers);
         return true;
     }
 
@@ -494,10 +491,11 @@ public class Controller {
 
         // creazione delle categorie figlie
         while (this.chooseAndRun(Arrays.asList(
-                new PrivilegedMenuAction<>("Salva ed esci", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, !root.isCategoryValid(), 0, -1),
-                new PrivilegedMenuAction<>("Aggiungi nuova categoria", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
+                new PrivilegedMenuAction<>(SAVE_EXIT_PROMPT, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, !root.isCategoryValid(), 0, -1),
+                new PrivilegedMenuAction<>(ADD_CATEGORY_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
         ), ADD_HIERARCHY_PROMPT)) {
-            Category father = this.chooseAndRun(this.getCategorySelectionMenu(root), SELECT_FATHER_HIERARCHY_PROMPT);
+            List<Category> path = this.view.selectItem(SELECT_FATHER_HIERARCHY_PROMPT, this.getCategorySelectionMenu(root));
+            Category father = path.get(path.size() - 1);
             if (father == null) continue;
 
             NodeCategory r = null;
@@ -766,7 +764,7 @@ public class Controller {
      * @return true se l'utente si è autenticato
      */
     private boolean login() {
-        var username = this.view.get("Utente");
+        var username = this.view.get(INSERT_USERNAME);
 
         List<AuthMethod> authType;
         try {
@@ -798,9 +796,9 @@ public class Controller {
     private @NotNull String getNewPassword() {
         String psw;
         while (true) {
-            psw = this.view.getPassword("Nuova password");
+            psw = this.view.getPassword(INSERT_NEW_PASSWORD);
 
-            if (!psw.equals(this.view.getPassword("Ripeti la password"))) {
+            if (!psw.equals(this.view.getPassword(INSERT_REPEATED_PASSWORD))) {
                 this.view.error(PASSWORD_NOT_SAME);
                 continue;
             }
@@ -831,8 +829,8 @@ public class Controller {
      */
     private void makeFields(Category c) {
         while (this.chooseAndRun(Arrays.asList(
-                new PrivilegedMenuAction<>("No, torna all'inserimento categorie", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
-                new PrivilegedMenuAction<>("Sì, aggiungi campo nativo", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> this.addField(c))
+                new PrivilegedMenuAction<>(GO_BACK_TO_CATEGORY_LIST_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
+                new PrivilegedMenuAction<>(ADD_NATIVE_FIELD_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> this.addField(c))
         ), ADD_NATIVE_FIELD_PROMPT)) ;
     }
 
@@ -846,10 +844,10 @@ public class Controller {
         // scelta del nome del campo, non deve essere già esistente tra i padri della categoria
         String name = null;
         while (name == null) {
-            name = this.view.getText("Nome campo").trim();
+            name = this.view.getText(INSERT_FIELD_NAME_PROMPT).trim();
             while (name.length() == 0) {
                 this.view.warn(NO_EMPTY_NAME);
-                name = this.view.getText("Nome campo").trim();
+                name = this.view.getText(INSERT_FIELD_NAME_PROMPT).trim();
             }
             if (c.containsKey(name)) {
                 this.view.error(DUPLICATE_FIELD_IN_CATEGORY);
@@ -862,14 +860,11 @@ public class Controller {
         var type = TypeDefinition.TypeAssociation.values()[0];
 
         if (TypeDefinition.TypeAssociation.values().length >= 2) {
-            type = this.view.chooseOption(
-                    Arrays.stream(TypeDefinition.TypeAssociation.values())
-                            .map(e -> (MenuAction<TypeDefinition.TypeAssociation>) new PrivilegedMenuAction<>(e.toString(), new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> e))
-                            .toList(), SELECT_TYPE_PROMPT).getAction().run();
+            type = this.view.selectItem(SELECT_TYPE_PROMPT, Arrays.stream(TypeDefinition.TypeAssociation.values()).toList());
         }
 
         // chiede se la compilazione del campo è obbligatoria
-        var required = this.view.get("Obbligatorio [y/N]").equalsIgnoreCase("y");
+        var required = this.view.get(INSERT_Y_N_REQUIRED).equalsIgnoreCase("y");
 
         c.put(name, new TypeDefinition(type, required));
 
@@ -883,17 +878,17 @@ public class Controller {
      */
     private @NotNull Category createCategory(Category root) throws DuplicateCategoryException {
 
-        String name = this.view.getText("Nome").trim();
+        String name = this.view.getText(INSERT_CATEGORY_NAME_PROMPT).trim();
         while (name.length() == 0) {
             this.view.warn(NO_EMPTY_NAME);
-            name = this.view.getText("Nome").trim();
+            name = this.view.getText(INSERT_CATEGORY_NAME_PROMPT).trim();
         }
         if (root == null && !this.model.isValidRootCategoryName(name))
             throw new DuplicateCategoryException();
         else if (root != null && !root.isValidChildCategoryName(name))
             throw new DuplicateCategoryException();
 
-        String description = this.view.getText("Descrizione").trim();
+        String description = this.view.getText(INSERT_CATEGORY_DESCRIPTION_PROMPT).trim();
 
         return this.model.createCategory(name, description, null);
     }
@@ -918,11 +913,11 @@ public class Controller {
      * Passo base della ricorsione
      *
      * @param root categoria radice
-     * @return la lista di MenuAction delle categorie figlie
+     * @return l'insieme delle liste rappresentanti il percorso da radice a una particolare categoria
      */
     @Contract("_ -> new")
-    private @NotNull List<MenuAction<Category>> getCategorySelectionMenu(Category root) {
-        return this.getCategorySelectionMenu(root, new LinkedList<>(), "");
+    private @NotNull List<List<Category>> getCategorySelectionMenu(Category root) {
+        return this.getCategorySelectionMenu(root, new LinkedList<>(), new LinkedList<>());
     }
 
     /**
@@ -933,16 +928,19 @@ public class Controller {
      *
      * @param root   categoria radice
      * @param acc    lista a cui aggiungere le MenuAction
-     * @param prefix prefisso da anteporre ai nomi delle categorie
-     * @return la lista completa delle categorie figlie
+     * @return l'insieme delle liste rappresentanti il percorso da radice a una particolare categoria
      */
-    private List<MenuAction<Category>> getCategorySelectionMenu(@NotNull Category root, @NotNull List<MenuAction<Category>> acc, String prefix) {
-        acc.add(new MenuAction<>(prefix + root.getName(), () -> root));
+    private List<List<Category>> getCategorySelectionMenu(@NotNull Category root, @NotNull List<List<Category>> acc, List<Category> prefix) {
+        List<Category> p = new LinkedList<>(prefix);
+        p.add(root);
+        acc.add(p);
         if (root instanceof NodeCategory)
             for (var child : ((NodeCategory) root).getChildren())
-                this.getCategorySelectionMenu(child, acc, prefix + root.getName() + " > ");
+                this.getCategorySelectionMenu(child, acc, p);
         return acc;
     }
+
+
 
     /**
      * Richiede l'inserimento all'utente dei parametri di configurazione,
@@ -955,23 +953,23 @@ public class Controller {
         String city;
         if (firstConfiguration) {
             boolean toImport = this.chooseAndRun(Arrays.asList(
-                    new PrivilegedMenuAction<>("No, aggiungi la configurazione manualmente", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
-                    new PrivilegedMenuAction<>("Sì, importa le configurazioni automaticamente", new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
+                    new PrivilegedMenuAction<>(MANUALLY_ADD_CONFIGURATION_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
+                    new PrivilegedMenuAction<>(AUTO_ADD_CONFIGURATION_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
             ), IMPORT_CONFIGURATION_PROMPT);
 
             if (toImport) {
                 this.importConfiguration(true);
                 return;
             }
-            city = this.view.get("Inserire la piazza di scambio");
+            city = this.view.get(INSERT_CITY_FOR_AFFAIR);
         } else {
             this.view.warn(CITY_NOT_OVERWRITABLE);
             city = this.model.readSettings().getCity();
         }
 
-        List<String> places = this.view.getStringList("Inserire un luogo", true);
+        List<String> places = this.view.getStringList(INSERT_PLACE_FOR_AFFAIR, true);
 
-        List<Settings.Day> days = this.view.getGenericList("Inserire un giorno", true,
+        List<Settings.Day> days = this.view.getGenericList(INSERT_DAY_FOR_AFFAIR, true,
                         (v) -> {
                             try {
                                 return Settings.Day.fromString(v);
@@ -983,7 +981,7 @@ public class Controller {
                 .toList();
 
         List<Interval> intervals = Interval.mergeIntervals(
-                        this.view.getGenericList("Inserire un intervallo orario [es. 15:30-17:00]", true,
+                        this.view.getGenericList(INSERT_HOUR_INTERVAL, true,
                                 (v) -> {
                                     try {
                                         return Interval.fromString(v);
@@ -994,7 +992,7 @@ public class Controller {
                 .sorted(Interval::compareTo)
                 .toList();
 
-        int daysDue = this.view.getInt("Inserire la scadenza (in numero di giorni)", (e) -> e > 0);
+        int daysDue = this.view.getInt(INSERT_EXPIRATION_FOR_AFFAIR, (e) -> e > 0);
 
         if (firstConfiguration) {
             this.model.configureSettings(city, daysDue, places, days, intervals);
@@ -1011,12 +1009,13 @@ public class Controller {
      * @return la categoria foglia scelta
      */
     private LeafCategory chooseLeafCategory(PromptType prompt) {
-        return this.view.chooseOption(
+        return this.view.selectItem(prompt, this.model.getLeafCategories());
+        /*return this.view.chooseOption(
                 this.model.getLeafCategories().stream()
                         .map((e) -> new MenuAction<>(e.fullToString(), () -> e))
                         .collect(Collectors.toList()),
                 prompt
-        ).getAction().run();
+        ).getAction().run();*/ //TODO comportamento modificato
     }
 
     /**
@@ -1026,9 +1025,13 @@ public class Controller {
      */
     private void addArticle(LeafCategory e) {
 
-        Map<String, Object> fields = new HashMap<>();
+        /*Map<String, Object> fields = new HashMap<>();
 
-        String name = this.view.getTrimmedLine("Inserire il nome del nuovo articolo", false);
+        String name = this.view.getText(INSERT_NEW_ARTICLE_NAME).trim();
+        while (name.length() == 0) {
+            this.view.error(STRING_MUST_NOT_BE_EMPTY);
+            name = this.view.getText(INSERT_NEW_ARTICLE_NAME).trim();
+        }
 
         boolean needRequiredField;
         boolean saveArticle;
@@ -1054,13 +1057,14 @@ public class Controller {
 
             // aggiunge alla lista delle azioni l'azione che permette di salvare
             // è attiva solo se non ci sono campi obbligatori da compilare
-            actions.add(0, new MenuAction<>("Salva articolo", () -> true, needRequiredField, 0, -1));
+            actions.add(0, new MenuAction<>(SAVE_ARTICLE_ENTRY, () -> true, needRequiredField, 0, -1));
 
             // scelta del campo da compilare
             saveArticle = this.view.chooseOption(
                     actions,
                     SELECT_FIELD_OR_SAVE_PROMPT
             ).getAction().run();
+            //saveArticle = this.view.selectItem(SELECT_FIELD_OR_SAVE_PROMPT, actions); //TODO
         } while (needRequiredField || !saveArticle);
 
         try {
@@ -1068,7 +1072,7 @@ public class Controller {
             this.view.warn(OFFER_CREATED);
         } catch (RequiredFieldConstrainException ex) {
             this.view.error(MISSING_FIELD);
-        }
+        }*/
     }
 
     /**
@@ -1081,7 +1085,7 @@ public class Controller {
         // in base al tipo di campo da compilare lo richiede all'utente
         // per ora sono supportate solo le stringhe
         return switch (k.getValue().type()) {
-            case STRING -> this.view.getText(String.format("Inserire il valore per il campo '%s'", k.getKey()));
+            case STRING -> this.view.getText(INSERT_FIELD_VALUE_PROMPT);
             default -> throw new RuntimeException();
         };
     }
@@ -1089,15 +1093,15 @@ public class Controller {
     /**
      * Show a list of offers
      *
-     * @param prompt message
+     * @param message message
      * @param offers list of offers
      */
-    private void showOffers(String prompt, List<Offer> offers) {
+    private void showOffers(InfoType message, List<Offer> offers) {
         if (offers.size() == 0) {
             this.view.warn(NO_OFFER_FOUND);
             return;
         }
-        this.view.showList(prompt, offers);
+        this.view.showList(message, offers);
     }
 
 }

@@ -1,9 +1,6 @@
 package it.matlice.ingsw.view;
 
-import it.matlice.ingsw.controller.ErrorType;
-import it.matlice.ingsw.controller.MenuAction;
-import it.matlice.ingsw.controller.PromptType;
-import it.matlice.ingsw.controller.WarningType;
+import it.matlice.ingsw.controller.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -43,7 +40,7 @@ public interface View {
      * @param message message to show before the list
      * @param list list of string to show
      */
-    <T> void showList(String message, List<T> list);
+    <T> void showList(InfoType message, List<T> list);
 
     /**
      * Richiede all'utente l'inserimento di una password
@@ -58,20 +55,20 @@ public interface View {
      * @param prompt prompt della richiesta della password
      * @return la password inserita
      */
-    String getPassword(String prompt);
+    String getPassword(PromptType prompt);
 
     /**
      * Richiede all'utente l'inserimento di una stringa
      * @return la stringa inserita
      */
-    String get(String prompt);
+    String get(PromptType prompt);
 
     /**
      * Richiede all'utente l'inserimento di una stringa (compresa di blanks)
      * @param prompt messaggio di richiesta all'utente
      * @return la stringa inserita
      */
-    String getText(String prompt);
+    String getText(PromptType prompt);
 
     /**
      * Richiede all'utente l'inserimento di una stringa (compresa di blanks),
@@ -80,7 +77,7 @@ public interface View {
      * @param available funzione che ritorna true se la stringa in input è valida
      * @return la stringa inserita
      */
-    String getText(String prompt, Function<String, Boolean> available);
+    String getText(PromptType prompt, Function<String, Boolean> available);
 
     /**
      * Richiede all'utente l'inserimento di una stringa, che verrà convertita in un oggetto
@@ -91,17 +88,7 @@ public interface View {
      * @param <V> tipo di ritorno
      * @return oggetto creato da stringa
      */
-    <V> V getLineWithConversion(String prompt, Function<String, V> conversionMap, ErrorType error);
-
-    /**
-     * Richiede all'utente l'inserimento di una stringa (a cui sono rimossi i blank iniziali e finali)
-     * Permette di specificare se la stringa immessa deve essere non vuota
-     *
-     * @param prompt messaggio di richiesta all'utente
-     * @param canBeEmpty false if the input string must not be empty
-     * @return la stringa inserita
-     */
-    String getTrimmedLine(String prompt, boolean canBeEmpty);
+    <V> V getLineWithConversion(PromptType prompt, Function<String, V> conversionMap, ErrorType error);
 
     /**
      * Richiede all'utente l'inserimento di un valore intero
@@ -110,7 +97,7 @@ public interface View {
      * @param nonValidError errore per valori non validi
      * @return l'intero inserito
      */
-    int getInt(String prompt, Function<Integer, Boolean> available, ErrorType nonValidError);
+    int getInt(PromptType prompt, Function<Integer, Boolean> available, ErrorType nonValidError);
 
     /**
      * Richiede all'utente l'inserimento di un valore intero
@@ -118,14 +105,14 @@ public interface View {
      * @param available returns true se l'intero inserito è valido, false per richiederlo
      * @return l'intero inserito
      */
-    int getInt(String prompt, Function<Integer, Boolean> available);
+    int getInt(PromptType prompt, Function<Integer, Boolean> available);
 
     /**
      * Richiede all'utente l'inserimento di un valore intero
      * @param prompt messaggio di richiesta all'utente
      * @return l'intero inserito
      */
-    int getInt(String prompt);
+    int getInt(PromptType prompt);
 
     /**
      * Ritorna una lista di oggetti, inseriti dall'utente come stringa dall'utente
@@ -139,7 +126,7 @@ public interface View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return lista di oggetti inseriti dall'utente
      */
-    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage);
+    public <V> List<V> getGenericList(PromptType prompt, boolean unique, Function<String, V> conversionMap, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage);
 
     /**
      * Ritorna una lista di oggetti, inseriti dall'utente come stringa dall'utente
@@ -151,7 +138,7 @@ public interface View {
      *                      deve ritornare null per valori di stringhe non validi
      * @return lista di oggetti inseriti dall'utente
      */
-    public <V> List<V> getGenericList(String prompt, boolean unique, Function<String, V> conversionMap);
+    public <V> List<V> getGenericList(PromptType prompt, boolean unique, Function<String, V> conversionMap);
 
     /**
      * Ritorna una lista di stringhe non vuote inserite dall'utente
@@ -161,7 +148,7 @@ public interface View {
      * @param nonValidErrorMessage messaggio di errore per valori non validi
      * @return lista di stringhe inserite dall'utente
      */
-    public List<String> getStringList(String prompt, boolean unique, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage);
+    public List<String> getStringList(PromptType prompt, boolean unique, ErrorType duplicateErrorMessage, ErrorType nonValidErrorMessage);
 
     /**
      * Ritorna una lista di stringhe non vuote inserite dall'utente
@@ -169,7 +156,7 @@ public interface View {
      * @param unique true se non ci possono essere ripetizioni
      * @return lista di stringhe inserite dall'utente
      */
-    public List<String> getStringList(String prompt, boolean unique);
+    public List<String> getStringList(PromptType prompt, boolean unique);
 
     /**
      * Richiede all'utente la scelta di un'opzione
@@ -199,4 +186,6 @@ public interface View {
      * @return oggetto selezionato
      */
     public <V> V selectItem(PromptType prompt, List<@NotNull V> items);
+
+    public <V> V selectItem(PromptType prompt, List<@NotNull V> items, MenuType exit);
 }

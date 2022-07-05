@@ -2,26 +2,24 @@ package it.matlice.ingsw.controller;
 
 import it.matlice.ingsw.model.data.User;
 
-import java.util.Arrays;
-
 public class MenuAction<T> {
 
-    private final String name;
+    private final MenuType type;
     private final ReturnAction<T> action;
     private final boolean disabled;
     private final Integer index;
     private final Integer position;
 
-    public MenuAction(String name, ReturnAction<T> action) {
-        this(name, action, false, null, null);
+    public MenuAction(MenuType type, ReturnAction<T> action) {
+        this(type, action, false, null, null);
     }
 
-    public MenuAction(String name, ReturnAction<T> action, boolean disabled) {
-        this(name, action, disabled, null, null);
+    public MenuAction(MenuType type, ReturnAction<T> action, boolean disabled) {
+        this(type, action, disabled, null, null);
     }
 
-    public MenuAction(String name, ReturnAction<T> action, boolean disabled, Integer index, Integer position) {
-        this.name = name;
+    public MenuAction(MenuType type, ReturnAction<T> action, boolean disabled, Integer index, Integer position) {
+        this.type = type;
         this.action = action;
         this.disabled = disabled;
         this.index = index;
@@ -36,12 +34,12 @@ public class MenuAction<T> {
         return this.index;
     }
 
-    public int getPosition() {
+    public Integer getPosition() {
         return this.position;
     }
 
-    public String getName() {
-        return this.name;
+    public MenuType getType(){
+        return this.type;
     }
 
     public ReturnAction<T> getAction() {

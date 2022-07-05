@@ -9,18 +9,18 @@ public class PrivilegedMenuAction<T> extends MenuAction<T>{
     private User.UserTypes[] allowedTypes;
 
 
-    public PrivilegedMenuAction(String name, User.UserTypes[] allowedTypes, ReturnAction<T> action) {
-        super(name, action);
+    public PrivilegedMenuAction(MenuType type, User.UserTypes[] allowedTypes, ReturnAction<T> action) {
+        super(type, action);
         this.allowedTypes = allowedTypes;
     }
 
-    public PrivilegedMenuAction(String name, User.UserTypes[] allowedTypes, ReturnAction<T> action, boolean disabled) {
-        super(name, action, disabled);
+    public PrivilegedMenuAction(MenuType type, User.UserTypes[] allowedTypes, ReturnAction<T> action, boolean disabled) {
+        super(type, action, disabled);
         this.allowedTypes = allowedTypes;
     }
 
-    public PrivilegedMenuAction(String name, User.UserTypes[] allowedTypes, ReturnAction<T> action, boolean disabled, Integer index, Integer position) {
-        super(name, action, disabled, index, position);
+    public PrivilegedMenuAction(MenuType type, User.UserTypes[] allowedTypes, ReturnAction<T> action, boolean disabled, Integer index, Integer position) {
+        super(type, action, disabled, index, position);
         this.allowedTypes = allowedTypes;
     }
 

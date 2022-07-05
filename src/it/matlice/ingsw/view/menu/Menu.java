@@ -26,49 +26,45 @@ public class Menu {
     /**
      * adds an entry to the menu. position will be assigned incrementally based oin the number of elements in the menu
      *
-     * @param action_str the string the entry will be described with
-     * @param action     a {@link MenuAction} or null for a default action (returns call index)
+     * @param entryWrapper
      * @return this
      */
-    public Menu addEntry(String action_str, MenuAction action) {
-        return this.addEntry(new MenuEntry(action_str, this.entries.size(), this.call_ref.size() == 0 ? 0 : Collections.max(this.call_ref.keySet()) + 1, action, null, false));
+    public Menu addEntry(MenuEntryWrapper entryWrapper) {
+        return this.addEntry(new MenuEntry(entryWrapper.getName(), this.entries.size(), this.call_ref.size() == 0 ? 0 : Collections.max(this.call_ref.keySet()) + 1, entryWrapper.getAction(), null, false));
     }
 
     /**
      * adds an entry to the menu
      *
-     * @param action_str the string the entry will be described with
-     * @param action     a {@link MenuAction} or null for a default action (returns call index)
+     * @param entryWrapper
      * @param position   the position in the list the entry will be displayed: negative values start from the end (-1 = last)
      * @return this
      */
-    public Menu addEntry(String action_str, MenuAction action, int position) {
-        return this.addEntry(new MenuEntry(action_str, position, this.call_ref.size() == 0 ? 0 : Collections.max(this.call_ref.keySet()) + 1, action, null, false));
+    public Menu addEntry(MenuEntryWrapper entryWrapper, int position) {
+        return this.addEntry(new MenuEntry(entryWrapper.getName(), position, this.call_ref.size() == 0 ? 0 : Collections.max(this.call_ref.keySet()) + 1, entryWrapper.getAction(), null, false));
     }
 
     /**
      * adds an entry to the menu
      *
-     * @param action_str the string the entry will be described with
-     * @param action     a {@link MenuAction} or null for a default action (returns call index)
+     * @param entryWrapper
      * @param call_index the index the user will choose with
      * @return this
      */
-    public Menu addEntry(int call_index, String action_str, MenuAction action) {
-        return this.addEntry(new MenuEntry(action_str, this.entries.size(), call_index, action, null, false));
+    public Menu addEntry(int call_index, MenuEntryWrapper entryWrapper) {
+        return this.addEntry(new MenuEntry(entryWrapper.getName(), this.entries.size(), call_index, entryWrapper.getAction(), null, false));
     }
 
     /**
      * adds an entry to the menu
      *
-     * @param action_str the string the entry will be described with
-     * @param action     a {@link MenuAction} or null for a default action (returns call index)
+     * @param entryWrapper
      * @param position   the position in the list the entry will be displayed: negative values start from the end (-1 = last) or null to assign it based on the number of elements in the menu
      * @param call_index the index the user will choose with
      * @return this
      */
-    public Menu addEntry(int call_index, String action_str, MenuAction action, int position) {
-        return this.addEntry(new MenuEntry(action_str, position, call_index, action, null, false));
+    public Menu addEntry(int call_index, MenuEntryWrapper entryWrapper, int position) {
+        return this.addEntry(new MenuEntry(entryWrapper.getName(), position, call_index, entryWrapper.getAction(), null, false));
     }
 
     /**

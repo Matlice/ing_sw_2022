@@ -1,20 +1,22 @@
 package it.matlice.ingsw.view.stream;
 
-import it.matlice.ingsw.controller.ErrorType;
-import it.matlice.ingsw.controller.PromptType;
-import it.matlice.ingsw.controller.WarningType;
+import it.matlice.ingsw.controller.*;
 
 import java.util.HashMap;
 
 import static it.matlice.ingsw.controller.ErrorType.*;
 import static it.matlice.ingsw.controller.WarningType.*;
 import static it.matlice.ingsw.controller.PromptType.*;
+import static it.matlice.ingsw.controller.InfoType.*;
+import static it.matlice.ingsw.controller.MenuType.*;
 
 public class ConversionMap {
 
     private final HashMap<WarningType, String> warnMap = new HashMap<>();
     private final HashMap<ErrorType, String> errorMap = new HashMap<>();
     private final HashMap<PromptType, String> promptMap = new HashMap<>();
+    private final HashMap<InfoType, String> infoMap = new HashMap<>();
+    private final HashMap<MenuType, String> menuMap = new HashMap<>();
 
     public ConversionMap() {
         this.warnMap.put(NEED_CHANGE_PASSWORD, "Cambia le credenziali di accesso");
@@ -84,6 +86,60 @@ public class ConversionMap {
         this.promptMap.put(SELECT_OFFER_TO_RETRIEVE_PROMPT, "Quale offerta si vuole ritirare?");
         this.promptMap.put(SELECT_HIERARCHY_PROMPT, "Quale gerarchia si vuole visualizzare?");
         this.promptMap.put(EMPTY_PROMPT, "");
+
+        this.promptMap.put(INSERT_FIELD_VALUE_PROMPT, "Inserire il valore per il campo");
+        this.promptMap.put(INSERT_USERNAME, "Nome Utente");
+        this.promptMap.put(INSERT_PASSWORD, "Password");
+        this.promptMap.put(INSERT_NEW_PASSWORD, "Nuova Password");
+        this.promptMap.put(INSERT_REPEATED_PASSWORD, "Ripeti la password");
+        this.promptMap.put(INSERT_CITY_FOR_AFFAIR, "Inserire la piazza di scambio");
+        this.promptMap.put(INSERT_PLACE_FOR_AFFAIR, "Inserire un luogo per lo scambio");
+        this.promptMap.put(INSERT_DAY_FOR_AFFAIR, "Inserire giorno di scambio");
+        this.promptMap.put(INSERT_HOUR_FOR_AFFAIR, "Inserire ora di scambio");
+        this.promptMap.put(INSERT_HOUR_INTERVAL, "Inserire un intervallo orario [es. 15:30-17:00]");
+        this.promptMap.put(INSERT_EXPIRATION_FOR_AFFAIR, "Inserire la scadenza (in numero di giorni)");
+        this.promptMap.put(INSERT_FIELD_NAME_PROMPT, "Inserire il nome del campo");
+        this.promptMap.put(INSERT_CATEGORY_NAME_PROMPT, "Inserire il nome della categoria");
+        this.promptMap.put(INSERT_CATEGORY_DESCRIPTION_PROMPT, "Inserire la descrizione della categoria");
+        this.promptMap.put(INSERT_NEW_ARTICLE_NAME, "Inserire il nome del nuovo articolo");
+        this.promptMap.put(INSERT_Y_N_REQUIRED, "Obbligatorio [y/N]");
+
+
+        this.infoMap.put(BEEN_SELECTED_INFO, "Sei stato selezionato per degli scambi!");
+        this.infoMap.put(NEW_MESSAGES_INFO, "Hai ricevuto nuovi messaggi!");
+        this.infoMap.put(YOUR_OFFERS_INFO, "Le tue offerte sono le seguenti: ");
+        this.infoMap.put(YOUR_OFFERS_FROM_CATEGORY_INFO, "Le offerte aperte della categoria sono le seguenti: ");
+        this.infoMap.put(PLACES_INFO, "I luoghi disponibili per lo scambio sono i seguenti:");
+        this.infoMap.put(DATES_INFO, "I giorni disponibili per lo scambio sono i seguenti:");
+        this.infoMap.put(HOURS_INFO, "Gli intervalli disponibili per lo scambio sono i seguenti:");
+
+        this.menuMap.put(LOGIN_ENTRY, "Login");
+        this.menuMap.put(LOGOUT_ENTRY, "Logout");
+        this.menuMap.put(EXIT_ENTRY, "Esci");
+        this.menuMap.put(REGISTER_ENTRY, "Registrati");
+        this.menuMap.put(PROPOSE_CHANGE_ENTRY, "Proponi uno scambio");
+        this.menuMap.put(ACCEPT_CHANGE_ENTRY, "Accetta uno scambio");
+        this.menuMap.put(REPLY_MESSAGE_ENTRY, "Rispondi a un messaggio");
+        this.menuMap.put(ADD_NEW_ARTICLE_ENTRY, "Aggiungi nuovo articolo");
+        this.menuMap.put(RETRIEVE_OPENED_OFFER_ENTRY, "Ritira un'offerta aperta");
+        this.menuMap.put(SHOW_OFFERS_ENTRY, "Mostra mie le offerte aperte");
+        this.menuMap.put(SHOW_OFFERS_BY_CATEGORY_ENTRY, "Mostra le offerte per categoria");
+        this.menuMap.put(ADD_HIERARCHY_ENTRY, "Aggiungi nuova gerarchia");
+        this.menuMap.put(ADD_CATEGORY_ENTRY, "Aggiungi nuova categoria");
+        this.menuMap.put(SHOW_HIERARCHIES_ENTRY, "Mostra gerarchie");
+        this.menuMap.put(SHOW_PARAMETERS_ENTRY, "Mostra parametri di configurazione");
+        this.menuMap.put(EDIT_PARAMETERS_ENTRY, "Modifica parametri di configurazione");
+        this.menuMap.put(IMPORT_CONFIGURATION_ENTRY, "Importa informazioni da file testuale");
+        this.menuMap.put(ADD_CONFIGURATOR_ENTRY, "Aggiungi nuovo configuratore");
+        this.menuMap.put(CHANGE_PASSWORD_ENTRY, "Cambia password");
+        this.menuMap.put(RESTORE_ENTRY, "Annulla");
+        this.menuMap.put(SEND_NEW_PROPOSE_ENTRY, "Fai una controproposta");
+        this.menuMap.put(SAVE_EXIT_PROMPT, "Salva ed esci");
+        this.menuMap.put(GO_BACK_TO_CATEGORY_LIST_ENTRY, "No, torna all'inserimento categorie");
+        this.menuMap.put(ADD_NATIVE_FIELD_ENTRY, "Sì, aggiungi campo nativo");
+        this.menuMap.put(MANUALLY_ADD_CONFIGURATION_ENTRY, "No, aggiungi la configurazione manualmente");
+        this.menuMap.put(AUTO_ADD_CONFIGURATION_ENTRY, "Sì, importa le configurazioni automaticamente");
+        this.menuMap.put(SAVE_ARTICLE_ENTRY, "Salva Articolo");
     }
 
     public String convertWarningToString(WarningType warn) {
@@ -100,6 +156,18 @@ public class ConversionMap {
 
     public String convertPromptToString(PromptType prompt) {
         String r = this.promptMap.get(prompt);
+        assert r != null;
+        return r;
+    }
+
+    public String convertInfoToString(InfoType info) {
+        String r = this.infoMap.get(info);
+        assert r != null;
+        return r;
+    }
+
+    public String convertMenuToString(MenuType menuEntry) {
+        String r = this.menuMap.get(menuEntry);
         assert r != null;
         return r;
     }
