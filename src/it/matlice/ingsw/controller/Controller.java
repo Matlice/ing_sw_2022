@@ -1065,7 +1065,7 @@ public class Controller {
                     actions,
                     SELECT_FIELD_OR_SAVE_PROMPT
             ).getAction().run();
-            //saveArticle = this.view.selectItem(SELECT_FIELD_OR_SAVE_PROMPT, actions); //TODO
+            //saveArticle = this.view.selectItem(SELECT_FIELD_OR_SAVE_PROMPT, actions); //TODO far sì cche save sia il pulsante di uscita, se non sono compilati tutti i campi obbligatori allora non viene mostrato, altrimenti viene mostrato e ne permette l'uscita
         } while (needRequiredField || !saveArticle);
 
         try {
