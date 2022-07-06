@@ -2,7 +2,7 @@ package it.matlice.ingsw.view.menu;
 import it.matlice.ingsw.controller.MenuType;
 import it.matlice.ingsw.model.data.User;
 
-public class MenuEntryWrapper {
+public class MenuEntryWrapper<T> {
 
     private final String name;
     private final MenuAction action;
@@ -42,7 +42,7 @@ public class MenuEntryWrapper {
         return this.name;
     }
 
-    public MenuAction getAction() {
+    public MenuAction<T> getAction() {
         return this.action;
     }
 }
