@@ -161,4 +161,7 @@ public abstract class Category extends HashMap<String, TypeDefinition> {
     }
 
     public abstract boolean isValidChildCategoryName(String name);
+
+    public abstract NodeCategory convertToNode();
+
 }

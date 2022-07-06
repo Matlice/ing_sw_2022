@@ -352,32 +352,31 @@ Ogni gruppo (costituito al più da tre persone),  dovrà:
 ### MVC
 
 MVC
-- stringhe in view
-- toString() da spostare
-- fix vari
+- [X] stringhe in view
+- [X] toString() da spostare
 
 ### Pattern GRASP (2)
 
-- Pure Fabrication (separazione oggetti concettuali-rappresentazione DB)
-- Polymorphism (qualsiasi)
+- [ ] Pure Fabrication (separazione oggetti concettuali-rappresentazione DB)
+- [ ] Polymorphism (qualsiasi)
 
 ### Pattern SOLID (2)
 
-- Single Responsibility (una classe deve avere una sola responsabilità)
-- Dependency inversion principle (classe dovrebbe dipendere dalle astrazioni, non da classi concrete) [es. View-StreamView, database (?)]
+- [ ] Single Responsibility (una classe deve avere una sola responsabilità)
+- [ ] Dependency inversion principle (classe dovrebbe dipendere dalle astrazioni, non da classi concrete) [es. View-StreamView, database (?)]
 
 ### Gang of Four (2)
 
-- Convert Exception (ora tutto dipende da SQLExcpetion, da generalizzare)
-- Composite (per le categorie)
+- [X] Convert Exception (ora tutto dipende da SQLExcpetion, da generalizzare)
+- [X] Composite (per le categorie)
 
 ### Testing
 
-- scegliere una classe da testare, e mostrare come si è testata [white box o black box]
+- [ ] scegliere una classe da testare, e mostrare come si è testata [white box o black box]
 
 ### Refactor
 
-- mostrare un singolo caso di refactor (Extract Method!)
+- [ ] mostrare un singolo caso di refactor (Extract Method!)
 
 ### Note a caso
 

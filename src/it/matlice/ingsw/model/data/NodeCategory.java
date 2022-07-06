@@ -48,4 +48,9 @@ public abstract class NodeCategory extends Category {
      */
     @Override
     public abstract Object clone();
+
+    @Override
+    public NodeCategory convertToNode(){
+        return this;
+    };
 }

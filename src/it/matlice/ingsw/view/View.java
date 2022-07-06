@@ -71,6 +71,13 @@ public interface View {
     String getText(PromptType prompt);
 
     /**
+     * Richiede all'utente un input che possa essere considerato come valore booleano
+     * @param prompt messaggio di richiesta all'utente
+     * @return valore booleano generato
+     */
+    Boolean getBoolean(PromptType prompt);
+
+    /**
      * Richiede all'utente l'inserimento di una stringa (compresa di blanks),
      * validata secondo una funzione
      * @param prompt messaggio di richiesta all'utente

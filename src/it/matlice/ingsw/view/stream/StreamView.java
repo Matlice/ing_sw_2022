@@ -198,6 +198,16 @@ public class StreamView implements View {
     }
 
     /**
+     * Richiede all'utente un input che possa essere considerato come valore booleano
+     * @param prompt messaggio di richiesta all'utente
+     * @return valore booleano generato
+     */
+    @Override
+    public Boolean getBoolean(PromptType prompt) {
+        return this.get(prompt).equalsIgnoreCase("y");
+    }
+
+    /**
      * Richiede all'utente l'inserimento di una stringa, che verrà convertita in un oggetto
      * tramite una funzione di conversione
      *

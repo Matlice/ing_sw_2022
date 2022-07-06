@@ -852,20 +852,15 @@ public class Controller {
                 name = null;
             }
         }
-
         // se ci sono più tipi di campo possibili permette di sceglierlo
         // per ora è possibile inserire solo stringhe, quindi salta la scelta
         var type = TypeDefinition.TypeAssociation.values()[0];
-
         if (TypeDefinition.TypeAssociation.values().length >= 2) {
             type = this.view.selectItem(SELECT_TYPE_PROMPT, Arrays.stream(TypeDefinition.TypeAssociation.values()).toList(), null);
         }
-
         // chiede se la compilazione del campo è obbligatoria
-        var required = this.view.get(INSERT_Y_N_REQUIRED).equalsIgnoreCase("y");
-
+        var required = this.view.getBoolean(INSERT_Y_N_REQUIRED);
         c.put(name, new TypeDefinition(type, required));
-
         return true;
     }
 
@@ -899,7 +894,7 @@ public class Controller {
      * @return la nuova categoria padre
      */
     private @NotNull NodeCategory appendCategory(Category father, Category child) {
-        var f = father instanceof LeafCategory ? ((LeafCategory) father).convertToNode() : (NodeCategory) father;
+        var f = father.convertToNode();
         f.addChild(child);
         return f;
     }
@@ -915,7 +910,7 @@ public class Controller {
      */
     @Contract("_ -> new")
     private @NotNull List<List<Category>> getCategorySelectionMenu(Category root) {
-        return this.getCategorySelectionMenu(root, new LinkedList<>(), new LinkedList<>(), true);
+        return this.getCategorySelectionMenu(root, true);
     }
 
     /**
