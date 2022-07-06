@@ -13,10 +13,18 @@ public class StreamMessageAvailableIntervals extends AStreamMessage {
         this.intervals = intervals;
     }
 
+    public static String timeToString(Interval.Time t) {
+        return t.getHour() + ":" + String.format("%02d", t.getMinute());
+    }
+
+    public static String intervalToString(Interval i) {
+        return timeToString(i.getStart()) + "-" + timeToString(i.getEnd());
+    }
+
     @Override
     public String getMessage() {
         StringJoiner sj_interval = new StringJoiner(", ");
-        this.intervals.forEach((e) -> sj_interval.add(e.toString()));
+        this.intervals.forEach((e) -> sj_interval.add(intervalToString(e)));
         return String.format("Gli intervalli orari disponibili per lo scambio sono: %s\n", sj_interval);
     }
 }

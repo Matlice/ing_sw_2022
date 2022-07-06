@@ -22,6 +22,14 @@ public class Interval implements Comparable<Interval> {
         this.end = new Time(end);
     }
 
+    public Time getStart() {
+        return this.start;
+    }
+
+    public Time getEnd() {
+        return this.end;
+    }
+
     public int getStartingMinute() {
         return this.start.getTime();
     }
@@ -54,11 +62,6 @@ public class Interval implements Comparable<Interval> {
         return new Interval(
                 Math.min(this.start.getTime(), oth.start.getTime()),
                 Math.max(this.end.getTime(), oth.end.getTime()));
-    }
-
-    @Override
-    public String toString() {
-        return this.start + "-" + this.end;
     }
 
     /**
@@ -210,11 +213,6 @@ public class Interval implements Comparable<Interval> {
 
             var hour_minute = time.split(":");
             return Integer.parseInt(hour_minute[0]) * 60 + minute;
-        }
-
-        @Override
-        public String toString() {
-            return this.getHour() + ":" + String.format("%02d", this.getMinute());
         }
 
         @Override
