@@ -5,6 +5,8 @@ import it.matlice.ingsw.model.data.Offer;
 
 import java.util.Calendar;
 
+import static it.matlice.ingsw.view.stream.StreamUtil.offerToString;
+
 public class StreamOfferAdapter implements StreamDataType {
 
     private Offer offer;
@@ -12,20 +14,10 @@ public class StreamOfferAdapter implements StreamDataType {
         this.offer = o;
     }
 
-    private StringBuilder getInfoString(Offer o) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(o.getName()).append(" (").append(o.getCategory().fullToString()).append(") [").append(o.getStatus().getName()).append(" di ").append(o.getOwner().getUsername()).append("]\n");
-        for(var k: o.entrySet()) {
-            sb.append("\t").append(k.getKey()).append(" = ").append(k.getValue().toString()).append("\n");
-        }
-        sb.setLength(sb.length()-1);
-        return sb;
-    }
-
     private String getOfferMessage(Offer o){
         StringBuilder sb = new StringBuilder();
         sb.append("• ");
-        sb.append(this.getInfoString(o));
+        sb.append(offerToString(o));
         return sb.toString();
     }
 
@@ -33,9 +25,9 @@ public class StreamOfferAdapter implements StreamDataType {
         var o2 = this.offer.getLinkedOffer();
         StringBuilder sb = new StringBuilder();
         sb.append("• ");
-        sb.append(this.getInfoString(o));
+        sb.append(offerToString(o));
         sb.append("\n  per\n");
-        sb.append("  " + this.getInfoString(o2));
+        sb.append("  ").append(offerToString(o2));
         return sb.toString();
     }
 

@@ -4,6 +4,8 @@ import it.matlice.ingsw.model.data.Interval;
 
 import java.util.StringJoiner;
 
+import static it.matlice.ingsw.view.stream.StreamUtil.intervalToString;
+
 public class StreamMessageAvailableIntervals extends AStreamMessage {
 
     private final Iterable<Interval> intervals;
@@ -11,14 +13,6 @@ public class StreamMessageAvailableIntervals extends AStreamMessage {
     public StreamMessageAvailableIntervals(StreamView view, Iterable<Interval> intervals) {
         super(view);
         this.intervals = intervals;
-    }
-
-    public static String timeToString(Interval.Time t) {
-        return t.getHour() + ":" + String.format("%02d", t.getMinute());
-    }
-
-    public static String intervalToString(Interval i) {
-        return timeToString(i.getStart()) + "-" + timeToString(i.getEnd());
     }
 
     @Override

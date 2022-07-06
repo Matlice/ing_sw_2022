@@ -5,6 +5,8 @@ import it.matlice.ingsw.model.data.Settings;
 
 import java.util.Calendar;
 
+import static it.matlice.ingsw.view.stream.StreamUtil.timeToString;
+
 public class StreamMessageProposedExchange extends AStreamMessage {
 
     private final Calendar date;
@@ -24,7 +26,7 @@ public class StreamMessageProposedExchange extends AStreamMessage {
                 this.day.getName(),
                 this.date.get(Calendar.DAY_OF_MONTH),
                 this.date.get(Calendar.MONTH) + 1,
-                this.time
+                timeToString(this.time)
         );
     }
 
