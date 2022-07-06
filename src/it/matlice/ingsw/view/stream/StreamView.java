@@ -347,13 +347,8 @@ public class StreamView implements View {
      */
     private <T> T choose(@NotNull List<MenuEntryWrapper<T>> choices, PromptType prompt) {
         Menu menu = new Menu();
-        for (var act : choices) {
-            if (act.getIndex() == null) {
-                menu.addEntry(act).disable(act.isDisabled());
-            } else {
-                menu.addEntry(act.getIndex(), act , act.getPosition()).disable(act.isDisabled());
-            }
-        }
+        for (var act : choices)
+            menu.addEntry(act);
         menu.setPrompt(this.conversionMap.convertPromptToString(prompt));
         Object answ = menu.displayOnce(this.in, this.out);
         while (answ == null) {

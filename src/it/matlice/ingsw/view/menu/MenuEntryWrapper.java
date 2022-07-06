@@ -34,15 +34,23 @@ public class MenuEntryWrapper<T> {
         return this.index;
     }
 
-    public int getPosition() {
+    public Integer getIndex(Integer def) {
+        return this.getIndex() == null ? def : this.getIndex() ;
+    }
+
+    public Integer getPosition() {
         return this.position;
+    }
+
+    public Integer getPosition(Integer def) {
+        return this.getPosition() == null ? def : this.getPosition();
     }
 
     public String getName(){
         return this.name;
     }
 
-    public MenuAction<T> getAction() {
+    public MenuAction getAction() {
         return this.action;
     }
 }
