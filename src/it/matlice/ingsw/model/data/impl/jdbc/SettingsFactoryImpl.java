@@ -6,6 +6,7 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
+import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.Interval;
 import it.matlice.ingsw.model.data.Settings;
@@ -25,8 +26,8 @@ public class SettingsFactoryImpl implements SettingsFactory {
     private final Dao<DaysDB, Integer> daysDAO;
     private final Dao<IntervalsDB, Integer> intervalsDAO;
 
-    public SettingsFactoryImpl() throws DBException {
-        var connectionSource = JdbcConnection.getInstance().getConnectionSource();
+    public SettingsFactoryImpl(JdbcConnection connection) throws DBException {
+        ConnectionSource connectionSource = connection.getConnectionSource();
         try {
             this.settingsDAO = DaoManager.createDao(connectionSource, SettingsDB.class);
             this.locationsDAO = DaoManager.createDao(connectionSource, LocationsDB.class);

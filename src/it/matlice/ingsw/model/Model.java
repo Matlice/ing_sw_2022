@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import java.security.SecureRandom;
 import java.util.*;
 
+import static it.matlice.ingsw.controller.ErrorType.PASSWORD_NOT_VALID;
+import static it.matlice.ingsw.controller.ErrorType.USER_LOGIN_INVALID;
 import static it.matlice.ingsw.model.auth.password.PasswordAuthMethod.isPasswordValid;
 import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
 
@@ -52,11 +54,11 @@ public class Model {
      *
      * @param auth autenticazione, permette di identificare l'utente e verificare sia loggato
      * @param newPassword nuova password che si vuole impostare
-     * @throws DBException errore di connessione col database
+     * @throws CannotRetrieveInformationException errore nell'accesso ai dati
      * @throws InvalidPasswordException password non rispettante i requisiti di sicurezza
      * @throws LoginInvalidException utente non loggato
      */
-    public void changePassword(@NotNull Authentication auth, String newPassword) throws DBException, InvalidPasswordException, LoginInvalidException {
+    public void changePassword(@NotNull Authentication auth, String newPassword) throws CannotRetrieveInformationException, InvalidPasswordException, LoginInvalidException {
         if (!auth.isValid())
             throw new LoginInvalidException();
 
@@ -64,7 +66,11 @@ public class Model {
             if (method instanceof PasswordAuthMethod)
                 ((PasswordAuthMethod) method).setPassword(newPassword);
         }
-        this.uf.saveUser(auth.getUser());
+        try {
+            this.uf.saveUser(auth.getUser());
+        } catch (DBException e) {
+            throw new CannotRetrieveInformationException();
+        }
     }
 
     /**
@@ -107,11 +113,15 @@ public class Model {
      * Imposta l'ultimo accesso dell'utente
      *
      * @param auth autenticazione, permette di identificare l'utente e verificare sia loggato
-     * @throws DBException errore di connessione col database
+     * @throws CannotRetrieveInformationException errore nell'accesso ai dati
      */
-    public void finalizeLogin(@NotNull Authentication auth) throws DBException {
+    public void finalizeLogin(@NotNull Authentication auth) throws CannotRetrieveInformationException {
         auth.getUser().setLastLoginTime(auth.getLoginTime());
-        this.uf.saveUser(auth.getUser());
+        try {
+            this.uf.saveUser(auth.getUser());
+        } catch (DBException e) {
+            throw new CannotRetrieveInformationException();
+        }
     }
 
     /**
@@ -137,16 +147,20 @@ public class Model {
      * @param username
      * @param type
      * @return
-     * @throws DBException
+     * @throws CannotRetrieveInformationException errore nell'accesso ai dati
      * @throws DuplicateUserException
      * @throws InvalidUserTypeException
      */
-    private User createUser(String username, User.UserTypes type) throws DBException, DuplicateUserException, InvalidUserTypeException {
-        if (this.uf.doesUserExist(username)) {
-            throw new DuplicateUserException();
+    private User createUser(String username, User.UserTypes type) throws CannotRetrieveInformationException, DuplicateUserException, InvalidUserTypeException {
+        try {
+            if (this.uf.doesUserExist(username)) {
+                throw new DuplicateUserException();
+            }
+            return this.uf.createUser(username, type);
+        } catch (DBException e) {
+            throw new CannotRetrieveInformationException();
         }
 
-        return this.uf.createUser(username, type);
     }
 
     /**
@@ -155,12 +169,12 @@ public class Model {
      * @param username username dell'utente da creare
      * @param defaultPassword true per utilizzare una password default, altrimenti la genera casualmente
      * @return password dell'utente appena creato
-     * @throws DBException errore di connessione col database
+     * @throws CannotRetrieveInformationException
      * @throws DuplicateUserException utente con username già esistente
      * @throws InvalidPasswordException
      * @throws InvalidUserTypeException
      */
-    public String addConfiguratorUser(String username, boolean defaultPassword) throws DBException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
+    public String addConfiguratorUser(String username, boolean defaultPassword) throws CannotRetrieveInformationException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
 
         var u = this.createUser(username, User.UserTypes.CONFIGURATOR);
 
@@ -173,7 +187,11 @@ public class Model {
 
         assert u.getAuthMethods().get(0) instanceof PasswordAuthMethod;
         ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, true);
-        this.uf.saveUser(u);
+        try {
+            this.uf.saveUser(u);
+        } catch (DBException e) {
+            throw new CannotRetrieveInformationException();
+        }
         return password;
     }
 
@@ -181,12 +199,12 @@ public class Model {
      * Aggiunge un nuovo utente fruitore
      * @param username username dell'utente da creare
      * @param password password associata all'utente da creare
-     * @throws DBException errore di connessione col database
+     * @throws CannotRetrieveInformationException errore di connessione col database
      * @throws DuplicateUserException utente con username già esistente
      * @throws InvalidUserTypeException
      * @throws InvalidPasswordException
      */
-    public void registerUser(String username, String password) throws DBException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
+    public void registerUser(String username, String password) throws CannotRetrieveInformationException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
         // controllo effettuato a priori, altrimenti crea un utente senza password
         if (!isPasswordValid(password)) throw new InvalidPasswordException();
 
@@ -194,7 +212,11 @@ public class Model {
         assert u.getAuthMethods().get(0) instanceof PasswordAuthMethod;
         ((PasswordAuthMethod) u.getAuthMethods().get(0)).setPassword(password, false);
         u.setLastLoginTime(0);
-        this.uf.saveUser(u);
+        try {
+            this.uf.saveUser(u);
+        } catch (DBException e) {
+            throw new CannotRetrieveInformationException();
+        }
     }
 
     /**
@@ -214,51 +236,55 @@ public class Model {
      * non possono esserci due categorie root con lo stesso nome
      *
      * @param name nome della categoria radice
+     * @throws CannotRetrieveInformationException errore di connessione col database
      * @return true se il nome della categoria radice non è già esistente
      */
-    public boolean isValidRootCategoryName(String name) {
+    public boolean isValidRootCategoryName(String name) throws CannotRetrieveInformationException {
         try {
             return !this.hf.getHierarchies().stream()
                     .map((e) -> e.getRootCategory().getName())
                     .toList()
                     .contains(name);
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return false;
+
     }
 
     /**
      * Crea una nuova gerarchia con la categoria root specificata
      *
      * @param root categoria root della gerarchia
-     * @throws DBException errore di connessione col database
+     * @throws CannotRetrieveInformationException errore di connessione col database
      */
-    public void createHierarchy(Category root) throws DBException {
-        this.cf.saveCategory(root);
-        this.hf.getHierarchies().add(this.hf.createHierarchy(root));
+    public void createHierarchy(Category root) throws CannotRetrieveInformationException {
+        try {
+            this.cf.saveCategory(root);
+            this.hf.getHierarchies().add(this.hf.createHierarchy(root));
+        } catch (DBException e) {
+            throw new CannotRetrieveInformationException();
+        }
     }
 
     /**
      * Ritorna le gerarchie
      * @return lista di gerarchie a sistema
+     * @throws CannotRetrieveInformationException errore di connessione col database
      */
-    public List<Hierarchy> getHierarchies() {
+    public List<Hierarchy> getHierarchies() throws CannotRetrieveInformationException{
         try {
             return this.hf.getHierarchies();
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
      * Ritorna una lista con tutte le categorie foglia di ogni gerarchia
      * @return lista di categorie
+     * @throws CannotRetrieveInformationException errore di connessione col database
      */
-    public List<LeafCategory> getLeafCategories() {
+    public List<LeafCategory> getLeafCategories() throws CannotRetrieveInformationException{
         return this.getHierarchies()
                 .stream()
                 .map((e) -> e.getRootCategory().getChildLeafs())
@@ -271,27 +297,23 @@ public class Model {
      * (piazza, scadenza, giorni, orari, luoghi)
      * @return boolean
      */
-    public boolean hasConfiguredSettings() {
+    public boolean hasConfiguredSettings() throws CannotRetrieveInformationException {
         try {
             return this.sf.readSettings() != null;
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return false;
     }
 
     /**
      * Ritorna i parametri di configurazione attuali
      */
-    public it.matlice.ingsw.model.data.Settings readSettings() {
+    public it.matlice.ingsw.model.data.Settings readSettings() throws CannotRetrieveInformationException {
         try {
             return this.sf.readSettings();
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -304,7 +326,7 @@ public class Model {
      *
      * @return true se è stato effettuato un tentativo di sovrascrivere la città in memoria, false altrimenti
      */
-    public boolean configureSettings(String city, int daysDue, List<String> locations, List<it.matlice.ingsw.model.data.Settings.Day> days, List<Interval> intervals) {
+    public boolean configureSettings(String city, int daysDue, List<String> locations, List<it.matlice.ingsw.model.data.Settings.Day> days, List<Interval> intervals) throws CannotRetrieveInformationException {
         try {
             it.matlice.ingsw.model.data.Settings set = this.sf.readSettings();
             if (set == null) {
@@ -327,8 +349,7 @@ public class Model {
                 return city != null;
             }
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
         return false;
     }
@@ -338,14 +359,12 @@ public class Model {
      * @param e categoria a cui appartiene l'articolo da creare
      * @return articolo creato
      */
-    public Offer createOffer(User u, String name, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
+    public Offer createOffer(User u, String name, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException, CannotRetrieveInformationException {
         try {
             return this.of.makeOffer(name, u, e, fields);
         } catch (DBException ex) {
-            ex.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -353,14 +372,12 @@ public class Model {
      * @param user utente
      * @return liste di offerte dell'utente
      */
-    public List<Offer> getOffersByUser(User user) {
+    public List<Offer> getOffersByUser(User user) throws CannotRetrieveInformationException {
         try {
             return this.of.getOffers(user);
-        } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+        } catch (DBException ex) {
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -368,14 +385,12 @@ public class Model {
      * @param cat categoria
      * @return liste di offerte dell'utente
      */
-    public List<Offer> getOffersByCategory(LeafCategory cat) {
+    public List<Offer> getOffersByCategory(LeafCategory cat) throws CannotRetrieveInformationException {
         try {
             return this.of.getOffers(cat);
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -384,7 +399,7 @@ public class Model {
      * @param user utente
      * @return lista di offerte ritirabili
      */
-    public List<Offer> getRetractableOffers(User user) {
+    public List<Offer> getRetractableOffers(User user) throws CannotRetrieveInformationException {
         return this.getOffersByUser(user)
                 .stream()
                 .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED)
@@ -395,13 +410,12 @@ public class Model {
      * Ritira un'offerta
      * @param offerToRetract offerta da ritirare
      */
-    public void retractOffer(Offer offerToRetract) {
+    public void retractOffer(Offer offerToRetract) throws CannotRetrieveInformationException {
         try {
             if (offerToRetract.getStatus() != Offer.OfferStatus.RETRACTED)
                 this.of.setOfferStatus(offerToRetract, Offer.OfferStatus.RETRACTED);
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
     }
 
@@ -411,17 +425,15 @@ public class Model {
      * @param owner proprietario
      * @return lista di offerte scambiabili
      */
-    public List<Offer> getTradableOffers(User owner) {
+    public List<Offer> getTradableOffers(User owner) throws CannotRetrieveInformationException {
         try {
             return this.of.getOffers(owner)
                     .stream()
                     .filter((e) -> e.getStatus().equals(Offer.OfferStatus.OPEN))
                     .toList();
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -431,7 +443,7 @@ public class Model {
      * @param offerToTrade offerta da scambiaare
      * @return lista di offerte scambiabili
      */
-    public List<Offer> getTradableOffers(Offer offerToTrade) {
+    public List<Offer> getTradableOffers(Offer offerToTrade) throws CannotRetrieveInformationException {
         try {
             return this.of.getOffers(offerToTrade.getCategory())
                     .stream()
@@ -439,10 +451,8 @@ public class Model {
                     .filter((e) -> e.getStatus().equals(Offer.OfferStatus.OPEN))
                     .toList();
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -450,7 +460,7 @@ public class Model {
      * @param offerToTrade articolo dell'utente che propone lo scambio
      * @param offerToAccept articolo richiesto in cambio
      */
-    public void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws InvalidTradeOfferException {
+    public void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws InvalidTradeOfferException, CannotRetrieveInformationException {
         if (offerToTrade.getStatus() != Offer.OfferStatus.OPEN) throw new InvalidTradeOfferException();
         if (offerToAccept.getStatus() != Offer.OfferStatus.OPEN) throw new InvalidTradeOfferException();
         if (!offerToTrade.getCategory().equals(offerToAccept.getCategory())) throw new InvalidTradeOfferException();
@@ -459,8 +469,7 @@ public class Model {
         try {
             this.of.createTradeOffer(offerToTrade, offerToAccept);
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
     }
 
@@ -468,12 +477,11 @@ public class Model {
      * Verifica tutte le condizioni legate al tempo,
      * come ad esempio le scadenze delle offerte
      */
-    public void timeIteration() {
+    public void timeIteration() throws CannotRetrieveInformationException {
         try {
             this.of.checkForDueDate();
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
     }
 
@@ -482,14 +490,12 @@ public class Model {
      * @param auth token di autenticazione dell'utente a cui le offerte son riferite
      * @return lista di offerte selezionate
      */
-    public List<Offer> getSelectedOffers(Authentication auth){
+    public List<Offer> getSelectedOffers(Authentication auth) throws CannotRetrieveInformationException {
         try {
             return this.of.getSelectedOffers(auth.getUser());
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -498,7 +504,7 @@ public class Model {
      * @param auth token di autenticazione dell'utente a cui le offerte son riferite
      * @return lista di messaggi
      */
-    public List<Message> getUserMessages(Authentication auth) {
+    public List<Message> getUserMessages(Authentication auth) throws CannotRetrieveInformationException {
         try {
             return this.mf.getUserMessages(auth.getUser())
                     .stream()
@@ -506,10 +512,8 @@ public class Model {
                     .filter((e) -> !e.hasReply())
                     .toList();
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -521,17 +525,15 @@ public class Model {
      * @param time proposta di ora di scambio
      * @return momento dello scambio
      */
-    public Calendar acceptTrade(Offer offer, String location, it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
+    public Calendar acceptTrade(Offer offer, String location, it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) throws CannotRetrieveInformationException {
         assert offer.getStatus() == Offer.OfferStatus.SELECTED;
         try {
             var date = convertToDate(day, time);
             this.of.acceptTradeOffer(offer, this.mf, location, date);
             return date;
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
@@ -543,29 +545,26 @@ public class Model {
      * @param time orario della controproposta
      * @return momento dello scambio
      */
-    public Calendar replyToMessage(Message replyto, String place, it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) {
+    public Calendar replyToMessage(Message replyto, String place, it.matlice.ingsw.model.data.Settings.Day day, Interval.Time time) throws CannotRetrieveInformationException {
         try {
             var date = convertToDate(day, time);
             this.of.updateTime(replyto.getReferencedOffer());
             this.mf.answer(replyto, replyto.getReferencedOffer().getLinkedOffer(), place, date);
             return date;
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
-        return null;
     }
 
     /**
      * Accetta un luogo, giorno e ora per lo scambio,
      * concludendo il processo di scambio
      */
-    public void acceptTradeMessage(Message m) {
+    public void acceptTradeMessage(Message m) throws CannotRetrieveInformationException {
         try {
             this.of.closeTradeOffer(m);
         } catch (DBException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new CannotRetrieveInformationException();
         }
     }
 

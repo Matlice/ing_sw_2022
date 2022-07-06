@@ -27,4 +27,9 @@ public class NullUser extends User{
     public List<UserTypes> getAuthTypes() {
         return List.of();
     }
+
+    @Override
+    public Boolean isAdmin() {
+        return false;
+    }
 }

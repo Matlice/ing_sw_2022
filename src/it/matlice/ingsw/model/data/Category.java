@@ -95,12 +95,7 @@ public abstract class Category extends HashMap<String, TypeDefinition> {
         return super.containsValue(value) || (this.father != null && this.father.containsValue(value));
     }
 
-    public boolean isCategoryValid() {
-        if (this instanceof LeafCategory)
-            return true;
-        assert this instanceof NodeCategory;
-        return ((NodeCategory) this).getChildren().length >= 2 && Arrays.stream(((NodeCategory) this).getChildren()).allMatch(Category::isCategoryValid);
-    }
+    public abstract boolean isCategoryValid();
 
     public NodeCategory getFather() {
         return this.father;
@@ -161,4 +156,20 @@ public abstract class Category extends HashMap<String, TypeDefinition> {
     }
 
     public abstract boolean isValidChildCategoryName(String name);
+
+    public abstract NodeCategory convertToNode();
+
+    /**
+     * A partire da una categoria root, crea una lista contenente i percorsi verso le categorie figlie
+     * Utilizzato per scegliere la categoria padre a cui aggiungere una categoria figlia
+     * <p>
+     * Passo ricorsivo, aggiunge le categorie figlie
+     *
+     * @param acc    lista a cui aggiungere le MenuAction
+     * @param prefix lista di categorie dalla root
+     * @param addNodes true per aggiungere Category nodes intermedi
+     * @return l'insieme delle liste rappresentanti il percorso da radice a una particolare categoria
+     */
+    public abstract List<List<Category>> getChildrenPath(@NotNull List<List<Category>> acc, List<Category> prefix, boolean addNodes);
+
 }
