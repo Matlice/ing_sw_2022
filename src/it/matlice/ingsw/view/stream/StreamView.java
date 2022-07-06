@@ -1,10 +1,7 @@
 package it.matlice.ingsw.view.stream;
 
 import it.matlice.ingsw.controller.*;
-import it.matlice.ingsw.model.data.Category;
-import it.matlice.ingsw.model.data.Hierarchy;
-import it.matlice.ingsw.model.data.Message;
-import it.matlice.ingsw.model.data.Offer;
+import it.matlice.ingsw.model.data.*;
 import it.matlice.ingsw.view.InfoFactory;
 import it.matlice.ingsw.view.View;
 import it.matlice.ingsw.view.menu.Menu;
@@ -56,10 +53,18 @@ public class StreamView implements View {
         c.registerConverter(Offer.class, o -> new StreamOfferAdapter((Offer) o));
         c.registerConverter(String.class, o -> new StreamStringAdapter((String) o));
         c.registerConverter(LinkedList.class, o -> {
-            LinkedList l = (LinkedList) o;
-            if (!l.isEmpty()  && l.get(0) instanceof Category) return new StreamCategoryChainAdapter(l);
+            if (!(o instanceof LinkedList l)) return null;
+            if (!l.isEmpty() && l.get(0) instanceof Category) return new StreamCategoryChainAdapter(l);
             return null;
         });
+        c.registerConverter(Map.Entry.class, o -> {
+            if (!(o instanceof Map.Entry entry)) return null;
+            if (entry.getKey() instanceof String && entry.getValue() instanceof TypeDefinition)
+                return new StreamFieldAdapter(entry);
+            return null;
+        });
+
+
 
 
         this.out = out;

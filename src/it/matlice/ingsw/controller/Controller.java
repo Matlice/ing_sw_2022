@@ -1025,8 +1025,7 @@ public class Controller {
      * @param e categoria foglia a cui appartiene il nuovo articolo
      */
     private void addArticle(LeafCategory e) {
-
-        /*Map<String, Object> fields = new HashMap<>();
+        Map<String, Object> fields = new HashMap<>();
 
         String name = this.view.getText(INSERT_NEW_ARTICLE_NAME).trim();
         while (name.length() == 0) {
@@ -1035,45 +1034,38 @@ public class Controller {
         }
 
         boolean needRequiredField;
-        boolean saveArticle;
+        Map.Entry<String, TypeDefinition> selectedField;
         do {
-            // cerca se ci sono campi obbligatori da compilare
-            needRequiredField = e.fullEntrySet()
+            // ottiene tutti i campi compilabili
+             var inputFields = e.fullEntrySet()
                     .stream()
                     .filter((f) -> !fields.containsKey(f.getKey()))
-                    .anyMatch((f) -> f.getValue().required());
+                    .collect(Collectors.toCollection(ArrayList::new));
 
-            // crea la lista di campi compilabili
-            var actions = e.fullEntrySet()
-                    .stream()
-                    .filter((f) -> !fields.containsKey(f.getKey()))
-                    .map((k) -> new MenuAction<>(k.getKey() + (k.getValue().required() ? " [R]" : ""), () -> {
-                        fields.put(k.getKey(), this.getFieldValue(k));
-                        return false;
-                    })).collect(Collectors.toCollection(ArrayList::new));
-
-            if (actions.size() == 0) {
+            if (inputFields.size() == 0) {
                 break;
             }
 
-            // aggiunge alla lista delle azioni l'azione che permette di salvare
-            // è attiva solo se non ci sono campi obbligatori da compilare
-            actions.add(0, new MenuAction<>(SAVE_ARTICLE_ENTRY, () -> true, needRequiredField, 0, -1));
+            // cerca se ci sono campi obbligatori da compilare
+            needRequiredField = inputFields
+                    .stream()
+                    .anyMatch((f) -> f.getValue().required());
 
-            // scelta del campo da compilare
-            saveArticle = this.view.chooseOption(
-                    actions,
-                    SELECT_FIELD_OR_SAVE_PROMPT
-            ).getAction().run();
-            //saveArticle = this.view.selectItem(SELECT_FIELD_OR_SAVE_PROMPT, actions); //TODO far sì cche save sia il pulsante di uscita, se non sono compilati tutti i campi obbligatori allora non viene mostrato, altrimenti viene mostrato e ne permette l'uscita
-        } while (needRequiredField || !saveArticle);
+            selectedField = this.view.selectItem(SELECT_FIELD_OR_SAVE_PROMPT,
+                                         inputFields,
+                                         needRequiredField ? null : SAVE_ARTICLE_ENTRY);
+
+            if (selectedField != null)
+                fields.put(selectedField.getKey(), this.getFieldValue(selectedField));
+
+        } while (needRequiredField || selectedField != null);
 
         try {
             this.model.createOffer(this.currentUser.getUser(), name, e, fields);
             this.view.warn(OFFER_CREATED);
         } catch (RequiredFieldConstrainException ex) {
             this.view.error(MISSING_FIELD);
-        }*/
+        }
     }
 
     /**
