@@ -6,6 +6,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.Category;
 import it.matlice.ingsw.model.data.Hierarchy;
+import it.matlice.ingsw.model.data.factories.CategoryFactory;
 import it.matlice.ingsw.model.data.factories.HierarchyFactory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl;
@@ -21,15 +22,16 @@ import java.util.stream.Collectors;
  * una volta caricati da una base di dati Jdbc
  */
 public class HierarchyFactoryImpl implements HierarchyFactory {
-    private final ConnectionSource connectionSource;
     private final Dao<HierarchyDB, Integer> hierarchyDAO;
+    private final CategoryFactory category_factory;
 
-    public HierarchyFactoryImpl() throws DBException {
-        this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
+    public HierarchyFactoryImpl(CategoryFactory cat, JdbcConnection connection) throws DBException {
+        this.category_factory = cat;
+        ConnectionSource connectionSource = connection.getConnectionSource();
         try {
-            this.hierarchyDAO = DaoManager.createDao(this.connectionSource, HierarchyDB.class);
+            this.hierarchyDAO = DaoManager.createDao(connectionSource, HierarchyDB.class);
             if (!this.hierarchyDAO.isTableExists()) {
-                TableUtils.createTable(this.connectionSource, HierarchyDB.class);
+                TableUtils.createTable(connectionSource, HierarchyDB.class);
             }
         } catch (SQLException e) {
             throw new DBException();
@@ -39,12 +41,11 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
     @Override
     public List<Hierarchy> getHierarchies() throws DBException {
         try {
-            var category_factory = new CategoryFactoryImpl();
             return this.hierarchyDAO.queryForAll().stream().map(e -> {
                 try {
-                    var root = category_factory.getCategory(e.getRoot().getCategoryId());
+                    var root = this.category_factory.getCategory(e.getRoot().getCategoryId());
                     return new HierarchyImpl(e, root);
-                } catch (SQLException ex) {
+                } catch (DBException ex) {
                     ex.printStackTrace();
                     return null;
                 }

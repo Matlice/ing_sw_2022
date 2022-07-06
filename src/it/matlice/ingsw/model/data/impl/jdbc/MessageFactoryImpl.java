@@ -8,6 +8,8 @@ import it.matlice.ingsw.model.data.Message;
 import it.matlice.ingsw.model.data.Offer;
 import it.matlice.ingsw.model.data.User;
 import it.matlice.ingsw.model.data.factories.MessageFactory;
+import it.matlice.ingsw.model.data.factories.OfferFactory;
+import it.matlice.ingsw.model.data.factories.SettingsFactory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl;
@@ -21,13 +23,13 @@ import java.util.Date;
 import java.util.List;
 
 public class MessageFactoryImpl implements MessageFactory {
-
+    private final OfferFactoryImpl offers_factory;
     private final Dao<MessageDB, Integer> messageDAO;
     private final Dao<OfferDB, Integer> offerDAO;
 
-    public MessageFactoryImpl() throws DBException {
-        ConnectionSource connectionSource = JdbcConnection.getInstance().getConnectionSource();
-
+    public MessageFactoryImpl(OfferFactoryImpl offer, JdbcConnection connection) throws DBException {
+        ConnectionSource connectionSource = connection.getConnectionSource();
+        this.offers_factory = offer;
         try {
             this.messageDAO = DaoManager.createDao(connectionSource, MessageDB.class);
             this.offerDAO = DaoManager.createDao(connectionSource, OfferDB.class);
@@ -70,8 +72,7 @@ public class MessageFactoryImpl implements MessageFactory {
         } catch (SQLException e) {
             throw new DBException();
         }
-        var factory = new OfferFactoryImpl(new SettingsFactoryImpl());
-        return messages.stream().map(e -> (Message) new MessageImpl(e, factory.instantiateOffer(e.getRelative_offer(), null))).toList();
+        return messages.stream().map(e -> (Message) new MessageImpl(e, this.offers_factory.instantiateOffer(e.getRelative_offer(), null))).toList();
     }
 
     private MessageImpl createMessage(Offer offer, String location, Long date, MessageImpl answer_to) throws DBException {

@@ -27,8 +27,8 @@ import java.util.Objects;
 public class UserFactoryImpl implements UserFactory {
     private final Dao<UserDB, String> userDAO;
 
-    public UserFactoryImpl() throws DBException {
-        ConnectionSource connectionSource = JdbcConnection.getInstance().getConnectionSource();
+    public UserFactoryImpl(JdbcConnection connection) throws DBException {
+        ConnectionSource connectionSource = connection.getConnectionSource();
         try {
             this.userDAO = DaoManager.createDao(connectionSource, UserDB.class);
             if (!this.userDAO.isTableExists()) {

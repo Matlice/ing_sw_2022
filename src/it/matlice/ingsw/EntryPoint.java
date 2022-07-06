@@ -1,5 +1,6 @@
 package it.matlice.ingsw;
 
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
 import it.matlice.ingsw.model.data.impl.jdbc.*;
@@ -24,17 +25,17 @@ public class EntryPoint {
         try {
             // imposta il logger al livello di WARNING per togliere scritte non volute da stdout
             Logger.setGlobalLogLevel(Level.WARNING);
-            JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+            var connection = new JdbcConnection("jdbc:sqlite:db.sqlite");
 
             // istanzia le factory necessarie per il database
-            var uf = new UserFactoryImpl();
-            var cf = new CategoryFactoryImpl();
-            var hf = new HierarchyFactoryImpl();
-            var sf = new SettingsFactoryImpl();
-            var af = new OfferFactoryImpl(sf);
-            var mf = new MessageFactoryImpl();
+            var uf = new UserFactoryImpl(connection);
+            var cf = new CategoryFactoryImpl(connection);
+            var hf = new HierarchyFactoryImpl(cf, connection);
+            var sf = new SettingsFactoryImpl(connection);
+            var of = new OfferFactoryImpl(sf, hf, uf, connection);
+            var mf = new MessageFactoryImpl(of, connection);
 
-            var model = new Model(hf, cf, uf, sf, af, mf);
+            var model = new Model(hf, cf, uf, sf, of, mf);
 
             // istanzia una view sugli stream stdin e stdout
             var view = new StreamView(System.out, new Scanner(System.in));
