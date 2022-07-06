@@ -4,6 +4,8 @@ import it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -52,5 +54,20 @@ public abstract class NodeCategory extends Category {
     @Override
     public NodeCategory convertToNode(){
         return this;
-    };
+    }
+
+    @Override
+    public boolean isCategoryValid() {
+        return this.getChildren().length >= 2 && Arrays.stream(this.getChildren()).allMatch(Category::isCategoryValid);
+    }
+
+    @Override
+    public List<List<Category>> getChildrenPath(@NotNull List<List<Category>> acc, List<Category> prefix, boolean addNodes){
+        List<Category> p = new LinkedList<>(prefix);
+        p.add(this);
+        if (addNodes) acc.add(p);
+        for (var child : this.getChildren())
+            child.getChildrenPath(acc, p, addNodes);
+        return acc;
+    }
 }

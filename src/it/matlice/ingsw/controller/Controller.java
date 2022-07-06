@@ -78,9 +78,21 @@ public class Controller {
      * @return false se l'esecuzione deve essere interrotta
      */
     public boolean mainloop() {
-
-        if (this.model.hasConfiguredSettings())
-            this.model.timeIteration();
+        boolean hasConfiguredSettings = false;
+        try {
+            hasConfiguredSettings = this.model.hasConfiguredSettings();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        if (hasConfiguredSettings) {
+            try {
+                this.model.timeIteration();
+            } catch (CannotRetrieveInformationException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
 
         if (!this.currentUser.isValid())
             return this.chooseAndRun(this.public_actions, SELECT_OPTION_PROMPT);
@@ -114,43 +126,56 @@ public class Controller {
                 this.view.warn(NEED_CHANGE_PASSWORD);
                 this.changePassword();
             }
+            this.finalizeLogin();
             try {
-                this.finalizeLogin();
-
-                if (this.currentUser.getUser() instanceof ConfiguratorUser)
-                    while (!this.model.hasConfiguredSettings()) {
-                        this.configureSettings(true);
-                    }
-
-                else {
-                    if (!this.model.hasConfiguredSettings()) {
+                if (!this.model.hasConfiguredSettings()){
+                    if (this.currentUser.getUser().isAdmin())
+                        do {
+                            this.configureSettings(true);
+                        } while (!this.model.hasConfiguredSettings());
+                    else {
                         this.view.error(SYSTEM_NOT_CONFIGURED);
                         this.logout();
                     }
                 }
-            } catch (DBException e) {
+            }catch (CannotRetrieveInformationException e){
                 e.printStackTrace();
                 System.exit(1);
             }
+            this.showMessages();
             return true;
         }
         return true;
     }
 
-    private void finalizeLogin() throws DBException {
-
-        this.model.finalizeLogin(this.currentUser);
-
-        if (this.currentUser.getUser() instanceof CustomerUser) {
-
-            var selected = this.model.getSelectedOffers(this.currentUser);
-            if (selected.size() > 0) {
-                this.view.showList(BEEN_SELECTED_INFO, selected);
-            }
-
-            var messages = this.model.getUserMessages(this.currentUser);
-            if (messages.size() > 0) this.view.showList(NEW_MESSAGES_INFO, messages);
+    private void finalizeLogin(){
+        try {
+            this.model.finalizeLogin(this.currentUser);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
+    }
+
+    private void showMessages() {
+        List<Offer> selected = null;
+        try {
+            selected = this.model.getSelectedOffers(this.currentUser);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        if (selected.size() > 0) {
+            this.view.showList(BEEN_SELECTED_INFO, selected);
+        }
+        List<Message> messages = null;
+        try {
+            messages =  this.model.getUserMessages(this.currentUser);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        if (messages.size() > 0) this.view.showList(NEW_MESSAGES_INFO, messages);
     }
 
     /**
@@ -169,8 +194,9 @@ public class Controller {
             this.view.error(PASSWORD_NOT_VALID);
         } catch (DuplicateUserException e) {
             this.view.error(USER_DUPLICATE);
-        } catch (InvalidUserTypeException | DBException e) {
+        } catch (InvalidUserTypeException | CannotRetrieveInformationException e) {
             e.printStackTrace();
+            System.exit(1);
         }
 
         return true;
@@ -191,7 +217,7 @@ public class Controller {
                 this.view.error(PASSWORD_NOT_VALID);
             } catch (LoginInvalidException e) {
                 this.view.error(USER_LOGIN_INVALID);
-            } catch (DBException e) {
+            } catch (CannotRetrieveInformationException e) {
                 e.printStackTrace();
                 System.exit(1);
                 return false;
@@ -207,7 +233,7 @@ public class Controller {
         try {
             String psw = this.model.addConfiguratorUser("admin", true);
             this.view.getInfoFactory().getFirstAccessCredentialsMessage("admin", psw).show();
-        } catch (DBException e) {
+        } catch (CannotRetrieveInformationException e) {
             e.printStackTrace();
             System.exit(1);
         } catch (InvalidUserTypeException | DuplicateUserException | InvalidPasswordException e) {
@@ -227,7 +253,7 @@ public class Controller {
             this.view.getInfoFactory().getFirstAccessCredentialsMessage(username, password).show();
         } catch (DuplicateUserException e) {
             this.view.error(USER_DUPLICATE);
-        } catch (InvalidUserTypeException | InvalidPasswordException | DBException e) {
+        } catch (InvalidUserTypeException | InvalidPasswordException | CannotRetrieveInformationException e) {
             this.view.error(ERR_CONFIG_USER_CREATION);
         }
         return true;
@@ -242,7 +268,13 @@ public class Controller {
     private boolean offerTrade() {
 
         // scelta del proprio articolo da scambiare
-        List<Offer> userOffers = this.model.getTradableOffers(this.currentUser.getUser());
+        List<Offer> userOffers = null;
+        try {
+            userOffers = this.model.getTradableOffers(this.currentUser.getUser());
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         if (userOffers.size() == 0) {
             this.view.warn(NO_OFFERS_IN_EXCHANGE);
@@ -254,7 +286,13 @@ public class Controller {
         }
 
         // scelta dell'articolo che si vuole accettare in scambio
-        List<Offer> offers = this.model.getTradableOffers(offerToTrade);
+        List<Offer> offers = null;
+        try {
+            offers = this.model.getTradableOffers(offerToTrade);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         if (offers.size() == 0) {
             this.view.warn(NO_OFFERS_IN_EXCHANGE);
             return true;
@@ -267,8 +305,11 @@ public class Controller {
         try {
             this.model.createTradeOffer(offerToTrade, offerToAccept);
             this.view.warn(SUCCESSFUL_OFFER_PROPOSAL);
-        } catch (Exception e) {
+        } catch (InvalidTradeOfferException e) {
             this.view.error(ERR_OFFER_PROPOSAL);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
 
         return true;
@@ -280,7 +321,13 @@ public class Controller {
      * @return true
      */
     private boolean acceptTrade() {
-        var selected_offers = this.model.getSelectedOffers(this.currentUser);
+        List<Offer> selected_offers = null;
+        try {
+            selected_offers = this.model.getSelectedOffers(this.currentUser);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         if (selected_offers.size() == 0) {
             this.view.warn(NO_ACCEPTABLE_OFFERS);
@@ -296,7 +343,13 @@ public class Controller {
         Settings.Day day = this.chooseExchangeDay();
         Interval.Time time = this.chooseExchangeTime();
 
-        var date = this.model.acceptTrade(offer, place, day, time);
+        Calendar date = null;
+        try {
+            date =  this.model.acceptTrade(offer, place, day, time);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         // info summary
         this.view.getInfoFactory().getProposedExchangeMessage(date, day, time).show();
@@ -306,23 +359,31 @@ public class Controller {
 
     private String chooseExchangePlace() {
         // exchange place
-        var places = this.model.readSettings().getLocations();
-        /*return this.view.chooseOption(
-                places.stream()
-                        .map((e) -> new MenuAction<>(e, () -> e))
-                        .collect(Collectors.toList()),
-                SELECT_PLACE_PROMPT
-        ).getAction().run();*/
+        List<String> places = null;
+        try {
+            places = this.model.readSettings().getLocations();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         return this.view.selectItem(SELECT_PLACE_PROMPT, places, null);
     }
 
     private Settings.Day chooseExchangeDay() {
         // exchange day
-        this.view.getInfoFactory().getAvailableDaysMessage(this.model.readSettings().getDays()).show();
+        List<Settings.Day> days = null;
+        try {
+            days = this.model.readSettings().getDays();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        this.view.getInfoFactory().getAvailableDaysMessage(days).show();
+        List<Settings.Day> finalDays = days;
         return this.view.getLineWithConversion(INSERT_DAY_FOR_AFFAIR, (e) -> {
             try {
                 var d = Settings.Day.fromString(e);
-                if (this.model.readSettings().getDays().contains(d)) {
+                if (finalDays.contains(d)) {
                     return d;
                 } else {
                     return null;
@@ -335,11 +396,19 @@ public class Controller {
 
     private Interval.Time chooseExchangeTime() {
         // exchange time
-        this.view.getInfoFactory().getAvailableIntervalsMessage(this.model.readSettings().getIntervals()).show();
+        List<Interval> times = null;
+        try {
+            times = this.model.readSettings().getIntervals();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        this.view.getInfoFactory().getAvailableIntervalsMessage(times).show();
+        List<Interval> finalTimes = times;
         return this.view.getLineWithConversion(INSERT_HOUR_FOR_AFFAIR, (e) -> {
             try {
                 var t = Interval.Time.fromString(e);
-                if (this.model.readSettings().getIntervals().stream().anyMatch((i) -> i.includes(t))) {
+                if (finalTimes.stream().anyMatch((i) -> i.includes(t))) {
                     return t;
                 } else {
                     return null;
@@ -351,7 +420,13 @@ public class Controller {
     }
 
     private boolean answerMessage() {
-        var messages = this.model.getUserMessages(this.currentUser);
+        List<Message> messages = null;
+        try {
+            messages =  this.model.getUserMessages(this.currentUser);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         if (messages.size() == 0) {
             this.view.warn(NO_MESSAGES_TO_REPLY);
@@ -375,7 +450,12 @@ public class Controller {
 
         if (accept) {
             // proposta accettata
-            this.model.acceptTradeMessage(replyto);
+            try {
+                this.model.acceptTradeMessage(replyto);
+            } catch (CannotRetrieveInformationException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
             this.view.warn(SUCCESSFUL_ACCEPT_OFFER);
         } else {
             // proposta rifiutata, fai controproposta
@@ -383,7 +463,13 @@ public class Controller {
             Settings.Day day = this.chooseExchangeDay();
             Interval.Time time = this.chooseExchangeTime();
 
-            var date = this.model.replyToMessage(replyto, place, day, time);
+            Calendar date = null;
+            try {
+                date = this.model.replyToMessage(replyto, place, day, time);
+            } catch (CannotRetrieveInformationException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
 
             // info summary
             this.view.getInfoFactory().getProposedExchangeReplyMessage(date, day, time).show();
@@ -400,7 +486,14 @@ public class Controller {
      */
     private boolean createArticle() {
         // scelta della categoria in cui inserire l'articolo
-        if (this.model.getLeafCategories().size() == 0) {
+        List<LeafCategory> leafCategories = null;
+        try {
+            leafCategories = this.model.getLeafCategories();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        if (leafCategories.size() == 0) {
             this.view.error(NO_LEAF_CATEGORY);
             return true;
         }
@@ -415,7 +508,13 @@ public class Controller {
      * @return true
      */
     private boolean retractOffer() {
-        List<Offer> offers = this.model.getRetractableOffers(this.currentUser.getUser());
+        List<Offer> offers = null;
+        try {
+            offers = this.model.getRetractableOffers(this.currentUser.getUser());
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         if (offers.size() == 0) {
             this.view.warn(NO_RETRACTABLE_OFFER);
@@ -426,7 +525,12 @@ public class Controller {
         var offerToRetract = this.view.selectItem(SELECT_OFFER_TO_RETRIEVE_PROMPT, offers);
         if (offerToRetract == null) return true;
 
-        this.model.retractOffer(offerToRetract);
+        try {
+            this.model.retractOffer(offerToRetract);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         this.view.getInfoFactory().getRetractedExchangeMessage().show();
 
         return true;
@@ -439,7 +543,13 @@ public class Controller {
      * @return true
      */
     private boolean showOffersByUser() {
-        List<Offer> offers = this.model.getOffersByUser(this.currentUser.getUser());
+        List<Offer> offers = null;
+        try {
+            offers = this.model.getOffersByUser(this.currentUser.getUser());
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         this.showOffers(YOUR_OFFERS_INFO, offers);
         return true;
     }
@@ -451,12 +561,26 @@ public class Controller {
      * @return true
      */
     private boolean showOpenOffersByCategory() {
-        if (this.model.getLeafCategories().size() == 0) {
+        List<LeafCategory> leafCategories = null;
+        try {
+            leafCategories = this.model.getLeafCategories();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        if (leafCategories.size() == 0) {
             this.view.warn(NO_LEAF_CATEGORIES_TO_SHOW);
             return true;
         }
         LeafCategory cat = this.chooseLeafCategory(SELECT_CATEGORY_FOR_OFFERS_PROMPT);
-        List<Offer> offers = this.model.getOffersByCategory(cat)
+        List<Offer> offersByCat = null;
+        try {
+            offersByCat = this.model.getOffersByCategory(cat);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        List<Offer> offers = offersByCat
                 .stream()
                 .filter((o) -> o.getStatus() != Offer.OfferStatus.RETRACTED)
                 .toList();
@@ -491,7 +615,7 @@ public class Controller {
                 new PrivilegedMenuAction<>(SAVE_EXIT_PROMPT, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, !root.isCategoryValid(), 0, -1),
                 new PrivilegedMenuAction<>(ADD_CATEGORY_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> true)
         ), ADD_HIERARCHY_PROMPT)) {
-            List<Category> path = this.view.selectItem(SELECT_FATHER_HIERARCHY_PROMPT, this.getCategorySelectionMenu(root));
+            List<Category> path = this.view.selectItem(SELECT_FATHER_HIERARCHY_PROMPT, this.getCategoryPathFromRoot(root));
             if (path == null) continue;
             Category father = path.get(path.size() - 1);
             if (father == null) continue;
@@ -511,7 +635,7 @@ public class Controller {
 
         try {
             this.model.createHierarchy(root);
-        } catch (DBException e) {
+        } catch (CannotRetrieveInformationException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -525,7 +649,13 @@ public class Controller {
      */
     private boolean showHierarchies() {
         // mostra la lista di gerarchie disponibili
-        List<Hierarchy> hierarchies = this.model.getHierarchies();
+        List<Hierarchy> hierarchies = null;
+        try {
+            hierarchies = this.model.getHierarchies();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         if (hierarchies.size() == 0) {
             this.view.warn(NO_HIERARCHIES);
             return true;
@@ -544,7 +674,14 @@ public class Controller {
      * @return true
      */
     private boolean showConfParameters() {
-        this.view.getInfoFactory().getConfigurationMessage(this.model.readSettings()).show();
+        Settings settings = null;
+        try {
+            settings = this.model.readSettings();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        this.view.getInfoFactory().getConfigurationMessage(settings).show();
         return true;
     }
 
@@ -590,7 +727,7 @@ public class Controller {
                     this.view.error(IMPORT_FILE_NOT_VALID);
                     return true;
                 }
-                var cityOverride = this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
+                boolean cityOverride = this.model.configureSettings(settings.city, settings.expiration, settings.locations, settings.days, settings.intervals);
                 if (cityOverride)
                     this.view.warn(CITY_NOT_OVERWRITABLE_SUCCESS);
 
@@ -611,9 +748,6 @@ public class Controller {
                         this.view.error(DUPLICATE_FIELD);
                     } catch (InvalidFieldException ex) {
                         this.view.error(INVALID_FIELD);
-                    } catch (DBException ex) {
-                        this.view.error(ERR_IMPORTING_HIERARCHY);
-                        ex.printStackTrace();
                     }
                 });
             }
@@ -621,6 +755,9 @@ public class Controller {
             this.view.error(IMPORT_FILE_NOT_FOUND);
         } catch (XMLStreamException e) {
             this.view.error(ERR_IMPORTING_CONFIG);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
         return true;
     }
@@ -630,7 +767,7 @@ public class Controller {
      *
      * @param hierarchyXML la definizione della gerarchia da creare
      */
-    private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException, DBException {
+    private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException {
         // creazione della categoria root
         Category root = this.createCategoryFromXML(null, hierarchyXML.root);
         if (hierarchyXML.root.fields != null)
@@ -689,7 +826,12 @@ public class Controller {
             if (father == root) root = r;
         }
 
-        this.model.createHierarchy(root);
+        try {
+            this.model.createHierarchy(root);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**
@@ -704,7 +846,13 @@ public class Controller {
         if (name == null || name.length() == 0)
             throw new InvalidCategoryException();
 
-        if (root == null && !this.model.isValidRootCategoryName(name))
+        boolean valid;
+        try {
+            valid = this.model.isValidRootCategoryName(name);
+        } catch (CannotRetrieveInformationException e) {
+            valid = false;
+        }
+        if (root == null && !valid)
             throw new DuplicateCategoryException();
         else if (root != null && !root.isValidChildCategoryName(name))
             throw new DuplicateCategoryException();
@@ -876,7 +1024,13 @@ public class Controller {
             this.view.warn(NO_EMPTY_NAME);
             name = this.view.getText(INSERT_CATEGORY_NAME_PROMPT).trim();
         }
-        if (root == null && !this.model.isValidRootCategoryName(name))
+        boolean valid;
+        try {
+            valid = this.model.isValidRootCategoryName(name);
+        } catch (CannotRetrieveInformationException e) {
+            valid = false;
+        }
+        if (root == null && !valid)
             throw new DuplicateCategoryException();
         else if (root != null && !root.isValidChildCategoryName(name))
             throw new DuplicateCategoryException();
@@ -909,12 +1063,12 @@ public class Controller {
      * @return l'insieme delle liste rappresentanti il percorso da radice a una particolare categoria
      */
     @Contract("_ -> new")
-    private @NotNull List<List<Category>> getCategorySelectionMenu(Category root) {
-        return this.getCategorySelectionMenu(root, true);
+    private @NotNull List<List<Category>> getCategoryPathFromRoot(Category root) {
+        return this.getCategoryPathFromRoot(root, true);
     }
 
     /**
-     * A partire da una categoria root, crea un menu che permette di scegliere una delle categorie figlie
+     * A partire da una categoria root, crea una lista contenente i percorsi verso le categorie figlie
      * Utilizzato per scegliere la categoria padre a cui aggiungere una categoria figlia
      * <p>
      * Passo base della ricorsione
@@ -923,12 +1077,12 @@ public class Controller {
      * @param addNodes true per aggiungere Category nodes intermedi
      * @return l'insieme delle liste rappresentanti il percorso da radice a una particolare categoria
      */
-    private @NotNull List<List<Category>> getCategorySelectionMenu(Category root, boolean addNodes) {
-        return this.getCategorySelectionMenu(root, new LinkedList<>(), new LinkedList<>(), addNodes);
+    private @NotNull List<List<Category>> getCategoryPathFromRoot(Category root, boolean addNodes) {
+        return this.getCategoryPathFromRoot(root, new LinkedList<>(), new LinkedList<>(), addNodes);
     }
 
     /**
-     * A partire da una categoria root, crea un menu che permette di scegliere una delle categorie figlie
+     * A partire da una categoria root, crea una lista contenente i percorsi verso le categorie figlie
      * Utilizzato per scegliere la categoria padre a cui aggiungere una categoria figlia
      * <p>
      * Passo ricorsivo, aggiunge le categorie figlie
@@ -939,20 +1093,9 @@ public class Controller {
      * @param addNodes true per aggiungere Category nodes intermedi
      * @return l'insieme delle liste rappresentanti il percorso da radice a una particolare categoria
      */
-    private List<List<Category>> getCategorySelectionMenu(@NotNull Category root, @NotNull List<List<Category>> acc, List<Category> prefix, boolean addNodes) {
-        List<Category> p = new LinkedList<>(prefix);
-        p.add(root);
-        if (root instanceof NodeCategory) {
-            if (addNodes) acc.add(p);
-            for (var child : ((NodeCategory) root).getChildren())
-                this.getCategorySelectionMenu(child, acc, p, addNodes);
-        } else if (root instanceof LeafCategory) {
-            acc.add(p);
-        }
-        return acc;
+    private List<List<Category>> getCategoryPathFromRoot(@NotNull Category root, @NotNull List<List<Category>> acc, List<Category> prefix, boolean addNodes) {
+        return root.getChildrenPath(acc, prefix, addNodes);
     }
-
-
 
     /**
      * Richiede l'inserimento all'utente dei parametri di configurazione,
@@ -962,7 +1105,7 @@ public class Controller {
      */
     private void configureSettings(boolean firstConfiguration) {
 
-        String city;
+        String city = "";
         if (firstConfiguration) {
             boolean toImport = this.chooseAndRun(Arrays.asList(
                     new PrivilegedMenuAction<>(MANUALLY_ADD_CONFIGURATION_ENTRY, new User.UserTypes[]{User.UserTypes.CONFIGURATOR}, () -> false, false, 0, -1),
@@ -976,7 +1119,13 @@ public class Controller {
             city = this.view.get(INSERT_CITY_FOR_AFFAIR);
         } else {
             this.view.warn(CITY_NOT_OVERWRITABLE);
-            city = this.model.readSettings().getCity();
+            try {
+                city = this.model.readSettings().getCity();
+            } catch (CannotRetrieveInformationException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+
         }
 
         List<String> places = this.view.getStringList(INSERT_PLACE_FOR_AFFAIR, true);
@@ -1006,10 +1155,11 @@ public class Controller {
 
         int daysDue = this.view.getInt(INSERT_EXPIRATION_FOR_AFFAIR, (e) -> e > 0);
 
-        if (firstConfiguration) {
+        try {
             this.model.configureSettings(city, daysDue, places, days, intervals);
-        } else {
-            this.model.configureSettings(city, daysDue, places, days, intervals);
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
 
     }
@@ -1021,10 +1171,17 @@ public class Controller {
      * @return la categoria foglia scelta
      */
     private LeafCategory chooseLeafCategory(PromptType prompt) {
-        var leafCategories = this.model.getHierarchies()
+        List<Hierarchy> hierarchies = null;
+        try {
+            hierarchies = this.model.getHierarchies();
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        var leafCategories = hierarchies
                 .stream()
                 .map(Hierarchy::getRootCategory)
-                .map(c -> this.getCategorySelectionMenu(c, false))
+                .map(c -> this.getCategoryPathFromRoot(c, false))
                 .flatMap(Collection::stream)
                 .toList();
         var r = this.view.selectItem(prompt, leafCategories, null);
@@ -1077,6 +1234,9 @@ public class Controller {
             this.view.warn(OFFER_CREATED);
         } catch (RequiredFieldConstrainException ex) {
             this.view.error(MISSING_FIELD);
+        } catch (CannotRetrieveInformationException ex){
+            ex.printStackTrace();
+            System.exit(1);
         }
     }
 

@@ -20,6 +20,8 @@ public abstract class User implements Authenticable {
 
     public abstract List<UserTypes> getAuthTypes();
 
+    public abstract Boolean isAdmin();
+
     public enum UserTypes {
         CONFIGURATOR("configurator"),
         CUSTOMER("customer");

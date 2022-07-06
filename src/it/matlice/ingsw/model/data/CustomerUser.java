@@ -8,8 +8,14 @@ import java.util.List;
  */
 public abstract class CustomerUser extends User{
 
+    @Override
     public List<UserTypes> getAuthTypes(){
         return List.of(UserTypes.CUSTOMER);
+    }
+
+    @Override
+    public Boolean isAdmin(){
+        return false;
     }
 
 }
