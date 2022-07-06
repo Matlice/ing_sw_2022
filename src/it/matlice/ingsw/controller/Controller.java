@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.xml.stream.XMLStreamException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 

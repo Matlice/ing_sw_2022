@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.security.SecureRandom;
-import java.sql.SQLException;
 import java.util.*;
 
 import static it.matlice.ingsw.model.auth.password.PasswordAuthMethod.isPasswordValid;
@@ -53,7 +52,7 @@ public class Model {
      *
      * @param auth autenticazione, permette di identificare l'utente e verificare sia loggato
      * @param newPassword nuova password che si vuole impostare
-     * @throws SQLException errore di connessione col database
+     * @throws DBException errore di connessione col database
      * @throws InvalidPasswordException password non rispettante i requisiti di sicurezza
      * @throws LoginInvalidException utente non loggato
      */
@@ -156,7 +155,7 @@ public class Model {
      * @param username username dell'utente da creare
      * @param defaultPassword true per utilizzare una password default, altrimenti la genera casualmente
      * @return password dell'utente appena creato
-     * @throws SQLException errore di connessione col database
+     * @throws DBException errore di connessione col database
      * @throws DuplicateUserException utente con username già esistente
      * @throws InvalidPasswordException
      * @throws InvalidUserTypeException
@@ -182,7 +181,7 @@ public class Model {
      * Aggiunge un nuovo utente fruitore
      * @param username username dell'utente da creare
      * @param password password associata all'utente da creare
-     * @throws SQLException errore di connessione col database
+     * @throws DBException errore di connessione col database
      * @throws DuplicateUserException utente con username già esistente
      * @throws InvalidUserTypeException
      * @throws InvalidPasswordException
@@ -234,7 +233,7 @@ public class Model {
      * Crea una nuova gerarchia con la categoria root specificata
      *
      * @param root categoria root della gerarchia
-     * @throws SQLException errore di connessione col database
+     * @throws DBException errore di connessione col database
      */
     public void createHierarchy(Category root) throws DBException {
         this.cf.saveCategory(root);
