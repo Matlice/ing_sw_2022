@@ -918,7 +918,21 @@ public class Controller {
      */
     @Contract("_ -> new")
     private @NotNull List<List<Category>> getCategorySelectionMenu(Category root) {
-        return this.getCategorySelectionMenu(root, new LinkedList<>(), new LinkedList<>());
+        return this.getCategorySelectionMenu(root, new LinkedList<>(), new LinkedList<>(), true);
+    }
+
+    /**
+     * A partire da una categoria root, crea un menu che permette di scegliere una delle categorie figlie
+     * Utilizzato per scegliere la categoria padre a cui aggiungere una categoria figlia
+     * <p>
+     * Passo base della ricorsione
+     *
+     * @param root categoria radice
+     * @param addNodes true per aggiungere Category nodes intermedi
+     * @return l'insieme delle liste rappresentanti il percorso da radice a una particolare categoria
+     */
+    private @NotNull List<List<Category>> getCategorySelectionMenu(Category root, boolean addNodes) {
+        return this.getCategorySelectionMenu(root, new LinkedList<>(), new LinkedList<>(), addNodes);
     }
 
     /**
@@ -929,15 +943,20 @@ public class Controller {
      *
      * @param root   categoria radice
      * @param acc    lista a cui aggiungere le MenuAction
+     * @param prefix lista di categorie dalla root
+     * @param addNodes true per aggiungere Category nodes intermedi
      * @return l'insieme delle liste rappresentanti il percorso da radice a una particolare categoria
      */
-    private List<List<Category>> getCategorySelectionMenu(@NotNull Category root, @NotNull List<List<Category>> acc, List<Category> prefix) {
+    private List<List<Category>> getCategorySelectionMenu(@NotNull Category root, @NotNull List<List<Category>> acc, List<Category> prefix, boolean addNodes) {
         List<Category> p = new LinkedList<>(prefix);
         p.add(root);
-        acc.add(p);
-        if (root instanceof NodeCategory)
+        if (root instanceof NodeCategory) {
+            if (addNodes) acc.add(p);
             for (var child : ((NodeCategory) root).getChildren())
-                this.getCategorySelectionMenu(child, acc, p);
+                this.getCategorySelectionMenu(child, acc, p, addNodes);
+        } else if (root instanceof LeafCategory) {
+            acc.add(p);
+        }
         return acc;
     }
 
@@ -1010,13 +1029,14 @@ public class Controller {
      * @return la categoria foglia scelta
      */
     private LeafCategory chooseLeafCategory(PromptType prompt) {
-        return this.view.selectItem(prompt, this.model.getLeafCategories(), null);
-        /*return this.view.chooseOption(
-                this.model.getLeafCategories().stream()
-                        .map((e) -> new MenuAction<>(e.fullToString(), () -> e))
-                        .collect(Collectors.toList()),
-                prompt
-        ).getAction().run();*/ //TODO comportamento modificato
+        var leafCategories = this.model.getHierarchies()
+                .stream()
+                .map(Hierarchy::getRootCategory)
+                .map(c -> this.getCategorySelectionMenu(c, false))
+                .flatMap(Collection::stream)
+                .toList();
+        var r = this.view.selectItem(prompt, leafCategories, null);
+        return (LeafCategory) r.get(r.size()-1);
     }
 
     /**

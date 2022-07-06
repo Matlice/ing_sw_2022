@@ -316,7 +316,7 @@ public class StreamView implements View {
      *                      deve ritornare null per valori di stringhe non validi
      * @return lista di oggetti inseriti dall'utente
      */
-    public <V> List<V> getGenericList(PromptType prompt, boolean unique, Function<String, V> conversionMap) { // todo move to view the conversion map
+    public <V> List<V> getGenericList(PromptType prompt, boolean unique, Function<String, V> conversionMap) {
         return this.getGenericList(prompt, unique, conversionMap, DUPLICATE_VALUE, INVALID_VALUE);
     }
 
