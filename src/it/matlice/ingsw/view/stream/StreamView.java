@@ -56,9 +56,9 @@ public class StreamView implements View {
         c.registerConverter(Offer.class, o -> new StreamOfferAdapter((Offer) o));
         c.registerConverter(String.class, o -> new StreamStringAdapter((String) o));
         c.registerConverter(LinkedList.class, o -> {
-            LinkedList l = (LinkedList) o;
-            if (!l.isEmpty()  && l.get(0) instanceof Category) return new StreamCategoryChainAdapter(l);
-            return null;
+            LinkedList<?> l = (LinkedList<?>) o;
+            assert l.isEmpty() || l.get(0) instanceof Category;
+            return new StreamCategoryChainAdapter((LinkedList<Category>) l);
         });
 
 
