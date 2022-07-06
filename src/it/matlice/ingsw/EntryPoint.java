@@ -5,6 +5,7 @@ import com.j256.ormlite.logger.Logger;
 import it.matlice.ingsw.model.data.impl.jdbc.*;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.controller.Controller;
+import it.matlice.ingsw.model.exceptions.DBException;
 import it.matlice.ingsw.view.stream.StreamView;
 
 import java.sql.SQLException;
@@ -47,7 +48,7 @@ public class EntryPoint {
             // esecuzione in loop del programma
             while (controller.mainloop());
 
-        } catch (SQLException e) {
+        } catch (DBException e) {
             // errore durante la connessione al database, interrompe l'esecuzione
             System.out.println("Errore durante la connessione al database");
             System.exit(1);

@@ -129,9 +129,7 @@ public class Controller {
                         this.logout();
                     }
                 }
-
-
-            } catch (SQLException e) {
+            } catch (DBException e) {
                 e.printStackTrace();
                 System.exit(1);
             }
@@ -140,7 +138,7 @@ public class Controller {
         return true;
     }
 
-    private void finalizeLogin() throws SQLException {
+    private void finalizeLogin() throws DBException {
 
         this.model.finalizeLogin(this.currentUser);
 
@@ -172,7 +170,7 @@ public class Controller {
             this.view.error(PASSWORD_NOT_VALID);
         } catch (DuplicateUserException e) {
             this.view.error(USER_DUPLICATE);
-        } catch (InvalidUserTypeException | SQLException e) {
+        } catch (InvalidUserTypeException | DBException e) {
             e.printStackTrace();
         }
 
@@ -194,7 +192,7 @@ public class Controller {
                 this.view.error(PASSWORD_NOT_VALID);
             } catch (LoginInvalidException e) {
                 this.view.error(USER_LOGIN_INVALID);
-            } catch (SQLException e) {
+            } catch (DBException e) {
                 e.printStackTrace();
                 System.exit(1);
                 return false;
@@ -210,7 +208,7 @@ public class Controller {
         try {
             String psw = this.model.addConfiguratorUser("admin", true);
             this.view.getInfoFactory().getFirstAccessCredentialsMessage("admin", psw).show();
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         } catch (InvalidUserTypeException | DuplicateUserException | InvalidPasswordException e) {
@@ -230,7 +228,7 @@ public class Controller {
             this.view.getInfoFactory().getFirstAccessCredentialsMessage(username, password).show();
         } catch (DuplicateUserException e) {
             this.view.error(USER_DUPLICATE);
-        } catch (InvalidUserTypeException | InvalidPasswordException | SQLException e) {
+        } catch (InvalidUserTypeException | InvalidPasswordException | DBException e) {
             this.view.error(ERR_CONFIG_USER_CREATION);
         }
         return true;
@@ -514,7 +512,7 @@ public class Controller {
 
         try {
             this.model.createHierarchy(root);
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -614,7 +612,7 @@ public class Controller {
                         this.view.error(DUPLICATE_FIELD);
                     } catch (InvalidFieldException ex) {
                         this.view.error(INVALID_FIELD);
-                    } catch (SQLException ex) {
+                    } catch (DBException ex) {
                         this.view.error(ERR_IMPORTING_HIERARCHY);
                         ex.printStackTrace();
                     }
@@ -633,7 +631,7 @@ public class Controller {
      *
      * @param hierarchyXML la definizione della gerarchia da creare
      */
-    private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException, SQLException {
+    private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException, DBException {
         // creazione della categoria root
         Category root = this.createCategoryFromXML(null, hierarchyXML.root);
         if (hierarchyXML.root.fields != null)

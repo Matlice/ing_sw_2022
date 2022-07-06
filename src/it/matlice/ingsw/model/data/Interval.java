@@ -217,9 +217,7 @@ public class Interval implements Comparable<Interval> {
 
         @Override
         public int compareTo(@NotNull Time o) {
-            if (this.time < o.time) return -1;
-            if (this.time > o.time) return 1;
-            return 0;
+            return Integer.compare(this.time, o.time);
         }
 
     }

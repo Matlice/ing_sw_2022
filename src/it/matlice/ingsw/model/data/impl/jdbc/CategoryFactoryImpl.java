@@ -12,6 +12,7 @@ import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl;
 import it.matlice.ingsw.model.data.impl.jdbc.types.LeafCategoryImpl;
 import it.matlice.ingsw.model.data.impl.jdbc.types.NodeCategoryImpl;
+import it.matlice.ingsw.model.exceptions.DBException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
@@ -34,15 +35,19 @@ public class CategoryFactoryImpl implements CategoryFactory {
         return this.categoryDAO;
     }
 
-    public CategoryFactoryImpl() throws SQLException {
+    public CategoryFactoryImpl() throws DBException {
         this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
-        this.categoryDAO = DaoManager.createDao(this.connectionSource, CategoryDB.class);
-        this.fieldDAO = DaoManager.createDao(this.connectionSource, CategoryFieldDB.class);
+        try {
+            this.categoryDAO = DaoManager.createDao(this.connectionSource, CategoryDB.class);
+            this.fieldDAO = DaoManager.createDao(this.connectionSource, CategoryFieldDB.class);
 
-        if (!this.categoryDAO.isTableExists())
-            TableUtils.createTable(this.connectionSource, CategoryDB.class);
-        if (!this.fieldDAO.isTableExists())
-            TableUtils.createTable(this.connectionSource, CategoryFieldDB.class);
+            if (!this.categoryDAO.isTableExists())
+                TableUtils.createTable(this.connectionSource, CategoryDB.class);
+            if (!this.fieldDAO.isTableExists())
+                TableUtils.createTable(this.connectionSource, CategoryFieldDB.class);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     private Category populateCategory(Category cat) throws SQLException {
@@ -67,7 +72,6 @@ public class CategoryFactoryImpl implements CategoryFactory {
         return cat;
     }
 
-    @Override
     public Category getCategory(int id) throws SQLException {
         var map = new HashMap<CategoryDB, List<CategoryDB>>();
         var fields = new HashMap<String, CategoryFieldDB>();
@@ -125,22 +129,26 @@ public class CategoryFactoryImpl implements CategoryFactory {
     }
 
     @Override
-    public Category saveCategory(@NotNull Category category) throws SQLException {
+    public Category saveCategory(@NotNull Category category) throws DBException {
         assert category instanceof CategoryImpl;
 
-        this.categoryDAO.createOrUpdate(((CategoryImpl) category).getDbData());
+        try {
+            this.categoryDAO.createOrUpdate(((CategoryImpl) category).getDbData());
 
-        for (var entry : category.entrySet()) {
-            var field_name = entry.getKey();
-            var field_type = entry.getValue();
-            this.fieldDAO.createOrUpdate(
-                    new CategoryFieldDB(
-                            field_name,
-                            ((CategoryImpl) category).getDbData(),
-                            field_type.type().toString(),
-                            category.isRequired(field_name)
-                    )
-            );
+            for (var entry : category.entrySet()) {
+                var field_name = entry.getKey();
+                var field_type = entry.getValue();
+                this.fieldDAO.createOrUpdate(
+                        new CategoryFieldDB(
+                                field_name,
+                                ((CategoryImpl) category).getDbData(),
+                                field_type.type().toString(),
+                                category.isRequired(field_name)
+                        )
+                );
+            }
+        } catch (SQLException e) {
+            throw new DBException();
         }
 
         if(category instanceof NodeCategoryImpl)

@@ -57,7 +57,7 @@ public class Model {
      * @throws InvalidPasswordException password non rispettante i requisiti di sicurezza
      * @throws LoginInvalidException utente non loggato
      */
-    public void changePassword(@NotNull Authentication auth, String newPassword) throws SQLException, InvalidPasswordException, LoginInvalidException {
+    public void changePassword(@NotNull Authentication auth, String newPassword) throws DBException, InvalidPasswordException, LoginInvalidException {
         if (!auth.isValid())
             throw new LoginInvalidException();
 
@@ -108,9 +108,9 @@ public class Model {
      * Imposta l'ultimo accesso dell'utente
      *
      * @param auth autenticazione, permette di identificare l'utente e verificare sia loggato
-     * @throws SQLException errore di connessione col database
+     * @throws DBException errore di connessione col database
      */
-    public void finalizeLogin(@NotNull Authentication auth) throws SQLException {
+    public void finalizeLogin(@NotNull Authentication auth) throws DBException {
         auth.getUser().setLastLoginTime(auth.getLoginTime());
         this.uf.saveUser(auth.getUser());
     }
@@ -138,11 +138,11 @@ public class Model {
      * @param username
      * @param type
      * @return
-     * @throws SQLException
+     * @throws DBException
      * @throws DuplicateUserException
      * @throws InvalidUserTypeException
      */
-    private User createUser(String username, User.UserTypes type) throws SQLException, DuplicateUserException, InvalidUserTypeException {
+    private User createUser(String username, User.UserTypes type) throws DBException, DuplicateUserException, InvalidUserTypeException {
         if (this.uf.doesUserExist(username)) {
             throw new DuplicateUserException();
         }
@@ -161,7 +161,7 @@ public class Model {
      * @throws InvalidPasswordException
      * @throws InvalidUserTypeException
      */
-    public String addConfiguratorUser(String username, boolean defaultPassword) throws SQLException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
+    public String addConfiguratorUser(String username, boolean defaultPassword) throws DBException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
 
         var u = this.createUser(username, User.UserTypes.CONFIGURATOR);
 
@@ -187,7 +187,7 @@ public class Model {
      * @throws InvalidUserTypeException
      * @throws InvalidPasswordException
      */
-    public void registerUser(String username, String password) throws SQLException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
+    public void registerUser(String username, String password) throws DBException, DuplicateUserException, InvalidUserTypeException, InvalidPasswordException {
         // controllo effettuato a priori, altrimenti crea un utente senza password
         if (!isPasswordValid(password)) throw new InvalidPasswordException();
 
@@ -223,7 +223,7 @@ public class Model {
                     .map((e) -> e.getRootCategory().getName())
                     .toList()
                     .contains(name);
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -236,7 +236,7 @@ public class Model {
      * @param root categoria root della gerarchia
      * @throws SQLException errore di connessione col database
      */
-    public void createHierarchy(Category root) throws SQLException {
+    public void createHierarchy(Category root) throws DBException {
         this.cf.saveCategory(root);
         this.hf.getHierarchies().add(this.hf.createHierarchy(root));
     }
@@ -248,7 +248,7 @@ public class Model {
     public List<Hierarchy> getHierarchies() {
         try {
             return this.hf.getHierarchies();
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -275,7 +275,7 @@ public class Model {
     public boolean hasConfiguredSettings() {
         try {
             return this.sf.readSettings() != null;
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -288,7 +288,7 @@ public class Model {
     public it.matlice.ingsw.model.data.Settings readSettings() {
         try {
             return this.sf.readSettings();
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -327,7 +327,7 @@ public class Model {
 
                 return city != null;
             }
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -342,7 +342,7 @@ public class Model {
     public Offer createOffer(User u, String name, LeafCategory e, Map<String, Object> fields) throws RequiredFieldConstrainException {
         try {
             return this.of.makeOffer(name, u, e, fields);
-        } catch (SQLException ex) {
+        } catch (DBException ex) {
             ex.printStackTrace();
             System.exit(1);
         }
@@ -357,7 +357,7 @@ public class Model {
     public List<Offer> getOffersByUser(User user) {
         try {
             return this.of.getOffers(user);
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -372,7 +372,7 @@ public class Model {
     public List<Offer> getOffersByCategory(LeafCategory cat) {
         try {
             return this.of.getOffers(cat);
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -400,7 +400,7 @@ public class Model {
         try {
             if (offerToRetract.getStatus() != Offer.OfferStatus.RETRACTED)
                 this.of.setOfferStatus(offerToRetract, Offer.OfferStatus.RETRACTED);
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -418,7 +418,7 @@ public class Model {
                     .stream()
                     .filter((e) -> e.getStatus().equals(Offer.OfferStatus.OPEN))
                     .toList();
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -439,7 +439,7 @@ public class Model {
                     .filter((e) -> !e.getOwner().equals(offerToTrade.getOwner()))
                     .filter((e) -> e.getStatus().equals(Offer.OfferStatus.OPEN))
                     .toList();
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -459,7 +459,7 @@ public class Model {
 
         try {
             this.of.createTradeOffer(offerToTrade, offerToAccept);
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -472,7 +472,7 @@ public class Model {
     public void timeIteration() {
         try {
             this.of.checkForDueDate();
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -486,7 +486,7 @@ public class Model {
     public List<Offer> getSelectedOffers(Authentication auth){
         try {
             return this.of.getSelectedOffers(auth.getUser());
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -506,7 +506,7 @@ public class Model {
                     .filter((e) -> e.getReferencedOffer().getStatus() == Offer.OfferStatus.EXCHANGE)
                     .filter((e) -> !e.hasReply())
                     .toList();
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -528,7 +528,7 @@ public class Model {
             var date = convertToDate(day, time);
             this.of.acceptTradeOffer(offer, this.mf, location, date);
             return date;
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -550,7 +550,7 @@ public class Model {
             this.of.updateTime(replyto.getReferencedOffer());
             this.mf.answer(replyto, replyto.getReferencedOffer().getLinkedOffer(), place, date);
             return date;
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -564,7 +564,7 @@ public class Model {
     public void acceptTradeMessage(Message m) {
         try {
             this.of.closeTradeOffer(m);
-        } catch (SQLException e) {
+        } catch (DBException e) {
             e.printStackTrace();
             System.exit(1);
         }

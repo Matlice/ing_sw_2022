@@ -3,6 +3,7 @@ package it.matlice.ingsw.model.data.factories;
 import it.matlice.ingsw.model.data.Message;
 import it.matlice.ingsw.model.data.Offer;
 import it.matlice.ingsw.model.data.User;
+import it.matlice.ingsw.model.exceptions.DBException;
 
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -20,11 +21,10 @@ public interface MessageFactory {
      * @param offer offerta a cui si riferisce il messaggio (del ricevitore)
      * @param location luogo proposto
      * @param date data proposta
-     * @param timestamp momento di creazione del messaggio
      * @return messaggio inviato
-     * @throws SQLException errore di database durante la creazione del messaggio
+     * @throws DBException errore di database durante la creazione del messaggio
      */
-    Message send(Offer offer, String location, Calendar date) throws SQLException;
+    Message send(Offer offer, String location, Calendar date) throws DBException;
 
     /**
      * Permette di aggiungere un nuovo messaggio in risposta ad una proposta di uno scambio
@@ -33,15 +33,15 @@ public interface MessageFactory {
      * @param location luogo proposto
      * @param date data proposta
      * @return messaggio inviato
-     * @throws SQLException errore di database durante la creazione del messaggio
+     * @throws DBException errore di database durante la creazione del messaggio
      */
-    Message answer(Message msg, Offer offer, String location, Calendar date) throws SQLException;
+    Message answer(Message msg, Offer offer, String location, Calendar date) throws DBException;
 
     /**
      * Ottiene tutti i messaggi a cui l'utente deve fornire una risposta
      * @param u utente ricevitore dei messaggi
      * @return lista di messaggi per l'utente
-     * @throws SQLException errore di database durante l'ottenimento dei messaggi
+     * @throws DBException errore di database durante l'ottenimento dei messaggi
      */
-    List<Message> getUserMessages(User u) throws SQLException;
+    List<Message> getUserMessages(User u) throws DBException;
 }

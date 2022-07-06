@@ -10,6 +10,7 @@ import it.matlice.ingsw.model.data.factories.HierarchyFactory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl;
 import it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl;
+import it.matlice.ingsw.model.exceptions.DBException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -23,39 +24,55 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
     private final ConnectionSource connectionSource;
     private final Dao<HierarchyDB, Integer> hierarchyDAO;
 
-    public HierarchyFactoryImpl() throws SQLException {
+    public HierarchyFactoryImpl() throws DBException {
         this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
-        this.hierarchyDAO = DaoManager.createDao(this.connectionSource, HierarchyDB.class);
-        if (!this.hierarchyDAO.isTableExists()) {
-            TableUtils.createTable(this.connectionSource, HierarchyDB.class);
+        try {
+            this.hierarchyDAO = DaoManager.createDao(this.connectionSource, HierarchyDB.class);
+            if (!this.hierarchyDAO.isTableExists()) {
+                TableUtils.createTable(this.connectionSource, HierarchyDB.class);
+            }
+        } catch (SQLException e) {
+            throw new DBException();
         }
     }
 
     @Override
-    public List<Hierarchy> getHierarchies() throws SQLException {
-        var category_factory = new CategoryFactoryImpl();
-        return this.hierarchyDAO.queryForAll().stream().map(e -> {
-            try {
-                var root = category_factory.getCategory(e.getRoot().getCategoryId());
-                return new HierarchyImpl(e, root);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                return null;
-            }
-        }).collect(Collectors.toList());
+    public List<Hierarchy> getHierarchies() throws DBException {
+        try {
+            var category_factory = new CategoryFactoryImpl();
+            return this.hierarchyDAO.queryForAll().stream().map(e -> {
+                try {
+                    var root = category_factory.getCategory(e.getRoot().getCategoryId());
+                    return new HierarchyImpl(e, root);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    return null;
+                }
+            }).collect(Collectors.toList());
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public Hierarchy createHierarchy(Category rootCategory) throws SQLException {
+    public Hierarchy createHierarchy(Category rootCategory) throws DBException {
         assert rootCategory instanceof CategoryImpl;
-        var ref = new HierarchyDB(((CategoryImpl) rootCategory).getDbData());
-        this.hierarchyDAO.create(ref);
-        return new HierarchyImpl(ref, rootCategory);
+        try {
+            var ref = new HierarchyDB(((CategoryImpl) rootCategory).getDbData());
+            this.hierarchyDAO.create(ref);
+            return new HierarchyImpl(ref, rootCategory);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public void deleteHierarchy(Hierarchy h) throws SQLException {
+    public void deleteHierarchy(Hierarchy h) throws DBException {
         assert h instanceof HierarchyImpl;
-        this.hierarchyDAO.delete(((HierarchyImpl) h).getDbData());
+        try {
+            this.hierarchyDAO.delete(((HierarchyImpl) h).getDbData());
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 }

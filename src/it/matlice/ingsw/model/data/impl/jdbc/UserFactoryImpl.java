@@ -10,6 +10,7 @@ import it.matlice.ingsw.model.data.impl.jdbc.db.UserDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl;
 import it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl;
 import it.matlice.ingsw.model.data.impl.jdbc.types.UserImpl;
+import it.matlice.ingsw.model.exceptions.DBException;
 import it.matlice.ingsw.model.exceptions.InvalidUserException;
 import it.matlice.ingsw.model.exceptions.InvalidUserTypeException;
 import org.jetbrains.annotations.NotNull;
@@ -26,11 +27,15 @@ import java.util.Objects;
 public class UserFactoryImpl implements UserFactory {
     private final Dao<UserDB, String> userDAO;
 
-    public UserFactoryImpl() throws SQLException {
+    public UserFactoryImpl() throws DBException {
         ConnectionSource connectionSource = JdbcConnection.getInstance().getConnectionSource();
-        this.userDAO = DaoManager.createDao(connectionSource, UserDB.class);
-        if (!this.userDAO.isTableExists()) {
-            TableUtils.createTable(connectionSource, UserDB.class);
+        try {
+            this.userDAO = DaoManager.createDao(connectionSource, UserDB.class);
+            if (!this.userDAO.isTableExists()) {
+                TableUtils.createTable(connectionSource, UserDB.class);
+            }
+        } catch (SQLException e) {
+            throw new DBException();
         }
     }
 
@@ -42,41 +47,63 @@ public class UserFactoryImpl implements UserFactory {
         return null;
     }
 
-    public User getUser(String username) throws SQLException, InvalidUserException {
-        var udb = this.userDAO.queryForId(username);
+    public User getUser(String username) throws DBException, InvalidUserException {
+        UserDB udb;
+        try {
+            udb = this.userDAO.queryForId(username);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
         var u = this.makeUser(udb);
         if (u == null)
             throw new InvalidUserException();
         return u;
     }
 
-    public boolean doesUserExist(String username) throws SQLException {
-        var udb = this.userDAO.queryForId(username);
+    public boolean doesUserExist(String username) throws DBException {
+        UserDB udb;
+        try {
+            udb = this.userDAO.queryForId(username);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
         return !(udb == null);
     }
 
-    public User createUser(String username, User.UserTypes userType) throws SQLException, InvalidUserTypeException {
+    public User createUser(String username, User.UserTypes userType) throws DBException, InvalidUserTypeException {
         var ref = switch (userType){
             case CONFIGURATOR -> new ConfiguratorUserImpl(username);
             case CUSTOMER -> new CustomerUserImpl(username);
             default -> throw new InvalidUserTypeException();
         };
 
-        this.userDAO.create(ref.getDbData());
+        try {
+            this.userDAO.create(ref.getDbData());
+        } catch (SQLException e) {
+            throw new DBException();
+        }
         return ref;
     }
 
-    public User saveUser(User u) throws SQLException {
+    public User saveUser(User u) throws DBException {
         assert u instanceof UserImpl;
-        this.userDAO.update(((UserImpl) u).getDbData());
+        try {
+            this.userDAO.update(((UserImpl) u).getDbData());
+        } catch (SQLException e) {
+            throw new DBException();
+        }
         return u;
     }
 
-    public List<User> getUsers() throws SQLException {
-        return this.userDAO.queryForAll().stream()
-                .map(this::makeUser)
-                .filter(Objects::nonNull)
-                .toList();
+    public List<User> getUsers() throws DBException {
+        try {
+            return this.userDAO.queryForAll().stream()
+                    .map(this::makeUser)
+                    .filter(Objects::nonNull)
+                    .toList();
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
 }

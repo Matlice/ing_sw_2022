@@ -2,6 +2,7 @@ package it.matlice.ingsw.model.data.factories;
 
 
 import it.matlice.ingsw.model.data.Category;
+import it.matlice.ingsw.model.exceptions.DBException;
 
 import java.sql.SQLException;
 
@@ -11,17 +12,18 @@ import java.sql.SQLException;
  */
 public interface CategoryFactory {
 
-    /**
-     * Ottiene una categoria tramite id.
-     * notare che questo metodo non dovrebbe essere usato direttamente dal controller, ma deve essere utilizzato per
-     * ottenere la categoria a partire da una gerarchia.
-     * la gestione dell'id è lasciata all'implementazione e non deve incidere nello sviluppo del controller.
-     *
-     * @param id numero incrementale identificativo univoco della categoria
-     * @return una categoria se esiste
-     * @throws SQLException
-     */
-    Category getCategory(int id) throws SQLException;
+//    /**
+//     * Ottiene una categoria tramite id.
+//     * notare che questo metodo non dovrebbe essere usato direttamente dal controller, ma deve essere utilizzato per
+//     * ottenere la categoria a partire da una gerarchia.
+//     * la gestione dell'id è lasciata all'implementazione e non deve incidere nello sviluppo del controller.
+//     *
+//     * @param id numero incrementale identificativo univoco della categoria
+//     * @return una categoria se esiste
+//     * @throws DBException
+//     */
+//    Category getCategory(int id) throws DBException;
+// todo cancella
 
     /**
      * crea e salva una nuova categoria
@@ -40,7 +42,7 @@ public interface CategoryFactory {
      *
      * @param category categoria da salvare
      * @return la categoria aggiornata
-     * @throws SQLException
+     * @throws DBException
      */
-    Category saveCategory(Category category) throws SQLException;
+    Category saveCategory(Category category) throws DBException;
 }

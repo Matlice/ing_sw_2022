@@ -2,6 +2,7 @@ package it.matlice.ingsw.model.data.impl.jdbc;
 
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
+import it.matlice.ingsw.model.exceptions.DBException;
 
 import java.sql.SQLException;
 
@@ -14,15 +15,19 @@ public class JdbcConnection {
         throw new RuntimeException("Database has not been instantiated");
     }
 
-    private JdbcConnection(String url) throws SQLException {
-        this.cs = new JdbcConnectionSource(url);
+    private JdbcConnection(String url) throws DBException {
+        try {
+            this.cs = new JdbcConnectionSource(url);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     public static JdbcConnection getInstance() {
         return instance;
     }
 
-    public static JdbcConnection startInstance(String url) throws SQLException {
+    public static JdbcConnection startInstance(String url) throws DBException {
         if (instance == null) instance = new JdbcConnection(url);
         return instance;
     }

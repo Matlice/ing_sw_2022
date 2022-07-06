@@ -2,6 +2,7 @@ package it.matlice.ingsw.model.data.factories;
 
 
 import it.matlice.ingsw.model.data.*;
+import it.matlice.ingsw.model.exceptions.DBException;
 import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,25 +27,25 @@ public interface OfferFactory {
      * @param field_values mappa dei valori dei campi
      * @return l'offerta istanziata
      * @throws RequiredFieldConstrainException Se un campo obbligatorio non é stato compilato
-     * @throws SQLException .
+     * @throws DBException .
      */
-    Offer makeOffer(@NotNull String name, User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, SQLException;
+    Offer makeOffer(@NotNull String name, User owner, LeafCategory category, Map<String, Object> field_values) throws RequiredFieldConstrainException, DBException;
 
     /**
      *
      * @param owner utente
      * @return Ritorna tutte le offerte associate all'utente
-     * @throws SQLException .
+     * @throws DBException .
      */
-    List<Offer> getOffers(User owner) throws SQLException;
+    List<Offer> getOffers(User owner) throws DBException;
 
     /**
      * Imposta lo stato di un'offerta
      * @param offer istanza dell'offerta da creare
      * @param status stato dell'offerta
-     * @throws SQLException .
+     * @throws DBException .
      */
-    void setOfferStatus(Offer offer, Offer.OfferStatus status) throws SQLException;
+    void setOfferStatus(Offer offer, Offer.OfferStatus status) throws DBException;
 
     /**
      * Ottiene la lista di offerte associate a una categoria.
@@ -52,25 +53,25 @@ public interface OfferFactory {
      * per far si che vengano rilevati tutti i campi delle categorie padre sopra di essa.
      * @param cat categoria
      * @return offerte associate alla categoria
-     * @throws SQLException .
+     * @throws DBException .
      */
-    List<Offer> getOffers(LeafCategory cat) throws SQLException;
+    List<Offer> getOffers(LeafCategory cat) throws DBException;
 
-    List<Offer> getSelectedOffers(User owner) throws SQLException;
+    List<Offer> getSelectedOffers(User owner) throws DBException;
 
     /**
      * Permette di accoppiare due offerte, la prima è dell'utente che propone lo scambio
      * @param offerToTrade offerta accoppiata
      * @param offerToAccept offerta selezionata
-     * @throws SQLException
+     * @throws DBException
      */
-    void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws SQLException;
+    void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws DBException;
 
-    void acceptTradeOffer(Offer offer, MessageFactory mf, String location, Calendar date) throws SQLException;
+    void acceptTradeOffer(Offer offer, MessageFactory mf, String location, Calendar date) throws DBException;
 
-    void updateTime(Offer offer) throws SQLException;
+    void updateTime(Offer offer) throws DBException;
 
-    void closeTradeOffer(Message m) throws SQLException;
+    void closeTradeOffer(Message m) throws DBException;
 
-    void checkForDueDate() throws SQLException;
+    void checkForDueDate() throws DBException;
 }

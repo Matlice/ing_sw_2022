@@ -12,6 +12,7 @@ import it.matlice.ingsw.model.data.Settings;
 import it.matlice.ingsw.model.data.factories.SettingsFactory;
 import it.matlice.ingsw.model.data.impl.jdbc.db.*;
 import it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl;
+import it.matlice.ingsw.model.exceptions.DBException;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
@@ -24,46 +25,64 @@ public class SettingsFactoryImpl implements SettingsFactory {
     private final Dao<DaysDB, Integer> daysDAO;
     private final Dao<IntervalsDB, Integer> intervalsDAO;
 
-    public SettingsFactoryImpl() throws SQLException {
+    public SettingsFactoryImpl() throws DBException {
         var connectionSource = JdbcConnection.getInstance().getConnectionSource();
-        this.settingsDAO = DaoManager.createDao(connectionSource, SettingsDB.class);
-        this.locationsDAO = DaoManager.createDao(connectionSource, LocationsDB.class);
-        this.daysDAO = DaoManager.createDao(connectionSource, DaysDB.class);
-        this.intervalsDAO = DaoManager.createDao(connectionSource, IntervalsDB.class);
+        try {
+            this.settingsDAO = DaoManager.createDao(connectionSource, SettingsDB.class);
+            this.locationsDAO = DaoManager.createDao(connectionSource, LocationsDB.class);
+            this.daysDAO = DaoManager.createDao(connectionSource, DaysDB.class);
+            this.intervalsDAO = DaoManager.createDao(connectionSource, IntervalsDB.class);
 
-        if (!this.settingsDAO.isTableExists())
-            TableUtils.createTable(connectionSource, SettingsDB.class);
-        if (!this.locationsDAO.isTableExists())
-            TableUtils.createTable(connectionSource, LocationsDB.class);
-        if (!this.daysDAO.isTableExists())
-            TableUtils.createTable(connectionSource, DaysDB.class);
-        if (!this.intervalsDAO.isTableExists())
-            TableUtils.createTable(connectionSource, IntervalsDB.class);
+            if (!this.settingsDAO.isTableExists())
+                TableUtils.createTable(connectionSource, SettingsDB.class);
+            if (!this.locationsDAO.isTableExists())
+                TableUtils.createTable(connectionSource, LocationsDB.class);
+            if (!this.daysDAO.isTableExists())
+                TableUtils.createTable(connectionSource, DaysDB.class);
+            if (!this.intervalsDAO.isTableExists())
+                TableUtils.createTable(connectionSource, IntervalsDB.class);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public Settings readSettings() throws SQLException {
-        var settings = this.settingsDAO.queryForAll();
+    public Settings readSettings() throws DBException {
+        List<SettingsDB> settings;
+        try {
+            settings = this.settingsDAO.queryForAll();
+        } catch (SQLException e) {
+            throw new DBException();
+        }
         if(settings.size() == 0)
             return null;
         var setting = settings.get(0);
-        var locations = this.locationsDAO.query(this.locationsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
-        var days = this.daysDAO.query(this.daysDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
-        var intervals = this.intervalsDAO.query(this.intervalsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
-        return new SettingsImpl(setting, locations, intervals, days);
+        try {
+            var locations = this.locationsDAO.query(this.locationsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
+            var days = this.daysDAO.query(this.daysDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
+            var intervals = this.intervalsDAO.query(this.intervalsDAO.queryBuilder().where().eq("ref_id", setting.getId()).prepare());
+            return new SettingsImpl(setting, locations, intervals, days);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public Settings makeSettings(String city, int due, @NotNull List<String> locations, @NotNull List<Settings.Day> days, @NotNull List<Interval> intervals) throws SQLException {
+    public Settings makeSettings(String city, int due, @NotNull List<String> locations, @NotNull List<Settings.Day> days, @NotNull List<Interval> intervals) throws DBException {
         var settings = new SettingsDB(city, due);
-        this.settingsDAO.create(settings);
 
-        for (var loc: locations)
-            this.addLocation(settings, loc);
-        for (var d: days)
-            this.addDay(settings, d);
-        for (var intv: intervals)
-            this.addInterval(settings, intv);
+        try {
+            this.settingsDAO.create(settings);
+
+            for (var loc : locations)
+                this.addLocation(settings, loc);
+            for (var d : days)
+                this.addDay(settings, d);
+            for (var intv : intervals)
+                this.addInterval(settings, intv);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
 
         return this.readSettings();
     }
@@ -110,45 +129,73 @@ public class SettingsFactoryImpl implements SettingsFactory {
     }
 
     @Override
-    public void setDue(Settings db, int due) throws SQLException {
+    public void setDue(Settings db, int due) throws DBException {
         assert db instanceof SettingsImpl;
-        this.setDue(((SettingsImpl) db).getDbData(), due);
+        try {
+            this.setDue(((SettingsImpl) db).getDbData(), due);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public void addLocation(Settings db, String l) throws SQLException {
+    public void addLocation(Settings db, String l) throws DBException {
         assert db instanceof SettingsImpl;
-        this.addLocation(((SettingsImpl) db).getDbData(), l);
+        try {
+            this.addLocation(((SettingsImpl) db).getDbData(), l);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public void addDay(Settings db, Settings.Day d) throws SQLException {
+    public void addDay(Settings db, Settings.Day d) throws DBException {
         assert db instanceof SettingsImpl;
-        this.addDay(((SettingsImpl) db).getDbData(), d);
+        try {
+            this.addDay(((SettingsImpl) db).getDbData(), d);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public void addInterval(Settings db, Interval i) throws SQLException {
+    public void addInterval(Settings db, Interval i) throws DBException {
         assert db instanceof SettingsImpl;
-        this.addInterval(((SettingsImpl) db).getDbData(), i);
+        try {
+            this.addInterval(((SettingsImpl) db).getDbData(), i);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public void removeLocations(Settings db) throws SQLException {
+    public void removeLocations(Settings db) throws DBException {
         assert db instanceof SettingsImpl;
-        this.removeLocations(((SettingsImpl) db).getDbData());
+        try {
+            this.removeLocations(((SettingsImpl) db).getDbData());
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public void removeDays(Settings db) throws SQLException {
+    public void removeDays(Settings db) throws DBException {
         assert db instanceof SettingsImpl;
-        this.removeDays(((SettingsImpl) db).getDbData());
+        try {
+            this.removeDays(((SettingsImpl) db).getDbData());
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
     @Override
-    public void removeIntervals(Settings db) throws SQLException {
+    public void removeIntervals(Settings db) throws DBException {
         assert db instanceof SettingsImpl;
-        this.removeIntervals(((SettingsImpl) db).getDbData());
+        try {
+            this.removeIntervals(((SettingsImpl) db).getDbData());
+        } catch (SQLException e) {
+            throw new DBException();
+        }
     }
 
 }
