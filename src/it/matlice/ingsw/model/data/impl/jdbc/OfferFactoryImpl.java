@@ -5,11 +5,10 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
+import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.*;
-import it.matlice.ingsw.model.data.factories.MessageFactory;
-import it.matlice.ingsw.model.data.factories.OfferFactory;
-import it.matlice.ingsw.model.data.factories.SettingsFactory;
+import it.matlice.ingsw.model.data.factories.*;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB;
@@ -30,9 +29,13 @@ public class OfferFactoryImpl implements OfferFactory {
     private final Dao<CategoryFieldDB, Integer> categoryFieldDAO;
     private final SettingsFactory settingsFactory;
 
-    public OfferFactoryImpl(SettingsFactory sf) throws DBException {
-        var connectionSource = JdbcConnection.getInstance().getConnectionSource();
+    private final HierarchyFactory hierarchyFactory;
+    private final UserFactory userFactory;
 
+    public OfferFactoryImpl(SettingsFactory sf, HierarchyFactory hierarchyFactory, UserFactory userFactory, JdbcConnection connection) throws DBException {
+        ConnectionSource connectionSource = connection.getConnectionSource();
+        this.hierarchyFactory = hierarchyFactory;
+        this.userFactory = userFactory;
         try {
             this.offerDAO = DaoManager.createDao(connectionSource, OfferDB.class);
             this.offerFieldDAO = DaoManager.createDao(connectionSource, OfferFieldDB.class);
@@ -159,18 +162,18 @@ public class OfferFactoryImpl implements OfferFactory {
             OfferImpl art = null;
             if (offerDb.getLinkedOffer() == null) {
                 art = new OfferImpl(offerDb,
-                        this.findCategory(new HierarchyFactoryImpl().getHierarchies(), offerDb.getCategory().getCategoryId()),
-                        new UserFactoryImpl().getUser(offerDb.getOwner().getUsername()),
+                        this.findCategory(this.hierarchyFactory.getHierarchies(), offerDb.getCategory().getCategoryId()),
+                        this.userFactory.getUser(offerDb.getOwner().getUsername()),
                         null);
             } else if (linkedOffer != null && offerDb.getLinkedOffer().getId().equals(linkedOffer.getDbData().getId())) {
                 art = new OfferImpl(offerDb,
-                        this.findCategory(new HierarchyFactoryImpl().getHierarchies(), offerDb.getCategory().getCategoryId()),
-                        new UserFactoryImpl().getUser(offerDb.getOwner().getUsername()),
+                        this.findCategory(this.hierarchyFactory.getHierarchies(), offerDb.getCategory().getCategoryId()),
+                        this.userFactory.getUser(offerDb.getOwner().getUsername()),
                         linkedOffer);
             } else {
                 art = new OfferImpl(offerDb,
-                        this.findCategory(new HierarchyFactoryImpl().getHierarchies(), offerDb.getCategory().getCategoryId()),
-                        new UserFactoryImpl().getUser(offerDb.getOwner().getUsername()),
+                        this.findCategory(this.hierarchyFactory.getHierarchies(), offerDb.getCategory().getCategoryId()),
+                        this.userFactory.getUser(offerDb.getOwner().getUsername()),
                         null);
 
                 OfferImpl linked = this.instantiateOffer(offerDb.getLinkedOffer(), art);

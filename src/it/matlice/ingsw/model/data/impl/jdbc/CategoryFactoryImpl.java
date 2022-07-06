@@ -27,7 +27,6 @@ import java.util.Stack;
  * a partire da una base di dati mediante Jdbc
  */
 public class CategoryFactoryImpl implements CategoryFactory {
-    private final ConnectionSource connectionSource;
     private final Dao<CategoryDB, Integer> categoryDAO;
     private final Dao<CategoryFieldDB, Integer> fieldDAO;
 
@@ -35,57 +34,72 @@ public class CategoryFactoryImpl implements CategoryFactory {
         return this.categoryDAO;
     }
 
-    public CategoryFactoryImpl() throws DBException {
-        this.connectionSource = JdbcConnection.getInstance().getConnectionSource();
+    public CategoryFactoryImpl(JdbcConnection connection) throws DBException {
+        ConnectionSource connectionSource = connection.getConnectionSource();
         try {
-            this.categoryDAO = DaoManager.createDao(this.connectionSource, CategoryDB.class);
-            this.fieldDAO = DaoManager.createDao(this.connectionSource, CategoryFieldDB.class);
+            this.categoryDAO = DaoManager.createDao(connectionSource, CategoryDB.class);
+            this.fieldDAO = DaoManager.createDao(connectionSource, CategoryFieldDB.class);
 
             if (!this.categoryDAO.isTableExists())
-                TableUtils.createTable(this.connectionSource, CategoryDB.class);
+                TableUtils.createTable(connectionSource, CategoryDB.class);
             if (!this.fieldDAO.isTableExists())
-                TableUtils.createTable(this.connectionSource, CategoryFieldDB.class);
+                TableUtils.createTable(connectionSource, CategoryFieldDB.class);
         } catch (SQLException e) {
             throw new DBException();
         }
     }
 
-    private Category populateCategory(Category cat) throws SQLException {
+    private Category populateCategory(Category cat) throws DBException {
         assert cat instanceof CategoryImpl;
 
-        var fields = this.fieldDAO.query(
-                this.fieldDAO.queryBuilder().where()
-                        .eq("category_id", ((CategoryImpl) cat).getDbData().getCategoryId())
-                        .prepare()
-        );
-
-        fields.forEach(e -> {
-            cat.put(
-                    e.getFieldName(),
-                    new TypeDefinition(
-                            TypeDefinition.TypeAssociation.valueOf(e.getType()),
-                            e.isRequired()
-                    )
+        try {
+            var fields = this.fieldDAO.query(
+                    this.fieldDAO.queryBuilder().where()
+                            .eq("category_id", ((CategoryImpl) cat).getDbData().getCategoryId())
+                            .prepare()
             );
-        });
 
-        return cat;
+
+            fields.forEach(e -> {
+                cat.put(
+                        e.getFieldName(),
+                        new TypeDefinition(
+                                TypeDefinition.TypeAssociation.valueOf(e.getType()),
+                                e.isRequired()
+                        )
+                );
+            });
+
+            return cat;
+        } catch (SQLException e){
+            throw new DBException();
+        }
     }
 
-    public Category getCategory(int id) throws SQLException {
+    public Category getCategory(int id) throws DBException {
+        
         var map = new HashMap<CategoryDB, List<CategoryDB>>();
         var fields = new HashMap<String, CategoryFieldDB>();
 
-        var ref = this.categoryDAO.queryForId(id);
+        CategoryDB ref = null;
+        try {
+            ref = this.categoryDAO.queryForId(id);
+        } catch (SQLException e) {
+            throw new DBException();
+        }
 
         var stack = new Stack<CategoryDB>();
         stack.push(ref);
         while (!stack.empty()) {
-            var r = stack.pop();
-            var qb = this.categoryDAO.queryBuilder();
-            var children = this.categoryDAO.query(qb.where().eq("father_id", r.getCategoryId()).prepare());
-            map.put(r, children);
-            children.forEach(stack::push);
+            try{
+                var r = stack.pop();
+                var qb = this.categoryDAO.queryBuilder();
+                var children = this.categoryDAO.query(qb.where().eq("father_id", r.getCategoryId()).prepare());
+                map.put(r, children);
+                children.forEach(stack::push);
+            } catch (SQLException e) {
+                throw new DBException();
+            }
         }
 
         var obj_ref = map.get(ref).size() > 0 ? new NodeCategoryImpl(ref) : new LeafCategoryImpl(ref);
