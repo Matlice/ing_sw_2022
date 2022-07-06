@@ -53,19 +53,17 @@ public class StreamView implements View {
         c.registerConverter(Offer.class, o -> new StreamOfferAdapter((Offer) o));
         c.registerConverter(String.class, o -> new StreamStringAdapter((String) o));
         c.registerConverter(LinkedList.class, o -> {
-            if (!(o instanceof LinkedList l)) return null;
-            if (!l.isEmpty() && l.get(0) instanceof Category) return new StreamCategoryChainAdapter(l);
-            return null;
+            assert o instanceof LinkedList<?>;
+            LinkedList<?> l = (LinkedList<?>) o;
+            assert !l.isEmpty() && l.get(0) instanceof Category;
+            return new StreamCategoryChainAdapter((LinkedList<Category>) l);
         });
         c.registerConverter(Map.Entry.class, o -> {
-            if (!(o instanceof Map.Entry entry)) return null;
-            if (entry.getKey() instanceof String && entry.getValue() instanceof TypeDefinition)
-                return new StreamFieldAdapter(entry);
-            return null;
+            assert o instanceof Map.Entry<?, ?> entry;
+            Map.Entry<?, ?> entry = (Map.Entry<?, ?>) o;
+            assert (entry.getKey() instanceof String && entry.getValue() instanceof TypeDefinition);
+            return new StreamFieldAdapter((Map.Entry<String, TypeDefinition>) entry);
         });
-
-
-
 
         this.out = out;
         this.in = in;
@@ -350,23 +348,17 @@ public class StreamView implements View {
      * @param prompt  prompt della richiesta di scelta
      * @return l'azione scelta dall'utente
      */
-    private Object choose(@NotNull List<MenuEntryWrapper> choices, PromptType prompt) {
+    private <T> T choose(@NotNull List<MenuEntryWrapper<T>> choices, PromptType prompt) {
         Menu menu = new Menu();
-        for (var act : choices) {
-            if (act.getIndex() == null) {
-                menu.addEntry(act).disable(act.isDisabled());
-            } else {
-                menu.addEntry(act.getIndex(), act , act.getPosition()).disable(act.isDisabled());
-            }
-        }
+        for (var act : choices)
+            menu.addEntry(act);
         menu.setPrompt(this.conversionMap.convertPromptToString(prompt));
         Object answ = menu.displayOnce(this.in, this.out);
         while (answ == null) {
             this.error(ACTION_NOT_ALLOWED);
             answ = menu.displayOnce(this.in, this.out);
         }
-
-        return answ;
+        return (T) answ;
     }
 
     /**
@@ -378,28 +370,13 @@ public class StreamView implements View {
      */
     @Override
     public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, PromptType prompt) {
-        /*Menu menu = new Menu();
-        for (var act : choices) {
-            if (act.getIndex() == null) {
-                menu.addEntry(new MenuEntryWrapper(this.conversionMap.convertMenuToString(act.getType()), (in, out, ref) -> act)).disable(act.isDisabled());
-            } else {
-                menu.addEntry(act.getIndex(), new MenuEntryWrapper(this.conversionMap.convertMenuToString(act.getType()), (in, out, ref) -> act), act.getPosition()).disable(act.isDisabled());
-            }
-        }
-        menu.setPrompt(this.conversionMap.convertPromptToString(prompt));
-        Object answ = menu.displayOnce(this.in, this.out);
-        while (answ == null) {
-            this.error(ACTION_NOT_ALLOWED);
-            answ = menu.displayOnce(this.in, this.out);
-        }
-
-        return (MenuAction<T>) answ;*/
-        return (MenuAction<T>) this.choose(choices
-                .stream()
-                .map((e) -> (
-                new MenuEntryWrapper(this.conversionMap.convertMenuToString(e.getType()), (in, out, ref) -> e, e.isDisabled(), e.getIndex(), e.getPosition())
-                ))
-                .toList(), prompt);
+        return this.choose(choices.stream()
+                .map((e) -> new MenuEntryWrapper<MenuAction<T>>(
+                        this.conversionMap.convertMenuToString(e.getType()),
+                        (in, out, ref) -> e, e.isDisabled(),
+                        e.getIndex(),
+                        e.getPosition()
+                )).toList(), prompt);
     }
 
     @Override
@@ -407,15 +384,18 @@ public class StreamView implements View {
         return this.selectItem(prompt, items, EXIT_ENTRY);
     }
 
-    //TODO
     @Override
     public <V> V selectItem(PromptType prompt, List<@NotNull V> items, MenuType exit) {
         var actions = items
                 .stream()
-                .map((p) -> new MenuEntryWrapper(this.converter.getViewType(p).getStreamRepresentation(), (in, out, ref) -> new MenuAction<V>(null, () -> p))) //TODO
+                .map(
+                        (p) -> new MenuEntryWrapper<ReturnAction<V>>(
+                                this.converter.getViewType(p).getStreamRepresentation(),
+                                (in, out, ref) -> (ReturnAction<V>) () -> p))
                 .collect(Collectors.toCollection(ArrayList::new));
-        if(exit != null) actions.add(0, new MenuEntryWrapper(this.conversionMap.convertMenuToString(exit), (in, out, ref) -> new MenuAction<V>(null, () -> null), false, 0, -1));
-        return ((MenuAction<V>) this.choose(actions, prompt)).getAction().run();
+        if(exit != null) actions.add(0, new MenuEntryWrapper<>(this.conversionMap.convertMenuToString(exit), (in, out, ref) -> (ReturnAction<V>) () -> null, false, 0, -1));
+
+        return this.choose(actions, prompt).run();
     }
 
     public DataTypeConverter getConverter() {

@@ -29,42 +29,17 @@ public class Menu {
      * @param entryWrapper
      * @return this
      */
-    public Menu addEntry(MenuEntryWrapper entryWrapper) {
-        return this.addEntry(new MenuEntry(entryWrapper.getName(), this.entries.size(), this.call_ref.size() == 0 ? 0 : Collections.max(this.call_ref.keySet()) + 1, entryWrapper.getAction(), null, false));
-    }
-
-    /**
-     * adds an entry to the menu
-     *
-     * @param entryWrapper
-     * @param position   the position in the list the entry will be displayed: negative values start from the end (-1 = last)
-     * @return this
-     */
-    public Menu addEntry(MenuEntryWrapper entryWrapper, int position) {
-        return this.addEntry(new MenuEntry(entryWrapper.getName(), position, this.call_ref.size() == 0 ? 0 : Collections.max(this.call_ref.keySet()) + 1, entryWrapper.getAction(), null, false));
-    }
-
-    /**
-     * adds an entry to the menu
-     *
-     * @param entryWrapper
-     * @param call_index the index the user will choose with
-     * @return this
-     */
-    public Menu addEntry(int call_index, MenuEntryWrapper entryWrapper) {
-        return this.addEntry(new MenuEntry(entryWrapper.getName(), this.entries.size(), call_index, entryWrapper.getAction(), null, false));
-    }
-
-    /**
-     * adds an entry to the menu
-     *
-     * @param entryWrapper
-     * @param position   the position in the list the entry will be displayed: negative values start from the end (-1 = last) or null to assign it based on the number of elements in the menu
-     * @param call_index the index the user will choose with
-     * @return this
-     */
-    public Menu addEntry(int call_index, MenuEntryWrapper entryWrapper, int position) {
-        return this.addEntry(new MenuEntry(entryWrapper.getName(), position, call_index, entryWrapper.getAction(), null, false));
+    public <T> Menu addEntry(MenuEntryWrapper<T> entryWrapper) {
+        return this.addEntry(
+                new MenuEntry(
+                        entryWrapper.getName(),
+                        entryWrapper.getPosition(this.entries.size()),
+                        entryWrapper.getIndex(this.call_ref.size() == 0 ? 0 : Collections.max(this.call_ref.keySet()) + 1),
+                        entryWrapper.getAction(),
+                        null,
+                        entryWrapper.isDisabled()
+                )
+        );
     }
 
     /**
@@ -117,18 +92,6 @@ public class Menu {
     public MenuEntry getEntry(int call_reference) {
         for (var e : this.entries)
             if (e.getCall_index() == call_reference) return e;
-        return null;
-    }
-
-    /**
-     * Gets the reference to a MenuEntry
-     *
-     * @param position_reference the integer to be typed to load that entry
-     * @return the entry reference or null if inexistent
-     */
-    public MenuEntry getEntryByPosition(int position_reference) {
-        for (var e : this.entries)
-            if (e.getPos_index() == position_reference) return e;
         return null;
     }
 
