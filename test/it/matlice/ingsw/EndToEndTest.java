@@ -6,38 +6,45 @@ import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.data.impl.jdbc.*;
 import it.matlice.ingsw.view.stream.StreamView;
+import it.matlice.test.utils.InputToOutputStream;
 import it.matlice.test.utils.TeeOutputStream;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Scanner;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class EndToEndTest {
 
-    @Test()
-    @Timeout(10000)
-    public void firstAdminLoginChangePasswordTest() {
-        this.testCase("test/txt/test1.in.txt", "test/txt/test1.out.txt");
-        this.testCase("test/txt/test2.in.txt", "test/txt/test2.out.txt");
+    @TestFactory
+    Collection<DynamicTest> e2eTestFactory() {
+        var tests = new LinkedList<DynamicTest>();
+        var testDir = new File("test/cases/");
+        for(var testCase: Objects.requireNonNull(testDir.list((current, name) -> new File(current, name).isDirectory()))){
+            var in_file = new File("test/cases/" + testCase + "/in.txt");
+            var out_file = new File("test/cases/" + testCase + "/out.txt");
+
+            if(in_file.exists() && out_file.exists())
+                tests.add(DynamicTest.dynamicTest(testCase, () -> testCase(in_file, out_file)));
+        }
+
+        return tests;
     }
 
-    public void testCase(String inFile, String outFile) {
+    public void testCase(File inFile, File outFile) {
         try {
-            var in = new FileInputStream(inFile);
+            var in = new BufferedInputStream(new FileInputStream(inFile));
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             PrintStream out = new PrintStream(new TeeOutputStream(os, System.out));
 
             this.run(in, out);
 
-            assertEquals(Files.readString(Path.of(outFile)), os.toString());
+            assertEquals(Files.readString(outFile.toPath()), os.toString());
         } catch(Exception e) {
             fail();
         }
@@ -72,7 +79,6 @@ public class EndToEndTest {
     public void after() {
         this.deleteDb();
     }
-
 
     public void deleteDb() {
         File db = new File("db.test.sqlite");
