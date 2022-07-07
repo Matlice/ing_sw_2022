@@ -1,20 +1,19 @@
-package it.matlice.ingsw.model.data.factories;
+package it.matlice.ingsw.model.data.storage;
 
 import it.matlice.ingsw.model.data.Message;
 import it.matlice.ingsw.model.data.Offer;
 import it.matlice.ingsw.model.data.User;
+import it.matlice.ingsw.model.data.storage.repositories.MessageRepository;
 import it.matlice.ingsw.model.exceptions.DBException;
 
-import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Rappresenta una classe che si occupa di istanziare elementi di tipo Message
  * una volta caricati da una base di dati esterna.
  */
-public interface MessageFactory {
+public interface MessageStorageManagement extends MessageRepository {
 
     /**
      * Permette di aggiungere un nuovo messaggio durante la fase di proposta di uno scambio
@@ -37,11 +36,4 @@ public interface MessageFactory {
      */
     Message answer(Message msg, Offer offer, String location, Calendar date) throws DBException;
 
-    /**
-     * Ottiene tutti i messaggi a cui l'utente deve fornire una risposta
-     * @param u utente ricevitore dei messaggi
-     * @return lista di messaggi per l'utente
-     * @throws DBException errore di database durante l'ottenimento dei messaggi
-     */
-    List<Message> getUserMessages(User u) throws DBException;
 }

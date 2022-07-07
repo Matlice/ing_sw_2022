@@ -4,7 +4,7 @@ import it.matlice.ingsw.model.auth.AuthData;
 import it.matlice.ingsw.model.auth.AuthMethod;
 import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
 import it.matlice.ingsw.model.auth.password.PasswordAuthMethod;
-import it.matlice.ingsw.model.data.factories.*;
+import it.matlice.ingsw.model.data.storage.*;
 import it.matlice.ingsw.model.exceptions.*;
 import it.matlice.ingsw.model.data.*;
 import org.jetbrains.annotations.Contract;
@@ -13,8 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.security.SecureRandom;
 import java.util.*;
 
-import static it.matlice.ingsw.controller.ErrorType.PASSWORD_NOT_VALID;
-import static it.matlice.ingsw.controller.ErrorType.USER_LOGIN_INVALID;
 import static it.matlice.ingsw.model.auth.password.PasswordAuthMethod.isPasswordValid;
 import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
 
@@ -23,12 +21,12 @@ import static it.matlice.ingsw.model.Settings.LOGIN_EXPIRATION_TIME;
  */
 public class Model {
 
-    private final HierarchyFactory hf;
-    private final CategoryFactory cf;
-    private final UserFactory uf;
-    private final SettingsFactory sf;
-    private final OfferFactory of;
-    private final MessageFactory mf;
+    private final HierarchyStorageManagement hf;
+    private final CategoryStorageManagement cf;
+    private final UserStorageManagement uf;
+    private final SettingsStorageManagement sf;
+    private final OfferStorageManagement of;
+    private final MessageStorageManagement mf;
 
     private it.matlice.ingsw.model.data.Settings settings = null;
 
@@ -40,7 +38,7 @@ public class Model {
      * @param sf la settings factory che permette di interfacciarsi col DB per i parametri di configurazione
      * @param af la article factory che permette di interfacciarsi col DB per gli articoli
      */
-    public Model(@NotNull HierarchyFactory hf, @NotNull CategoryFactory cf, @NotNull UserFactory uf, @NotNull SettingsFactory sf, @NotNull OfferFactory af, @NotNull MessageFactory mf) {
+    public Model(@NotNull HierarchyStorageManagement hf, @NotNull CategoryStorageManagement cf, @NotNull UserStorageManagement uf, @NotNull SettingsStorageManagement sf, @NotNull OfferStorageManagement af, @NotNull MessageStorageManagement mf) {
         this.hf = hf;
         this.cf = cf;
         this.uf = uf;
@@ -260,7 +258,7 @@ public class Model {
     public void createHierarchy(Category root) throws CannotRetrieveInformationException {
         try {
             this.cf.saveCategory(root);
-            this.hf.getHierarchies().add(this.hf.createHierarchy(root));
+            this.hf.getHierarchies().add(this.hf.saveHierarchy(root));
         } catch (DBException e) {
             throw new CannotRetrieveInformationException();
         }
@@ -467,7 +465,7 @@ public class Model {
         if (offerToTrade.getOwner().equals(offerToAccept.getOwner())) throw new InvalidTradeOfferException();
 
         try {
-            this.of.createTradeOffer(offerToTrade, offerToAccept);
+            this.of.linkOffersInTradeOffer(offerToTrade, offerToAccept);
         } catch (DBException e) {
             throw new CannotRetrieveInformationException();
         }

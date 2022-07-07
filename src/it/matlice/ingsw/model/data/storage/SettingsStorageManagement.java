@@ -1,34 +1,15 @@
-package it.matlice.ingsw.model.data.factories;
+package it.matlice.ingsw.model.data.storage;
 
 import it.matlice.ingsw.model.data.Interval;
 import it.matlice.ingsw.model.data.Settings;
+import it.matlice.ingsw.model.data.storage.factories.SettingsFactory;
+import it.matlice.ingsw.model.data.storage.repositories.SettingsRepository;
 import it.matlice.ingsw.model.exceptions.DBException;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.SQLException;
 import java.util.List;
 
-public interface SettingsFactory {
-
-    /**
-     * Legge le impostazioni e le ritorna
-     * @return impostazioni ottenute dalla base di dati. Se fossero presenti piú impostazioni, il
-     * comportamento non é definito e ne verrá ritornata solo una.
-     * @throws DBException .
-     */
-    Settings readSettings() throws DBException;
-
-    /**
-     * Crea una istanza di impostazioni
-     * @param city Piazza di scambio
-     * @param due numero di giorni di scadenza
-     * @param locations luoghi di scambio
-     * @param days Giorni di scambio
-     * @param intervals intervalli di scambio
-     * @return l'istanza creata
-     * @throws DBException .
-     */
-    Settings makeSettings(String city, int due, @NotNull List<String> locations, @NotNull List<Settings.Day> days, @NotNull List<Interval> intervals) throws DBException;
+public interface SettingsStorageManagement extends SettingsFactory, SettingsRepository {
 
     /**
      * Permette di impostare i giorni di scadenza

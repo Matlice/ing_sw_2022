@@ -10,7 +10,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.Interval;
 import it.matlice.ingsw.model.data.Settings;
-import it.matlice.ingsw.model.data.factories.SettingsFactory;
+import it.matlice.ingsw.model.data.storage.SettingsStorageManagement;
 import it.matlice.ingsw.model.data.impl.jdbc.db.*;
 import it.matlice.ingsw.model.data.impl.jdbc.types.SettingsImpl;
 import it.matlice.ingsw.model.exceptions.DBException;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.SQLException;
 import java.util.List;
 
-public class SettingsFactoryImpl implements SettingsFactory {
+public class SettingsFactoryImpl implements SettingsStorageManagement {
 
     private final Dao<SettingsDB, Integer> settingsDAO;
     private final Dao<LocationsDB, Integer> locationsDAO;

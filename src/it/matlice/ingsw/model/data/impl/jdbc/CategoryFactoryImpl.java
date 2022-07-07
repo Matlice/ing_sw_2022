@@ -5,7 +5,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.Category;
-import it.matlice.ingsw.model.data.factories.CategoryFactory;
+import it.matlice.ingsw.model.data.storage.CategoryStorageManagement;
 import it.matlice.ingsw.model.data.TypeDefinition;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -26,7 +25,7 @@ import java.util.Stack;
  * correttamente identificate da NodeCategory o LeafCategory, complete di struttura di (eventuali) figli
  * a partire da una base di dati mediante Jdbc
  */
-public class CategoryFactoryImpl implements CategoryFactory {
+public class CategoryFactoryImpl implements CategoryStorageManagement {
     private final Dao<CategoryDB, Integer> categoryDAO;
     private final Dao<CategoryFieldDB, Integer> fieldDAO;
 

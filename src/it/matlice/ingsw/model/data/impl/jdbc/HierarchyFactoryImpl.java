@@ -6,8 +6,8 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.Category;
 import it.matlice.ingsw.model.data.Hierarchy;
-import it.matlice.ingsw.model.data.factories.CategoryFactory;
-import it.matlice.ingsw.model.data.factories.HierarchyFactory;
+import it.matlice.ingsw.model.data.storage.CategoryStorageManagement;
+import it.matlice.ingsw.model.data.storage.HierarchyStorageManagement;
 import it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl;
 import it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl;
@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
  * Classe che si occupa di istanziare elementi di tipo Hierarchy
  * una volta caricati da una base di dati Jdbc
  */
-public class HierarchyFactoryImpl implements HierarchyFactory {
+public class HierarchyFactoryImpl implements HierarchyStorageManagement {
     private final Dao<HierarchyDB, Integer> hierarchyDAO;
-    private final CategoryFactory category_factory;
+    private final CategoryStorageManagement category_factory;
 
-    public HierarchyFactoryImpl(CategoryFactory cat, JdbcConnection connection) throws DBException {
+    public HierarchyFactoryImpl(CategoryStorageManagement cat, JdbcConnection connection) throws DBException {
         this.category_factory = cat;
         ConnectionSource connectionSource = connection.getConnectionSource();
         try {
@@ -56,7 +56,7 @@ public class HierarchyFactoryImpl implements HierarchyFactory {
     }
 
     @Override
-    public Hierarchy createHierarchy(Category rootCategory) throws DBException {
+    public Hierarchy saveHierarchy(Category rootCategory) throws DBException {
         assert rootCategory instanceof CategoryImpl;
         try {
             var ref = new HierarchyDB(((CategoryImpl) rootCategory).getDbData());

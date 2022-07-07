@@ -357,17 +357,17 @@ MVC
 
 ### Pattern GRASP (2)
 
-- [ ] Pure Fabrication (separazione oggetti concettuali-rappresentazione DB)
-- [ ] Polymorphism (qualsiasi) [User, aggiunto NullUser ma da fixare gli instanceof]
+- [X] Pure Fabrication (separazione oggetti concettuali-rappresentazione DB) [colpa ti teto]
+- [X] Polymorphism (qualsiasi) [User, aggiunto NullUser adeguati i metodi togliendo instanceof]
 
 ### Pattern SOLID (2)
 
-- [ ] Single Responsibility (una classe deve avere una sola responsabilità) [separare OfferFactory in Factory e Repository]
-- [ ] Dependency inversion principle (classe dovrebbe dipendere dalle astrazioni, non da classi concrete) [es. View-StreamView, database (?)]
+- [X] Interface segregation [OfferFactory (e altre Factory) in  più interfacce Factory e Repository: StoreManagement]
+- [X] Dependency inversion principle (classe dovrebbe dipendere dalle astrazioni, non da classi concrete) [es. View-StreamView, database (?)]
 
 ### Gang of Four (2)
 
-- [X] Convert Exception (ora tutto dipende da SQLExcpetion, da generalizzare)
+- [X] Convert Exception (ora tutto dipende da SQLExcpetion, da generalizzare) [doppia conversione DB/Model e Model/Controller]
 - [X] Composite (per le categorie) [addField, createCategory?, appendCategory, isCategoryValid,
   getCategorySelectionMenu -> getCategoryPathFromRoot e getChildrenPath]
 

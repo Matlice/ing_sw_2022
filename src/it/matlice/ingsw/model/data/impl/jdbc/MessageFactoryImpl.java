@@ -7,9 +7,7 @@ import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.Message;
 import it.matlice.ingsw.model.data.Offer;
 import it.matlice.ingsw.model.data.User;
-import it.matlice.ingsw.model.data.factories.MessageFactory;
-import it.matlice.ingsw.model.data.factories.OfferFactory;
-import it.matlice.ingsw.model.data.factories.SettingsFactory;
+import it.matlice.ingsw.model.data.storage.MessageStorageManagement;
 import it.matlice.ingsw.model.data.impl.jdbc.db.MessageDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.MessageImpl;
@@ -19,10 +17,9 @@ import it.matlice.ingsw.model.exceptions.DBException;
 
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-public class MessageFactoryImpl implements MessageFactory {
+public class MessageFactoryImpl implements MessageStorageManagement {
     private final OfferFactoryImpl offers_factory;
     private final Dao<MessageDB, Integer> messageDAO;
     private final Dao<OfferDB, Integer> offerDAO;

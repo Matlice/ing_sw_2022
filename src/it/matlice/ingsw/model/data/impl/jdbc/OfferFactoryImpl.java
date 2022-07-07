@@ -8,7 +8,7 @@ import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.*;
-import it.matlice.ingsw.model.data.factories.*;
+import it.matlice.ingsw.model.data.storage.*;
 import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
 import it.matlice.ingsw.model.data.impl.jdbc.db.OfferFieldDB;
@@ -20,19 +20,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.CancellationException;
 
-public class OfferFactoryImpl implements OfferFactory {
+public class OfferFactoryImpl implements OfferStorageManagement {
 
     private final Dao<OfferDB, Integer> offerDAO;
     private final Dao<OfferFieldDB, Integer> offerFieldDAO;
     private final Dao<CategoryFieldDB, Integer> categoryFieldDAO;
-    private final SettingsFactory settingsFactory;
+    private final SettingsStorageManagement settingsFactory;
 
-    private final HierarchyFactory hierarchyFactory;
-    private final UserFactory userFactory;
+    private final HierarchyStorageManagement hierarchyFactory;
+    private final UserStorageManagement userFactory;
 
-    public OfferFactoryImpl(SettingsFactory sf, HierarchyFactory hierarchyFactory, UserFactory userFactory, JdbcConnection connection) throws DBException {
+    public OfferFactoryImpl(SettingsStorageManagement sf, HierarchyStorageManagement hierarchyFactory, UserStorageManagement userFactory, JdbcConnection connection) throws DBException {
         ConnectionSource connectionSource = connection.getConnectionSource();
         this.hierarchyFactory = hierarchyFactory;
         this.userFactory = userFactory;
@@ -292,7 +291,7 @@ public class OfferFactoryImpl implements OfferFactory {
     }
 
     @Override
-    public void createTradeOffer(Offer offerToTrade, Offer offerToAccept) throws DBException {
+    public void linkOffersInTradeOffer(Offer offerToTrade, Offer offerToAccept) throws DBException {
         this.setOfferStatus(offerToTrade, Offer.OfferStatus.COUPLED);
         this.setOfferStatus(offerToAccept, Offer.OfferStatus.SELECTED);
         this.setOfferLinked(offerToAccept, offerToTrade);
@@ -303,7 +302,7 @@ public class OfferFactoryImpl implements OfferFactory {
     }
 
     @Override
-    public void acceptTradeOffer(Offer offer, MessageFactory mf, String location, Calendar date) throws DBException {
+    public void acceptTradeOffer(Offer offer, MessageStorageManagement mf, String location, Calendar date) throws DBException {
         assert offer.getLinkedOffer() != null;
         assert offer.getLinkedOffer().getLinkedOffer().equals(offer);
 

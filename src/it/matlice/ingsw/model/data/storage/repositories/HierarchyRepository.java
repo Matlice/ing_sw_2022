@@ -1,17 +1,13 @@
-package it.matlice.ingsw.model.data.factories;
+package it.matlice.ingsw.model.data.storage.repositories;
 
 import it.matlice.ingsw.model.data.Category;
 import it.matlice.ingsw.model.data.Hierarchy;
 import it.matlice.ingsw.model.exceptions.DBException;
 
-import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Rappresenta una classe che si occupa di istanziare elementi di tipo Hierarchy
- * una volta caricati da una base di dati esterna.
- */
-public interface HierarchyFactory {
+public interface HierarchyRepository {
+
     /**
      * @return Ottiene la lista di getrarchie presenti nel programma
      * @throws DBException
@@ -25,7 +21,7 @@ public interface HierarchyFactory {
      * @return la nuova gerarchia
      * @throws DBException
      */
-    Hierarchy createHierarchy(Category rootCategory) throws DBException;
+    Hierarchy saveHierarchy(Category rootCategory) throws DBException;
 
     /**
      * rimuove una gerarchia dalla bd
@@ -34,4 +30,5 @@ public interface HierarchyFactory {
      * @throws DBException
      */
     void deleteHierarchy(Hierarchy h) throws DBException;
+
 }

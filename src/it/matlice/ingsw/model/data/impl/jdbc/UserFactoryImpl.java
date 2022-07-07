@@ -5,7 +5,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import it.matlice.ingsw.model.data.User;
-import it.matlice.ingsw.model.data.factories.UserFactory;
+import it.matlice.ingsw.model.data.storage.UserStorageManagement;
 import it.matlice.ingsw.model.data.impl.jdbc.db.UserDB;
 import it.matlice.ingsw.model.data.impl.jdbc.types.ConfiguratorUserImpl;
 import it.matlice.ingsw.model.data.impl.jdbc.types.CustomerUserImpl;
@@ -24,7 +24,7 @@ import java.util.Objects;
  * classe in grado di istanziare User nella giusta declinazione
  * a partire da una base di dati Jdbc
  */
-public class UserFactoryImpl implements UserFactory {
+public class UserFactoryImpl implements UserStorageManagement {
     private final Dao<UserDB, String> userDAO;
 
     public UserFactoryImpl(JdbcConnection connection) throws DBException {
