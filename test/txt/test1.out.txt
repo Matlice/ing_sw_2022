@@ -1,0 +1,29 @@
+Per il primo accesso le credenziali sono admin:Config!1
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Password> AVVISO: Cambia le credenziali di accesso
+Nuova Password> Nuova Password> Ripeti la password> 
+Si vuole importare la configurazione da file?
+ 1) Sì, importa le configurazioni automaticamente
+ 0) No, aggiungi la configurazione manualmente
+AVVISO: Importando la configurazione...
+AVVISO: Importando le gerarchie...
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci

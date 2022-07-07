@@ -5,21 +5,40 @@ import com.j256.ormlite.logger.Logger;
 import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.data.impl.jdbc.*;
-import it.matlice.ingsw.model.exceptions.DBException;
 import it.matlice.ingsw.view.stream.StreamView;
+import it.matlice.test.utils.TeeOutputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
-public class EndToEnd {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-    @Test
-    public void test() throws Exception {
-        var in = new FileInputStream("test/test1.in.txt");
-        this.run(in, System.out);
+public class EndToEndTest {
+
+    @Test(timeout = 5000)
+    public void firstAdminLoginChangePasswordTest() {
+        this.testCase("test/txt/test1.in.txt", "test/txt/test1.out.txt");
+    }
+
+    public void testCase(String inFile, String outFile) {
+        try {
+            var in = new FileInputStream(inFile);
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            PrintStream out = new PrintStream(new TeeOutputStream(os, System.out));
+
+            this.run(in, out);
+
+            assertEquals(Files.readString(Path.of(outFile)), os.toString());
+        } catch(Exception e) {
+            fail();
+        }
     }
 
     public void run(InputStream in, PrintStream out) throws Exception {
@@ -59,7 +78,7 @@ public class EndToEnd {
 
     public void deleteDb() {
         File db = new File("db.test.sqlite");
-        if (!db.delete()) System.out.println("Couldn't delete db");
+        if (db.exists() && !db.delete()) System.out.println("Couldn't delete db");
 
     }
 

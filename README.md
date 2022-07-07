@@ -363,7 +363,7 @@ MVC
 ### Pattern SOLID (2)
 
 - [X] Interface segregation [OfferFactory (e altre Factory) in  più interfacce Factory e Repository: StoreManagement]
-- [X] Dependency inversion principle (classe dovrebbe dipendere dalle astrazioni, non da classi concrete) [es. View-StreamView, database (?)]
+- [X] Dependency inversion principle (classe dovrebbe dipendere dalle astrazioni, non da classi concrete) [es. View-StreamView, database (?)] [unica non toccata]
 
 ### Gang of Four (2)
 
