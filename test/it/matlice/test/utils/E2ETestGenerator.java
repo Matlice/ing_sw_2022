@@ -17,9 +17,9 @@ public class E2ETestGenerator {
     }
 
     public void generate() throws Exception {
-
-        InputToOutputStream in = new InputToOutputStream(System.in, new FileOutputStream("test/txt/test2.in.txt"));
-        PrintStream out = new PrintStream(new TeeOutputStream(new FileOutputStream("test/txt/test2.out.txt"), System.out));
+        var testCaseName = new Scanner(System.in).next();
+        InputToOutputStream in = new InputToOutputStream(System.in, new FileOutputStream("test/case/" + testCaseName + "/in.txt"));
+        PrintStream out = new PrintStream(new TeeOutputStream(new FileOutputStream("test/case/" + testCaseName + "/out.txt"), System.out));
 
         this.run(in, out);
 
