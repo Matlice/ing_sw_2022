@@ -1,0 +1,252 @@
+Per il primo accesso le credenziali sono admin:Config!1
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Password> AVVISO: Cambia le credenziali di accesso
+Nuova Password> Ripeti la password> ERRORE: La password inserita non rispetta i requisiti di sicurezza
+Nuova Password> Ripeti la password> ERRORE: La password inserita non rispetta i requisiti di sicurezza
+Nuova Password> Ripeti la password> 
+Si vuole importare la configurazione da file?
+ 1) Sì, importa le configurazioni automaticamente
+ 0) No, aggiungi la configurazione manualmente
+AVVISO: Importando la configurazione...
+AVVISO: Importando le gerarchie...
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+
+Di quale categoria si vogliono visualizzare le offerte aperte?
+ 0) Vestiti > Pantaloni > Jeans
+ 1) Vestiti > Pantaloni > Pantaloncini
+ 2) Vestiti > Felpe > Felpe con Cappuccio
+ 3) Vestiti > Felpe > Felpe senza Cappuccio
+AVVISO: Non sono state trovate offerte
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+
+Di quale categoria si vogliono visualizzare le offerte aperte?
+ 0) Vestiti > Pantaloni > Jeans
+ 1) Vestiti > Pantaloni > Pantaloncini
+ 2) Vestiti > Felpe > Felpe con Cappuccio
+ 3) Vestiti > Felpe > Felpe senza Cappuccio
+AVVISO: Non sono state trovate offerte
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+Inserire il nome della categoria> Inserire la descrizione della categoria> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+Inserire il nome del campo> Obbligatorio [y/N]> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+
+Si vuole aggiungere una nuova categoria?
+(nota: una categoria non può avere una sola sottocategoria)
+ 1) Aggiungi nuova categoria
+ 0) Salva ed esci
+
+Selezionare la categoria padre
+ 1) Scarpe
+ 0) Esci
+Inserire il nome della categoria> Inserire la descrizione della categoria> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+Inserire il nome del campo> Obbligatorio [y/N]> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+
+Si vuole aggiungere una nuova categoria?
+(nota: una categoria non può avere una sola sottocategoria)
+ 1) Aggiungi nuova categoria
+ X) Salva ed esci [DISABILITATO]
+ERRORE: Azione non permessa
+
+Si vuole aggiungere una nuova categoria?
+(nota: una categoria non può avere una sola sottocategoria)
+ 1) Aggiungi nuova categoria
+ X) Salva ed esci [DISABILITATO]
+
+Selezionare la categoria padre
+ 1) Scarpe
+ 2) Scarpe > Ginnastica
+ 0) Esci
+Inserire il nome della categoria> Inserire la descrizione della categoria> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+
+Si vuole aggiungere una nuova categoria?
+(nota: una categoria non può avere una sola sottocategoria)
+ 1) Aggiungi nuova categoria
+ X) Salva ed esci [DISABILITATO]
+
+Selezionare la categoria padre
+ 1) Scarpe
+ 2) Scarpe > Ginnastica
+ 3) Scarpe > Ginnastica > Nike
+ 0) Esci
+Inserire il nome della categoria> Inserire la descrizione della categoria> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+
+Si vuole aggiungere una nuova categoria?
+(nota: una categoria non può avere una sola sottocategoria)
+ 1) Aggiungi nuova categoria
+ X) Salva ed esci [DISABILITATO]
+ERRORE: Azione non permessa
+
+Si vuole aggiungere una nuova categoria?
+(nota: una categoria non può avere una sola sottocategoria)
+ 1) Aggiungi nuova categoria
+ X) Salva ed esci [DISABILITATO]
+
+Selezionare la categoria padre
+ 1) Scarpe
+ 2) Scarpe > Ginnastica
+ 3) Scarpe > Ginnastica > Nike
+ 4) Scarpe > Ginnastica > Adidas
+ 0) Esci
+Inserire il nome della categoria> Inserire la descrizione della categoria> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+Inserire il nome del campo> Obbligatorio [y/N]> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+Inserire il nome del campo> Obbligatorio [y/N]> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+Inserire il nome del campo> Obbligatorio [y/N]> 
+Si vuole aggiungere un campo nativo?
+ 1) Sì, aggiungi campo nativo
+ 0) No, torna all'inserimento categorie
+
+Si vuole aggiungere una nuova categoria?
+(nota: una categoria non può avere una sola sottocategoria)
+ 1) Aggiungi nuova categoria
+ 0) Salva ed esci
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+
+Quale gerarchia si vuole visualizzare?
+ 1) Vestiti
+ 2) Scarpe
+ 0) Esci
+Vestiti <Colore, Stato di conservazione [R], Taglia [R], Descrizione libera>
+    Pantaloni <Giro vita>
+        Jeans
+        Pantaloncini (Quelli corti popo)
+    Felpe
+        Felpe con Cappuccio
+        Felpe senza Cappuccio <Colore cappuccio [R]>
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+
+Quale gerarchia si vuole visualizzare?
+ 1) Vestiti
+ 2) Scarpe
+ 0) Esci
+Scarpe (Indumento per piedi) <Stato di conservazione [R], Taglia [R], Descrizione libera>
+    Ginnastica (per sport) <Colore>
+        Nike
+        Adidas
+    Eleganti <Materiale [R], Lacci, Suola>
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+La piazza di scambio è Brescia
+
+I luoghi disponibili per lo scambio sono i seguenti:
+	Piazza Arnaldo
+	Castello
+	Piazza Vittoria
+	Stazione FS
+	McDonalds
+
+I giorni disponibili per lo scambio sono i seguenti:
+	Lunedì
+	Martedì
+	Venerdì
+	Sabato
+
+Gli intervalli disponibili per lo scambio sono i seguenti:
+	10:00-12:00
+	15:00-18:00
+
+La scadenza è impostata a 3 giorni
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
