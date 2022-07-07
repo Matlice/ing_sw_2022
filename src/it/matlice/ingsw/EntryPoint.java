@@ -41,13 +41,7 @@ public class EntryPoint {
             var view = new StreamView(System.out, new Scanner(System.in));
             var controller = new Controller(view, model);
 
-            // se non ci sono utenti creati, crea il primo con credenziali di default
-            if (uf.getUsers().size() == 0) {
-                controller.addDefaultConfigurator();
-            }
-
-            // esecuzione in loop del programma
-            while (controller.mainloop());
+            controller.run();
 
         } catch (DBException e) {
             // errore durante la connessione al database, interrompe l'esecuzione

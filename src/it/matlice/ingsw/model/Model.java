@@ -595,6 +595,14 @@ public class Model {
         return date;
     }
 
+    public Collection<User> getUsers() throws CannotRetrieveInformationException {
+        try {
+            return this.uf.getUsers();
+        } catch (DBException e) {
+            throw new CannotRetrieveInformationException();
+        }
+    }
+
     /**
      * Classe che gestisce l'autenticazione dell'utente
      */

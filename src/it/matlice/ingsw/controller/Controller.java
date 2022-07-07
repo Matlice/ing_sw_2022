@@ -77,7 +77,7 @@ public class Controller {
      *
      * @return false se l'esecuzione deve essere interrotta
      */
-    public boolean mainloop() {
+    private boolean mainloop() {
         boolean hasConfiguredSettings = false;
         try {
             hasConfiguredSettings = this.model.hasConfiguredSettings();
@@ -1269,5 +1269,21 @@ public class Controller {
         this.view.showList(message, offers);
     }
 
+    public void run() {
+        // se non ci sono utenti creati, crea il primo con credenziali di default
+        try {
+            if (this.model.getUsers().size() == 0) {
+                this.addDefaultConfigurator();
+            }
+        } catch (CannotRetrieveInformationException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        // esecuzione in loop del rogramma
+        while (this.mainloop());
+
+
+    }
 }
 
