@@ -45,7 +45,9 @@ public class EndToEndTest {
             this.run(in, out);
 
             assertEquals(Files.readString(outFile.toPath()), os.toString());
+            deleteDb();
         } catch(Exception e) {
+            deleteDb();
             fail();
         }
     }
