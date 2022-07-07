@@ -29,7 +29,7 @@ public class Menu {
      * @param entryWrapper
      * @return this
      */
-    public <T> Menu addEntry(MenuEntryWrapper<T> entryWrapper) {
+    public <T> Menu addEntry(@NotNull MenuEntryWrapper<T> entryWrapper) {
         return this.addEntry(
                 new MenuEntry(
                         entryWrapper.getName(),

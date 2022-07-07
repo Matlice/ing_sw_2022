@@ -7,23 +7,25 @@ import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.data.impl.jdbc.*;
 import it.matlice.ingsw.view.stream.StreamView;
 import it.matlice.test.utils.TeeOutputStream;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class EndToEndTest {
 
-    @Test(timeout = 5000)
+    @Test()
+    @Timeout(10000)
     public void firstAdminLoginChangePasswordTest() {
         this.testCase("test/txt/test1.in.txt", "test/txt/test1.out.txt");
+        return;
     }
 
     public void testCase(String inFile, String outFile) {
@@ -66,15 +68,11 @@ public class EndToEndTest {
         connection.close();
     }
 
-    @After
+    @AfterEach
     public void after() {
         this.deleteDb();
     }
 
-    @Before
-    public void before() {
-        this.deleteDb();
-    }
 
     public void deleteDb() {
         File db = new File("db.test.sqlite");
