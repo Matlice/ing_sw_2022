@@ -770,15 +770,7 @@ public class Controller {
      */
     private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException {
         // creazione della categoria root
-        Category root = this.createCategoryFromXML(null, hierarchyXML.root);
-        if (hierarchyXML.root.fields != null)
-            for (var e : hierarchyXML.root.fields) {
-                this.addFieldFromXML(root, e);
-            }
-
-        // aggiunge i campi default alla categoria radice
-        root.put("Stato di conservazione", new TypeDefinition(true));
-        root.put("Descrizione libera", new TypeDefinition(false));
+        Category root = XMLcreateRootCategory(hierarchyXML);
 
         // associa una CategoryXML all'istanza della Category padre già creata
         var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
@@ -795,34 +787,11 @@ public class Controller {
             var toInsert = categoryStack.pop();
             Category father = toInsert.getValue();
 
-            NodeCategory r = null;
-            while (r == null) {
-                var newChild = this.createCategoryFromXML(root, toInsert.getKey());
-                r = this.appendCategory(father, newChild);
-
-                if (toInsert.getKey().fields != null)
-                    for (var f : toInsert.getKey().fields) {
-                        this.addFieldFromXML(newChild, f);
-                    }
-
-                if (toInsert.getKey().categories != null) {
-                    if (toInsert.getKey().categories.size() == 1) throw new InvalidCategoryException();
-                    for (var e : toInsert.getKey().categories) {
-                        categoryStack.add(new AbstractMap.SimpleEntry<>(e, newChild));
-                    }
-                }
-            }
+            //era un while ma viene eseguito solo una volta
+            NodeCategory r = XMLBuildChildCategory(root, categoryStack, toInsert, father);
+            
             // aggiorna i padri nello stack, serve perchè l'istanza potrebbe essere cambiata
-            var newCategoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
-            for (var e : categoryStack) {
-                if (e.getValue() == father) {
-                    var newElem = new AbstractMap.SimpleEntry<>(e.getKey(), (Category) r);
-                    newCategoryStack.add(newElem);
-                } else {
-                    newCategoryStack.add(e);
-                }
-            }
-            categoryStack = newCategoryStack;
+            categoryStack = getUpdatedCategoryStack(categoryStack, father, r);
 
             if (father == root) root = r;
         }
@@ -833,6 +802,55 @@ public class Controller {
             e.printStackTrace();
             System.exit(1);
         }
+    }
+
+    @NotNull
+    private LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> getUpdatedCategoryStack(LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> categoryStack, Category father, Category r) {
+        var newCategoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+        for (var e : categoryStack) {
+            if (e.getValue() == father) {
+                var newElem = new AbstractMap.SimpleEntry<>(e.getKey(), r);
+                newCategoryStack.add(newElem);
+            } else {
+                newCategoryStack.add(e);
+            }
+        }
+        categoryStack = newCategoryStack;
+        return categoryStack;
+    }
+
+    @NotNull
+    private NodeCategory XMLBuildChildCategory(Category root, LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> categoryStack, AbstractMap.@NotNull SimpleEntry<XMLImport.CategoryXML, Category> toInsert, Category father) throws DuplicateCategoryException, InvalidCategoryException, InvalidFieldException, DuplicateFieldException {
+        NodeCategory r;
+        var newChild = this.createCategoryFromXML(root, toInsert.getKey());
+        r = this.appendCategory(father, newChild);
+
+        if (toInsert.getKey().fields != null)
+            for (var f : toInsert.getKey().fields) {
+                this.addFieldFromXML(newChild, f);
+            }
+
+        if (toInsert.getKey().categories != null) {
+            if (toInsert.getKey().categories.size() == 1) throw new InvalidCategoryException();
+            for (var e : toInsert.getKey().categories) {
+                categoryStack.add(new AbstractMap.SimpleEntry<>(e, newChild));
+            }
+        }
+        return r;
+    }
+
+    @NotNull
+    private Category XMLcreateRootCategory(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, InvalidFieldException, DuplicateFieldException {
+        Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+        if (hierarchyXML.root.fields != null)
+            for (var e : hierarchyXML.root.fields) {
+                this.addFieldFromXML(root, e);
+            }
+
+        // aggiunge i campi default alla categoria radice
+        root.put("Stato di conservazione", new TypeDefinition(true));
+        root.put("Descrizione libera", new TypeDefinition(false));
+        return root;
     }
 
     /**
