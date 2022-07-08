@@ -4,7 +4,6 @@ import com.j256.ormlite.logger.Level;
 import com.j256.ormlite.logger.Logger;
 import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.model.Model;
-import it.matlice.ingsw.model.data.Category;
 import it.matlice.ingsw.model.data.Hierarchy;
 import it.matlice.ingsw.model.data.LeafCategory;
 import it.matlice.ingsw.model.data.NodeCategory;
@@ -16,14 +15,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.ReflectionUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class createHierarchyFromXMLTest {
+public class CreateHierarchyFromXMLTest {
 
     @Test
     public void createHierarchyFromXML() throws Exception {
