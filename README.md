@@ -373,7 +373,6 @@ MVC
 
 ### Testing
 
-<<<<<<< HEAD
 - [X] scegliere una classe da testare, e mostrare come si è testata [black box e2e e createHierarchyFromXML]
 
 ### Refactor
