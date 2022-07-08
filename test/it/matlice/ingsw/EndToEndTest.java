@@ -44,7 +44,7 @@ public class EndToEndTest {
 
             this.run(in, out);
 
-            assertEquals(Files.readString(outFile.toPath()), os.toString());
+            assertEquals(Files.readString(outFile.toPath()), os.toString().replaceAll("[0-9][0-9]/[0-9][0-9]", "&DATA&"));
             deleteDb();
         } catch(Exception e) {
             deleteDb();
