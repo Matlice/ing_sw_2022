@@ -373,11 +373,11 @@ MVC
 
 ### Testing
 
-- [ ] scegliere una classe da testare, e mostrare come si è testata [white box o black box]
+- [X] scegliere una classe da testare, e mostrare come si è testata [Black box]
 
 ### Refactor
 
-- [ ] mostrare un singolo caso di refactor (Extract Method!)
+- [X] mostrare un singolo caso di refactor (Extract Method!) [createHierarchyFromXML]
 
 ### Note a caso
 

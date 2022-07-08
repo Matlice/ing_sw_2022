@@ -15,14 +15,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.ReflectionUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CreateHierarchyFromXMLTest {
-
+/**/
     @Test
     public void createHierarchyFromXML_empty() throws Exception {
         assertThrows(Exception.class, () -> run(getEmptyHierarchyXML()));
@@ -199,12 +201,15 @@ public class CreateHierarchyFromXMLTest {
         var controller = new Controller(view, model);
 
         assertEquals(0, model.getHierarchies().size());
-        ReflectionUtils.invokeMethod(Controller.class.getDeclaredMethod("createHierarchyFromXML", XMLImport.HierarchyXML.class), controller, hierarchyXml);
-
+        try{
+            ReflectionUtils.invokeMethod(Controller.class.getDeclaredMethod("createHierarchyFromXML", XMLImport.HierarchyXML.class), controller, hierarchyXml);
+        }
+        catch (Exception e){
+            connection.close();
+            throw e;
+        }
         var h = model.getHierarchies();
-
         connection.close();
-
         return h;
     }
 
@@ -262,12 +267,12 @@ public class CreateHierarchyFromXMLTest {
     }
 
     @BeforeEach
-    public void before() {
+    public void before(){
         this.deleteDb();
     }
 
     @AfterEach
-    public void after() {
+    public void after(){
         this.deleteDb();
     }
 
