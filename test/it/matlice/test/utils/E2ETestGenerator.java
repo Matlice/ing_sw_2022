@@ -17,6 +17,8 @@ public class E2ETestGenerator {
     }
 
     public void generate() throws Exception {
+        deleteDb();
+
         var testCaseName = new Scanner(System.in).next();
         new File("test/cases/" + testCaseName).mkdirs();
         InputToOutputStream in = new InputToOutputStream(System.in, new FileOutputStream("test/cases/" + testCaseName + "/in.txt"));
@@ -26,11 +28,13 @@ public class E2ETestGenerator {
 
         in.flush();
         out.flush();
+
+        deleteDb();
     }
 
-    public void a(InputStream in, OutputStream out) {
-        var s = new Scanner(in);
-        System.out.println(s.nextLine());
+    public void deleteDb() {
+        File db = new File("db.test.sqlite");
+        if (db.exists() && !db.delete()) System.out.println("Couldn't delete db");
     }
 
     public void run(InputStream in, PrintStream out) throws Exception {

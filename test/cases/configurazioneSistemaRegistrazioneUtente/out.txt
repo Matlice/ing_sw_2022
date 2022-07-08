@@ -1,0 +1,92 @@
+Per il primo accesso le credenziali sono admin:Config!1
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Password> AVVISO: Cambia le credenziali di accesso
+Nuova Password> Ripeti la password> 
+Si vuole importare la configurazione da file?
+ 1) Sì, importa le configurazioni automaticamente
+ 0) No, aggiungi la configurazione manualmente
+Inserire la piazza di scambio> 
+Inserire un luogo per lo scambio (oppure nulla per terminare l'inserimento)> Inserire un luogo per lo scambio (oppure nulla per terminare l'inserimento)> Inserire un luogo per lo scambio (oppure nulla per terminare l'inserimento)> Inserire un luogo per lo scambio (oppure nulla per terminare l'inserimento)> 
+Inserire giorno di scambio (oppure nulla per terminare l'inserimento)> Inserire giorno di scambio (oppure nulla per terminare l'inserimento)> Inserire giorno di scambio (oppure nulla per terminare l'inserimento)> Inserire giorno di scambio (oppure nulla per terminare l'inserimento)> Inserire giorno di scambio (oppure nulla per terminare l'inserimento)> 
+Inserire un intervallo orario [es. 15:30-17:00] (oppure nulla per terminare l'inserimento)> Inserire un intervallo orario [es. 15:30-17:00] (oppure nulla per terminare l'inserimento)> Inserire un intervallo orario [es. 15:30-17:00] (oppure nulla per terminare l'inserimento)> ERRORE: Valore non valido
+Inserire un intervallo orario [es. 15:30-17:00] (oppure nulla per terminare l'inserimento)> Inserire un intervallo orario [es. 15:30-17:00] (oppure nulla per terminare l'inserimento)> 
+Inserire la scadenza (in numero di giorni)> 
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> ERRORE: Utente non esistente
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Nuova Password> Ripeti la password> AVVISO: Utente registrato con successo.
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Password> 
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+La piazza di scambio è Verona
+
+I luoghi disponibili per lo scambio sono i seguenti:
+	Arena
+	Piazza delle Erbe
+	Piazza dei Signori
+
+I giorni disponibili per lo scambio sono i seguenti:
+	Lunedì
+	Giovedì
+	Domenica
+
+Gli intervalli disponibili per lo scambio sono i seguenti:
+	9:00-11:30
+	12:30-18:00
+
+La scadenza è impostata a 7 giorni
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci

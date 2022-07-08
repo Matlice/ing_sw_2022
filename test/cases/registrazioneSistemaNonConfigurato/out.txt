@@ -1,0 +1,24 @@
+Per il primo accesso le credenziali sono admin:Config!1
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> ERRORE: Utente non esistente
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Nuova Password> Ripeti la password> AVVISO: Utente registrato con successo.
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Password> ERRORE: Il sistema non è ancora utilizzabile. Contattare un configuratore.
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci

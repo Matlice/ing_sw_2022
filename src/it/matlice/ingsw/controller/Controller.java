@@ -136,6 +136,7 @@ public class Controller {
                     else {
                         this.view.error(SYSTEM_NOT_CONFIGURED);
                         this.logout();
+                        return true;
                     }
                 }
             }catch (CannotRetrieveInformationException e){
@@ -1209,6 +1210,7 @@ public class Controller {
              var inputFields = e.fullEntrySet()
                     .stream()
                     .filter((f) -> !fields.containsKey(f.getKey()))
+                    .sorted(Map.Entry.comparingByKey())
                     .collect(Collectors.toCollection(ArrayList::new));
 
             if (inputFields.size() == 0) {

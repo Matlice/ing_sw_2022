@@ -1,0 +1,237 @@
+Per il primo accesso le credenziali sono admin:Config!1
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Nuova Password> Ripeti la password> AVVISO: Utente registrato con successo.
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Password> AVVISO: Cambia le credenziali di accesso
+Nuova Password> Ripeti la password> 
+Si vuole importare la configurazione da file?
+ 1) Sì, importa le configurazioni automaticamente
+ 0) No, aggiungi la configurazione manualmente
+AVVISO: Importando la configurazione...
+AVVISO: Importando le gerarchie...
+
+Benvenuto! Scegli un'opzione
+ 1) Mostra le offerte per categoria
+ 2) Aggiungi nuova gerarchia
+ 3) Mostra gerarchie
+ 4) Mostra parametri di configurazione
+ 5) Modifica parametri di configurazione
+ 6) Importa informazioni da file testuale
+ 7) Aggiungi nuovo configuratore
+ 8) Cambia password
+ 0) Logout
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci
+Nome Utente> Password> 
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+AVVISO: Non sono state trovate offerte
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+A quale categoria appartiene l'articolo da creare?
+ 0) Vestiti > Pantaloni > Jeans
+ 1) Vestiti > Pantaloni > Pantaloncini
+ 2) Vestiti > Felpe > Felpe con Cappuccio
+ 3) Vestiti > Felpe > Felpe senza Cappuccio
+Inserire il nome del nuovo articolo> 
+Scegliere quale campo si vuole compilare (oppure salva)
+ 0) Colore
+ 1) Descrizione libera
+ 2) Giro vita
+ 3) Stato di conservazione [R]
+ 4) Taglia [R]
+Inserire il valore per il campo> 
+Scegliere quale campo si vuole compilare (oppure salva)
+ 0) Colore
+ 1) Descrizione libera
+ 2) Giro vita
+ 3) Stato di conservazione [R]
+Inserire il valore per il campo> 
+Scegliere quale campo si vuole compilare (oppure salva)
+ 0) Colore
+ 1) Giro vita
+ 2) Stato di conservazione [R]
+Inserire il valore per il campo> 
+Scegliere quale campo si vuole compilare (oppure salva)
+ 1) Colore
+ 2) Giro vita
+ 0) Salva Articolo
+Inserire il valore per il campo> 
+Scegliere quale campo si vuole compilare (oppure salva)
+ 1) Giro vita
+ 0) Salva Articolo
+AVVISO: L'articolo è stato salvato con successo, è ora disponibile allo scambio
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+Le tue offerte sono le seguenti: 
+	• Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta aperta di utente]
+		Stato di conservazione = Poco usati
+		Colore = Blu
+		Taglia = XL
+		Descrizione libera = Bellissimi shorts blu
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+Quale offerta si vuole ritirare?
+ 1) • Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta aperta di utente]
+		Stato di conservazione = Poco usati
+		Colore = Blu
+		Taglia = XL
+		Descrizione libera = Bellissimi shorts blu
+ 0) Esci
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+Le tue offerte sono le seguenti: 
+	• Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta aperta di utente]
+		Stato di conservazione = Poco usati
+		Colore = Blu
+		Taglia = XL
+		Descrizione libera = Bellissimi shorts blu
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+Quale offerta si vuole ritirare?
+ 1) • Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta aperta di utente]
+		Stato di conservazione = Poco usati
+		Colore = Blu
+		Taglia = XL
+		Descrizione libera = Bellissimi shorts blu
+ 0) Esci
+Offerta ritirata con successo
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+Le tue offerte sono le seguenti: 
+	• Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta ritirata di utente]
+		Stato di conservazione = Poco usati
+		Colore = Blu
+		Taglia = XL
+		Descrizione libera = Bellissimi shorts blu
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+Di quale categoria si vogliono visualizzare le offerte aperte?
+ 0) Vestiti > Pantaloni > Jeans
+ 1) Vestiti > Pantaloni > Pantaloncini
+ 2) Vestiti > Felpe > Felpe con Cappuccio
+ 3) Vestiti > Felpe > Felpe senza Cappuccio
+AVVISO: Non sono state trovate offerte
+
+Benvenuto! Scegli un'opzione
+ 1) Proponi uno scambio
+ 2) Accetta uno scambio
+ 3) Rispondi a un messaggio
+ 4) Aggiungi nuovo articolo
+ 5) Ritira un'offerta aperta
+ 6) Mostra mie le offerte aperte
+ 7) Mostra le offerte per categoria
+ 8) Mostra gerarchie
+ 9) Mostra parametri di configurazione
+10) Cambia password
+ 0) Logout
+
+Scegliere un'opzione
+ 1) Login
+ 2) Registrati
+ 0) Esci

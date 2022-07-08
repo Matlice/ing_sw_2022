@@ -1,0 +1,35 @@
+1
+admin
+Config!1
+Config!1
+Config!1
+0
+Verona
+Arena
+Piazza delle Erbe
+Piazza dei Signori
+
+
+lunedi
+giovedi
+domenica
+
+12:30-17:30
+15:00-18:00
+9:00
+9:00-11:30
+
+7
+0
+1
+utente
+2
+utente
+Utente!1
+Utente!1
+1
+utente
+Utente!1
+9
+0
+0

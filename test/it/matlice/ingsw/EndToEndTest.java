@@ -85,7 +85,6 @@ public class EndToEndTest {
     public void deleteDb() {
         File db = new File("db.test.sqlite");
         if (db.exists() && !db.delete()) System.out.println("Couldn't delete db");
-
     }
 
 }
