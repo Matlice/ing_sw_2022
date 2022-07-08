@@ -40,7 +40,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -54,7 +54,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -101,7 +101,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -110,10 +110,10 @@ Benvenuto! Scegli un'opzione
 
 Le tue offerte sono le seguenti: 
 	• Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta aperta di utente]
-		Stato di conservazione = Poco usati
 		Colore = Blu
-		Taglia = XL
 		Descrizione libera = Bellissimi shorts blu
+		Stato di conservazione = Poco usati
+		Taglia = XL
 
 Benvenuto! Scegli un'opzione
  1) Proponi uno scambio
@@ -121,7 +121,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -130,10 +130,10 @@ Benvenuto! Scegli un'opzione
 
 Quale offerta si vuole ritirare?
  1) • Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta aperta di utente]
-		Stato di conservazione = Poco usati
 		Colore = Blu
-		Taglia = XL
 		Descrizione libera = Bellissimi shorts blu
+		Stato di conservazione = Poco usati
+		Taglia = XL
  0) Esci
 
 Benvenuto! Scegli un'opzione
@@ -142,7 +142,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -151,10 +151,10 @@ Benvenuto! Scegli un'opzione
 
 Le tue offerte sono le seguenti: 
 	• Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta aperta di utente]
-		Stato di conservazione = Poco usati
 		Colore = Blu
-		Taglia = XL
 		Descrizione libera = Bellissimi shorts blu
+		Stato di conservazione = Poco usati
+		Taglia = XL
 
 Benvenuto! Scegli un'opzione
  1) Proponi uno scambio
@@ -162,7 +162,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -171,10 +171,10 @@ Benvenuto! Scegli un'opzione
 
 Quale offerta si vuole ritirare?
  1) • Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta aperta di utente]
-		Stato di conservazione = Poco usati
 		Colore = Blu
-		Taglia = XL
 		Descrizione libera = Bellissimi shorts blu
+		Stato di conservazione = Poco usati
+		Taglia = XL
  0) Esci
 Offerta ritirata con successo
 
@@ -184,7 +184,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -193,10 +193,10 @@ Benvenuto! Scegli un'opzione
 
 Le tue offerte sono le seguenti: 
 	• Shorts blu (Vestiti > Pantaloni > Pantaloncini (Quelli corti popo)) [Offerta ritirata di utente]
-		Stato di conservazione = Poco usati
 		Colore = Blu
-		Taglia = XL
 		Descrizione libera = Bellissimi shorts blu
+		Stato di conservazione = Poco usati
+		Taglia = XL
 
 Benvenuto! Scegli un'opzione
  1) Proponi uno scambio
@@ -204,7 +204,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -224,7 +224,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione

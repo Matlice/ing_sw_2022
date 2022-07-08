@@ -122,7 +122,7 @@ public class ConversionMap {
         this.menuMap.put(REPLY_MESSAGE_ENTRY, "Rispondi a un messaggio");
         this.menuMap.put(ADD_NEW_ARTICLE_ENTRY, "Aggiungi nuovo articolo");
         this.menuMap.put(RETRIEVE_OPENED_OFFER_ENTRY, "Ritira un'offerta aperta");
-        this.menuMap.put(SHOW_OFFERS_ENTRY, "Mostra mie le offerte aperte");
+        this.menuMap.put(SHOW_OFFERS_ENTRY, "Mostra le mie offerte");
         this.menuMap.put(SHOW_OFFERS_BY_CATEGORY_ENTRY, "Mostra le offerte per categoria");
         this.menuMap.put(ADD_HIERARCHY_ENTRY, "Aggiungi nuova gerarchia");
         this.menuMap.put(ADD_CATEGORY_ENTRY, "Aggiungi nuova categoria");

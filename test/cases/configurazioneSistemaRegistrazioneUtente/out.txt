@@ -49,7 +49,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
@@ -79,7 +79,7 @@ Benvenuto! Scegli un'opzione
  3) Rispondi a un messaggio
  4) Aggiungi nuovo articolo
  5) Ritira un'offerta aperta
- 6) Mostra mie le offerte aperte
+ 6) Mostra le mie offerte
  7) Mostra le offerte per categoria
  8) Mostra gerarchie
  9) Mostra parametri di configurazione
