@@ -6,13 +6,11 @@ import it.matlice.ingsw.controller.Controller;
 import it.matlice.ingsw.model.Model;
 import it.matlice.ingsw.model.data.impl.jdbc.*;
 import it.matlice.ingsw.view.stream.StreamView;
-import it.matlice.test.utils.InputToOutputStream;
 import it.matlice.test.utils.TeeOutputStream;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,8 +42,10 @@ public class EndToEndTest {
             PrintStream out = new PrintStream(new TeeOutputStream(os, System.out));
 
             this.run(in, out);
+            String testFile = Files.readString(outFile.toPath()).replaceAll("\r", "");
+            String result = os.toString().replaceAll("[0-9][0-9]/[0-9][0-9]", "&DATA&").replaceAll("\r", "");
 
-            assertEquals(Files.readString(outFile.toPath()), os.toString().replaceAll("[0-9][0-9]/[0-9][0-9]", "&DATA&"));
+            assertEquals(testFile, result);
         } catch(Exception e) {
             fail();
         }
@@ -78,6 +78,11 @@ public class EndToEndTest {
 
     @AfterEach
     public void after() {
+        this.deleteDb();
+    }
+
+    @BeforeEach
+    public void before() {
         this.deleteDb();
     }
 
