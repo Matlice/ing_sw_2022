@@ -24,30 +24,99 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CreateHierarchyFromXMLTest {
 
     @Test
-    public void createHierarchyFromXML() throws Exception {
+    public void createHierarchyFromXML_empty() throws Exception {
+        assertThrows(Exception.class, () -> run(getEmptyHierarchyXML()));
+    }
 
-        // imposta il logger al livello di WARNING per togliere scritte non volute da stdout
-        Logger.setGlobalLogLevel(Level.WARNING);
-        var connection = new JdbcConnection("jdbc:sqlite:db.test.sqlite");
+    @Test
+    public void createHierarchyFromXML_noFields() throws Exception {
+        var list = run(getNoFieldsHierarchyXML());
 
-        // istanzia le factory necessarie per il database
-        var uf = new UserFactoryImpl(connection);
-        var cf = new CategoryFactoryImpl(connection);
-        var hf = new HierarchyFactoryImpl(cf, connection);
-        var sf = new SettingsFactoryImpl(connection);
-        var of = new OfferFactoryImpl(sf, hf, uf, connection);
-        var mf = new MessageFactoryImpl(of, connection);
+        assertEquals(1, list.size());
+        Hierarchy h = list.get(0);
 
-        var model = new Model(hf, cf, uf, sf, of, mf);
+        assertEquals(h.getRootCategory().getName(), "Vestiti");
+        assertEquals(h.getRootCategory().getDescription(), "Descrizione di Vestiti");
+        assertNull(h.getRootCategory().getFather());
 
-        // istanzia una view sugli stream stdin e stdout
-        var view = new StreamView(System.out, new Scanner(System.in));
-        var controller = new Controller(view, model);
+        assertEquals(h.getRootCategory().size(), 2);
+        assertNotNull(h.getRootCategory().get("Stato di conservazione"));
+        assertEquals(h.getRootCategory().get("Stato di conservazione").required(), true);
+        assertNotNull(h.getRootCategory().get("Descrizione libera"));
+        assertEquals(h.getRootCategory().get("Descrizione libera").required(), false);
 
-        assertEquals(0, model.getHierarchies().size());
-        ReflectionUtils.invokeMethod(Controller.class.getDeclaredMethod("createHierarchyFromXML", XMLImport.HierarchyXML.class), controller, getTestHierarchyXML());
-        assertEquals(1, model.getHierarchies().size());
-        Hierarchy h = model.getHierarchies().get(0);
+        assertTrue(h.getRootCategory() instanceof LeafCategory);
+    }
+
+    @Test
+    public void createHierarchyFromXML_single() throws Exception {
+        var list = run(getNoChildHierarchyXML());
+
+        assertEquals(1, list.size());
+        Hierarchy h = list.get(0);
+
+        assertEquals(h.getRootCategory().getName(), "Vestiti");
+        assertEquals(h.getRootCategory().getDescription(), "Descrizione di Vestiti");
+        assertNull(h.getRootCategory().getFather());
+
+        assertEquals(h.getRootCategory().size(), 4);
+        assertNotNull(h.getRootCategory().get("Taglia"));
+        assertEquals(h.getRootCategory().get("Taglia").required(), true);
+        assertNotNull(h.getRootCategory().get("Colore"));
+        assertEquals(h.getRootCategory().get("Colore").required(), false);
+        assertNotNull(h.getRootCategory().get("Stato di conservazione"));
+        assertEquals(h.getRootCategory().get("Stato di conservazione").required(), true);
+        assertNotNull(h.getRootCategory().get("Descrizione libera"));
+        assertEquals(h.getRootCategory().get("Descrizione libera").required(), false);
+
+        assertTrue(h.getRootCategory() instanceof LeafCategory);
+    }
+
+    @Test
+    public void createHierarchyFromXML_singleNode() throws Exception {
+        var list = run(getSingleNodeHierarchyXML());
+
+        assertEquals(1, list.size());
+        Hierarchy h = list.get(0);
+
+        assertEquals(h.getRootCategory().getName(), "Vestiti");
+        assertEquals(h.getRootCategory().getDescription(), "Descrizione di Vestiti");
+        assertNull(h.getRootCategory().getFather());
+
+        assertEquals(h.getRootCategory().size(), 4);
+        assertNotNull(h.getRootCategory().get("Taglia"));
+        assertEquals(h.getRootCategory().get("Taglia").required(), true);
+        assertNotNull(h.getRootCategory().get("Colore"));
+        assertEquals(h.getRootCategory().get("Colore").required(), false);
+        assertNotNull(h.getRootCategory().get("Stato di conservazione"));
+        assertEquals(h.getRootCategory().get("Stato di conservazione").required(), true);
+        assertNotNull(h.getRootCategory().get("Descrizione libera"));
+        assertEquals(h.getRootCategory().get("Descrizione libera").required(), false);
+
+        assertTrue(h.getRootCategory() instanceof NodeCategory);
+        var children = ((NodeCategory) h.getRootCategory()).getChildren();
+
+        assertEquals(2, children.length);
+        assertEquals(children[0].getName(), "Pantaloni");
+        assertEquals(children[0].getDescription(), "Descrizione di Pantaloni");
+        assertEquals(children[1].getName(), "Felpe");
+        assertEquals(children[1].getDescription(), "Descrizione di Felpe");
+
+        assertEquals(children[0].size(), 5);
+        assertEquals(children[1].size(), 4);
+        assertNotNull(children[0].get("Giro Vita"));
+        assertEquals(children[0].get("Giro Vita").required(), false);
+
+        assertTrue(children[0] instanceof LeafCategory);
+        assertTrue(children[1] instanceof LeafCategory);
+    }
+
+    @Test
+    public void createHierarchyFromXML_example() throws Exception {
+        var list = run(getExampleHierarchyXML());
+
+        assertEquals(1, list.size());
+        Hierarchy h = list.get(0);
 
         assertEquals(h.getRootCategory().getName(), "Vestiti");
         assertEquals(h.getRootCategory().getDescription(), "Descrizione di Vestiti");
@@ -108,11 +177,69 @@ public class CreateHierarchyFromXMLTest {
 
         assertTrue(nephews[0] instanceof LeafCategory);
         assertTrue(nephews[1] instanceof LeafCategory);
-
-        connection.close();
     }
 
-    private XMLImport.HierarchyXML getTestHierarchyXML(){
+    private List<Hierarchy> run(XMLImport.HierarchyXML hierarchyXml) throws Exception {
+        // imposta il logger al livello di WARNING per togliere scritte non volute da stdout
+        Logger.setGlobalLogLevel(Level.WARNING);
+        var connection = new JdbcConnection("jdbc:sqlite:db.test.sqlite");
+
+        // istanzia le factory necessarie per il database
+        var uf = new UserFactoryImpl(connection);
+        var cf = new CategoryFactoryImpl(connection);
+        var hf = new HierarchyFactoryImpl(cf, connection);
+        var sf = new SettingsFactoryImpl(connection);
+        var of = new OfferFactoryImpl(sf, hf, uf, connection);
+        var mf = new MessageFactoryImpl(of, connection);
+
+        var model = new Model(hf, cf, uf, sf, of, mf);
+
+        // istanzia una view sugli stream stdin e stdout
+        var view = new StreamView(System.out, new Scanner(System.in));
+        var controller = new Controller(view, model);
+
+        assertEquals(0, model.getHierarchies().size());
+        ReflectionUtils.invokeMethod(Controller.class.getDeclaredMethod("createHierarchyFromXML", XMLImport.HierarchyXML.class), controller, hierarchyXml);
+
+        var h = model.getHierarchies();
+
+        connection.close();
+
+        return h;
+    }
+
+    private XMLImport.HierarchyXML getEmptyHierarchyXML(){
+        return new XMLImport.HierarchyXML(null);
+    }
+
+    private XMLImport.HierarchyXML getNoFieldsHierarchyXML(){
+        XMLImport.CategoryXML c1 = new XMLImport.CategoryXML("Vestiti", "Descrizione di Vestiti", Arrays.asList(), Arrays.asList());
+
+        return new XMLImport.HierarchyXML(c1);
+    }
+
+    private XMLImport.HierarchyXML getNoChildHierarchyXML(){
+        XMLImport.FieldXML f1_1 = new XMLImport.FieldXML("Taglia", true);
+        XMLImport.FieldXML f1_2 = new XMLImport.FieldXML("Colore", false);
+        XMLImport.CategoryXML c1 = new XMLImport.CategoryXML("Vestiti", "Descrizione di Vestiti", Arrays.asList(f1_1, f1_2), Arrays.asList());
+
+        return new XMLImport.HierarchyXML(c1);
+    }
+
+    private XMLImport.HierarchyXML getSingleNodeHierarchyXML() {
+        XMLImport.CategoryXML c3 = new XMLImport.CategoryXML("Felpe", "Descrizione di Felpe", List.of(), Arrays.asList());
+
+        XMLImport.FieldXML f2_1 = new XMLImport.FieldXML("Giro Vita", false);
+        XMLImport.CategoryXML c2 = new XMLImport.CategoryXML("Pantaloni", "Descrizione di Pantaloni", List.of(f2_1), Arrays.asList());
+
+        XMLImport.FieldXML f1_1 = new XMLImport.FieldXML("Taglia", true);
+        XMLImport.FieldXML f1_2 = new XMLImport.FieldXML("Colore", false);
+        XMLImport.CategoryXML c1 = new XMLImport.CategoryXML("Vestiti", "Descrizione di Vestiti", Arrays.asList(f1_1, f1_2), Arrays.asList(c2, c3));
+
+        return new XMLImport.HierarchyXML(c1);
+    }
+
+    private XMLImport.HierarchyXML getExampleHierarchyXML(){
 
         XMLImport.FieldXML f8_1 = new XMLImport.FieldXML("Colore Cappuccio", true);
 
@@ -134,13 +261,13 @@ public class CreateHierarchyFromXMLTest {
         return new XMLImport.HierarchyXML(c1);
     }
 
-    @AfterEach
-    public void after() {
+    @BeforeEach
+    public void before() {
         this.deleteDb();
     }
 
-    @BeforeEach
-    public void before() {
+    @AfterEach
+    public void after() {
         this.deleteDb();
     }
 
