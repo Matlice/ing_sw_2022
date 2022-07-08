@@ -770,7 +770,7 @@ public class Controller {
      */
     private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException {
         // creazione della categoria root
-        Category root = XMLcreateRootCategory(hierarchyXML);
+        Category root = XMLCreateRootCategory(hierarchyXML);
 
         // associa una CategoryXML all'istanza della Category padre già creata
         var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
@@ -783,18 +783,7 @@ public class Controller {
         }
 
         // creazione delle categorie figlie
-        while (categoryStack.size() != 0) {
-            var toInsert = categoryStack.pop();
-            Category father = toInsert.getValue();
-
-            //era un while ma viene eseguito solo una volta
-            NodeCategory r = XMLBuildChildCategory(root, categoryStack, toInsert, father);
-            
-            // aggiorna i padri nello stack, serve perchè l'istanza potrebbe essere cambiata
-            categoryStack = getUpdatedCategoryStack(categoryStack, father, r);
-
-            if (father == root) root = r;
-        }
+        root = XMLCreateChildCategories(root, categoryStack);
 
         try {
             this.model.createHierarchy(root);
@@ -804,8 +793,24 @@ public class Controller {
         }
     }
 
+    private Category XMLCreateChildCategories(Category root, Deque<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> categoryStack) throws DuplicateCategoryException, InvalidCategoryException, InvalidFieldException, DuplicateFieldException {
+        while (categoryStack.size() != 0) {
+            var toInsert = categoryStack.pop();
+            Category father = toInsert.getValue();
+
+            //era un while ma viene eseguito solo una volta
+            NodeCategory r = XMLBuildChildCategory(root, categoryStack, toInsert, father);
+
+            // aggiorna i padri nello stack, serve perchè l'istanza potrebbe essere cambiata
+            categoryStack = getUpdatedCategoryStack(categoryStack, father, r);
+
+            if (father == root) root = r;
+        }
+        return root;
+    }
+
     @NotNull
-    private LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> getUpdatedCategoryStack(LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> categoryStack, Category father, Category r) {
+    private Deque<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> getUpdatedCategoryStack(Deque<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> categoryStack, Category father, Category r) {
         var newCategoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
         for (var e : categoryStack) {
             if (e.getValue() == father) {
@@ -820,7 +825,7 @@ public class Controller {
     }
 
     @NotNull
-    private NodeCategory XMLBuildChildCategory(Category root, LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> categoryStack, AbstractMap.@NotNull SimpleEntry<XMLImport.CategoryXML, Category> toInsert, Category father) throws DuplicateCategoryException, InvalidCategoryException, InvalidFieldException, DuplicateFieldException {
+    private NodeCategory XMLBuildChildCategory(Category root, Deque<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>> categoryStack, AbstractMap.@NotNull SimpleEntry<XMLImport.CategoryXML, Category> toInsert, Category father) throws DuplicateCategoryException, InvalidCategoryException, InvalidFieldException, DuplicateFieldException {
         NodeCategory r;
         var newChild = this.createCategoryFromXML(root, toInsert.getKey());
         r = this.appendCategory(father, newChild);
@@ -840,7 +845,7 @@ public class Controller {
     }
 
     @NotNull
-    private Category XMLcreateRootCategory(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, InvalidFieldException, DuplicateFieldException {
+    private Category XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, InvalidFieldException, DuplicateFieldException {
         Category root = this.createCategoryFromXML(null, hierarchyXML.root);
         if (hierarchyXML.root.fields != null)
             for (var e : hierarchyXML.root.fields) {
