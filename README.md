@@ -373,11 +373,12 @@ MVC
 
 ### Testing
 
-- [X] scegliere una classe da testare, e mostrare come si è testata [black box e2e e hierarchyFromXML]
+<<<<<<< HEAD
+- [X] scegliere una classe da testare, e mostrare come si è testata [black box e2e e createHierarchyFromXML]
 
 ### Refactor
 
-- [X] mostrare un singolo caso di refactor (Extract Method su hierarchyFromXML)
+- [X] mostrare un singolo caso di refactor (Extract Method!) [createHierarchyFromXML]
 
 ### Note a caso
 
