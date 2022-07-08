@@ -278,7 +278,7 @@ public class Controller {
         }
 
         if (userOffers.size() == 0) {
-            this.view.warn(NO_OFFERS_IN_EXCHANGE);
+            this.view.warn(NO_OFFERS_TO_EXCHANGE);
             return true;
         }
         var offerToTrade = this.view.selectItem(SELECT_OFFER_TO_PROPOSE_PROMPT, userOffers);
@@ -295,7 +295,7 @@ public class Controller {
             System.exit(1);
         }
         if (offers.size() == 0) {
-            this.view.warn(NO_OFFERS_IN_EXCHANGE);
+            this.view.warn(NO_OFFERS_AVAILABLE_TO_EXCHANGE);
             return true;
         }
         var offerToAccept = this.view.selectItem(SELECT_OFFER_TO_ACCEPT_PROMPT, offers);

@@ -21,7 +21,8 @@ public class ConversionMap {
     public ConversionMap() {
         this.warnMap.put(NEED_CHANGE_PASSWORD, "Cambia le credenziali di accesso");
         this.warnMap.put(SUCCESSFUL_REGISTRATION, "Utente registrato con successo.");
-        this.warnMap.put(NO_OFFERS_IN_EXCHANGE, "Non hai offerte disponibili allo scambio");
+        this.warnMap.put(NO_OFFERS_TO_EXCHANGE, "Non hai offerte disponibili allo scambio");
+        this.warnMap.put(NO_OFFERS_AVAILABLE_TO_EXCHANGE, "Non ci sono offerte disponibili allo scambio");
         this.warnMap.put(SUCCESSFUL_OFFER_PROPOSAL, "Proposta di scambio confermata");
         this.warnMap.put(NO_ACCEPTABLE_OFFERS, "Non ci sono proposte di scambio accettabili al momento");
         this.warnMap.put(NO_MESSAGES_TO_REPLY, "Non hai messaggi a cui rispondere");

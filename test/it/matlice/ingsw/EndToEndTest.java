@@ -36,6 +36,7 @@ public class EndToEndTest {
     }
 
     public void testCase(File inFile, File outFile) {
+        deleteDb();
         try {
             var in = new BufferedInputStream(new FileInputStream(inFile));
 
@@ -45,9 +46,7 @@ public class EndToEndTest {
             this.run(in, out);
 
             assertEquals(Files.readString(outFile.toPath()), os.toString().replaceAll("[0-9][0-9]/[0-9][0-9]", "&DATA&"));
-            deleteDb();
         } catch(Exception e) {
-            deleteDb();
             fail();
         }
     }

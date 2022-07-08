@@ -904,7 +904,7 @@ Quale offerta si vuole proporre in scambio?
 		Stato di conservazione = Molto usati
 		Taglia = M
  0) Esci
-AVVISO: Non hai offerte disponibili allo scambio
+AVVISO: Non ci sono offerte disponibili allo scambio
 
 Benvenuto! Scegli un'opzione
  1) Proponi uno scambio
@@ -1009,7 +1009,7 @@ Quale offerta si vuole proporre in scambio?
 		Stato di conservazione = Molto usati
 		Taglia = M
  0) Esci
-AVVISO: Non hai offerte disponibili allo scambio
+AVVISO: Non ci sono offerte disponibili allo scambio
 
 Benvenuto! Scegli un'opzione
  1) Proponi uno scambio
@@ -1194,7 +1194,7 @@ Quale offerta si vuole proporre in scambio?
 		Stato di conservazione = Distrutti come da titolo
 		Taglia = XS
  0) Esci
-AVVISO: Non hai offerte disponibili allo scambio
+AVVISO: Non ci sono offerte disponibili allo scambio
 
 Benvenuto! Scegli un'opzione
  1) Proponi uno scambio
