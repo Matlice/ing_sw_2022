@@ -1,0 +1,61 @@
+
+\usepackage{shellesc}
+\usepackage{luacode}
+
+\begin{luacode*}
+    local plantumlJar = "./plantuml.jar"
+
+    function setPlantumlJar(path)
+        print("Setting jar path to " .. path)
+        plantumlJar = path
+    end
+
+    function filename(path)
+        return file:match("^.+[/\\](.+)$")
+    end
+
+    function makeplantuml(opt, file)
+        print("Processing " .. file)
+
+        print("Reading source")
+        local infile = io.open(file, "r")
+        if infile ~= nil then
+            local src_content = infile:read("*a")
+            infile:close()
+            
+            local last_out_file = io.open(file .. ".last", "r")
+            local last_src_content = ""
+            if last_out_file ~= nil then
+                print("Reading last version")
+                last_src_content = last_out_file:read("*a")
+                last_out_file:close()
+            end
+
+            if last_out_file == nil or last_src_content ~= src_content then
+                last_out_file = io.open(file .. ".last", "w")
+                last_out_file:write(src_content)
+                last_out_file:close()
+                tex.print("\\immediate\\write18{java -jar " .. plantumlJar .. " -teps " .. file ..  "}")
+            else
+                print("No rebuild necessary")
+            end
+            
+            tex.print("\\includegraphics[" .. opt .."]{".. file:gsub(".puml", ".eps") .."}")
+            return
+        end
+        print("Inexistent File " .. file)
+        tex.print("Cannot file file " .. file)
+    end
+\end{luacode*}
+
+\newcommand{\plantumlfile}[2][width=.95\textwidth]{
+    \directlua{
+        makeplantuml("\luaescapestring{#1}", "\luaescapestring{#2}")
+    }
+}
+
+\newcommand{\setpumljar}[1]{
+    \directlua{
+        setPlantumlJar("\luaescapestring{#1}")
+    }
+}
