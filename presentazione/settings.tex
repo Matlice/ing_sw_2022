@@ -32,15 +32,21 @@
 \setbeamercolor{palette primary}{bg=unibsbg}
 \setbeamercolor{progress bar}{fg=unibsbg}
 
-\setbeamertemplate{footline}[text line]{%
-    \parbox{\linewidth}{\vspace*{-15pt}
-        \shortinstitute%
-        \hfill\insertshorttitle%
-        \hfill\insertshortauthor%
-        \hfill\insertpagenumber}
+\newcommand{\enablefooter}{
+    \setbeamertemplate{footline}[text line]{%
+        \parbox{\linewidth}{\vspace*{-15pt}
+            \shortinstitute%
+            \hfill\insertshorttitle~-~\secname%
+            \hfill\insertshortauthor%
+            \hfill\insertframenumber~/~\inserttotalframenumber}
+    }
 }
 
-\bibliographystyle{alpha}
+\newcommand{\disablefooter}{
+    \setbeamertemplate{footline}[text line]{}
+}
+
+\enablefooter
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -74,3 +80,4 @@
 \input{lua.tex}
 
 \setpumljar{plantuml-1.2022.6.jar}
+\input{structure.tex}

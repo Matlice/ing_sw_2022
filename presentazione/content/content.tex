@@ -2,58 +2,25 @@
     \maketitle
 \end{frame}
 
-\section{Sommario}
+\disablefooter%
+\section*{Indice}
 \begin{frame}[allowframebreaks]
-    \frametitle{Sommario}
-    \setbeamertemplate{section in toc}[sections numbered]
-    \tableofcontents
-
+    \frametitle{Indice}
+    \tableofcontents[
+        subsectionstyle=show/hide
+    ]
 \end{frame}
+\enablefooter%
 
-\section{Sezione 1}
-\subsection{SubSezione1}
-\begin{frame}[fragile]
-    \frametitle{Sample frame title}
-    \lstset{style=java}
-    \begin{lstlisting}[language=java]
-public static void main(String[] args) {
-    try {
-        // imposta il logger al livello di WARNING 
-        // per togliere scritte non volute da stdout
-        Logger.setGlobalLogLevel(Level.WARNING);
-        JdbcConnection.startInstance("jdbc:sqlite:db.sqlite");
+\input{content/MVC/mvc.tex}
 
-        // istanzia le factory necessarie per il database
-        var af = new OfferFactoryImpl(sf);
-        var mf = new MessageFactoryImpl();
-    } catch (SQLException e) {
-    }
-}
-    \end{lstlisting}
-\end{frame}
+\input{content/GRASP/grasp.tex}
 
-\section{Sezione 2}
-\subsection{SubSezione1}
-\begin{frame}
-    \frametitle{Sample frame title}
-    \plantumlfile[width=.5\textwidth]{uml/test.puml}
-\end{frame}
+\input{content/SOLID/solid.tex}
 
-\section{Sezione 3}
-\subsection{SubSezione1}
-\begin{frame}
-    \frametitle{Sample frame title}
-    aaaaaaaaaaaaa
-\end{frame}
+\input{content/GoF/gof.tex}
 
-\subsection{SubSezione2}
-\begin{frame}
-    \frametitle{Sample frame titlee}
-    aaaaaaaaaaaaa
-\end{frame}
+\input{content/TEST/testing.tex}
 
-\section{Sezione 4}
-\begin{frame}
-    \frametitle{Sample frame title}
-    bbbbb
-\end{frame}
+\input{content/REFACTOR/refactoring.tex}
+
