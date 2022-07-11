@@ -1,17 +1,62 @@
 @startuml
 
+skinparam linetype ortho
+
 package "controller" as controller {
     class "Controller" as Controller {
-        +void cose() 
+        - Model model
+        - View view
+        --
+        + void mainloop() 
         'todo da fare
     }
 
+    enum "PromptType" as PromptType {
+        SELECT_OPTION_PROMPT
+        ADD_HIERARCHY_PROMPT
+        INSERT_FIELD_VALUE_PROMPT
+        INSERT_USERNAME
+        INSERT_PASSWORD
+        ...
+    }
+
+    enum "InfoType" as InfoType {
+        YOUR_OFFERS_INFO
+        YOUR_OFFERS_BY_CATEGORY_INFO
+        PLACES_INFO
+        DATES_INFO
+        HOURS_INFO
+        ...
+    }
+
+    Controller -up- PromptType
+    Controller -up- InfoType
 }
 
 package "model" as model {
     class "Model" as Model {
         'todo
     }
+
+    package "model.data" as data {
+
+        abstract class Hierarchy {
+            - Category root
+            + Category getRootCategory()
+        }
+
+        abstract class Offer {
+            String getName()
+            User getOwner()
+            OfferStatus getStatus()
+            LeafCategory getCategory()
+        }
+
+    }
+
+    Model -- Offer
+    Model -- Hierarchy
+
 }
 
 package "view" as view {
@@ -65,11 +110,22 @@ package "view" as view {
         }
 
         class "StreamView" as StreamView implements View{
-            'todo
+            --
+            ...
         }
 
         class StreamInfoFactory implements InfoFactory {
             - StreamView view
+        }
+
+        class ConversionMap {
+            - Map<PromptType, String> promptMap
+            - Map<InfoType, String> infoMap
+            ...
+            --
+            + String convertPrompt(PromptType)
+            + String convertInfo(InfoType)
+            ...
         }
 
         abstract class AStreamMessage implements IStreamMessage {
@@ -77,17 +133,18 @@ package "view" as view {
             + void show()
         }
 
-        StreamInfoFactory -right- StreamView
-        StreamView -- DataTypeConverter
+        StreamInfoFactory <-right- StreamView
+        StreamView --> DataTypeConverter
+        StreamView -right-> ConversionMap
         DataTypeConverter -right- StreamDataType
 
     }
 
-    View -right- InfoFactory
-    InfoFactory -right- IMessage
+    View -left- InfoFactory
+    InfoFactory -left- IMessage
 }
 
-Model <-right- Controller
+Controller -down-> Model
 Controller -right-> View
 
 @enduml
