@@ -1,8 +1,4 @@
 \section{Model View Controller}
-%Diagramma dei package
-%no logica di presentazione nello strato business
-%Formattazione delle stringhe
-%diagrammi ssd pe i dati scambiati
 
 \subsection{Diagramma dei Packages}
 \begin{frame}
@@ -10,16 +6,63 @@
 \end{frame}
 
 \subsection{Scambio di dati}
-\begin{frame}
-    \frametitle{ciao}
+\begin{frame}{Scambio dei dati tra gli strati}
+    il modello di interazione tra i componenti \texttt{Model}, \texttt{View} e \texttt{Controller} è il seguente:
+
+    \begin{minipage}{.49\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/mvc.ssd.puml}
+        \end{figure}
+    \end{minipage}
+    \begin{minipage}{.49\textwidth}
+        \begin{enumerate}
+            \item<1-> Inizialmente il controller rende noto alla view le azioni disponibili.
+            \item<2-> L'utente, mediante l'interazione con la view, sceglie l'azione da intraprendere
+            \item<3-> Il controller riceve un callback ed esegue l'azione.
+            \item <4-> Il risultato viene inviato alla view e viene mostrato all'utente mediante quanto definito nell'implementazione.
+        \end{enumerate}
+    \end{minipage}
 \end{frame}
 
-\subsection{Dipendenze}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Scelta delle azioni}
+
+    \begin{minipage}{.49\textwidth}
+        \begin{enumerate}
+            \item<1-> Viene formata una lista di azioni (Istanze di controller.ReturnAction)
+            \item<2-> La lista viene inviata alla view, la quale converte le istanze di controller.MenuAction in istanze di MenuEntry tramite la classe adattatore MenuEntryWrapper
+            \item<3-> Viene proposta all'utente la scelta dell'azione e viene ritornata l'istanza di MenuEntryWrapper associata
+            \item <4-> L'istanza viene estratta fino ad ottenere la ReturnAction iniziale
+        \end{enumerate}
+    \end{minipage}
+    \begin{minipage}{.49\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile[width=.8\textwidth]{uml/mvc.menu-select.puml}
+        \end{figure}
+    \end{minipage}
+    
 \end{frame}
 
-\subsection{Controller}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Stampa degli oggetti model}
+    \begin{minipage}{.29\textwidth}
+        Al fine di evitare che le classi del \texttt{Model} implementino metodi strettamente legati alla view, viene utilizzato un sistema di adapter istanziati da una factory specializzata per ogni tipologia di \texttt{View}.
+    \end{minipage}
+    \begin{minipage}{.69\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/mvc.view.getrepr.puml}
+        \end{figure}
+    \end{minipage}
 \end{frame}
+\note{
+    view.DataTypeConverter è la factory dinamica che viene istanziata nel momento in cui la StreamView viene definita.
+
+    Ogni tipo di classe appartenente al model viene registrato con un relativo adapter.
+
+    Al momento del bisogno, dato un oggetto proveniente dal model, viene istanziata una istanza dell'adapter alla quale viene passata la referenza dell'oggetto, per poi chiamate il metodo ereditato dall'interfaccia StreamDataType getStreamRepresentation() per ottenere il valore stampabile come stringa.
+
+    È un tostring più grosso.
+}

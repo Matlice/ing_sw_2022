@@ -1,0 +1,45 @@
+@startuml
+
+actor user as "Utente"
+participant view as "StreamView"
+participant dataconv as "DataTypeConverter"
+participant adapter as "ModelClassAdapter"
+participant modelclass as "ModelClass"
+participant controller as "Controller"
+
+create dataconv
+activate view
+view -> dataconv: new
+activate dataconv
+
+loop foreach ModelClass type
+    view -> dataconv: registerConverter(ModelClass, converter)
+end
+deactivate dataconv
+deactivate view
+
+
+controller -> view : showList(List<ModelObject>)
+activate view
+loop foreach element of list
+    view -> dataconv: getViewType(obj)
+    activate dataconv
+    create adapter
+    dataconv -> adapter: ModelClassAdapter(obj)
+    dataconv --> view: return instance
+    deactivate dataconv
+    view -> adapter: getStreamRepresentation()
+    activate adapter
+    adapter -> modelclass: get data
+    activate modelclass
+    modelclass --> adapter: returned data
+    deactivate modelclass
+    adapter -> adapter: perform conversion
+    adapter --> view: String
+    deactivate adapter
+    view -> user: show data representation
+end
+
+deactivate view
+
+@enduml
