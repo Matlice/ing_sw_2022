@@ -1,4 +1,39 @@
 \section{SOLID Interface Segregation}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Interface Segregation}
+
+    \begin{minipage}{.48\textwidth}
+        Precedentemente al refactor
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/solid.is.pre.puml}
+        \end{figure}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{.48\textwidth}
+        Successivamente al refactor
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/solid.is.post.puml}
+        \end{figure}
+    \end{minipage}
 \end{frame}
+
+\begin{frame}
+    \frametitle{Interface Segregation - Spiegazione}
+    L'interfaccia \texttt{OfferFactory} viene suddivisa in funzione del campo di appartenenza delle azioni dei suoi metodi.
+
+    Questo processo è stato effettuato in modo da adattare tutte le factory presenti nel codice, secondo i seguenti criteri:
+    \begin{itemize}
+        \item<1-> Tutte le azioni relative alla modifica di un'istanza esistente vengono destinate all'interfaccia \texttt{*StorageManager}
+        \item<2-> Tutte le azioni di creazione vengono destinate all'interfaccia \texttt{*Factory}
+        \item <3-> Tutte le azioni di querying vengono infine destinate all'interfaccia \texttt{*Repository}
+    \end{itemize}
+\end{frame}
+\note{
+    Si noti come le funzioni di modifica di una istanza potessero essere delegate alla classe Offer stessa.
+
+    Sebbene possibile e consigliato da Information Expert, questo comporterebbe un incremento delle responsabilità della classe e un aumento della coesione, in quanto la classe Offer dovrebbe dipendere dagli oggetti DAO per poter operare sulle istanze di database.
+
+    Di conseguenza si è preferito mantenere distaccata la logica di operazione sulla base di dati e la logica applicativa.
+}

@@ -1,4 +1,45 @@
 \section{GRASP Polymorphism}
-\begin{frame}
-    \frametitle{ciao}
+\begin{frame}[fragile]
+    \frametitle{GRASP Polymorphism - Prima del refactor}
+
+    Inizialmente le due tipologie di utente, \texttt{ConfiguratorUser} e \texttt{CustomerUser}, equivalenti ai tipi di utente Configuratore e Fruitore, venivano distinte dal Controller in funzione della loro istanza; come riportato a seguire.
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={v5 commit 34c1a67}]
+if (this.currentUser.getUser() instanceof ConfiguratorUser)
+    while (!this.model.hasConfiguredSettings())
+        this.configureSettings(true);
+else if (!this.model.hasConfiguredSettings())
+    this.view.error(Errors.NO_CONF_ERROR);
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Dopo il refactor}
+
+    \begin{minipage}{.38\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile[width=\textwidth]{uml/grasp.poly.post.puml}
+        \end{figure}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{.58\textwidth}
+        \lstset{style=java}
+        \begin{lstlisting}[language=java, caption={Codice refactorato in Controller}]
+if (this.currentUser.getUser().isAdmin())
+   do {
+       this.configureSettings(true);
+   }while(!model.hasConfiguredSettings());
+        \end{lstlisting}
+
+        \begin{lstlisting}[language=java, caption={Utente configuratore è admin}]
+@Override
+public Boolean isAdmin(){
+    return true;
+}
+        \end{lstlisting}
+    \end{minipage}
+
 \end{frame}

@@ -2,7 +2,11 @@
 
 \subsection{Diagramma dei Packages}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Diagramma dei package}
+    \begin{figure}
+        \centering
+        \plantumlfile[width=.68\textwidth]{uml/mvc_classi.puml}
+    \end{figure}
 \end{frame}
 
 \subsection{Scambio di dati}
@@ -43,6 +47,23 @@
         \end{figure}
     \end{minipage}
     
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Esempio rappresentativo della scelta di azioni}
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={Snippet tratto da StreamView\#chooseOption()}]
+@Override
+public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, PromptType prompt) {
+    return this.choose(choices.stream()
+            .map((e) -> new MenuEntryWrapper<MenuAction<T>>(
+                    this.conversionMap.convertMenuToString(e.getType()),
+                    (in, out, ref) -> e, e.isDisabled(),
+                    e.getIndex(),
+                    e.getPosition()
+            )).toList(), prompt);
+}
+    \end{lstlisting}
 \end{frame}
 
 \begin{frame}

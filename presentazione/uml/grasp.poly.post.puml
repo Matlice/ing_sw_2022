@@ -1,0 +1,21 @@
+@startuml
+
+abstract class User{
+    --
+    + {abstract} getUsername(): String
+    + {abstract} getLastLoginTime(): Long
+    + {abstract} setLastLoginTime(time: Long): void
+    + {abstract} isAdmin(): boolean
+    ...
+}
+
+abstract class ConfiguratorUser extends User{
+}
+
+abstract class CustomerUser extends User{
+}
+
+class NullUser extends User{
+}
+
+@enduml

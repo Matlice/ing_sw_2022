@@ -22,6 +22,23 @@
         \end{itemize}
     \end{minipage}
 \end{frame}
+\note{
+    Il funzionamento di questa configurazione consiste in quanto segue:
+    Tutto ciò contenuto nel package non viene utilizzato come dipendenza per una questione di dependency inversion e di riutilizzo.
+
+    La classe OfferImpl viene quindi istanziata mediante l'utilizzo di una factory (correlata e presente nello stesso package) mantenendo il principio di DI per cui il codice utilizzatore vede questa una OfferFactory.
+
+    Con questo approccio si nota come la classe OfferImpl sia responabile della gestione dei campi compilati (associati a una categoria), il loro riperimento dal database (mediante la dipendenza dalla connessione JDBC)
+    e della gestione effettiva dell'offerta nella base di dati.
+    
+    \textbf{Note relative alla gestione dei parametri dell'offerta}
+
+    Ogni campo compilabile viene associato a una categoria (mappa tra String e TypeDefinition), la quale definisce il nome del campo il suo tipo e l'obbligatorietà.
+
+    Ogni tipo quindi definisce i metodi di serializzazione e deserializzazione per il salvataggio in database.
+
+    I valori dei campi compilati sono quindi salvati con riferimento all'offerta e al campo definito nella categoria, ma questa struttura non è rispecchiata dall'architettura del codice.
+}
 
 \begin{frame}
     \frametitle{Soluzione: GRASP Pure Fabrication}
@@ -30,7 +47,7 @@
             \item<1-> Viene segmentata la classe \texttt{OfferImpl}
             \item <2-> Vengono create le relative classi di convenienza per l'associazione al modello del database
             \item <3-> Vengono creati dei Data Abstraction Object per gestire l'interazione con il database (OrmLite)
-            \item Viene delegato alla factory la responsabilità di istanziare le offerte ed effettuare l'associazione dei valori dei campi alle istanze.
+            \item<4-> Viene delegato alla factory la responsabilità di istanziare le offerte ed effettuare l'associazione dei valori dei campi alle istanze.
         \end{itemize}
     \end{minipage}
     \begin{minipage}{.47\textwidth}
@@ -39,4 +56,30 @@
             \plantumlfile[width=.8\textwidth]{uml/grasp.pf.post.puml}
         \end{figure}
     \end{minipage}
+\end{frame}
+\note{
+    Si noti come le classi relative all'implementazione nel database siano presenti e ripecchino l'architettura della base di dati.
+
+    Queste vengono gestite mediante la libreria OrmLite dal loro relativo DAO, classe che si occupa interamente della gestione della base di dati, consentendo quindi la ricerca (Query) e la gestione delle istanze.
+
+    Come definito in precedenza, le referenze verso la rappresentazione del campo (TypeDefinition) e il suo valore vengono rappresentate dalle classi OfferFieldDB e CategoryFieldDB, la quale referenzia la rappresentazione.
+}
+
+\begin{frame}[fragile]
+    \frametitle{Esempio di utilizzo DAO e classi di utilità}
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={OfferFactoryImpl\#getOffers()}]
+@Override
+public List<Offer> getOffers(User owner) throws DBException {
+    assert owner instanceof UserImpl;
+    //Controllo eseguito per aggiornare le offerte scadute
+    this.checkForDueDate();
+    List<OfferDB> offer_db; //Ottengo le offerte associate all'utente
+    offer_db = this.offerDAO.queryForEq("owner_id", ((UserImpl) owner).getDbData());
+    var offers = new LinkedList<Offer>();
+    for (var offer : offer_db) {
+        offers.add(this.instantiateOffer(offer, null));
+    return offers;
+}
+    \end{lstlisting}
 \end{frame}
