@@ -1,0 +1,93 @@
+@startuml
+
+package "controller" as controller {
+    class "Controller" as Controller {
+        +void cose() 
+        'todo da fare
+    }
+
+}
+
+package "model" as model {
+    class "Model" as Model {
+        'todo
+    }
+}
+
+package "view" as view {
+
+    class "IMessage" as IMessage {
+        + void show()
+    }
+
+    interface "InfoFactory" as InfoFactory {
+        --
+        + IMessage getHierarchyMessage(Hierarchy)
+        + IMessage getConfigurationMessage(Settings)
+        ...
+    }
+
+    interface "View" as View {
+        --
+        + InfoFactory getInfoFactory()
+        + <T> void showList(InfoType, List<T>)
+        + <V> selectItem(PromptType, List<V>)
+        + String getText(PromptType)
+        + Boolean getBoolean(PromptType)
+        ...
+    }
+
+    package "stream" as stream {
+
+        package "stream.datatypes" as datatypes {
+
+            class "DataTypeConverter" as DataTypeConverter {
+                - Map<Class<?>, Converter> converters
+                + StreamDataType getViewType(Object o)
+            }
+
+            interface StreamDataType {
+                String getStreamRepresentation()
+            }
+
+            class StreamHierarchyAdapter implements StreamDataType {
+                - Hierarchy hierarchy
+                ' todo lasciare il metodo implementato?
+            }
+
+            class StreamOfferAdapter implements StreamDataType {
+                - Offer offer
+            }
+
+        }
+
+        interface "IStreamMessage" as IStreamMessage extends IMessage {
+        }
+
+        class "StreamView" as StreamView implements View{
+            'todo
+        }
+
+        class StreamInfoFactory implements InfoFactory {
+            - StreamView view
+        }
+
+        abstract class AStreamMessage implements IStreamMessage {
+            - StreamView view
+            + void show()
+        }
+
+        StreamInfoFactory -right- StreamView
+        StreamView -- DataTypeConverter
+        DataTypeConverter -right- StreamDataType
+
+    }
+
+    View -right- InfoFactory
+    InfoFactory -right- IMessage
+}
+
+Model <-right- Controller
+Controller -right-> View
+
+@enduml
