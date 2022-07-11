@@ -1,0 +1,30 @@
+@startuml
+
+|Controller|
+start
+
+:Definizione lista possibili azioni
+mediante **List<MenuAction>**;
+
+:View#chooseOption(actionList);
+
+|View|
+
+:Conversione da List of controller.MenuAction
+a List of view.menu.MenuEntryWrapper;
+
+:Creazione del menu di interazione;
+
+:Menu.displayOnce();
+
+:Scelta utente<
+
+:return view.menu.MenuAction.run();
+
+|Controller|
+
+:choosenOption.getAction().run();
+
+stop
+
+@enduml

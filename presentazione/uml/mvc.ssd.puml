@@ -1,0 +1,37 @@
+@startuml
+
+actor user as "Utente"
+participant view as "StreamView"
+participant controller as "Controller"
+participant model as "Model"
+
+activate controller
+controller -> view: 1: chooseOption(availActions)
+
+activate view
+user -> view: 2: Selezione di un'operazione
+activate user
+view --> controller: 3: Azione selezionata
+deactivate view 
+
+controller -> controller: 3.1: Preprocessing
+
+controller -> view: 3.2: Richiesta dati di input
+activate view
+view -> user: 3.2.1: Prompt
+user --> view: 3.2.2: Inserimento dati
+view --> controller: 3.2.3: Dati richiesti
+deactivate view
+
+controller -> model: 3.3: Perform Action
+activate model
+model -> : 3.3.1: Delegate actions
+model --> controller: 4: Risultato
+deactivate model
+controller -> view: 4.1: showList(returnData)
+deactivate controller
+activate view
+view -> user: 4.2: Risultato
+deactivate view
+deactivate user
+@enduml
