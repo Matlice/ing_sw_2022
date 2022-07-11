@@ -1,4 +1,42 @@
 \section{GRASP Pure Fabrication}
+
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Prima ideazione derivata dal modello di dominio}
+    Inizialmente, durante la fase di modellazione del dominio, la classe OfferImpl veniva definita come segue.
+
+    \begin{minipage}{.29\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile[width=.8\textwidth]{uml/grasp.pf.pre.puml}
+        \end{figure}
+    \end{minipage}
+    \begin{minipage}{.68\textwidth}
+        \begin{itemize}
+            \item<1-> La classe si occupa di troppe responsabilità, violando High Cohesion. La classe dovrebbe occuparsi di:
+            \begin{itemize}
+                \item Gestione dell'offerta a livello di dominio
+                \item Gestione della persistenza sul database
+                \item Gestione dei valori degli attributi compilati
+            \end{itemize}
+            \item<2-> La classe inoltre viola Low Coupling essendo dipendente dalle astrazioni di Categoria e Utente oltre che alla connessione al database.
+        \end{itemize}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Soluzione: GRASP Pure Fabrication}
+    \begin{minipage}{.48\textwidth}
+        \begin{itemize}
+            \item<1-> Viene segmentata la classe \texttt{OfferImpl}
+            \item <2-> Vengono create le relative classi di convenienza per l'associazione al modello del database
+            \item <3-> Vengono creati dei Data Abstraction Object per gestire l'interazione con il database (OrmLite)
+            \item Viene delegato alla factory la responsabilità di istanziare le offerte ed effettuare l'associazione dei valori dei campi alle istanze.
+        \end{itemize}
+    \end{minipage}
+    \begin{minipage}{.47\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile[width=.8\textwidth]{uml/grasp.pf.post.puml}
+        \end{figure}
+    \end{minipage}
 \end{frame}

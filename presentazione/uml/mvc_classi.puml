@@ -4,10 +4,10 @@ skinparam linetype ortho
 
 package "controller" as controller {
     class "Controller" as Controller {
-        - Model model
-        - View view
+        -  model: Model
+        -  view: View
         --
-        + void mainloop() 
+        + mainloop(): void
         'todo da fare
     }
 
@@ -41,15 +41,15 @@ package "model" as model {
     package "model.data" as data {
 
         abstract class Hierarchy {
-            - Category root
-            + Category getRootCategory()
+            - root: Category
+            + getRootCategory(): Category
         }
 
         abstract class Offer {
-            String getName()
-            User getOwner()
-            OfferStatus getStatus()
-            LeafCategory getCategory()
+            + getName(): String
+            + getOwner(): User
+            + getStatus(): OfferStatus
+            + getCategory(): LeafCategory
         }
 
     }
@@ -62,23 +62,23 @@ package "model" as model {
 package "view" as view {
 
     class "IMessage" as IMessage {
-        + void show()
+        + show(): void
     }
 
     interface "InfoFactory" as InfoFactory {
         --
-        + IMessage getHierarchyMessage(Hierarchy)
-        + IMessage getConfigurationMessage(Settings)
+        + getHierarchyMessage(Hierarchy): IMessage
+        + getConfigurationMessage(Settings): IMessage
         ...
     }
 
     interface "View" as View {
         --
-        + InfoFactory getInfoFactory()
-        + <T> void showList(InfoType, List<T>)
-        + <V> selectItem(PromptType, List<V>)
-        + String getText(PromptType)
-        + Boolean getBoolean(PromptType)
+        + getInfoFactory(): InfoFactory
+        + showList(InfoType, List<T>): void
+        + selectItem(PromptType, List<V>): V
+        + getText(PromptType): String
+        + getBoolean(PromptType): Boolean
         ...
     }
 
@@ -87,21 +87,21 @@ package "view" as view {
         package "stream.datatypes" as datatypes {
 
             class "DataTypeConverter" as DataTypeConverter {
-                - Map<Class<?>, Converter> converters
-                + StreamDataType getViewType(Object o)
+                - converters: Map<Class<?>, Converter>
+                + getViewType(Object o): StreamDataType 
             }
 
             interface StreamDataType {
-                String getStreamRepresentation()
+                + getStreamRepresentation(): String
             }
 
             class StreamHierarchyAdapter implements StreamDataType {
-                - Hierarchy hierarchy
+                - hierarchy: Hierarchy
                 ' todo lasciare il metodo implementato?
             }
 
             class StreamOfferAdapter implements StreamDataType {
-                - Offer offer
+                - offer: Offer
             }
 
         }
@@ -115,22 +115,22 @@ package "view" as view {
         }
 
         class StreamInfoFactory implements InfoFactory {
-            - StreamView view
+            - view: StreamView
         }
 
         class ConversionMap {
-            - Map<PromptType, String> promptMap
-            - Map<InfoType, String> infoMap
+            - promptMap: Map<PromptType, String>
+            - infoMap: Map<InfoType, String>
             ...
             --
-            + String convertPrompt(PromptType)
-            + String convertInfo(InfoType)
+            + convertPrompt(PromptType): String
+            + convertInfo(InfoType): String
             ...
         }
 
         abstract class AStreamMessage implements IStreamMessage {
-            - StreamView view
-            + void show()
+            - view: StreamView
+            + show(): void
         }
 
         StreamInfoFactory <-right- StreamView
