@@ -2,5 +2,114 @@
 
 \subsection{Testing End to End}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Strutturazione dei test Black Box}
+    Al fine di garantire la continuità e la consistenza dell'applicativo, anche a fronte di modifiche sostanziali alla logica applicativa, è stato deciso un approccio \textbf{End to End} al testing.\pause
+
+    Concettualmente è come se l'interazione utente fosse automatizzata mantenendo l'esecuzione di tutti i componenti del codice.\pause
+
+    Non essendoci isolamento delle componenti, si valuta per lo più l'integrazione tra essi, al fine di validare l'output delle singole esecuzioni.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Flow di processo 1/3 - Predisposizione}
+    \begin{minipage}{.31\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/testing.e2e.flow.init.puml}
+        \end{figure}
+    \end{minipage}\hfill
+    \begin{minipage}{.66\textwidth}
+        \begin{itemize}
+            \item <1-> Vengono preparati due stream, uno per l'input che andrà a simulare l'utente e uno per l'output che servirà nella fase di validazione.
+            \item <2-> Vengono quindi caricati i file contenenti l'input del caso di test e l'output atteso
+            \item <3-> Viene inizializzata la struttura e le classi dell'applicativo per il suo funzionamento.
+        \end{itemize}
+        \pause\pause\pause
+        Questo metodo permette di testare sia la View che il Controller in una sola esecuzione.
+    \end{minipage}
+\end{frame}
+\note{
+    I test sono stati scritti tramite una JUnit 5 TestFactory che produce una collezione di test dinamica.
+}
+
+\begin{frame}[fragile]
+    \frametitle{Codice di esempio, Esecuzione test}
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={Snippet tratto da End2EndTest.java}]
+private void testCase(File inFile, File outFile) {
+  InputStream in = new BufferedInputStream(new FileInputStream(inFile));
+  OutputStream os = new ByteArrayOutputStream();
+  PrintStream out = new PrintStream(new TeeOutputStream(os, System.out));
+  this.run(in, out); //run the code
+  String testFile = Files.readString(outFile.toPath());
+  assertEquals(testFile, os.toString());
+}       
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Flow di processo 2/3 - Esecuzione}
+    \begin{minipage}{.31\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/testing.e2e.flow.exec.puml}
+        \end{figure}
+    \end{minipage}\hfill
+    \begin{minipage}{.66\textwidth}
+        Il codice viene avviato chiamando \texttt{Controller\#run()} e l'input viene fornito dal test case simulando l'interazione con l'utente.
+
+        Se il test non termina entro un timeout prefissato, questo è considerato fallito.
+    \end{minipage}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Flow di processo 3/3 - Validazione}
+    \begin{minipage}{.31\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/testing.e2e.flow.validate.puml}
+        \end{figure}
+    \end{minipage}\hfill
+    \begin{minipage}{.66\textwidth}
+        L'output dell'esecuzione viene reperito e confrontato con il caso atteso, e se questi non corrispondono il test è considerato fallito.
+    \end{minipage}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Coverage ottenuto}
+    \begin{center}
+        \begin{tabular}{ |p{6cm} l l|  }
+            \hline
+            \multicolumn{3}{|c|}{Coverage Report \textit{it.matlice}} \\
+            \hline
+            \textbf{Package}& \textbf{Class Coverage} & \textbf{Method Coverage}\\
+            \hline
+            \textit{ingsw.controller} & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0} 100\% & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{0.939}93\% \\
+            \textit{ingsw.model} & 
+                \progressbar[linecolor=white, filledcolor=orange]{0.667} 66.7\% & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{0.952}95.2\% \\
+            \textit{ingsw.model.auth.exceptions} & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0} 100\% & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0}100\% \\
+            \textit{ingsw.model.auth.password} & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0} 100\% & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0}100\% \\
+            \textit{ingsw.model.data} & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0} 100\% & 
+                \progressbar[linecolor=white, filledcolor=yellow]{0.827}82.7\% \\
+            \textit{ingsw.model.data.impl.jdbc} & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0} 100\% & 
+                \progressbar[linecolor=white, filledcolor=yellow]{0.857}85.7\% \\
+            \textit{it.matlice.ingsw.view.stream} & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0} 100\% & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{0.911}91.1\% \\
+            \textit{ingsw.view.stream.datatypes} & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0} 100\% & 
+                \progressbar[linecolor=white, filledcolor=codegreen]{1.0}100\% \\
+            \hline
+        \end{tabular}
+    \end{center}
 \end{frame}

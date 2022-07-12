@@ -7,6 +7,9 @@
 \usepackage{transparent}
 \usepackage{xcolor}
 \usepackage{listings}
+\usepackage{progressbar}
+\usepackage{makecell}
+\usepackage{tabularx}
 
 \definecolor{unibsbg}{rgb}{0.24, 0.34, 0.58}
 
@@ -92,3 +95,6 @@
 
 \setpumljar{plantuml-1.2022.6.jar}
 \input{structure.tex}
+
+\renewcommand\cellset{\renewcommand\arraystretch{0.3}%
+  \setlength\extrarowheight{0pt}}

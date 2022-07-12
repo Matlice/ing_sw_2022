@@ -5,7 +5,7 @@
     \frametitle{Diagramma dei package}
     \begin{figure}
         \centering
-        \plantumlfile[width=.68\textwidth]{uml/mvc_classi.puml}
+        \plantumlfile[width=.64\textwidth]{uml/mvc_classi.puml}
         \caption{Diagramma dei package per la valutazione delle dipendenze MVC}
     \end{figure}
 \end{frame}
@@ -21,7 +21,7 @@
     \begin{minipage}{.49\textwidth}
         \begin{figure}
             \centering
-            \plantumlfile{uml/mvc.ssd.puml}
+            \plantumlfile[width=.85\textwidth]{uml/mvc.ssd.puml}
             \caption{Diagramma UML di sequenza di scambio dati tra model e view}
         \end{figure}
     \end{minipage}
@@ -49,7 +49,7 @@
     \begin{minipage}{.49\textwidth}
         \begin{figure}
             \centering
-            \plantumlfile[width=.8\textwidth]{uml/mvc.menu-select.puml}
+            \plantumlfile[width=.7\textwidth]{uml/mvc.menu-select.puml}
             \caption{Diagramma di attività di utilizzo menu e scelta utente}
         \end{figure}
     \end{minipage}
@@ -75,10 +75,10 @@ public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, Prom
 
 \begin{frame}
     \frametitle{Stampa degli oggetti model}
-    \begin{minipage}{.29\textwidth}
+    \begin{minipage}{.35\textwidth}
         Al fine di evitare che le classi del \texttt{Model} implementino metodi strettamente legati alla view, viene utilizzato un sistema di adapter istanziati da una factory specializzata per ogni tipologia di \texttt{View}.
     \end{minipage}
-    \begin{minipage}{.69\textwidth}
+    \begin{minipage}{.64\textwidth}
         \begin{figure}
             \centering
             \plantumlfile{uml/mvc.view.getrepr.puml}
