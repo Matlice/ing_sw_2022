@@ -1,4 +1,73 @@
 \section{Gang of Four Composite}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{GoF Composite - Prima del refactor}
+
+    \begin{minipage}{.5\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile[width=0.83\textwidth]{uml/gof.composite.pre.puml}
+        \end{figure}
+    \end{minipage}
+    \begin{minipage}{.49\textwidth}
+        \begin{itemize}
+            \item<1-> Si era cercato di applicare il pattern \texttt{Composite} alla classe \texttt{Category} in modo che potesse rappresentare sia le categorie foglia che quelle nodo.
+            \item<2-> Tuttavia nel codice c'erano diverse violazioni del pattern
+        \end{itemize}
+    \end{minipage}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{GoF Composite - Violazioni del pattern}
+
+    Inizialmente il codice aveva comportamenti diversi in base alla classe dell'istanza che veniva considera (se \texttt{LeafCategory} oppure \texttt{NodeCategory}), ad esempio:
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={v5 commit 34c1a67}]
+private NodeCategory appendCategory(Category father, Category child) {
+    var f = father instanceof LeafCategory ?
+            ((LeafCategory) father).convertToNode() : 
+            (NodeCategory) father;
+    f.addChild(child);
+    return f;
+}
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{GoF Composite - Violazioni del pattern}
+
+    Allo stesso modo il metodo per determinare la validità di una categoria ha comportamenti diversi in base alla classe (usando \texttt{instanceof}):
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={v5 commit 34c1a67}]
+public boolean isCategoryValid(Category c) {
+    if (thcis instanceof LeafCategory)
+        return true;
+    assert c instanceof NodeCategory;
+    return ((NodeCategory) c).getChildren().length >= 2 &&
+            Arrays.stream(((NodeCategory) c).getChildren())
+                .allMatch(Category::isCategoryValid);
+}
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{GoF Composite - Dopo il refactor}
+
+    \begin{minipage}{.5\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile[width=0.83\textwidth]{uml/gof.composite.post.puml}
+        \end{figure}
+    \end{minipage}
+    \begin{minipage}{.49\textwidth}
+        \begin{itemize}
+            \item<1-> Si era cercato di applicare il pattern \texttt{Composite} alla classe \texttt{Category} in modo che potesse rappresentare sia le categorie foglia che quelle nodo.
+            \item<2-> Tuttavia nel codice c'erano diverse violazioni del pattern
+        \end{itemize}
+    \end{minipage}
+
 \end{frame}

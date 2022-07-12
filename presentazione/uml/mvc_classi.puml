@@ -67,18 +67,18 @@ package "view" as view {
 
     interface "InfoFactory" as InfoFactory {
         --
-        + getHierarchyMessage(Hierarchy): IMessage
-        + getConfigurationMessage(Settings): IMessage
+        + getHierarchyMessage(h: Hierarchy): IMessage
+        + getConfigurationMessage(s: Settings): IMessage
         ...
     }
 
     interface "View" as View {
         --
         + getInfoFactory(): InfoFactory
-        + showList(InfoType, List<T>): void
-        + selectItem(PromptType, List<V>): V
-        + getText(PromptType): String
-        + getBoolean(PromptType): Boolean
+        + showList(i: InfoType, l: List<T>): void
+        + selectItem(p: PromptType, l: List<V>): V
+        + getText(p: PromptType): String
+        + getBoolean(p: PromptType): Boolean
         ...
     }
 
@@ -88,7 +88,7 @@ package "view" as view {
 
             class "DataTypeConverter" as DataTypeConverter {
                 - converters: Map<Class<?>, Converter>
-                + getViewType(Object o): StreamDataType 
+                + getViewType(o: Object): StreamDataType 
             }
 
             interface StreamDataType {
@@ -123,8 +123,8 @@ package "view" as view {
             - infoMap: Map<InfoType, String>
             ...
             --
-            + convertPrompt(PromptType): String
-            + convertInfo(InfoType): String
+            + convertPrompt(p: PromptType): String
+            + convertInfo(i: InfoType): String
             ...
         }
 
