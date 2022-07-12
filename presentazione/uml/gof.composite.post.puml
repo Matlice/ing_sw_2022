@@ -9,27 +9,29 @@ abstract class "Category" as category extends hashmap {
     + {abstract} getName(): String
     + {abstract} getDescription(): String
     + {abstract} getChildLeafs(): List<LeafCategory>
-    + toString(): String
     + isFieldRequired(field: String): boolean
-    + isCategoryValid(): boolean
     + {abstract} isValidChildCategoryName(name: String): boolean
+    + <color:#0000FF>{abstract} isCategoryValid(): boolean</color>
+    + <color:#0000FF>{abstract} convertToNode(): NodeCategory</color>
 }
 
 abstract class "LeafCategory" as leafcategory extends category {
-    + {abstract} convertToNode(): NodeCategory
+    + <color:#0000FF>isCategoryValid(): boolean</color>
 }
 
 abstract class "NodeCategory" as nodecategory extends category {
-    '- children: List<Category>
     + getChildren(): Category[]
     + addChild(child: Category): Category
     + removeChild(child: Category): Category
+    + <color:#0000FF>isCategoryValid(): boolean</color>
+    + <color:#0000FF>convertToNode(): NodeCategory</color>
 }
 
 nodecategory  *-- category
 
 class LeafCategoryImpl extends leafcategory {
     - dbData: CategoryDB
+    + <color:#0000FF>convertToNode(): NodeCategory</color>
 }
 
 class NodeCategoryImpl extends nodecategory {
