@@ -3,10 +3,125 @@
 
 \subsection{Unit test specifico}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Ristrutturazione di createHierarchyFromXML()}
+    Si è deciso di ristrutturare il metodo di creazione della gerarchia da file XML, perché esso ricopriva più compiti complessi e quindi nell'insieme risultava difficile da interpretare.\pause
+
+    Al fine di migliorarne la lettura, si è deciso di applicare il metodo di refactoring \textbf{Extract Method}, assegnando nomi autoesplicativi alle porzioni di codice estratte per aiutare la comprensione.\pause
+
+    Prima di eseguire l'operazione di refactor, si è provveduto a mettere opportunamente sotto test il metodo selezionato.
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+    \frametitle{Casi di test}
+    Per ottenere dei casi di test efficaci, si è utilizzato come base la stessa struttura gerarchica descritta nella documentazione relativa all'importazione di configurazione da file testuale.\pause
+
+    Partendo da quella base, sono state effettuate delle modifiche alla struttura gerarchica per poter coprire i casi limite.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Casi di test}
+    \begin{itemize}
+        \item <1-> Si certifica che venga correttamente lanciata una eccezione in caso di gerarchia vuota
+        \item <2-> Si controlla il funzionamento nel caso di una gerarchia senza campi e senza figli
+        \item <3-> Si controlla il funzionamento nel caso di una gerarchia senza figli
+        \item <4-> Si controlla il funzionamento nel caso di una gerarchia divisa in sole due categorie figlie
+        \item <5-> Si controlla il funzionamento nel caso completo
+    \end{itemize}
 \end{frame}
 
 \subsection{Extract Method}
+\begin{frame}[fragile]
+    \frametitle{Metodo pre-refactor 1/3}
+
+    \lstset{style=tiny_java}
+    \begin{lstlisting}[language=java, caption={Snippet tratto da v5, Controller.java}]
+private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException, SQLException {
+        // creazione della categoria root
+        Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+        if (hierarchyXML.root.fields != null)
+            for (var e: hierarchyXML.root.fields) {
+                this.addFieldFromXML(root, e);
+            }
+
+        // aggiunge i campi default alla categoria radice
+        root.put("Stato di conservazione", new TypeDefinition(true));
+        root.put("Descrizione libera", new TypeDefinition(false));
+
+        // associa una CategoryXML all'istanza della Category padre già creata
+        var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+
+        if (hierarchyXML.root.categories != null) {
+            if (hierarchyXML.root.categories.size() == 1) throw new InvalidCategoryException();
+            for (var e: hierarchyXML.root.categories) {
+                categoryStack.add(new AbstractMap.SimpleEntry<>(e, root));
+            }
+        }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Metodo pre-refactor 2/3}
+
+    \lstset{style=tiny_java}
+    \begin{lstlisting}[language=java, caption={Snippet tratto da v5, Controller.java}, firstnumber=23]
+        // creazione delle categorie figlie
+        while (categoryStack.size() != 0) {
+            var toInsert = categoryStack.pop();
+            Category father = toInsert.getValue();
+
+            NodeCategory r = null;
+            while (r == null) {
+                var newChild = this.createCategoryFromXML(root, toInsert.getKey());
+                r = this.appendCategory(father, newChild);
+
+                if (toInsert.getKey().fields != null)
+                    for (var f: toInsert.getKey().fields) {
+                        this.addFieldFromXML(newChild, f);
+                    }
+
+                if (toInsert.getKey().categories != null) {
+                    if (toInsert.getKey().categories.size() == 1) throw new InvalidCategoryException();
+                    for (var e : toInsert.getKey().categories) {
+                        categoryStack.add(new AbstractMap.SimpleEntry<>(e, newChild));
+                    }
+                }
+            }
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Metodo pre-refactor 3/3}
+
+    \lstset{style=tiny_java}
+    \begin{lstlisting}[language=java, caption={Snippet tratto da v5, Controller.java}, firstnumber=46]
+            // aggiorna i padri nello stack, serve perchè l'istanza potrebbe essere cambiata
+            var newCategoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+            for(var e: categoryStack) {
+                if (e.getValue() == father) {
+                    var newElem = new AbstractMap.SimpleEntry<>(e.getKey(), (Category) r);
+                    newCategoryStack.add(newElem);
+                } else {
+                    newCategoryStack.add(e);
+                }
+            }
+            categoryStack = newCategoryStack;
+
+            if (father == root) root = r;
+        }
+
+        this.model.createHierarchy(root);
+    }
+    \end{lstlisting}
+\end{frame}
+
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Creazione nuovi metodi}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Copia del metodo}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Sostituzione del codice con chiamata al metodo}
 \end{frame}
