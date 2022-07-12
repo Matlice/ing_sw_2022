@@ -1,4 +1,45 @@
 \section{Gang of Four Convert Exception}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Problema pre refactoring}
+
+    \begin{minipage}{.40\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/gof.convex.pre.puml}
+            \caption{Diagramma uml delle classi con errore di dipendenza pre refactoring}
+        \end{figure}
+    \end{minipage}\hfill
+    \begin{minipage}{.58\textwidth}
+        Come visibile dal diagramma a fianco, sorgono diversi problemi:
+        \begin{itemize}
+            \item Il model dipende da un'eccezione relativa all'implementazione della classe \texttt{SettingsFactoryImpl}
+            \item Viola Dependency Inversion in quanto \texttt{Model} dipende (indirettamente) dall'implementazione e non dall'astrazione.
+            \item Ancora peggio è che tutte le eventuali astrazioni alternative dipenderanno dall'implementazione sql.
+        \end{itemize}
+    \end{minipage}
 \end{frame}
+
+\begin{frame}
+    \frametitle{Soluzione}
+
+    \begin{minipage}{.40\textwidth}
+        La soluzione consiste nell'intercettare l'eccezione dipendente dall'implementazione e rilanciarla sotto altro aspetto (\texttt{DBException}). Si veda il diagramma di sequenza (Figura \ref{uml:act:convex})
+    \end{minipage}\hfill
+    \begin{minipage}{.58\textwidth}
+        \begin{figure}
+            \centering
+            \plantumlfile{uml/gof.convex.post.puml}
+            \caption{Diagramma uml delle classi con eccezione nel package model}
+        \end{figure}
+    \end{minipage}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Funzionamento Convert Exception}
+    \begin{figure}
+        \centering
+        \plantumlfile[width=.6\textwidth]{uml/gof.convex.act.puml}
+        \label{uml:act:convex}\caption{Funzionamento della conversione di eccezioni tra Impl e Model e Model e Controller}
+    \end{figure}
+\end{frame}
+\note{Si noti la duplice conversione per non far dipendere direttamente il Controller da DBException ma manterener una eccezione (CannotRetrieveInformationException) a livello applicativo indipendente dal metodo di salvataggio}
