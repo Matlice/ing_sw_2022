@@ -57,6 +57,9 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+\definecolor{diffstart}{rgb}{0.5, 0.5, 0.5}
+\definecolor{diffincl}{rgb}{0, 0.3, 0}
+\definecolor{diffrem}{rgb}{1, 0.5, 0.5}
 
 \lstdefinestyle{java}{
     backgroundcolor=\color{backcolour},   
@@ -76,6 +79,14 @@
     showtabs=false,                  
     tabsize=2
 }
+
+\newcommand{\lstbg}[3][0pt]{{\fboxsep#1\colorbox{#2}{\strut #3}}}
+\lstdefinelanguage{diff}{
+    basicstyle=\ttfamily\small,
+    morecomment=[f][\color{diffstart}]{@@},
+    morecomment=[f][\lstbg{diffincl!10}]{+\ },
+    morecomment=[f][\lstbg{diffrem!20}]{-\ },
+  }
 
 \input{lua.tex}
 

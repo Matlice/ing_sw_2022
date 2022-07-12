@@ -1,0 +1,13 @@
+@startuml
+
+[StreamView] as sview
+[Controller] as controller
+[Model] as model
+
+() "View" as view
+
+sview - view
+view )- controller
+controller - model
+
+@enduml
