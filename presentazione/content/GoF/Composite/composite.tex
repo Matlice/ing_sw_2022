@@ -42,12 +42,12 @@ private NodeCategory appendCategory(Category father, Category child) {
 
     \lstset{style=java}
     \begin{lstlisting}[language=java, caption={v5 commit 34c1a67}]
-public boolean isCategoryValid(Category c) {
-    if (thcis instanceof LeafCategory)
+public boolean isCategoryValid() {
+    if (this instanceof LeafCategory)
         return true;
-    assert c instanceof NodeCategory;
-    return ((NodeCategory) c).getChildren().length >= 2 &&
-            Arrays.stream(((NodeCategory) c).getChildren())
+    assert this instanceof NodeCategory;
+    return ((NodeCategory) this).getChildren().length >= 2 &&
+            Arrays.stream(((NodeCategory) this).getChildren())
                 .allMatch(Category::isCategoryValid);
 }
     \end{lstlisting}
@@ -57,17 +57,59 @@ public boolean isCategoryValid(Category c) {
 \begin{frame}
     \frametitle{GoF Composite - Dopo il refactor}
 
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.43\textwidth}
         \begin{figure}
             \centering
             \plantumlfile[width=0.83\textwidth]{uml/gof.composite.post.puml}
         \end{figure}
     \end{minipage}
-    \begin{minipage}{.49\textwidth}
+    \begin{minipage}{.55\textwidth}
         \begin{itemize}
-            \item<1-> Si era cercato di applicare il pattern \texttt{Composite} alla classe \texttt{Category} in modo che potesse rappresentare sia le categorie foglia che quelle nodo.
-            \item<2-> Tuttavia nel codice c'erano diverse violazioni del pattern
+            \item<1-> Il metodo \texttt{convertToNode()} è stato spostato nella classe \texttt{Category} e reso astratto, in questo modo non si rende più necessario scindere i diversi casi. L'implementazione è effettuata in \texttt{NodeCategory} e \texttt{LeafCategoryImpl}.
+            \item<2-> Il metodo \texttt{Category#isCategoryValid()} è stato reso astratto, in modo che sia possibile usare trasparentemente sia categorie nodo che foglie come \texttt{Category} generiche; l'implementazione è fatta nelle due sottoclassi.
         \end{itemize}
     \end{minipage}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{GoF Composite - Soluzione}
+
+    Il codice è agnostico rispetto all'istanza della classe, viene richiamato il metodo \texttt{convertToNode()} di \texttt{Category}:
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=diff, caption={Post refactor}]
+private NodeCategory appendCategory(Category father, Category child) {
+-   var f = father instanceof LeafCategory ?
+-           ((LeafCategory) father).convertToNode() : 
+-           (NodeCategory) father;
++   var f = father.convertToNode();
+    f.addChild(child);
+    return f;
+}
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{GoF Composite - Soluzione}
+
+    Allo stesso modo è stato possibile rimuovere gli \texttt{instanceof} dal codice:
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={Post refactor, in LeafCategory}]
+@Override
+public boolean isCategoryValid() {
+    return true;
+}\end{lstlisting}
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={Post refactor, in NodeCategory}]
+@Override
+public boolean isCategoryValid() {
+    return this.getChildren().length >= 2 &&
+            Arrays.stream(this.getChildren())
+                .allMatch(Category::isCategoryValid);
+}\end{lstlisting}
 
 \end{frame}

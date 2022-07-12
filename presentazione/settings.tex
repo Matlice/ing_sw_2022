@@ -7,6 +7,7 @@
 \usepackage{transparent}
 \usepackage{xcolor}
 \usepackage{listings}
+\usepackage{lstautogobble}
 
 \definecolor{unibsbg}{rgb}{0.24, 0.34, 0.58}
 
@@ -82,7 +83,7 @@
 
 \newcommand{\lstbg}[3][0pt]{{\fboxsep#1\colorbox{#2}{\strut #3}}}
 \lstdefinelanguage{diff}{
-    basicstyle=\ttfamily\small,
+    basicstyle=\ttfamily\footnotesize,
     morecomment=[f][\color{diffstart}]{@@},
     morecomment=[f][\lstbg{diffincl!10}]{+\ },
     morecomment=[f][\lstbg{diffrem!20}]{-\ },
