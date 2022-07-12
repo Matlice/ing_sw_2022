@@ -1,9 +1,45 @@
 \section{SOLID Dependency Inversion}
-\begin{frame}
+\begin{frame}[fragile]
     \frametitle{Inversione delle dipendenze}
 
-    Durante lo sviluppo del modello MVC è stato adottato il pattern SOLID Dependency Inversion al fine di garantire l'indipendenza del Controller dall'implementazione di una View.
-    \pause
+    Durante lo sviluppo del modello MVC è stato adottato il pattern SOLID Dependency Inversion al fine di garantire l'indipendenza del Controller dall'implementazione di una View.\pause%
     
-    In particolare viene mantenuta una logica generica per l'interfacciamento e non vi è dipendenza diretta tra \texttt{StreamView} e \texttt{Controller}. 
+    In particolare viene mantenuta una logica generica per l'interfacciamento e non vi è dipendenza diretta tra \texttt{StreamView} e \texttt{Controller}.\pause%
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=java, caption={Snippet tratto dal costruttore di Controller}]
+private View view;
+public Controller(View view, Model model) {
+    this.view = view;
+    this.model = model;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Dependency Inversion~-~UML}
+    \begin{figure}
+        \centering
+        \plantumlfile{uml/solid.di.puml}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Vantaggi}
+
+    È evidente come possa essere facile sostituire il tipo di View per l'applicativo.
+
+    Ipotizzando una classe \texttt{SwingView} la quale implementi \texttt{View}, l'unico cambiamento necessario (oltre all'implementazione della classe) sarebbe quanto segue:
+
+    \lstset{style=java}
+    \begin{lstlisting}[language=diff, caption={EntryPoint.java\#main}]
+public static void main(String[] args) throws DBException {
+    // -- inizializzazione StorageManagers -- (omessa)
+    Model model = new Model(...);
+-   View view = new StreamView(System.out, new Scanner(System.in));
++   View view = new SwingView(new JFrame());
+    Controller controller = new Controller(view, model);
+    controller.run()
+}
+    \end{lstlisting}
 \end{frame}
