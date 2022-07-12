@@ -1,0 +1,35 @@
+class "HashMap<String, TypeDefinition>" as hashmap {}
+
+abstract class "Category" as category extends hashmap {
+    - father: NodeCategory
+    + getFather(): NodeCategory
+    + isRoot(): boolean
+    + {abstract} getName(): String
+    + {abstract} getDescription(): String
+    + {abstract} getChildLeafs(): List<LeafCategory>
+    + toString(): String
+    + isFieldRequired(field: String): boolean
+    + isCategoryValid(): boolean
+    + {abstract} isValidChildCategoryName(name: String): boolean
+}
+
+abstract class "LeafCategory" as leafcategory extends category {
+    + {abstract} convertToNode(): NodeCategory
+}
+
+abstract class "NodeCategory" as nodecategory extends category {
+    '- children: List<Category>
+    + getChildren(): Category[]
+    + addChild(child: Category): Category
+    + removeChild(child: Category): Category
+}
+
+nodecategory  *-- category
+
+class LeafCategoryImpl extends leafcategory {
+    - dbData: CategoryDB
+}
+
+class NodeCategoryImpl extends nodecategory {
+    - dbData: CategoryDB
+}
