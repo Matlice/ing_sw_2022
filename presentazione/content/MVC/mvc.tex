@@ -2,8 +2,15 @@
 
 \subsection{Diagramma dei Packages}
 \begin{frame}
-    \frametitle{ciao}
+    \frametitle{Diagramma dei Packages}
+    \begin{figure}
+        \plantumlfile[width=0.65\textwidth]{uml/mvc_classi.puml}
+    \end{figure}
 \end{frame}
+\note{
+    View è complessa ma assolutamente generalizzata, non ci sono stringhe all'interno del Controller o del Model.
+    Lo strato di presentazione dipende dallo strato di business (Hierarchy usata in View è del Model)
+}
 
 \subsection{Scambio di dati}
 \begin{frame}{Scambio dei dati tra gli strati}
