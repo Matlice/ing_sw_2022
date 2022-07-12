@@ -1,0 +1,67 @@
+@startuml
+
+'skinparam Linetype ortho
+
+class HashMap<String, Object>{}
+
+abstract class Offer extends HashMap{
+    + getName(): String
+    + getOwner(): User
+    + getStatus(): OfferStatus
+    + getCategory(): LeafCategory
+}
+
+abstract class User{}
+abstract class Category{}
+
+interface OfferFactory{
+}
+
+package sql{
+    class OfferImpl extends Offer{
+        - id: Integer
+        - name: String
+        - status: String
+    --
+        + <<getter>>
+        + <<setter>>
+        + {static} findById(id: Integer): OfferImpl
+        + update(): void
+        + delete(): void
+        + <<other db methods>>
+        + populateDatabaseFields(): void
+    }
+
+    class JDBCConnection{}
+    class TypeDefinition{
+        --
+        + required(): bool
+        + getType(): TypeAssociation
+    }
+
+    class TypeAssociation<T>{
+        --
+        + serialize(o: T): String
+        + deserialize(s: String): T
+    }
+
+    class OfferFactoryImpl implements OfferFactory{
+    }
+
+    JDBCConnection -[hidden]down- TypeDefinition
+
+    OfferImpl -left-> User
+    OfferImpl -left-> Category
+    OfferImpl "1  " *-- Offer
+    OfferImpl -right-> JDBCConnection
+    OfferImpl -right- TypeDefinition
+
+    TypeDefinition --> TypeAssociation
+    OfferFactoryImpl --> OfferImpl: crea >
+}
+
+Offer -[hidden]down- User
+User -[hidden]down- Category
+
+
+@enduml

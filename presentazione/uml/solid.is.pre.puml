@@ -1,0 +1,18 @@
+@startuml
+
+
+interface OfferFactory{
+    --
+    + makeOffer(name: String, owner: User, ...): Offer
+    + getOffers(owner: User): List<Offer>
+    + getOfefrs(cat: LeafCategory): List<Offer>
+    + getSelectedOffers(owner: User): List<Offer>
+    + setOfferStatus(offer: Offer, status: OfferStatus): void
+    + createTradeOffer(a: offer, b: Offer): void
+    + acceptTradeOffer(offer: Offer, location: String, ...): void
+    + updateTime(o: Offer): void
+    + closeTradeOffer(m: Message): void
+    + checkForDueDate(): void
+}
+
+@enduml

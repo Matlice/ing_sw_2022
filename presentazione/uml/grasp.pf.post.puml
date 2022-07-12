@@ -1,0 +1,76 @@
+@startuml
+
+class HashMap<String, Object>{}
+
+abstract class Offer extends HashMap{
+    + getName(): String
+    + getOwner(): User
+    + getStatus(): OfferStatus
+    + getCategory(): LeafCategory
+}
+
+class OfferImpl extends Offer{}
+
+class OfferDB{
+    - id: Integer
+    - name: String
+    - status: String
+    --
+    ~ <<getter>>
+    ~ <<setter>>
+}
+
+abstract class User{}
+abstract class Category{}
+
+class UserDB{}
+class CategoryDB{}
+
+class OfferDAO{
+    --
+    + {static} findById(id: Integer): OfferDB
+    + update(): void
+    + delete(): void
+    + <<other db methods>>
+}
+
+class OfferFactoryImpl{
+    --
+    + makeOffer(name: String, owner: User ...): Offer
+    + getOffers(): List<Offer>
+    + getOffers(leaf: LeafCategory): List<Offer>
+    ...
+}
+
+class OfferFieldDAO{
+    --
+    + {static} findById(id: Integer): OfferFieldDB
+    + update(): void
+    + delete(): void
+    + <<other db methods>>
+}
+
+class OfferFieldDB{
+    - id: Integer
+    - value: String
+    - categoryField: CategoryFieldDB
+}
+
+OfferImpl -down-> User
+OfferImpl -down-> Category
+OfferImpl -right-> OfferDB
+
+OfferDB --> CategoryDB
+OfferDB --> UserDB
+
+OfferDAO -- OfferDB: gestisce >
+
+OfferFactoryImpl --> OfferDAO
+OfferFactoryImpl --> OfferImpl: crea >
+
+OfferFactoryImpl --> OfferFieldDAO
+OfferFieldDAO -- OfferFieldDB: gestisce >
+
+OfferFieldDB --> OfferDB: references >
+
+@enduml
