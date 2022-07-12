@@ -1,0 +1,41 @@
+@startuml
+
+|Controller|
+start
+:Model#configureSettings(...);
+
+|Model|
+:SettingsFactory#makeSettings(...);
+
+|SettingsFactoryImpl|
+:SettingsDAO#create(new SettingsDB(...));
+
+if () then (catch SQLException)
+    :handle SQLException;
+    :throw DBException;
+else
+    :return value;
+endif
+
+|Model|
+if () then (catch DBException)
+    :handle DBException;
+    :throw 
+    CannotRetrieveInformationException;
+else
+    :return value;
+endif
+
+|Controller|
+if () then (catch CannotRetrieveInformationException)
+    :handle 
+    CannotRetrieveInformationException;
+    end
+else
+    :continue method 
+    operations as normal;
+    stop
+endif
+
+
+@enduml

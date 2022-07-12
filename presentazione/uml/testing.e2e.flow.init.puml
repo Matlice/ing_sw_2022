@@ -1,0 +1,14 @@
+@startuml
+
+start
+
+partition Predisposizione {
+    :Predisposizione stream di I/O;
+    :Apertura descrittori verso il caso di test;
+    :Inizializzazione StorageManagers
+    e Mockup Database;
+}
+
+#white:(A)
+
+@enduml

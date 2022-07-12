@@ -1,0 +1,105 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > PasswordAuthenticable</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.model.auth.password</a>
+</div>
+
+<h1>Coverage Summary for Class: PasswordAuthenticable (it.matlice.ingsw.model.auth.password)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">PasswordAuthenticable</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.model.auth.password;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.matlice.ingsw.model.auth.Authenticable;
+<i class="no-highlight">4</i>&nbsp;import it.matlice.ingsw.model.auth.exceptions.InvalidPasswordException;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;/**
+<i class="no-highlight">7</i>&nbsp; * L&#39;interfaccia rappresenta una classe che può essere autenticata mediante il metodo
+<i class="no-highlight">8</i>&nbsp; * PasswordAuthMethod.
+<i class="no-highlight">9</i>&nbsp; * &lt;p&gt;
+<i class="no-highlight">10</i>&nbsp; * La gestione della password avvene mediante la verifica dell&#39;hash (salted) della password,
+<i class="no-highlight">11</i>&nbsp; * rendendo così necessario il salvataggio si hash e salt a livello di struttura dati.
+<i class="no-highlight">12</i>&nbsp; */
+<i class="no-highlight">13</i>&nbsp;public interface PasswordAuthenticable extends Authenticable {
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * Il metodo ritorna l&#39;hash della password salvato precedentemente.
+<i class="no-highlight">17</i>&nbsp;     * l&#39;hash è computato secondo la seguente espressione:
+<i class="no-highlight">18</i>&nbsp;     * \[ passwordHash = base64enc(hmac_{sha256}(key=password, data=salt)) \]
+<i class="no-highlight">19</i>&nbsp;     *
+<i class="no-highlight">20</i>&nbsp;     * @return l&#39;hash della password salvato in precedenza
+<i class="no-highlight">21</i>&nbsp;     */
+<i class="no-highlight">22</i>&nbsp;    byte[] getPasswordHash();
+<i class="no-highlight">23</i>&nbsp;
+<i class="no-highlight">24</i>&nbsp;    /**
+<i class="no-highlight">25</i>&nbsp;     * @return ritorna il salt, generato casualmente, utilizzato per &quot;salare la password&quot;
+<i class="no-highlight">26</i>&nbsp;     */
+<i class="no-highlight">27</i>&nbsp;    byte[] getPasswordSalt();
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    /**
+<i class="no-highlight">30</i>&nbsp;     * Aggiorna la password associata all&#39;utente __rigenerando__ il salt
+<i class="no-highlight">31</i>&nbsp;     *
+<i class="no-highlight">32</i>&nbsp;     * @param password nuova password
+<i class="no-highlight">33</i>&nbsp;     */
+<i class="no-highlight">34</i>&nbsp;    void setPassword(byte[] password) throws InvalidPasswordException;
+<i class="no-highlight">35</i>&nbsp;    void setSalt(byte[] salt) throws InvalidPasswordException;
+<i class="no-highlight">36</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

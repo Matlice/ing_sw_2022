@@ -1,0 +1,175 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CategoryDB</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.model.data.impl.jdbc.db</a>
+</div>
+
+<h1>Coverage Summary for Class: CategoryDB (it.matlice.ingsw.model.data.impl.jdbc.db)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CategoryDB</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (8/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.2%
+  </span>
+  <span class="absValue">
+    (15/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.model.data.impl.jdbc.db;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.j256.ormlite.field.DatabaseField;
+<i class="no-highlight">4</i>&nbsp;import com.j256.ormlite.table.DatabaseTable;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;import java.util.Objects;
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;/**
+<i class="no-highlight">9</i>&nbsp; * Classe che rappresenta a database la tabella `categories`
+<i class="no-highlight">10</i>&nbsp; */
+<i class="no-highlight">11</i>&nbsp;@DatabaseTable(tableName = &quot;categories&quot;)
+<i class="no-highlight">12</i>&nbsp;public class CategoryDB {
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    @DatabaseField(generatedId = true)
+<i class="no-highlight">15</i>&nbsp;    private int category_id;
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;    public void setFather(CategoryDB father) {
+<b class="fc"><i class="no-highlight">18</i>&nbsp;        this.father = father;</b>
+<i class="no-highlight">19</i>&nbsp;    }
+<i class="no-highlight">20</i>&nbsp;
+<i class="no-highlight">21</i>&nbsp;    @DatabaseField(canBeNull = false, uniqueCombo = true)
+<i class="no-highlight">22</i>&nbsp;    private String category_name;
+<i class="no-highlight">23</i>&nbsp;
+<i class="no-highlight">24</i>&nbsp;    @DatabaseField(canBeNull = false)
+<i class="no-highlight">25</i>&nbsp;    private String category_description;
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;    @DatabaseField(foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true, uniqueCombo = true)
+<i class="no-highlight">28</i>&nbsp;    private CategoryDB father;
+<i class="no-highlight">29</i>&nbsp;
+<b class="fc"><i class="no-highlight">30</i>&nbsp;    public CategoryDB(String category_name, String category_description, CategoryDB father) {</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;        this.category_name = category_name;</b>
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        this.category_description = category_description;</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        this.father = father;</b>
+<i class="no-highlight">34</i>&nbsp;    }
+<i class="no-highlight">35</i>&nbsp;
+<b class="fc"><i class="no-highlight">36</i>&nbsp;    CategoryDB() {</b>
+<i class="no-highlight">37</i>&nbsp;    }
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;    public int getCategoryId() {
+<b class="fc"><i class="no-highlight">40</i>&nbsp;        return this.category_id;</b>
+<i class="no-highlight">41</i>&nbsp;    }
+<i class="no-highlight">42</i>&nbsp;
+<i class="no-highlight">43</i>&nbsp;    public String getCategoryDescription() {
+<b class="fc"><i class="no-highlight">44</i>&nbsp;        return this.category_description;</b>
+<i class="no-highlight">45</i>&nbsp;    }
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;    public String getCategoryName() {
+<b class="fc"><i class="no-highlight">48</i>&nbsp;        return this.category_name;</b>
+<i class="no-highlight">49</i>&nbsp;    }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;    public CategoryDB getFather() {
+<b class="nc"><i class="no-highlight">52</i>&nbsp;        return this.father;</b>
+<i class="no-highlight">53</i>&nbsp;    }
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;    @Override
+<i class="no-highlight">56</i>&nbsp;    public boolean equals(Object o) {
+<b class="fc"><i class="no-highlight">57</i>&nbsp;        if (this == o) return true;</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;        if (o == null || this.getClass() != o.getClass()) return false;</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        CategoryDB that = (CategoryDB) o;</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;        if (this.category_id == 0) {</b>
+<b class="nc"><i class="no-highlight">61</i>&nbsp;            return this.category_name.equals(that.category_name);</b>
+<i class="no-highlight">62</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">63</i>&nbsp;        return this.category_id == that.category_id;</b>
+<i class="no-highlight">64</i>&nbsp;    }
+<i class="no-highlight">65</i>&nbsp;
+<i class="no-highlight">66</i>&nbsp;    @Override
+<i class="no-highlight">67</i>&nbsp;    public int hashCode() {
+<b class="fc"><i class="no-highlight">68</i>&nbsp;        return Objects.hash(this.category_id);</b>
+<i class="no-highlight">69</i>&nbsp;    }
+<i class="no-highlight">70</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MapNode</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.tree</a>
+</div>
+
+<h1>Coverage Summary for Class: MapNode (it.matlice.ingsw.tree)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MapNode</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (9/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77.5%
+  </span>
+  <span class="absValue">
+    (31/40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.tree;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import java.util.*;
+<i class="no-highlight">4</i>&nbsp;
+<i class="no-highlight">5</i>&nbsp;public class MapNode&lt;T&gt; implements Node&lt;T&gt; {
+<b class="fc"><i class="no-highlight">6</i>&nbsp;    private final TreeMap&lt;String, MapNode&lt;T&gt;&gt; children = new TreeMap&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">7</i>&nbsp;    private final HashMap&lt;String, Integer&gt; duplicates = new HashMap&lt;&gt;();</b>
+<i class="no-highlight">8</i>&nbsp;    private T data;
+<i class="no-highlight">9</i>&nbsp;    private MapNode&lt;T&gt; parent;
+<i class="no-highlight">10</i>&nbsp;
+<b class="fc"><i class="no-highlight">11</i>&nbsp;    public MapNode(T data) {</b>
+<b class="fc"><i class="no-highlight">12</i>&nbsp;        this.data = data;</b>
+<i class="no-highlight">13</i>&nbsp;    }
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * Adds a child to the node
+<i class="no-highlight">17</i>&nbsp;     *
+<i class="no-highlight">18</i>&nbsp;     * @param key   the name of the child
+<i class="no-highlight">19</i>&nbsp;     * @param child the data of the new child
+<i class="no-highlight">20</i>&nbsp;     * @return this
+<i class="no-highlight">21</i>&nbsp;     */
+<i class="no-highlight">22</i>&nbsp;    public MapNode&lt;T&gt; addChild(String key, T child) {
+<b class="fc"><i class="no-highlight">23</i>&nbsp;        MapNode&lt;T&gt; childNode = new MapNode&lt;&gt;(child);</b>
+<b class="fc"><i class="no-highlight">24</i>&nbsp;        childNode.parent = this;</b>
+<b class="fc"><i class="no-highlight">25</i>&nbsp;        if (duplicates.containsKey(key)) {</b>
+<b class="fc"><i class="no-highlight">26</i>&nbsp;            this.children.put(key + &quot;&amp;&quot; + duplicates.get(key), childNode);</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;            duplicates.put(key, duplicates.get(key) + 1);</b>
+<i class="no-highlight">28</i>&nbsp;        } else {
+<b class="fc"><i class="no-highlight">29</i>&nbsp;            this.children.put(key, childNode);</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;            duplicates.put(key, 1);</b>
+<i class="no-highlight">31</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        return childNode;</b>
+<i class="no-highlight">33</i>&nbsp;    }
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;    /**
+<i class="no-highlight">36</i>&nbsp;     * Adds a child to the node
+<i class="no-highlight">37</i>&nbsp;     *
+<i class="no-highlight">38</i>&nbsp;     * @param child the data of the new child
+<i class="no-highlight">39</i>&nbsp;     * @return this
+<i class="no-highlight">40</i>&nbsp;     */
+<i class="no-highlight">41</i>&nbsp;    @Override
+<i class="no-highlight">42</i>&nbsp;    public Node&lt;T&gt; addChild(T child) {
+<b class="nc"><i class="no-highlight">43</i>&nbsp;        return this.addChild(String.valueOf(children.size()), child);</b>
+<i class="no-highlight">44</i>&nbsp;    }
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    @Override
+<i class="no-highlight">47</i>&nbsp;    public T getData() {
+<b class="fc"><i class="no-highlight">48</i>&nbsp;        return data;</b>
+<i class="no-highlight">49</i>&nbsp;    }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;    @Override
+<i class="no-highlight">52</i>&nbsp;    public Node&lt;T&gt; setData(T data) {
+<b class="fc"><i class="no-highlight">53</i>&nbsp;        this.data = data;</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;        return this;</b>
+<i class="no-highlight">55</i>&nbsp;    }
+<i class="no-highlight">56</i>&nbsp;
+<i class="no-highlight">57</i>&nbsp;    @Override
+<i class="no-highlight">58</i>&nbsp;    public MapNode&lt;T&gt; getParent() {
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        return parent;</b>
+<i class="no-highlight">60</i>&nbsp;    }
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;    @Override
+<i class="no-highlight">64</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i class="no-highlight">65</i>&nbsp;    public MapNode&lt;T&gt;[] getChildren() {
+<b class="fc"><i class="no-highlight">66</i>&nbsp;        return children.values().toArray(new MapNode[]{});</b>
+<i class="no-highlight">67</i>&nbsp;    }
+<i class="no-highlight">68</i>&nbsp;
+<i class="no-highlight">69</i>&nbsp;    public TreeMap&lt;String, T&gt; getChildrenMap() {
+<b class="fc"><i class="no-highlight">70</i>&nbsp;        var r = new TreeMap&lt;String, T&gt;();</b>
+<b class="fc"><i class="no-highlight">71</i>&nbsp;        children.forEach((k, v) -&gt; r.put(k, v.getData()));</b>
+<b class="fc"><i class="no-highlight">72</i>&nbsp;        return r;</b>
+<i class="no-highlight">73</i>&nbsp;    }
+<i class="no-highlight">74</i>&nbsp;
+<i class="no-highlight">75</i>&nbsp;    /**
+<i class="no-highlight">76</i>&nbsp;     * Returns all node&#39;s children data
+<i class="no-highlight">77</i>&nbsp;     *
+<i class="no-highlight">78</i>&nbsp;     * @return
+<i class="no-highlight">79</i>&nbsp;     */
+<i class="no-highlight">80</i>&nbsp;    @Override
+<i class="no-highlight">81</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+<i class="no-highlight">82</i>&nbsp;    public T[] getChildrenData() {
+<b class="nc"><i class="no-highlight">83</i>&nbsp;        return (T[]) children.values().stream().map(MapNode::getData).toArray();</b>
+<i class="no-highlight">84</i>&nbsp;    }
+<i class="no-highlight">85</i>&nbsp;
+<i class="no-highlight">86</i>&nbsp;    /**
+<i class="no-highlight">87</i>&nbsp;     * traverses the tree layer by layer
+<i class="no-highlight">88</i>&nbsp;     *
+<i class="no-highlight">89</i>&nbsp;     * @param action the action to be performed on each node
+<i class="no-highlight">90</i>&nbsp;     * @see Node#BFT(TreeAction)
+<i class="no-highlight">91</i>&nbsp;     * @deprecated since 1.5
+<i class="no-highlight">92</i>&nbsp;     */
+<i class="no-highlight">93</i>&nbsp;    @Override
+<i class="no-highlight">94</i>&nbsp;    @Deprecated
+<i class="no-highlight">95</i>&nbsp;    public void traverse_linear(TreeAction&lt;T&gt; action) {
+<b class="nc"><i class="no-highlight">96</i>&nbsp;        this.BFT(action);</b>
+<i class="no-highlight">97</i>&nbsp;    }
+<i class="no-highlight">98</i>&nbsp;
+<i class="no-highlight">99</i>&nbsp;    /**
+<i class="no-highlight">100</i>&nbsp;     * traverses the tree recursively
+<i class="no-highlight">101</i>&nbsp;     *
+<i class="no-highlight">102</i>&nbsp;     * @param action the action to be performed on each node
+<i class="no-highlight">103</i>&nbsp;     * @see Node#DFT(TreeAction)
+<i class="no-highlight">104</i>&nbsp;     * @deprecated since 1.5
+<i class="no-highlight">105</i>&nbsp;     */
+<i class="no-highlight">106</i>&nbsp;    @Override
+<i class="no-highlight">107</i>&nbsp;    @Deprecated
+<i class="no-highlight">108</i>&nbsp;    public void traverse(TreeAction&lt;T&gt; action) {
+<b class="nc"><i class="no-highlight">109</i>&nbsp;        this.DFT(action);</b>
+<i class="no-highlight">110</i>&nbsp;    }
+<i class="no-highlight">111</i>&nbsp;
+<i class="no-highlight">112</i>&nbsp;    /**
+<i class="no-highlight">113</i>&nbsp;     * traverses the tree layer by layer, bottom first
+<i class="no-highlight">114</i>&nbsp;     *
+<i class="no-highlight">115</i>&nbsp;     * @param action the action to be performed on each node
+<i class="no-highlight">116</i>&nbsp;     * @see Node#BFT(TreeAction)
+<i class="no-highlight">117</i>&nbsp;     * @deprecated since 1.5
+<i class="no-highlight">118</i>&nbsp;     */
+<i class="no-highlight">119</i>&nbsp;    @Override
+<i class="no-highlight">120</i>&nbsp;    @Deprecated
+<i class="no-highlight">121</i>&nbsp;    public void traverse_reverse_linear(TreeAction&lt;T&gt; action) {
+<b class="nc"><i class="no-highlight">122</i>&nbsp;        this.reverse_BFT(action);</b>
+<i class="no-highlight">123</i>&nbsp;    }
+<i class="no-highlight">124</i>&nbsp;
+<i class="no-highlight">125</i>&nbsp;    /**
+<i class="no-highlight">126</i>&nbsp;     * Branch First Traverse
+<i class="no-highlight">127</i>&nbsp;     * Executes an action on each node traversing the tree prioritizing children first, then children of childes...
+<i class="no-highlight">128</i>&nbsp;     *
+<i class="no-highlight">129</i>&nbsp;     * @param action the action to be performed
+<i class="no-highlight">130</i>&nbsp;     */
+<i class="no-highlight">131</i>&nbsp;    @Override
+<i class="no-highlight">132</i>&nbsp;    public void BFT(TreeAction&lt;T&gt; action) {
+<b class="fc"><i class="no-highlight">133</i>&nbsp;        LinkedList&lt;MapNode&lt;T&gt;&gt; nodes = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">134</i>&nbsp;        nodes.add(this);</b>
+<b class="fc"><i class="no-highlight">135</i>&nbsp;        while (nodes.size() &gt; 0) {</b>
+<b class="fc"><i class="no-highlight">136</i>&nbsp;            var n = nodes.removeLast();</b>
+<b class="fc"><i class="no-highlight">137</i>&nbsp;            action.nodeAction(n);</b>
+<b class="fc"><i class="no-highlight">138</i>&nbsp;            for (MapNode&lt;T&gt; child : n.getChildren())</b>
+<b class="fc"><i class="no-highlight">139</i>&nbsp;                nodes.addFirst(child);</b>
+<b class="fc"><i class="no-highlight">140</i>&nbsp;        }</b>
+<i class="no-highlight">141</i>&nbsp;    }
+<i class="no-highlight">142</i>&nbsp;
+<i class="no-highlight">143</i>&nbsp;    /**
+<i class="no-highlight">144</i>&nbsp;     * Branch First Traverse reversed order
+<i class="no-highlight">145</i>&nbsp;     * Executes an action on each node traversing the tree prioritizing childs first, then childs of childes starting from leafs...
+<i class="no-highlight">146</i>&nbsp;     *
+<i class="no-highlight">147</i>&nbsp;     * @param action the action to be performed
+<i class="no-highlight">148</i>&nbsp;     */
+<i class="no-highlight">149</i>&nbsp;    @Override
+<i class="no-highlight">150</i>&nbsp;    public void reverse_BFT(TreeAction&lt;T&gt; action) {
+<b class="fc"><i class="no-highlight">151</i>&nbsp;        Stack&lt;MapNode&lt;T&gt;&gt; nodes = new Stack&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">152</i>&nbsp;        this.BFT((r) -&gt; nodes.push((MapNode&lt;T&gt;) r));</b>
+<b class="fc"><i class="no-highlight">153</i>&nbsp;        while (!nodes.empty()) action.nodeAction(nodes.pop());</b>
+<i class="no-highlight">154</i>&nbsp;    }
+<i class="no-highlight">155</i>&nbsp;
+<i class="no-highlight">156</i>&nbsp;    /**
+<i class="no-highlight">157</i>&nbsp;     * Depth First Traverse
+<i class="no-highlight">158</i>&nbsp;     * Executes an action on each node traversing the tree prioritizing branches
+<i class="no-highlight">159</i>&nbsp;     *
+<i class="no-highlight">160</i>&nbsp;     * @param action the action to be performed
+<i class="no-highlight">161</i>&nbsp;     */
+<i class="no-highlight">162</i>&nbsp;    @Override
+<i class="no-highlight">163</i>&nbsp;    public void DFT(TreeAction&lt;T&gt; action) {
+<b class="nc"><i class="no-highlight">164</i>&nbsp;        this.children.forEach((k, v) -&gt; v.DFT(action));</b>
+<i class="no-highlight">165</i>&nbsp;    }
+<i class="no-highlight">166</i>&nbsp;
+<i class="no-highlight">167</i>&nbsp;    public MapNode&lt;T&gt; getChildren(String key) {
+<b class="nc"><i class="no-highlight">168</i>&nbsp;        return children.get(key);</b>
+<i class="no-highlight">169</i>&nbsp;    }
+<i class="no-highlight">170</i>&nbsp;
+<i class="no-highlight">171</i>&nbsp;    public Set&lt;String&gt; childrenSet() {
+<b class="nc"><i class="no-highlight">172</i>&nbsp;        return children.keySet();</b>
+<i class="no-highlight">173</i>&nbsp;    }
+<i class="no-highlight">174</i>&nbsp;
+<i class="no-highlight">175</i>&nbsp;    @Override
+<i class="no-highlight">176</i>&nbsp;    public String toString() {
+<b class="nc"><i class="no-highlight">177</i>&nbsp;        return data.toString();</b>
+<i class="no-highlight">178</i>&nbsp;    }
+<i class="no-highlight">179</i>&nbsp;
+<i class="no-highlight">180</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > OfferFactory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.model.data.storage.factories</a>
+</div>
+
+<h1>Coverage Summary for Class: OfferFactory (it.matlice.ingsw.model.data.storage.factories)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">OfferFactory</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.model.data.storage.factories;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.matlice.ingsw.model.data.LeafCategory;
+<i class="no-highlight">4</i>&nbsp;import it.matlice.ingsw.model.data.Offer;
+<i class="no-highlight">5</i>&nbsp;import it.matlice.ingsw.model.data.User;
+<i class="no-highlight">6</i>&nbsp;import it.matlice.ingsw.model.exceptions.DBException;
+<i class="no-highlight">7</i>&nbsp;import it.matlice.ingsw.model.exceptions.RequiredFieldConstrainException;
+<i class="no-highlight">8</i>&nbsp;import org.jetbrains.annotations.NotNull;
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;import java.util.Map;
+<i class="no-highlight">11</i>&nbsp;
+<i class="no-highlight">12</i>&nbsp;public interface OfferFactory {
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    /**
+<i class="no-highlight">15</i>&nbsp;     * Crea un&#39;offerta per l&#39;utente nella categoria.
+<i class="no-highlight">16</i>&nbsp;     * Notare che l&#39;istanza di categoria deve essere stata precedentemente creata e deve fare parte dell&#39;albero delle categorie
+<i class="no-highlight">17</i>&nbsp;     * per far si che vengano rilevati tutti i campi delle categorie padre sopra di essa.
+<i class="no-highlight">18</i>&nbsp;     * @param name nome dell&#39;articolo offerto
+<i class="no-highlight">19</i>&nbsp;     * @param owner istanza dell&#39;utente proprietario
+<i class="no-highlight">20</i>&nbsp;     * @param category categoria dove posizionare l&#39;offerta
+<i class="no-highlight">21</i>&nbsp;     * @param field_values mappa dei valori dei campi
+<i class="no-highlight">22</i>&nbsp;     * @return l&#39;offerta istanziata
+<i class="no-highlight">23</i>&nbsp;     * @throws RequiredFieldConstrainException Se un campo obbligatorio non é stato compilato
+<i class="no-highlight">24</i>&nbsp;     * @throws DBException .
+<i class="no-highlight">25</i>&nbsp;     */
+<i class="no-highlight">26</i>&nbsp;    Offer makeOffer(@NotNull String name, User owner, LeafCategory category, Map&lt;String, Object&gt; field_values) throws RequiredFieldConstrainException, DBException;
+<i class="no-highlight">27</i>&nbsp;
+<i class="no-highlight">28</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

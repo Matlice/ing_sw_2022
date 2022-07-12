@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > StreamMessageConfiguration</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.view.stream</a>
+</div>
+
+<h1>Coverage Summary for Class: StreamMessageConfiguration (it.matlice.ingsw.view.stream)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StreamMessageConfiguration</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (8/9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.view.stream;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.matlice.ingsw.model.data.Interval;
+<i class="no-highlight">4</i>&nbsp;import it.matlice.ingsw.model.data.Settings;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;import java.util.StringJoiner;
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;import static it.matlice.ingsw.controller.InfoType.*;
+<i class="no-highlight">9</i>&nbsp;import static it.matlice.ingsw.view.stream.StreamUtil.intervalToString;
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;public class StreamMessageConfiguration extends AStreamMessage {
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;    private Settings settings;
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    public StreamMessageConfiguration(StreamView view, Settings s) {
+<b class="fc"><i class="no-highlight">16</i>&nbsp;        super(view);</b>
+<b class="fc"><i class="no-highlight">17</i>&nbsp;        this.settings = s;</b>
+<i class="no-highlight">18</i>&nbsp;    }
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    @Override
+<i class="no-highlight">21</i>&nbsp;    public void show() {
+<b class="fc"><i class="no-highlight">22</i>&nbsp;        this.getView().println(&quot;La piazza di scambio è &quot; + this.settings.getCity());</b>
+<b class="fc"><i class="no-highlight">23</i>&nbsp;        this.getView().showList(PLACES_INFO, this.settings.getLocations());</b>
+<b class="fc"><i class="no-highlight">24</i>&nbsp;        this.getView().showList(DATES_INFO, this.settings.getDays().stream().map(Settings.Day::getName).toList());</b>
+<b class="fc"><i class="no-highlight">25</i>&nbsp;        this.getView().showList(HOURS_INFO, this.settings.getIntervals().stream().map(StreamUtil::intervalToString).toList());</b>
+<b class="fc"><i class="no-highlight">26</i>&nbsp;        this.getView().println(&quot;&quot;);</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;        this.getView().println(&quot;La scadenza è impostata a &quot; + this.settings.getDue() + &quot; giorni&quot;);</b>
+<i class="no-highlight">28</i>&nbsp;    }
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;    @Override
+<i class="no-highlight">31</i>&nbsp;    public String getMessage() {
+<b class="nc"><i class="no-highlight">32</i>&nbsp;        return null;</b>
+<i class="no-highlight">33</i>&nbsp;    }
+<i class="no-highlight">34</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

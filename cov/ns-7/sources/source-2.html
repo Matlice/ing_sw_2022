@@ -1,0 +1,184 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > HierarchyFactoryImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.model.data.impl.jdbc</a>
+</div>
+
+<h1>Coverage Summary for Class: HierarchyFactoryImpl (it.matlice.ingsw.model.data.impl.jdbc)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HierarchyFactoryImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53.3%
+  </span>
+  <span class="absValue">
+    (16/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.model.data.impl.jdbc;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.j256.ormlite.dao.Dao;
+<i class="no-highlight">4</i>&nbsp;import com.j256.ormlite.dao.DaoManager;
+<i class="no-highlight">5</i>&nbsp;import com.j256.ormlite.support.ConnectionSource;
+<i class="no-highlight">6</i>&nbsp;import com.j256.ormlite.table.TableUtils;
+<i class="no-highlight">7</i>&nbsp;import it.matlice.ingsw.model.data.Category;
+<i class="no-highlight">8</i>&nbsp;import it.matlice.ingsw.model.data.Hierarchy;
+<i class="no-highlight">9</i>&nbsp;import it.matlice.ingsw.model.data.storage.CategoryStorageManagement;
+<i class="no-highlight">10</i>&nbsp;import it.matlice.ingsw.model.data.storage.HierarchyStorageManagement;
+<i class="no-highlight">11</i>&nbsp;import it.matlice.ingsw.model.data.impl.jdbc.db.HierarchyDB;
+<i class="no-highlight">12</i>&nbsp;import it.matlice.ingsw.model.data.impl.jdbc.types.CategoryImpl;
+<i class="no-highlight">13</i>&nbsp;import it.matlice.ingsw.model.data.impl.jdbc.types.HierarchyImpl;
+<i class="no-highlight">14</i>&nbsp;import it.matlice.ingsw.model.exceptions.DBException;
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;import java.sql.SQLException;
+<i class="no-highlight">17</i>&nbsp;import java.util.List;
+<i class="no-highlight">18</i>&nbsp;import java.util.stream.Collectors;
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;/**
+<i class="no-highlight">21</i>&nbsp; * Classe che si occupa di istanziare elementi di tipo Hierarchy
+<i class="no-highlight">22</i>&nbsp; * una volta caricati da una base di dati Jdbc
+<i class="no-highlight">23</i>&nbsp; */
+<b class="fc"><i class="no-highlight">24</i>&nbsp;public class HierarchyFactoryImpl implements HierarchyStorageManagement {</b>
+<i class="no-highlight">25</i>&nbsp;    private final Dao&lt;HierarchyDB, Integer&gt; hierarchyDAO;
+<i class="no-highlight">26</i>&nbsp;    private final CategoryStorageManagement category_factory;
+<i class="no-highlight">27</i>&nbsp;
+<b class="fc"><i class="no-highlight">28</i>&nbsp;    public HierarchyFactoryImpl(CategoryStorageManagement cat, JdbcConnection connection) throws DBException {</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        this.category_factory = cat;</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;        ConnectionSource connectionSource = connection.getConnectionSource();</b>
+<i class="no-highlight">31</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">32</i>&nbsp;            this.hierarchyDAO = DaoManager.createDao(connectionSource, HierarchyDB.class);</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;            if (!this.hierarchyDAO.isTableExists()) {</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;                TableUtils.createTable(connectionSource, HierarchyDB.class);</b>
+<i class="no-highlight">35</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">36</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i class="no-highlight">37</i>&nbsp;            throw new DBException();</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;        }</b>
+<i class="no-highlight">39</i>&nbsp;    }
+<i class="no-highlight">40</i>&nbsp;
+<i class="no-highlight">41</i>&nbsp;    @Override
+<i class="no-highlight">42</i>&nbsp;    public List&lt;Hierarchy&gt; getHierarchies() throws DBException {
+<i class="no-highlight">43</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">44</i>&nbsp;            return this.hierarchyDAO.queryForAll().stream().map(e -&gt; {</b>
+<i class="no-highlight">45</i>&nbsp;                try {
+<b class="fc"><i class="no-highlight">46</i>&nbsp;                    var root = this.category_factory.getCategory(e.getRoot().getCategoryId());</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;                    return new HierarchyImpl(e, root);</b>
+<b class="nc"><i class="no-highlight">48</i>&nbsp;                } catch (DBException ex) {</b>
+<b class="nc"><i class="no-highlight">49</i>&nbsp;                    ex.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">50</i>&nbsp;                    return null;</b>
+<i class="no-highlight">51</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">52</i>&nbsp;            }).collect(Collectors.toList());</b>
+<b class="nc"><i class="no-highlight">53</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i class="no-highlight">54</i>&nbsp;            throw new DBException();</b>
+<i class="no-highlight">55</i>&nbsp;        }
+<i class="no-highlight">56</i>&nbsp;    }
+<i class="no-highlight">57</i>&nbsp;
+<i class="no-highlight">58</i>&nbsp;    @Override
+<i class="no-highlight">59</i>&nbsp;    public Hierarchy saveHierarchy(Category rootCategory) throws DBException {
+<b class="fc"><i class="no-highlight">60</i>&nbsp;        assert rootCategory instanceof CategoryImpl;</b>
+<i class="no-highlight">61</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">62</i>&nbsp;            var ref = new HierarchyDB(((CategoryImpl) rootCategory).getDbData());</b>
+<b class="fc"><i class="no-highlight">63</i>&nbsp;            this.hierarchyDAO.create(ref);</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;            return new HierarchyImpl(ref, rootCategory);</b>
+<b class="nc"><i class="no-highlight">65</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;            throw new DBException();</b>
+<i class="no-highlight">67</i>&nbsp;        }
+<i class="no-highlight">68</i>&nbsp;    }
+<i class="no-highlight">69</i>&nbsp;
+<i class="no-highlight">70</i>&nbsp;    @Override
+<i class="no-highlight">71</i>&nbsp;    public void deleteHierarchy(Hierarchy h) throws DBException {
+<b class="nc"><i class="no-highlight">72</i>&nbsp;        assert h instanceof HierarchyImpl;</b>
+<i class="no-highlight">73</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">74</i>&nbsp;            this.hierarchyDAO.delete(((HierarchyImpl) h).getDbData());</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;        } catch (SQLException e) {</b>
+<b class="nc"><i class="no-highlight">76</i>&nbsp;            throw new DBException();</b>
+<b class="nc"><i class="no-highlight">77</i>&nbsp;        }</b>
+<i class="no-highlight">78</i>&nbsp;    }
+<i class="no-highlight">79</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

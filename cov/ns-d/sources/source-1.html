@@ -1,0 +1,263 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Menu</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.view.menu</a>
+</div>
+
+<h1>Coverage Summary for Class: Menu (it.matlice.ingsw.view.menu)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Menu</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    63.6%
+  </span>
+  <span class="absValue">
+    (7/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60.4%
+  </span>
+  <span class="absValue">
+    (29/48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.view.menu;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import org.jetbrains.annotations.NotNull;
+<i class="no-highlight">4</i>&nbsp;
+<i class="no-highlight">5</i>&nbsp;import java.io.PrintStream;
+<i class="no-highlight">6</i>&nbsp;import java.util.*;
+<i class="no-highlight">7</i>&nbsp;
+<b class="fc"><i class="no-highlight">8</i>&nbsp;public class Menu {</b>
+<i class="no-highlight">9</i>&nbsp;
+<b class="fc"><i class="no-highlight">10</i>&nbsp;    private final SortedSet&lt;MenuEntry&gt; entries = new TreeSet&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">11</i>&nbsp;    private final HashMap&lt;Integer, MenuEntry&gt; call_ref = new HashMap&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">12</i>&nbsp;    private String prompt = null;</b>
+<i class="no-highlight">13</i>&nbsp;    private MenuEntry last_entry;
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;    /**
+<i class="no-highlight">16</i>&nbsp;     * sets the ask prompt value
+<i class="no-highlight">17</i>&nbsp;     *
+<i class="no-highlight">18</i>&nbsp;     * @param prompt the string to be prompted
+<i class="no-highlight">19</i>&nbsp;     * @return this
+<i class="no-highlight">20</i>&nbsp;     */
+<i class="no-highlight">21</i>&nbsp;    public Menu setPrompt(String prompt) {
+<b class="fc"><i class="no-highlight">22</i>&nbsp;        this.prompt = prompt;</b>
+<b class="fc"><i class="no-highlight">23</i>&nbsp;        return this;</b>
+<i class="no-highlight">24</i>&nbsp;    }
+<i class="no-highlight">25</i>&nbsp;
+<i class="no-highlight">26</i>&nbsp;    /**
+<i class="no-highlight">27</i>&nbsp;     * adds an entry to the menu. position will be assigned incrementally based oin the number of elements in the menu
+<i class="no-highlight">28</i>&nbsp;     *
+<i class="no-highlight">29</i>&nbsp;     * @param entryWrapper
+<i class="no-highlight">30</i>&nbsp;     * @return this
+<i class="no-highlight">31</i>&nbsp;     */
+<i class="no-highlight">32</i>&nbsp;    public &lt;T&gt; Menu addEntry(@NotNull MenuEntryWrapper&lt;T&gt; entryWrapper) {
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        return this.addEntry(</b>
+<i class="no-highlight">34</i>&nbsp;                new MenuEntry(
+<b class="fc"><i class="no-highlight">35</i>&nbsp;                        entryWrapper.getName(),</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;                        entryWrapper.getPosition(this.entries.size()),</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;                        entryWrapper.getIndex(this.call_ref.size() == 0 ? 0 : Collections.max(this.call_ref.keySet()) + 1),</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;                        entryWrapper.getAction(),</b>
+<i class="no-highlight">39</i>&nbsp;                        null,
+<b class="fc"><i class="no-highlight">40</i>&nbsp;                        entryWrapper.isDisabled()</b>
+<i class="no-highlight">41</i>&nbsp;                )
+<i class="no-highlight">42</i>&nbsp;        );
+<i class="no-highlight">43</i>&nbsp;    }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    /**
+<i class="no-highlight">46</i>&nbsp;     * adds an entry to the menu
+<i class="no-highlight">47</i>&nbsp;     *
+<i class="no-highlight">48</i>&nbsp;     * @param entry the entry
+<i class="no-highlight">49</i>&nbsp;     * @return this
+<i class="no-highlight">50</i>&nbsp;     */
+<i class="no-highlight">51</i>&nbsp;    public Menu addEntry(MenuEntry entry) {
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        if (this.call_ref.containsKey(entry.getCall_index())) {</b>
+<b class="nc"><i class="no-highlight">53</i>&nbsp;            System.err.println(&quot;Duplicate position in menu &quot; + entry.getCall_index());</b>
+<b class="nc"><i class="no-highlight">54</i>&nbsp;            return null;</b>
+<i class="no-highlight">55</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">56</i>&nbsp;        this.entries.add(entry);</b>
+<b class="fc"><i class="no-highlight">57</i>&nbsp;        this.call_ref.put(entry.getCall_index(), entry);</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;        this.last_entry = entry;</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        return this;</b>
+<i class="no-highlight">60</i>&nbsp;    }
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;    /**
+<i class="no-highlight">63</i>&nbsp;     * Sets the last added entry&#39;s payload
+<i class="no-highlight">64</i>&nbsp;     *
+<i class="no-highlight">65</i>&nbsp;     * @param payload the object to be passed
+<i class="no-highlight">66</i>&nbsp;     * @return this
+<i class="no-highlight">67</i>&nbsp;     */
+<i class="no-highlight">68</i>&nbsp;    public Menu payload(Object payload) {
+<b class="nc"><i class="no-highlight">69</i>&nbsp;        if (this.last_entry == null) return this;</b>
+<b class="nc"><i class="no-highlight">70</i>&nbsp;        this.last_entry.setPayload(payload);</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;        return this;</b>
+<i class="no-highlight">72</i>&nbsp;    }
+<i class="no-highlight">73</i>&nbsp;
+<i class="no-highlight">74</i>&nbsp;    /**
+<i class="no-highlight">75</i>&nbsp;     * Sets the state of the last added entry
+<i class="no-highlight">76</i>&nbsp;     *
+<i class="no-highlight">77</i>&nbsp;     * @param disable the state to be assumed
+<i class="no-highlight">78</i>&nbsp;     * @return this
+<i class="no-highlight">79</i>&nbsp;     */
+<i class="no-highlight">80</i>&nbsp;    public Menu disable(boolean disable) {
+<b class="nc"><i class="no-highlight">81</i>&nbsp;        if (this.last_entry == null) return this;</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        this.last_entry.setDisabled(disable);</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;        return this;</b>
+<i class="no-highlight">84</i>&nbsp;    }
+<i class="no-highlight">85</i>&nbsp;
+<i class="no-highlight">86</i>&nbsp;    /**
+<i class="no-highlight">87</i>&nbsp;     * Gets the reference to a MenuEntry
+<i class="no-highlight">88</i>&nbsp;     *
+<i class="no-highlight">89</i>&nbsp;     * @param call_reference the integer to be typed to load that entry
+<i class="no-highlight">90</i>&nbsp;     * @return the entry reference or null if inexistent
+<i class="no-highlight">91</i>&nbsp;     */
+<i class="no-highlight">92</i>&nbsp;    public MenuEntry getEntry(int call_reference) {
+<b class="nc"><i class="no-highlight">93</i>&nbsp;        for (var e : this.entries)</b>
+<b class="nc"><i class="no-highlight">94</i>&nbsp;            if (e.getCall_index() == call_reference) return e;</b>
+<b class="nc"><i class="no-highlight">95</i>&nbsp;        return null;</b>
+<i class="no-highlight">96</i>&nbsp;    }
+<i class="no-highlight">97</i>&nbsp;
+<i class="no-highlight">98</i>&nbsp;    /**
+<i class="no-highlight">99</i>&nbsp;     * displays the menu on the output stream
+<i class="no-highlight">100</i>&nbsp;     *
+<i class="no-highlight">101</i>&nbsp;     * @param in  input stream where to get user input
+<i class="no-highlight">102</i>&nbsp;     * @param out output stream to print data
+<i class="no-highlight">103</i>&nbsp;     * @return the result of the call to {@link MenuAction}
+<i class="no-highlight">104</i>&nbsp;     */
+<i class="no-highlight">105</i>&nbsp;    public Object displayOnce(Scanner in, PrintStream out) {
+<b class="fc"><i class="no-highlight">106</i>&nbsp;        this.onlyDisplay(out);</b>
+<b class="fc"><i class="no-highlight">107</i>&nbsp;        return this.selectAfterDisplay(in, out);</b>
+<i class="no-highlight">108</i>&nbsp;    }
+<i class="no-highlight">109</i>&nbsp;
+<i class="no-highlight">110</i>&nbsp;    /**
+<i class="no-highlight">111</i>&nbsp;     * displays the menu on the output stream until the user inserts a valid answer
+<i class="no-highlight">112</i>&nbsp;     *
+<i class="no-highlight">113</i>&nbsp;     * @param in  input stream where to get user input
+<i class="no-highlight">114</i>&nbsp;     * @param out output stream to print data
+<i class="no-highlight">115</i>&nbsp;     * @return the result of the call to {@link MenuAction}
+<i class="no-highlight">116</i>&nbsp;     */
+<i class="no-highlight">117</i>&nbsp;    public Object display(Scanner in, PrintStream out) {
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        this.onlyDisplay(out);</b>
+<b class="nc"><i class="no-highlight">119</i>&nbsp;        Object r = null;</b>
+<b class="nc"><i class="no-highlight">120</i>&nbsp;        while ((r = this.selectAfterDisplay(in, out)) == null) out.println(&quot;Errore di scelta&quot;);</b>
+<b class="nc"><i class="no-highlight">121</i>&nbsp;        return r;</b>
+<i class="no-highlight">122</i>&nbsp;    }
+<i class="no-highlight">123</i>&nbsp;
+<i class="no-highlight">124</i>&nbsp;    /**
+<i class="no-highlight">125</i>&nbsp;     * shows the menu without asking for any input. input should be managed by the user
+<i class="no-highlight">126</i>&nbsp;     *
+<i class="no-highlight">127</i>&nbsp;     * @param out
+<i class="no-highlight">128</i>&nbsp;     */
+<i class="no-highlight">129</i>&nbsp;    public void onlyDisplay(PrintStream out) {
+<b class="fc"><i class="no-highlight">130</i>&nbsp;        if (this.prompt != null) out.println(&quot;\n&quot; + this.prompt);</b>
+<i class="no-highlight">131</i>&nbsp;
+<b class="fc"><i class="no-highlight">132</i>&nbsp;        for (MenuEntry e : this.entries)</b>
+<b class="fc"><i class="no-highlight">133</i>&nbsp;            out.println(e.toString().replaceAll(&quot;\n&quot;, &quot;\n\t&quot;));</b>
+<i class="no-highlight">134</i>&nbsp;    }
+<i class="no-highlight">135</i>&nbsp;
+<i class="no-highlight">136</i>&nbsp;    /**
+<i class="no-highlight">137</i>&nbsp;     * asks for an entry of the menu
+<i class="no-highlight">138</i>&nbsp;     *
+<i class="no-highlight">139</i>&nbsp;     * @param in
+<i class="no-highlight">140</i>&nbsp;     * @param out
+<i class="no-highlight">141</i>&nbsp;     * @return the return of the action lambda
+<i class="no-highlight">142</i>&nbsp;     */
+<i class="no-highlight">143</i>&nbsp;    public Object selectAfterDisplay(@NotNull Scanner in, @NotNull PrintStream out) {
+<i class="no-highlight">144</i>&nbsp;        int action;
+<i class="no-highlight">145</i>&nbsp;        try {
+<b class="fc"><i class="no-highlight">146</i>&nbsp;            action = in.nextInt();</b>
+<b class="fc"><i class="no-highlight">147</i>&nbsp;            in.nextLine();</b>
+<b class="nc"><i class="no-highlight">148</i>&nbsp;        } catch (InputMismatchException e) {</b>
+<b class="nc"><i class="no-highlight">149</i>&nbsp;            in.nextLine();</b>
+<b class="nc"><i class="no-highlight">150</i>&nbsp;            return null;</b>
+<b class="fc"><i class="no-highlight">151</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">152</i>&nbsp;        if (!this.call_ref.containsKey(action))</b>
+<b class="nc"><i class="no-highlight">153</i>&nbsp;            return null;</b>
+<b class="fc"><i class="no-highlight">154</i>&nbsp;        var ref = this.call_ref.get(action);</b>
+<b class="fc"><i class="no-highlight">155</i>&nbsp;        if (ref.isDisabled()) return null;</b>
+<b class="fc"><i class="no-highlight">156</i>&nbsp;        return ref.getAction().onUserSelect(in, out, ref);</b>
+<i class="no-highlight">157</i>&nbsp;    }
+<i class="no-highlight">158</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

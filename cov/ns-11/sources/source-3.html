@@ -1,0 +1,102 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > CategoryRepository</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.model.data.storage.repositories</a>
+</div>
+
+<h1>Coverage Summary for Class: CategoryRepository (it.matlice.ingsw.model.data.storage.repositories)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">CategoryRepository</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.model.data.storage.repositories;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.matlice.ingsw.model.data.Category;
+<i class="no-highlight">4</i>&nbsp;import it.matlice.ingsw.model.exceptions.DBException;
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;public interface CategoryRepository {
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;    /**
+<i class="no-highlight">9</i>&nbsp;     * Ottiene una categoria tramite id.
+<i class="no-highlight">10</i>&nbsp;     * notare che questo metodo non dovrebbe essere usato direttamente dal controller, ma deve essere utilizzato per
+<i class="no-highlight">11</i>&nbsp;     * ottenere la categoria a partire da una gerarchia.
+<i class="no-highlight">12</i>&nbsp;     * la gestione dell&#39;id è lasciata all&#39;implementazione e non deve incidere nello sviluppo del controller.
+<i class="no-highlight">13</i>&nbsp;     *
+<i class="no-highlight">14</i>&nbsp;     * @param id numero incrementale identificativo univoco della categoria
+<i class="no-highlight">15</i>&nbsp;     * @return una categoria se esiste
+<i class="no-highlight">16</i>&nbsp;     * @throws DBException
+<i class="no-highlight">17</i>&nbsp;     */
+<i class="no-highlight">18</i>&nbsp;    Category getCategory(int id) throws DBException;
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;    /**
+<i class="no-highlight">23</i>&nbsp;     * salva la categoria nel database aggiornandola, inoltre salva i campi se non esistono.
+<i class="no-highlight">24</i>&nbsp;     * Si noti che non è necessario cancellare i campi rimossi dato che da specifica, le categorie sono immutabili.
+<i class="no-highlight">25</i>&nbsp;     * È necessario quindi solo aggiungere i nuovi campi al momento della creazione.
+<i class="no-highlight">26</i>&nbsp;     *
+<i class="no-highlight">27</i>&nbsp;     * @param category categoria da salvare
+<i class="no-highlight">28</i>&nbsp;     * @return la categoria aggiornata
+<i class="no-highlight">29</i>&nbsp;     * @throws DBException
+<i class="no-highlight">30</i>&nbsp;     */
+<i class="no-highlight">31</i>&nbsp;    Category saveCategory(Category category) throws DBException;
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+@startuml
+
+'skinparam Linetype ortho
+
+class Exception{}
+
+package model{
+    interface SettingsFactory{
+        --
+        + makeSettings(...): Settings
+    }
+
+    class Model{
+        --
+        ...
+    }
+
+    package sql{
+        class SettingsFactoryImpl implements SettingsFactory{
+            --
+            + makeSettings(...): Settings
+        }
+    }
+}
+
+package java.sql{
+    class SQLException extends Exception{
+    }
+}
+
+Model --> SettingsFactory
+SettingsFactory -right- SQLException: can throw >
+SettingsFactoryImpl -up- SQLException: can throw >
+Model .. SQLException
+
+@enduml

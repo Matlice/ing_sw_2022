@@ -1,0 +1,22 @@
+@startuml
+
+#white:(A)
+partition Esecuzione {
+    fork
+        :Esecuzione del software
+        con stream interni;
+        :Execution finished>
+    fork again
+        :Wait 10s;
+        if () then (Execution finished)
+        else 
+            :Test Failed>
+            :kill;
+            end
+        endif
+    endfork{or}
+}
+
+#white:(B)
+
+@enduml

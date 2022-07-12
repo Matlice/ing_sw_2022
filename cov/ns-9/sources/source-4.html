@@ -1,0 +1,169 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > LeafCategoryImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">it.matlice.ingsw.model.data.impl.jdbc.types</a>
+</div>
+
+<h1>Coverage Summary for Class: LeafCategoryImpl (it.matlice.ingsw.model.data.impl.jdbc.types)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LeafCategoryImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package it.matlice.ingsw.model.data.impl.jdbc.types;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import it.matlice.ingsw.model.data.LeafCategory;
+<i class="no-highlight">4</i>&nbsp;import it.matlice.ingsw.model.data.NodeCategory;
+<i class="no-highlight">5</i>&nbsp;import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryDB;
+<i class="no-highlight">6</i>&nbsp;import it.matlice.ingsw.model.data.impl.jdbc.db.CategoryFieldDB;
+<i class="no-highlight">7</i>&nbsp;import it.matlice.ingsw.model.data.impl.jdbc.db.OfferDB;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">10</i>&nbsp;import java.util.Arrays;
+<i class="no-highlight">11</i>&nbsp;import java.util.List;
+<i class="no-highlight">12</i>&nbsp;import java.util.Map;
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;public class LeafCategoryImpl extends LeafCategory implements CategoryImpl {
+<i class="no-highlight">15</i>&nbsp;    private final CategoryDB dbData;
+<i class="no-highlight">16</i>&nbsp;
+<b class="fc"><i class="no-highlight">17</i>&nbsp;    public LeafCategoryImpl(CategoryDB from) {</b>
+<b class="fc"><i class="no-highlight">18</i>&nbsp;        this.dbData = from;</b>
+<i class="no-highlight">19</i>&nbsp;    }
+<i class="no-highlight">20</i>&nbsp;
+<i class="no-highlight">21</i>&nbsp;    public CategoryDB getDbData() {
+<b class="fc"><i class="no-highlight">22</i>&nbsp;        return this.dbData;</b>
+<i class="no-highlight">23</i>&nbsp;    }
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;    @Override
+<i class="no-highlight">26</i>&nbsp;    public String getName() {
+<b class="fc"><i class="no-highlight">27</i>&nbsp;        return this.dbData.getCategoryName();</b>
+<i class="no-highlight">28</i>&nbsp;    }
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;    @Override
+<i class="no-highlight">31</i>&nbsp;    public String getDescription() {
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        return this.dbData.getCategoryDescription();</b>
+<i class="no-highlight">33</i>&nbsp;    }
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;    @Override
+<i class="no-highlight">36</i>&nbsp;    public List&lt;LeafCategory&gt; getChildLeafs() {
+<b class="fc"><i class="no-highlight">37</i>&nbsp;        return List.of(this);</b>
+<i class="no-highlight">38</i>&nbsp;    }
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    @Override
+<i class="no-highlight">41</i>&nbsp;    public boolean isValidChildCategoryName(String name) {
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        return !name.equals(this.getName());</b>
+<i class="no-highlight">43</i>&nbsp;    }
+<i class="no-highlight">44</i>&nbsp;
+<i class="no-highlight">45</i>&nbsp;    @Override
+<i class="no-highlight">46</i>&nbsp;    public NodeCategory convertToNode() {
+<b class="fc"><i class="no-highlight">47</i>&nbsp;        var r = new NodeCategoryImpl(this.dbData);</b>
+<b class="fc"><i class="no-highlight">48</i>&nbsp;        var father = this.getFather();</b>
+<b class="fc"><i class="no-highlight">49</i>&nbsp;        if (father != null)</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;            father.removeChild(this);</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        r.putAll(this);</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        if (father != null)</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;            father.addChild(r);</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;        return r;</b>
+<i class="no-highlight">55</i>&nbsp;    }
+<i class="no-highlight">56</i>&nbsp;
+<i class="no-highlight">57</i>&nbsp;    @Override
+<i class="no-highlight">58</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        if (!(obj instanceof LeafCategoryImpl)) return false;</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;        if (this.dbData == null) return false;</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;        return this.dbData.equals(((LeafCategoryImpl) obj).dbData);</b>
+<i class="no-highlight">62</i>&nbsp;    }
+<i class="no-highlight">63</i>&nbsp;
+<i class="no-highlight">64</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-07-12 16:44</div>
+</div>
+</body>
+</html>

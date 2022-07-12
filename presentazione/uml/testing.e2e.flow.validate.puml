@@ -1,0 +1,17 @@
+@startuml
+
+#white:(B)
+
+partition Valutazione {
+    :Reperimento output dell'esecuzione;
+    :Valutazione dell'output;
+    if () then (Output atteso uguale)
+        :Test Passed>
+    else
+        :Test Failed>
+    endif
+}
+
+stop
+
+@enduml
