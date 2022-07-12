@@ -5,7 +5,7 @@ interface OfferFactory{
     --
     + makeOffer(name: String, owner: User, ...): Offer
     + getOffers(owner: User): List<Offer>
-    + getOfefrs(cat: LeafCategory): List<Offer>
+    + getOffers(cat: LeafCategory): List<Offer>
     + getSelectedOffers(owner: User): List<Offer>
     + setOfferStatus(offer: Offer, status: OfferStatus): void
     + createTradeOffer(a: offer, b: Offer): void
