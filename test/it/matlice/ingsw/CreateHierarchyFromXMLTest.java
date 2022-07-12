@@ -8,6 +8,7 @@ import it.matlice.ingsw.model.data.Hierarchy;
 import it.matlice.ingsw.model.data.LeafCategory;
 import it.matlice.ingsw.model.data.NodeCategory;
 import it.matlice.ingsw.model.data.impl.jdbc.*;
+import it.matlice.ingsw.model.exceptions.InvalidCategoryException;
 import it.matlice.ingsw.view.stream.StreamView;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,6 +73,11 @@ public class CreateHierarchyFromXMLTest {
         assertEquals(h.getRootCategory().get("Descrizione libera").required(), false);
 
         assertTrue(h.getRootCategory() instanceof LeafCategory);
+    }
+
+    @Test
+    public void createHierarchyFromXML_singleNodeSingleChild() {
+        assertThrows(InvalidCategoryException.class, () -> run(getSingleNodeSingleChildHierarchyXML()));
     }
 
     @Test
@@ -227,6 +233,18 @@ public class CreateHierarchyFromXMLTest {
         XMLImport.FieldXML f1_1 = new XMLImport.FieldXML("Taglia", true);
         XMLImport.FieldXML f1_2 = new XMLImport.FieldXML("Colore", false);
         XMLImport.CategoryXML c1 = new XMLImport.CategoryXML("Vestiti", "Descrizione di Vestiti", Arrays.asList(f1_1, f1_2), Arrays.asList());
+
+        return new XMLImport.HierarchyXML(c1);
+    }
+
+    private XMLImport.HierarchyXML getSingleNodeSingleChildHierarchyXML() {
+        XMLImport.CategoryXML c3 = new XMLImport.CategoryXML("Felpe", "Descrizione di Felpe", List.of(), Arrays.asList());
+
+        XMLImport.FieldXML f2_1 = new XMLImport.FieldXML("Giro Vita", false);
+
+        XMLImport.FieldXML f1_1 = new XMLImport.FieldXML("Taglia", true);
+        XMLImport.FieldXML f1_2 = new XMLImport.FieldXML("Colore", false);
+        XMLImport.CategoryXML c1 = new XMLImport.CategoryXML("Vestiti", "Descrizione di Vestiti", Arrays.asList(f1_1, f1_2), Arrays.asList(c3));
 
         return new XMLImport.HierarchyXML(c1);
     }
