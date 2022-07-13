@@ -34,6 +34,13 @@ private NodeCategory appendCategory(Category father, Category child) {
     \end{lstlisting}
 
 \end{frame}
+\note{
+    La funzione presente nel Controller e richiamata nella procedura di creazione gerarchia.
+
+    Vengono salvate le categorie come LeafCategory e solo se necessitano l'aggiunta dei figli esse vengono convertite in NodeCategory.
+
+    NON SEGUE SOLUZIONE, SEGUE ALTRA VIOLAZIONE
+}
 
 \begin{frame}[fragile]
     \frametitle{GoF Composite - Violazioni del pattern}
@@ -41,7 +48,7 @@ private NodeCategory appendCategory(Category father, Category child) {
     Allo stesso modo il metodo per determinare la validità di una categoria ha comportamenti diversi in base alla classe (usando \texttt{instanceof}):
 
     \lstset{style=java}
-    \begin{lstlisting}[language=java, caption={v5 commit 34c1a67}]
+    \begin{lstlisting}[language=java, caption={Controller\#appendCategory() v5 commit 34c1a67}]
 public boolean isCategoryValid() {
     if (this instanceof LeafCategory)
         return true;
@@ -53,6 +60,10 @@ public boolean isCategoryValid() {
     \end{lstlisting}
 
 \end{frame}
+\note{
+    La funzione è definita in Category ma dovrebbe essere differenziata per i due tipi figli
+}
+
 
 \begin{frame}
     \frametitle{GoF Composite - Dopo il refactor}
@@ -72,6 +83,7 @@ public boolean isCategoryValid() {
 
 \end{frame}
 
+
 \begin{frame}[fragile]
     \frametitle{GoF Composite - Soluzione}
 
@@ -90,6 +102,13 @@ private NodeCategory appendCategory(Category father, Category child) {
     \end{lstlisting}
 
 \end{frame}
+\note{
+    La chiamata a convertToNode() viene definita per le due tipologie nel seguente modo:
+
+    Se LeafCategory: Viene effettuata la conversione effettiva
+
+    Se NodeCategory: Viene ritornata la categoria senza modifiche.
+}
 
 \begin{frame}[fragile]
     \frametitle{GoF Composite - Soluzione}

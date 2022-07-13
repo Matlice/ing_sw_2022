@@ -34,6 +34,9 @@
         \end{enumerate}
     \end{minipage}
 \end{frame}
+\note{
+    Come è possibile vedere, non vi è mai una comunicazione diertta tra View e Model, ma il controller sarà sempre intermediario e facciata tra i vari metodi. In particolare il compito effettivo del Controller sarà di raccogliere e fornire i dati al model per effettuare le operazioni, oltre che a gestire la logica utente.
+}
 
 \begin{frame}
     \frametitle{Scelta delle azioni}
@@ -53,8 +56,10 @@
             \caption{Diagramma di attività di utilizzo menu e scelta utente}
         \end{figure}
     \end{minipage}
-    
 \end{frame}
+\note{
+    A seguire spiegazione del funzionamento del menu.
+}
 
 \begin{frame}[fragile]
     \frametitle{Esempio rappresentativo della scelta di azioni}
@@ -72,6 +77,10 @@ public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, Prom
 }
     \end{lstlisting}
 \end{frame}
+\note{
+    Il funzionamento del menu consiste nel proporre una scelta da una lista di MenuEntry, le quali hanno associato un testo stampabile, dati di visualizzazione (disabled, index...) e un'azione eseguibile.
+    L'azione eseguita dalla MenuEntry derivata da una MenuEntryWrapper consiste nel ritornare l'oggetto originale di tipo MenuAction<T>.
+}
 
 \begin{frame}
     \frametitle{Stampa degli oggetti model}
@@ -87,9 +96,9 @@ public <T> MenuAction<T> chooseOption(@NotNull List<MenuAction<T>> choices, Prom
     \end{minipage}
 \end{frame}
 \note{
-    view.DataTypeConverter è la factory dinamica che viene istanziata nel momento in cui la StreamView viene definita.
+    view.DataTypeConverter è la factory dinamica che viene istanziata nel momento in cui la StreamView viene definita, il quale compito consiste nel creare oggetti adattatori per la conversione di classi Modello
 
-    Ogni tipo di classe appartenente al model viene registrato con un relativo adapter.
+    Ogni tipo di classe appartenente al model viene registrato con un relativo cnverter, che si occuperà della creazione effettiva dell'adapter in funzione dell'oggetto.
 
     Al momento del bisogno, dato un oggetto proveniente dal model, viene istanziata una istanza dell'adapter alla quale viene passata la referenza dell'oggetto, per poi chiamate il metodo ereditato dall'interfaccia StreamDataType getStreamRepresentation() per ottenere il valore stampabile come stringa.
 

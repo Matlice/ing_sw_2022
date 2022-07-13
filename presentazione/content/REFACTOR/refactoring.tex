@@ -11,15 +11,15 @@
     Prima di eseguire l'operazione di refactor, si è provveduto a mettere opportunamente sotto test il metodo selezionato.
 \end{frame}
 
-\begin{frame}[allowframebreaks]
-    \frametitle{Casi di test}
+\begin{frame}
+    \frametitle{Casi di test i}
     Per ottenere dei casi di test efficaci, si è utilizzato come base la stessa struttura gerarchica descritta nella documentazione relativa all'importazione di configurazione da file testuale.\pause
 
-    Partendo da quella base, sono state effettuate delle modifiche alla struttura gerarchica per poter coprire i casi limite.
+    Partendo da quella base, sono state effettuate delle modifiche alla struttura gerarchica per poter coprire i casi limite mediante \textbf{Boundary Case Analysis}
 \end{frame}
 
 \begin{frame}[fragile]
-    \frametitle{Casi di test i}
+    \frametitle{Casi di test ii}
     \lstset{style=java}
     \begin{itemize}
         \item <1-> Si certifica che venga correttamente lanciata una eccezione in caso di gerarchia vuota
@@ -41,7 +41,7 @@
 }
 
 \begin{frame}[fragile]
-    \frametitle{Casi di test ii}
+    \frametitle{Casi di test iii}
     \lstset{style=java}
     \begin{itemize}
         \item <1-> Si controlla il funzionamento nel caso di una gerarchia senza figli
@@ -63,7 +63,7 @@
 
 \disablefooter
 \begin{frame}[fragile]
-    \frametitle{Casi di test iii}
+    \frametitle{Casi di test iv}
     \lstset{style=tiny_java}
     \begin{itemize}
         \item <1-> Si controlla il funzionamento nel caso di una gerarchia divisa in sole due categorie figlie
@@ -91,7 +91,9 @@
     \end{itemize}
 \end{frame}
 \note{
-    
+    Se si carica una categoria con un solo figlio viene lanciata un'eccezione come atteso
+
+    I casi completi di test si riferiscono ad alberi di categorie complessi e articolati.
 }
 \enablefooter
 
@@ -265,7 +267,8 @@ private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML){
 \begin{frame}[fragile]
     \frametitle{Extract Method 5 - Ritorno di variabili locali}
     \begin{lstlisting}[language=tiny_diff]
-private void XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML){
+- private void XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML){
++ private Category XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML){
     Category root = this.createCategoryFromXML(null, hierarchyXML.root);
     if (hierarchyXML.root.fields != null)
     for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
@@ -299,7 +302,7 @@ private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML){
 \begin{frame}[fragile]
     \frametitle{Extract Method 6 - Sostituzione con la chiamata al metodo}
     \begin{lstlisting}[language=tiny_diff]
-private void XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML){
+private Category XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML){
     Category root = this.createCategoryFromXML(null, hierarchyXML.root);
     if (hierarchyXML.root.fields != null)
     for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);

@@ -24,21 +24,13 @@
     \end{minipage}
 \end{frame}
 \note{
-    Il funzionamento di questa configurazione consiste in quanto segue:
-    Tutto ciò contenuto nel package non viene utilizzato come dipendenza per una questione di dependency inversion e di riutilizzo.
+    Si è scelto un approccio di \textbf{protected variation} per la gestione dell'implementazione delle classi di modello e della loro logica di persistenza.
 
-    La classe OfferImpl viene quindi istanziata mediante l'utilizzo di una factory (correlata e presente nello stesso package) mantenendo il principio di DI per cui il codice utilizzatore vede questa una OfferFactory.
+    Questo per garantire stabilità anche nel caso venga cambiata l'architettura di storage.
 
-    Con questo approccio si nota come la classe OfferImpl sia responabile della gestione dei campi compilati (associati a una categoria), il loro riperimento dal database (mediante la dipendenza dalla connessione JDBC)
-    e della gestione effettiva dell'offerta nella base di dati.
-    
-    \textbf{Note relative alla gestione dei parametri dell'offerta}
+    Nell'esempio la classe di implementazione deve occuparsi di gestire le offerte a db e, al momento della sua istanziazione, reperire dalla base di dati tutti i campi compilati associati all'offerta.
 
-    Ogni campo compilabile viene associato a una categoria (mappa tra String e TypeDefinition), la quale definisce il nome del campo il suo tipo e l'obbligatorietà.
-
-    Ogni tipo quindi definisce i metodi di serializzazione e deserializzazione per il salvataggio in database.
-
-    I valori dei campi compilati sono quindi salvati con riferimento all'offerta e al campo definito nella categoria, ma questa struttura non è rispecchiata dall'architettura del codice.
+    Questo comporta che la struttura della base di dati non sia trasparente e visibile dall'architettura dell'applicativo ma sia strettamente implementata dal codice in modo non trasparente.
 }
 
 \begin{frame}
@@ -85,3 +77,13 @@ public List<Offer> getOffers(User owner) throws DBException {
 }
     \end{lstlisting}
 \end{frame}
+\note{
+    \texttt{instantiateOffer(OfferDB main, OfferDB linked)}
+    Questo metodo permette di creare una OfferImpl a partire da un OfferDB.
+
+    Se OfferDB presenta una OfferDB collegata, il metodo si richiama ricorsivamente con le due offerte.
+
+    Per ogni offerta, vengono reperiti i campi compilati e i relativi nomi e tipi (OfferFieldDB --> CategoryFieldDB).
+
+    I campi vengono deserializzati e l'offerta viene istanziata e ritornata.
+}
