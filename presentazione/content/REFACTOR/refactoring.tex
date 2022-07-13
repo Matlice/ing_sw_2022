@@ -18,24 +18,90 @@
     Partendo da quella base, sono state effettuate delle modifiche alla struttura gerarchica per poter coprire i casi limite.
 \end{frame}
 
-\begin{frame}
-    \frametitle{Casi di test}
+\begin{frame}[fragile]
+    \frametitle{Casi di test i}
+    \lstset{style=java}
     \begin{itemize}
         \item <1-> Si certifica che venga correttamente lanciata una eccezione in caso di gerarchia vuota
-        \item <2-> Si controlla il funzionamento nel caso di una gerarchia senza campi e senza figli
-        \item <3-> Si controlla il funzionamento nel caso di una gerarchia senza figli
-        \item <4-> Si controlla il funzionamento nel caso di una gerarchia divisa in sole due categorie figlie
-        \item <5-> Si controlla il funzionamento nel caso completo
+\begin{lstlisting}[language=xml]
+<hierarchy/>
+\end{lstlisting}
+        \item <2-> Si controlla il funzionamento nel caso di una gerarchia senza campi e senza figli, verificando la presenza dei campi obbligatori nella categoria radice
+\begin{lstlisting}[language=xml]
+<hierarchy>
+    <name>Vestiti</name>
+    <fields/>
+    <children/>
+</hierarchy>
+\end{lstlisting}
     \end{itemize}
 \end{frame}
+\note{
+    
+}
+
+\begin{frame}[fragile]
+    \frametitle{Casi di test ii}
+    \lstset{style=java}
+    \begin{itemize}
+        \item <1-> Si controlla il funzionamento nel caso di una gerarchia senza figli
+\begin{lstlisting}[language=xml]
+<hierarchy>
+    <name>Vestiti</name>
+    <fields>
+        <field required="true"> Taglia </field>
+        <field required="false"> Colore </field>
+    </fields>
+    <children/>
+</hierarchy>
+\end{lstlisting}
+    \end{itemize}
+\end{frame}
+\note{
+    
+}
+
+\disablefooter
+\begin{frame}[fragile]
+    \frametitle{Casi di test iii}
+    \lstset{style=tiny_java}
+    \begin{itemize}
+        \item <1-> Si controlla il funzionamento nel caso di una gerarchia divisa in sole due categorie figlie
+\begin{lstlisting}[language=xml]
+<hierarchy>
+    <name>Vestiti</name>
+    <fields>
+        <field required="true"> Taglia </field>
+        <field required="false"> Colore </field>
+    </fields>
+    <children>
+        <category>
+            <name> Pantaloni </name>
+            <fields/>
+            <description/>
+        </category>
+        <category>
+            <name> Felpe </name>
+            <description/>
+        </category>
+    </children>
+</hierarchy>
+\end{lstlisting}
+        \item <2-> Si controlla il funzionamento nel caso completo
+    \end{itemize}
+\end{frame}
+\note{
+    
+}
+\enablefooter
 
 \subsection{Extract Method}
 \begin{frame}[fragile]
     \frametitle{Metodo pre-refactor 1/3}
 
     \lstset{style=tiny_java}
-    \begin{lstlisting}[language=java, caption={Snippet tratto da v5, Controller.java}]
-private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException, SQLException {
+    \begin{lstlisting}[language=java]
+private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException {
         // creazione della categoria root
         Category root = this.createCategoryFromXML(null, hierarchyXML.root);
         if (hierarchyXML.root.fields != null)
@@ -63,7 +129,7 @@ private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws 
     \frametitle{Metodo pre-refactor 2/3}
 
     \lstset{style=tiny_java}
-    \begin{lstlisting}[language=java, caption={Snippet tratto da v5, Controller.java}, firstnumber=23]
+    \begin{lstlisting}[language=java, firstnumber=23]
         // creazione delle categorie figlie
         while (categoryStack.size() != 0) {
             var toInsert = categoryStack.pop();
@@ -114,14 +180,175 @@ private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws 
     \end{lstlisting}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Creazione nuovi metodi}
+\begin{frame}[fragile]
+    \frametitle{Extract Method 1 - Creazione nuovi metodi}
+    \begin{lstlisting}[language=tiny_diff]
++ private void XMLCreateRootCategory(){
++ }
+
+private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML) throws DuplicateCategoryException, InvalidCategoryException, DuplicateFieldException, InvalidFieldException, SQLException {
+    // creazione della categoria root
+    Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+    if (hierarchyXML.root.fields != null)
+        for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
+    // aggiunge i campi default alla categoria radice
+    root.put("Stato di conservazione", new TypeDefinition(true));
+    root.put("Descrizione libera", new TypeDefinition(false));
+    // associa una CategoryXML all'istanza della Category padre già creata
+    var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+
+    ...
+}
+\end{lstlisting}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Copia del metodo}
+\begin{frame}[fragile]
+    \frametitle{Extract Method 2 - Copia del metodo}
+    \begin{lstlisting}[language=tiny_diff]
+private void XMLCreateRootCategory(){
++   Category root = this.createCategoryFromXML(null, hierarchyXML.root);
++   if (hierarchyXML.root.fields != null)
++   for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
++   // aggiunge i campi default alla categoria radice
++   root.put("Stato di conservazione", new TypeDefinition(true));
++   root.put("Descrizione libera", new TypeDefinition(false));
+}
+
+private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML){
+    // creazione della categoria root
+    Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+    if (hierarchyXML.root.fields != null)
+        for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
+    // aggiunge i campi default alla categoria radice
+    root.put("Stato di conservazione", new TypeDefinition(true));
+    root.put("Descrizione libera", new TypeDefinition(false));
+
+    // associa una CategoryXML all'istanza della Category padre già creata
+    var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+
+    ...
+}
+\end{lstlisting}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Sostituzione del codice con chiamata al metodo}
+\begin{frame}[fragile]
+    \frametitle{Extract Method 3 - Aggiunta dei parametri}
+    \begin{lstlisting}[language=tiny_diff]
+- private void XMLCreateRootCategory(){
++ private void XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML){
+    Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+    if (hierarchyXML.root.fields != null)
+    for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
+    // aggiunge i campi default alla categoria radice
+    root.put("Stato di conservazione", new TypeDefinition(true));
+    root.put("Descrizione libera", new TypeDefinition(false));
+}
+
+private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML){
+    // creazione della categoria root
+    Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+    if (hierarchyXML.root.fields != null)
+        for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
+    // aggiunge i campi default alla categoria radice
+    root.put("Stato di conservazione", new TypeDefinition(true));
+    root.put("Descrizione libera", new TypeDefinition(false));
+
+    // associa una CategoryXML all'istanza della Category padre già creata
+    var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+
+    ...
+}
+\end{lstlisting}
+\end{frame}
+
+\disablefooter%
+\begin{frame}[fragile]
+    \frametitle{Extract Method 5 - Ritorno di variabili locali}
+    \begin{lstlisting}[language=tiny_diff]
+private void XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML){
+    Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+    if (hierarchyXML.root.fields != null)
+    for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
+    // aggiunge i campi default alla categoria radice
+    root.put("Stato di conservazione", new TypeDefinition(true));
+    root.put("Descrizione libera", new TypeDefinition(false));
++   return root;
+}
+
+private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML){
+    // creazione della categoria root
+    Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+    if (hierarchyXML.root.fields != null)
+        for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
+    // aggiunge i campi default alla categoria radice
+    root.put("Stato di conservazione", new TypeDefinition(true));
+    root.put("Descrizione libera", new TypeDefinition(false));
+
+    // associa una CategoryXML all'istanza della Category padre già creata
+    var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+
+    ...
+}
+\end{lstlisting}
+\end{frame}
+\note{
+    Step 4: ``Se delle variabili locali sono usate solo all'interno del codice estratto, farle diventare variabili locali del metodo, mentre se il codice usa variabili locali, farle diventare parametri del metodo'' non viene proposto in quanto non necessario data l'assenza di tali variabili
+}
+\enablefooter%
+
+\begin{frame}[fragile]
+    \frametitle{Extract Method 6 - Sostituzione con la chiamata al metodo}
+    \begin{lstlisting}[language=tiny_diff]
+private void XMLCreateRootCategory(XMLImport.HierarchyXML hierarchyXML){
+    Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+    if (hierarchyXML.root.fields != null)
+    for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
+    // aggiunge i campi default alla categoria radice
+    root.put("Stato di conservazione", new TypeDefinition(true));
+    root.put("Descrizione libera", new TypeDefinition(false));
+    return root;
+}
+
+private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML){
+    // creazione della categoria root
+-   Category root = this.createCategoryFromXML(null, hierarchyXML.root);
+-   if (hierarchyXML.root.fields != null)
+-       for (var e: hierarchyXML.root.fields) this.addFieldFromXML(root, e);
+-   // aggiunge i campi default alla categoria radice
+-   root.put("Stato di conservazione", new TypeDefinition(true));
+-   root.put("Descrizione libera", new TypeDefinition(false));
++   Category root = XMLCreateRootCategory(hierarchyXML);
+
+    // associa una CategoryXML all'istanza della Category padre già creata
+    var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+
+    ...
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Extract Method 7 - Compilazione e test}
+    Il procedimento sopra descritto è stato applicato per più sezioni del metodo, risultando in quanto segue. I risultati del testing sono stati positivi.
+\lstset{style=tiny_java}
+\begin{lstlisting}[language=java, caption={Refactor del metodo Controller\#createHierarchyFromXML()}]
+private void createHierarchyFromXML(XMLImport.HierarchyXML hierarchyXML){
+    Category root = XMLCreateRootCategory(hierarchyXML); // creazione della categoria root
+    // associa una CategoryXML all'istanza della Category padre già creata
+    var categoryStack = new LinkedList<AbstractMap.SimpleEntry<XMLImport.CategoryXML, Category>>();
+
+    if (hierarchyXML.root.categories != null) {
+        if (hierarchyXML.root.categories.size() == 1) throw new InvalidCategoryException();
+        for (var e : hierarchyXML.root.categories)
+            categoryStack.add(new AbstractMap.SimpleEntry<>(e, root));
+    }
+    root = XMLCreateChildCategories(root, categoryStack); // creazione delle categorie figlie
+
+    try {
+        this.model.createHierarchy(root);
+    } catch (CannotRetrieveInformationException e) {
+        System.exit(1); //Errore terminale
+    }
+}
+\end{lstlisting}
 \end{frame}
